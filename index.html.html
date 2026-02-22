@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pequenos Artistas 🎨</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+  background: #fef6e4;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #001858;
+}
+
+.screen {
+  display: none;
+  padding: 10px;
+}
+
+.active {
+  display: block;
+}
+
+button {
+  padding: 14px;
+  margin: 6px;
+  border-radius: 16px;
+  border: none;
+  background: #f582ae;
+  font-size: 16px;
+  color: #001858;
+}
+
+.menu button {
+  width: 80%;
+  max-width: 320px;
+  font-size: 18px;
+}
+
+.canvas {
+  border: 4px solid #001858;
+  border-radius: 20px;
+  background: white;
+  touch-action: none;
+}
+
+.tools button {
+  background: #8bd3dd;
+}
+
+.palette button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.gallery img {
+  width: 120px;
+  margin: 6px;
+  border-radius: 12px;
+  border: 3px solid #001858;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 14px;
+  margin: 12px;
+  text-align: left;
+}
+.card h3 {
+  margin-top: 0;
+  color: #172c66;
+}
+.obra {
+  background: #f3d2c1;
+  border-radius: 12px;
+  padding: 6px;
+  margin: 4px 0;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div id="home" class="screen active menu">
+  <h1>🎨 Pequenos Artistas</h1>
+  <button onclick="show('desenho')">🖍 Desenho Livre</button>
+  <button onclick="show('desafios')">🎭 Desafios Criativos</button>
+  <button onclick="show('museu')">🏛 Museu Virtual</button>
+  <button onclick="show('galeria')">🏆 Galeria</button>
+</div>
+
+<!-- DESENHO -->
+<div id="desenho" class="screen">
+  <h2>🖍 Desenho Livre</h2>
+
+  <div class="tools">
+    <button onclick="tool='lapis'">✏️ Lápis</button>
+    <button onclick="tool='giz'">🖍 Giz</button>
+    <button onclick="tool='pincel'">🖌 Pincel</button>
+    <button onclick="tool='spray'">🎨 Spray</button>
+  </div>
+
+  <div class="tools">
+    <button onclick="size=4">Fino</button>
+    <button onclick="size=8">Médio</button>
+    <button onclick="size=14">Grosso</button>
+  </div>
+
+  <div class="palette">
+    <button style="background:black" onclick="color='black'"></button>
+    <button style="background:red" onclick="color='red'"></button>
+    <button style="background:blue" onclick="color='blue'"></button>
+    <button style="background:green" onclick="color='green'"></button>
+    <button style="background:orange" onclick="color='orange'"></button>
+    <button style="background:purple" onclick="color='purple'"></button>
+  </div>
+
+  <canvas id="canvas" width="420" height="420" class="canvas"></canvas><br>
+
+  <button onclick="save()">💾 Salvar</button>
+  <button onclick="clearCanvas()">🧽 Limpar</button>
+  <button onclick="show('home')">⬅ Voltar</button>
+</div>
+
+<!-- DESAFIOS -->
+<div id="desafios" class="screen">
+  <h2>🎭 Desafio Criativo</h2>
+  <div class="card">
+    <p id="challenge"></p>
+  </div>
+  <button onclick="newChallenge()">🎲 Outro Desafio</button>
+  <button onclick="show('desenho')">🎨 Desenhar</button>
+  <button onclick="show('home')">⬅ Voltar</button>
+</div>
+
+<!-- MUSEU -->
+<div id="museu" class="screen">
+  <h2>🏛 Museu Virtual</h2>
+
+  <div class="card">
+    <h3>🎨 Candido Portinari (1903–1962)</h3>
+    <p>
+      Portinari pintava lembranças da sua infância em Brodowski (SP),
+      mostrando crianças brincando, soltando pipa e jogando futebol.
+    </p>
+
+    <p><strong>Meninos no Balanço (1960)</strong></p>
+    <img src="https://imgur.com/VZH7ezB.jpg" class="museu-img.jpg">
+
+    <p><strong>Menino com Pião (1947)</strong></p>
+    <img src="https://imgur.com/nGfDRUG.jpg"class="museu-img.jpg">
+
+    <p><strong>Desafio:</strong> desenhe crianças brincando no quintal.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎨 Ivan Cruz</h3>
+    <p>
+      Ivan Cruz ficou conhecido por retratar brincadeiras antigas como
+      pular corda, amarelinha e aviãozinho.
+    </p>
+
+    <p><strong>Pular Corda</strong></p>
+    <img src="https://imgur.com/nTjah0C.jpg" class="museu-img">
+
+    <p><strong>Amarelinha</strong></p>
+    <img src="https://imgur.com/uliaJD5.jpg" class="museu-img">
+
+    <p><strong>Aviãozinho</strong></p>
+    <img src="https://imgur.com/MUqNpeg.jpg" class="museu-img">
+
+    <p><strong>Desafio:</strong> desenhe uma brincadeira que você gosta.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎨 Romero Britto</h3>
+    <p>
+      Romero Britto usa muitas cores, linhas pretas e formas simples,
+      criando obras alegres e divertidas.
+    </p>
+
+    <p><strong>Crianças Brincando</strong></p>
+    <img src="https://imgur.com/g9RiD8Q.jpg" class="museu-img">
+
+    <p><strong>Personagens Coloridos</strong></p>
+    <img src="https://imgur.com/Li1izIT.jpg" class="museu-img">
+
+    <p><strong>Desafio:</strong> desenhe usando muitas cores.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎨 Tarsila do Amaral (1886–1973)</h3>
+    <p>
+      Tarsila utilizava cores vivas e formas grandes, ajudando a imaginar
+      mundos diferentes no modernismo brasileiro.
+    </p>
+
+    <p><strong>Abaporu</strong></p>
+    <img src="https://imgur.com/Ai9sfV0.jpeg" class="museu-img">
+
+    <p><strong>O Mamoeiro</strong></p>
+    <img src="https://imgur.com/gD6Rw3b.jpg" class="museu-img">
+
+    <p><strong>Desafio:</strong> crie um personagem bem diferente.</p>
+  </div>
+
+  <button onclick="show('home')">⬅ Voltar</button>
+</div>
+
+<!-- GALERIA -->
+<div id="galeria" class="screen">
+  <h2>🏆 Galeria dos Artistas</h2>
+  <div id="gallery" class="gallery"></div>
+  <button onclick="show('home')">⬅ Voltar</button>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(id==="galeria") loadGallery();
+}
+
+const challenges = [
+  "Desenhe um animal que vive no fundo do mar",
+  "Crie sua própria super-heroína",
+  "Desenhe uma brincadeira que você gosta",
+  "Misture cores para criar uma nova",
+  "Desenhe sem tirar o lápis da tela",
+  "Crie um personagem imaginário"
+];
+
+function newChallenge() {
+  challenge.innerText = challenges[Math.floor(Math.random()*challenges.length)];
+}
+newChallenge();
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let drawing=false, color="black", size=6, tool="lapis";
+
+canvas.onpointerdown=()=>drawing=true;
+canvas.onpointerup=()=>drawing=false;
+canvas.onpointermove=e=>{
+  if(!drawing) return;
+  ctx.fillStyle=color;
+  let r=size;
+  if(tool==="spray") r=Math.random()*size;
+  ctx.beginPath();
+  ctx.arc(e.offsetX,e.offsetY,r,0,Math.PI*2);
+  ctx.fill();
+};
+
+function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+
+function save(){
+  const data=canvas.toDataURL();
+  const imgs=JSON.parse(localStorage.getItem("arts")||"[]");
+  imgs.push(data);
+  localStorage.setItem("arts",JSON.stringify(imgs));
+  alert("🎉 Desenho salvo!");
+}
+
+function loadGallery(){
+  gallery.innerHTML="";
+  const imgs=JSON.parse(localStorage.getItem("arts")||"[]");
+  imgs.forEach(i=>{
+    const img=document.createElement("img");
+    img.src=i;
+    gallery.appendChild(img);
+  });
+}
+</script>
+
+</body>
+</html>
