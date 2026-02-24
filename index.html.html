@@ -170,7 +170,7 @@ button:hover { background: #ff9cbb; }
   100% { transform: scale(1); background-color: #fff; }
 }
 
-/* ========== ESTILOS PARA O PINCEL MÁGICO ========== */
+/* ========== PINCEL MÁGICO SIMPLES (VERSÃO ANTERIOR) ========== */
 .pincel-container {
   max-width: 800px;
   margin: 0 auto;
@@ -234,6 +234,11 @@ button:hover { background: #ff9cbb; }
   font-size: 14px;
   padding: 8px 16px;
   border-radius: 40px;
+  transition: 0.2s;
+}
+.perguntas-sugeridas button:hover {
+  transform: scale(1.05);
+  background: #f582ae;
 }
 .chat-area {
   background: #ffe9d6;
@@ -260,6 +265,11 @@ button:hover { background: #ff9cbb; }
   padding: 10px 15px;
   border-radius: 20px 20px 5px 20px;
   max-width: 70%;
+  display: inline-block;
+}
+.mensagem.resposta {
+  justify-content: flex-start;
+  align-items: center;
 }
 .mensagem.resposta span {
   background: white;
@@ -267,6 +277,21 @@ button:hover { background: #ff9cbb; }
   border-radius: 20px 20px 20px 5px;
   border: 2px solid #8bd3dd;
   max-width: 70%;
+  display: inline-block;
+}
+.botao-audio {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 5px;
+  color: #172c66;
+  transition: 0.2s;
+}
+.botao-audio:hover {
+  transform: scale(1.2);
+  color: #f582ae;
 }
 .input-area {
   display: flex;
@@ -435,7 +460,7 @@ button:hover { background: #ff9cbb; }
   </div>
 </div>
 
-<!-- ========== TELA DO PINCEL MÁGICO ========== -->
+<!-- ========== TELA DO PINCEL MÁGICO SIMPLES ========== -->
 <div id="pincelIA" class="screen">
   <h2>🖌 Pincel Mágico</h2>
   <div class="pincel-container">
@@ -443,16 +468,19 @@ button:hover { background: #ff9cbb; }
       <div class="pincel-avatar" id="pincelAvatar">🖌️</div>
       <div class="pincel-fala" id="pincelFala">
         Olá! Eu sou o Pincel Mágico. Pode me perguntar tudo sobre arte, desenho, pintura, dança, música e teatro!
+        <button class="botao-audio" onclick="lerTexto('Olá! Eu sou o Pincel Mágico. Pode me perguntar tudo sobre arte, desenho, pintura, dança, música e teatro!')">
+          <i class="fas fa-volume-up"></i>
+        </button>
       </div>
     </div>
 
     <div class="perguntas-sugeridas">
-      <button onclick="fazerPergunta('Quem foi Tarsila do Amaral?')">Tarsila</button>
-      <button onclick="fazerPergunta('Quem foi Frida Kahlo?')">Frida Kahlo</button>
-      <button onclick="fazerPergunta('O que é pontilhismo?')">Pontilhismo</button>
-      <button onclick="fazerPergunta('Como desenhar o Stitch?')">Desenhar Stitch</button>
-      <button onclick="fazerPergunta('Quem é Yayoi Kusama?')">Yayoi Kusama</button>
-      <button onclick="fazerPergunta('O que é perspectiva?')">Perspectiva</button>
+      <button onclick="fazerPergunta('Quem foi Djanira?')">Djanira</button>
+      <button onclick="fazerPergunta('Quem foi Beatriz Milhazes?')">Beatriz Milhazes</button>
+      <button onclick="fazerPergunta('O que é a Mona Lisa?')">Mona Lisa</button>
+      <button onclick="fazerPergunta('Quem pintou a Última Ceia?')">Última Ceia</button>
+      <button onclick="fazerPergunta('O que é a Criação de Adão?')">Criação de Adão</button>
+      <button onclick="fazerPergunta('O que é O Nascimento de Vênus?')">Nascimento de Vênus</button>
     </div>
 
     <div class="chat-area" id="chatArea">
@@ -790,7 +818,6 @@ function voltarEscolha() {
 const desafios = [
   { numero: 1, titulo: "Desenho às Cegas", descricao: "Cada aluno fecha os olhos e tenta desenhar um objeto simples (copo, casa, flor). Depois comparam os resultados, rindo e discutindo sobre formas e proporções.", objetivo: "estimular criatividade e percepção sem pressão estética." },
   { numero: 2, titulo: "Cores Musicais", descricao: "O professor coloca músicas diferentes (alegre, triste, calma, agitada). Os alunos devem pintar ou desenhar o que 'sentirem' com cada música.", objetivo: "trabalhar expressão artística e relação entre som e cor." },
-  // ... COLOQUE AQUI TODOS OS OUTROS DESAFIOS
   { numero: 150, titulo: "Exposição de Arte da Turma", descricao: "Organizar uma exposição com os melhores trabalhos do ano, cada aluno explica sua obra.", objetivo: "valorizar o processo criativo e desenvolver autoconfiança." }
 ];
 
@@ -844,141 +871,124 @@ window.sortearDesafio = function() {
   }
 };
 
-// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO EXPANDIDO ==========
+// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO ==========
 const conhecimento = [
   // ===== CONCEITOS GERAIS =====
   { palavras: ['arte', 'o que é arte'], resposta: 'Arte é uma forma de expressão! Pode ser um desenho, pintura, dança, música… É o jeito das pessoas mostrarem sentimentos e ideias. 🎨' },
   { palavras: ['desenho', 'o que é desenho'], resposta: 'Desenho é quando usamos lápis, caneta ou giz para criar linhas e formas. Dá para desenhar tudo o que a gente imagina! 🖍️' },
   { palavras: ['pintura', 'técnicas de pintura'], resposta: 'Na pintura, existem várias técnicas: aquarela (tinta com água, suave), guache (tinta grossa), tinta a óleo (demora a secar) e até pintura com os dedos! 🎨' },
 
-  // ===== ARTISTAS BRASILEIROS =====
-  { palavras: ['tarsila', 'tarsila do amaral', 'abaporu'], resposta: 'Tarsila do Amaral foi uma pintora brasileira que adorava cores vibrantes. O quadro mais famoso dela é o Abaporu, que tem um homem bem diferente! Ela ajudou a criar a arte moderna no Brasil. 🌈' },
-  { palavras: ['portinari', 'candido portinari'], resposta: 'Candido Portinari pintava a vida do povo brasileiro: crianças brincando, trabalhadores e festas. Suas obras têm cores terrosas e mostram o Brasil de verdade. 🇧🇷' },
-  { palavras: ['aleijadinho', 'antonio francisco lisboa'], resposta: 'Aleijadinho foi um grande escultor brasileiro. Ele fez lindas estátuas de pedra-sabão, como os 12 profetas em Congonhas. Mesmo doente, continuou criando arte! 🙏' },
-  { palavras: ['djanira'], resposta: 'Djanira era uma pintora brasileira que gostava de mostrar a cultura do povo: festas, mercados e religiões. Suas telas são cheias de cores e alegria! 🎉' },
-  { palavras: ['rubem valentim'], resposta: 'Rubem Valentim criava obras com formas geométricas e cores fortes, inspiradas nos símbolos das religiões afro-brasileiras. Parecem mandalas coloridas! 🔴🟡🔵' },
-  { palavras: ['mestre didi'], resposta: 'Mestre Didi era artista e sacerdote do candomblé. Ele fazia esculturas com palha, contas e búzios que lembram os orixás. Uma arte cheia de espiritualidade! ✨' },
-  { palavras: ['rosana paulino'], resposta: 'Rosana Paulino é uma artista que usa desenhos, gravuras e costuras para falar sobre a história das mulheres negras no Brasil. Suas obras fazem a gente pensar! 🧵' },
-  { palavras: ['di cavalcanti'], resposta: 'Di Cavalcanti pintava mulheres, festas e o povo brasileiro com traços fortes e cores vibrantes. Ele foi um dos grandes nomes do modernismo! 💃' },
-  { palavras: ['carybé'], resposta: 'Carybé era um artista argentino que viveu no Brasil e adorava pintar a cultura baiana, com seus orixás, capoeira e carnaval. 🥁' },
-  { palavras: ['lygia clark'], resposta: 'Lygia Clark criava obras que a gente podia tocar e mexer! Ela inventou os "Bichos", esculturas que se movem. Uma artista muito divertida! 🐞' },
-  { palavras: ['helio oiticica', 'hélio oiticica'], resposta: 'Hélio Oiticica inventou os "Parangolés", capas coloridas para as pessoas vestirem e dançarem. Ele queria que a arte fosse vivida! 🧣' },
+  // ===== ELEMENTOS DAS ARTES VISUAIS =====
+  { palavras: ['ponto', 'o que é ponto'], resposta: 'O ponto é a menor marca no desenho! Sozinho chama atenção, mas muitos pontos juntos podem formar linhas, formas e até texturas. No pontilhismo, os pontos criam imagens incríveis! Seurat usou isso em "Tarde de domingo na Ilha de Grande Jatte". 🔴' },
+  { palavras: ['linha', 'o que é linha'], resposta: 'A linha é como um ponto que saiu passeando! Pode ser reta, curva, fina ou grossa. Linhas retas parecem firmes; curvas são mais suaves. Dürer e Kandinsky adoravam brincar com linhas! 📏' },
 
-  // ===== NOVOS ARTISTAS (SOLICITADOS) =====
-  { palavras: ['takashi murakami', 'murakami'], resposta: 'Takashi Murakami é um artista japonês que mistura arte erudita e cultura pop, criando personagens coloridos como flores sorridentes. Seu estilo é chamado de "superflat"! 🌸' },
-  { palavras: ['frida kahlo'], resposta: 'Frida Kahlo pintava muitos autorretratos mostrando sua vida e dores. Ela usava cores fortes, roupas mexicanas e elementos da natureza. Uma artista muito forte! 🌺' },
-  { palavras: ['romero britto'], resposta: 'Romero Britto é um artista brasileiro famoso por suas obras coloridas, com formas geométricas e traços alegres. Ele espalha felicidade pelo mundo com sua arte pop! 🌟' },
-  { palavras: ['yayoi kusama'], resposta: 'Yayoi Kusama é uma artista japonesa que adora bolinhas! Ela cria salas cheias de pontos coloridos e esculturas gigantes de abóboras. Uma arte hipnotizante! 🔴' },
-  { palavras: ['keith haring'], resposta: 'Keith Haring desenhava bonequinhos dançantes com contornos pretos e cores vibrantes. Sua arte estava nas ruas de Nova York e falava sobre amor e amizade! 💃' },
-  { palavras: ['wassily kandinsky'], resposta: 'Kandinsky foi um artista russo que pintava música! Ele usava formas e cores para expressar sons e sentimentos. Suas obras são abstratas e cheias de movimento! 🔵' },
-  { palavras: ['ivan cruz'], resposta: 'Ivan Cruz é um pintor brasileiro que retrata brincadeiras de criança: pular corda, amarelinha, pipa. Suas telas são coloridas e cheias de nostalgia! 🧸' },
-  { palavras: ['salvador dali'], resposta: 'Salvador Dalí era um artista surrealista espanhol. Pintava sonhos estranhos, com relógios derretidos e elefantes de pernas finas. Ele tinha um bigode incrível! ⏰' },
-  { palavras: ['picasso'], resposta: 'Pablo Picasso inventou o cubismo, mostrando as pessoas de vários ângulos ao mesmo tempo. Ele pintou "Guernica" contra a guerra. Um gênio da arte! 🎨' },
-  { palavras: ['paul klee'], resposta: 'Paul Klee criava obras delicadas e poéticas, com formas que parecem desenhos de criança. Ele dizia que "a arte não reproduz o visível, torna visível". 🖼️' },
-  { palavras: ['edgar degas'], resposta: 'Degas pintava bailarinas e cavalos em movimento. Ele adorava capturar momentos de dança e treino. Muitas de suas obras são em pastel! 🩰' },
+  // ===== COR =====
+  { 
+    palavras: ['cores primárias', 'primarias', 'o que são cores primárias'], 
+    resposta: 'Cores primárias ou puras são aquelas que não podem ser obtidas por meio de outras misturas. Elas são: amarelo, azul e vermelho. Com elas, podemos criar todas as outras cores! 🔴🔵🟡' 
+  },
+  { 
+    palavras: ['cores secundárias', 'secundarias', 'o que são cores secundárias'], 
+    resposta: 'Cores secundárias são geradas por meio da mistura de duas cores primárias. 🌈 Amarelo + vermelho = laranja 🟠, vermelho + azul = roxo ou violeta 🟣, azul + amarelo = verde 🟢. Que combinação legal!' 
+  },
+  { 
+    palavras: ['cores terciárias', 'terciarias', 'o que são cores terciárias'], 
+    resposta: 'Cores terciárias são geradas pela mistura de uma cor primária com uma cor secundária. São elas: vermelho-arroxeado (vinho), vermelho-alaranjado, amarelo-esverdeado, amarelo-alaranjado (bege), azul-arroxeado e azul-esverdeado (verde-água). Um montão de cores! 🌈' 
+  },
+  { 
+    palavras: ['cores complementares', 'complementares', 'contrastantes', 'o que são cores complementares'], 
+    resposta: 'Cores complementares são opostas no círculo cromático e criam o máximo de contraste! Os três pares principais são: 🔴 vermelho e 🟢 verde, 🟡 amarelo e 🟣 violeta (roxo), 🔵 azul e 🟠 laranja. Uma realça a outra! ⚡' 
+  },
+  { 
+    palavras: ['cores quentes', 'quentes', 'o que são cores quentes'], 
+    resposta: 'Cores quentes transmitem sensação de calor e energia! São elas: vermelho, laranja e amarelo. Elas lembram sol e fogo, dão alegria e movimento! ☀️' 
+  },
+  { 
+    palavras: ['cores frias', 'frias', 'o que são cores frias'], 
+    resposta: 'Cores frias transmitem sensação de calma e serenidade! São elas: azul, verde e violeta (roxo). Elas lembram água, céu e floresta. ❄️' 
+  },
+  { 
+    palavras: ['cores neutras', 'neutras', 'o que são cores neutras'], 
+    resposta: 'Cores neutras são aquelas que têm pouca reflexão da luz, como os tons de cinza e marrom. Elas são ótimas para equilibrar outras cores! ⚪⚫' 
+  },
+  { 
+    palavras: ['cor', 'o que é cor'], 
+    resposta: 'As cores são sensações visuais que nossos olhos captam quando há luz presente. A palavra "cor" vem do latim (color) e significa "cobrir" ou "ocultar". A luz branca é a união das sete cores do arco-íris: vermelho, laranja, amarelo, verde, azul, anil e violeta. Já a cor preta representa a ausência de luz. 🌈' 
+  },
 
-  // ===== OUTROS ARTISTAS BRASILEIROS (COMPLEMENTOS) =====
-  { palavras: ['anita malfatti'], resposta: 'Anita Malfatti foi uma pintora que trouxe o modernismo para o Brasil. Sua obra "O Homem Amarelo" causou polêmica, mas abriu caminho para a arte nova! 🇧🇷' },
-  { palavras: ['hélio oiticica', 'helio oiticica'], resposta: 'Hélio Oiticica criou os Parangolés, capas coloridas para vestir e dançar. Ele queria que o público participasse da arte. Muito divertido! 🧣' },
-  { palavras: ['lygia clark'], resposta: 'Lygia Clark inventou os "Bichos", esculturas que a gente pode dobrar e mexer. Uma arte que brinca com a gente! 🐞' },
-  { palavras: ['di cavalcanti'], resposta: 'Di Cavalcanti pintou as mulatas, o samba e as festas brasileiras. Suas obras têm curvas suaves e cores vibrantes. Um mestre do modernismo! 💃' },
-  { palavras: ['alfredo volpi'], resposta: 'Volpi ficou famoso pintando bandeirinhas de festa junina e fachadas de casas. Suas cores são suaves e suas formas, geométricas. Uma arte que lembra o Brasil! 🎏' },
-  { palavras: ['adriana varejão'], resposta: 'Adriana Varejão cria obras que parecem paredes rasgadas, mostrando camadas de azulejos e história. Sua arte fala sobre o Brasil colonial. 🏺' },
-  { palavras: ['vik muniz'], resposta: 'Vik Muniz faz arte com materiais inusitados: lixo, chocolate, geleia! Ele fotografa suas criações e recria obras famosas de um jeito bem criativo. ♻️' },
-  { palavras: ['beatriz milhazes'], resposta: 'Beatriz Milhazes pinta telas coloridas e cheias de formas que parecem flores e rendas. Sua arte é alegre e cheia de energia! 🌸' },
+  // ===== NOVAS ARTISTAS MULHERES =====
+  { 
+    palavras: ['djanira'], 
+    resposta: 'Djanira foi uma pintora brasileira que retratava a cultura popular, o povo simples e as religiões. Suas obras são coloridas e cheias de emoção, como "Festa de São João" e "Orixás". Uma artista que amava o Brasil! 🇧🇷' 
+  },
+  { 
+    palavras: ['lygia clark'], 
+    resposta: 'Lygia Clark foi uma artista brasileira que criou obras para as pessoas tocarem e interagirem! Ela inventou os "Bichos", esculturas que se movem e mudam de forma. Uma arte que brinca com a gente! 🐞' 
+  },
+  { 
+    palavras: ['beatriz milhazes'], 
+    resposta: 'Beatriz Milhazes é uma pintora brasileira conhecida por suas obras coloridas e cheias de formas que parecem flores e rendas. Sua arte é alegre, vibrante e muito feliz! 🌸' 
+  },
+  { 
+    palavras: ['frida kahlo'], 
+    resposta: 'Frida Kahlo foi uma pintora mexicana que fez muitos autorretratos mostrando sua vida, suas dores e suas paixões. Ela usava cores fortes, roupas tradicionais e elementos da natureza. Uma artista muito forte e inspiradora! 🌺' 
+  },
+  { 
+    palavras: ['georgia o keeffe', 'georgia okeeffe'], 
+    resposta: 'Georgia O\'Keeffe foi uma pintora americana famosa por suas pinturas gigantes de flores e paisagens do deserto. Ela dizia que suas flores faziam as pessoas pararem para apreciar a beleza da natureza. 🌵' 
+  },
 
-  // ===== ARTISTAS NORDESTINOS =====
-  { palavras: ['mestre vitalino'], resposta: 'Mestre Vitalino foi um artesão pernambucano que esculpia bonecos de barro retratando o sertão: vaqueiros, casamentos, festas. Uma arte cheia de tradição! 🏺' },
-  { palavras: ['aldemir martins'], resposta: 'Aldemir Martins pintou gatos, galos e a paisagem do Ceará. Seus traços são simples e fortes, e suas cores, vibrantes. Um artista muito querido! 🐓' },
-  { palavras: ['eduardo lima'], resposta: 'Eduardo Lima é um artista baiano autodidata que retrata o sertão com cores vibrantes. Suas obras já foram expostas no Louvre, em Paris! 🌵' },
-  { palavras: ['gilvan samico'], resposta: 'Samico criava xilogravuras com temas do folclore nordestino. Suas imagens parecem histórias em quadrinhos da literatura de cordel! 📖' },
-  { palavras: ['carybé'], resposta: 'Carybé nasceu na Argentina, mas amava a Bahia! Pintou orixás, capoeira e o carnaval de Salvador com traços fortes e muitas cores. 🥁' },
-  { palavras: ['yacunã tuxá'], resposta: 'Yacunã Tuxá é uma artista indígena da Bahia que usa linguagens contemporâneas para falar sobre sua cultura e seus ancestrais. Muito importante! 🌿' },
-  { palavras: ['solon ribeiro'], resposta: 'Solon Ribeiro é um artista cearense que trabalha com fotografia e luz. Suas obras brincam com sombras e reflexos, criando imagens mágicas. 📸' },
-  { palavras: ['cacimba', 'marcos felipe'], resposta: 'Cacimba é um artista paraibano que pinta cenas simples do interior: casinhas, ruas de terra, gente da roça. Sua arte é cheia de afeto e simplicidade. 🏡' },
+  // ===== NOVOS BRASILEIROS CONTEMPORÂNEOS =====
+  { 
+    palavras: ['ernesto neto'], 
+    resposta: 'Ernesto Neto é um artista brasileiro que cria esculturas sensoriais gigantes, feitas de tecido elástico e cheias de especiarias perfumadas. As pessoas podem entrar, tocar e sentir suas obras. Uma experiência incrível! 🧶' 
+  },
+  { 
+    palavras: ['cildo meireles'], 
+    resposta: 'Cildo Meireles é um artista conceitual brasileiro que cria obras para fazer a gente pensar. Ele usa objetos do dia a dia, como dinheiro e garrafas, para falar sobre política, sociedade e história. Muito inteligente! 💡' 
+  },
+  { 
+    palavras: ['regina silveira'], 
+    resposta: 'Regina Silveira é uma artista brasileira que trabalha com arte digital e ilusões de ótica. Ela cria sombras que não existem e distorce objetos, fazendo a gente duvidar do que vê. Uma arte que brinca com nossos olhos! 👀' 
+  },
 
-  // ===== TÉCNICAS ARTÍSTICAS =====
-  { palavras: ['desenho', 'técnica de desenho'], resposta: 'Desenho é a base de tudo! Use lápis, carvão ou caneta para criar linhas e formas. Treine observando a natureza e solte a imaginação! ✏️' },
-  { palavras: ['sombra', 'como fazer sombra'], resposta: 'Sombra dá volume aos desenhos! Observe onde a luz bate e escureça o lado oposto. Use lápis mais macio ou esfume com o dedo. 🌑' },
-  { palavras: ['luz', 'efeitos de luz'], resposta: 'A luz revela as cores e formas. Em um desenho, as áreas mais claras são onde a luz incide diretamente. Brilho e reflexos dão realismo! ☀️' },
-  { palavras: ['cores', 'teoria das cores'], resposta: 'Cores quentes (vermelho, amarelo, laranja) transmitem energia; cores frias (azul, verde, roxo) trazem calma. Cores complementares são opostas no círculo cromático! 🎨' },
-  { palavras: ['perspectiva'], resposta: 'Perspectiva dá profundidade ao desenho. Coisas longe parecem menores e com menos detalhes. Use linhas que convergem para um ponto no horizonte. 🛤️' },
-  { palavras: ['pontilhismo'], resposta: 'Pontilhismo é pintar com pontinhos! Ao invés de misturar as tintas, coloque pontos de cores puras lado a lado. O olho faz a mistura! Georges Seurat era mestre nisso. 🔴🟡🔵' },
+  // ===== OBRAS RENASCENTISTAS =====
+  { 
+    palavras: ['mona lisa'], 
+    resposta: 'A Mona Lisa é a pintura mais famosa do mundo! Foi pintada por Leonardo da Vinci no século XVI. Ela tem um sorriso misterioso e está no Museu do Louvre, em Paris. Até hoje as pessoas tentam descobrir o segredo do seu sorriso! 😊' 
+  },
+  { 
+    palavras: ['última ceia', 'ultima ceia'], 
+    resposta: 'A Última Ceia é uma pintura mural de Leonardo da Vinci que mostra Jesus e seus 12 apóstolos na última refeição antes da crucificação. Jesus acabou de dizer que um deles o trairá, e todos reagem com surpresa e tristeza. Está em Milão, na Itália. 🍞' 
+  },
+  { 
+    palavras: ['criação de adão', 'criação de adao'], 
+    resposta: 'A Criação de Adão é uma das cenas mais famosas do teto da Capela Sistina, pintada por Michelangelo. Mostra Deus estendendo a mão para dar vida a Adão, o primeiro homem. As mãos quase se tocando é uma das imagens mais conhecidas da arte! 👆' 
+  },
+  { 
+    palavras: ['nascimento de vênus', 'nascimento de venus'], 
+    resposta: 'O Nascimento de Vênus foi pintado por Sandro Botticelli. Mostra a deusa Vênus nascendo da espuma do mar dentro de uma concha. É uma pintura cheia de graça, beleza e cores suaves. Uma das obras-primas do Renascimento! 🌊' 
+  },
+  { 
+    palavras: ['escola de atenas'], 
+    resposta: 'A Escola de Atenas é um afresco de Rafael Sanzio no Vaticano. Mostra os grandes filósofos da Grécia Antiga, como Platão e Aristóteles, conversando em um cenário grandioso. É uma homenagem ao conhecimento e à filosofia! 📚' 
+  },
+  { 
+    palavras: ['primavera', 'a primavera'], 
+    resposta: 'A Primavera, de Sandro Botticelli, é uma pintura cheia de flores e figuras mitológicas. Mostra a deusa Vênus no centro de um jardim, cercada por cupidos, ninfas e o deus Mercúrio. Uma explosão de beleza e alegria! 🌸' 
+  },
 
-  // ===== DESENHOS DE PERSONAGENS (HITS ATUAIS E CLÁSSICOS) =====
-  { palavras: ['desenhar stitch', 'stitch'], resposta: 'Stitch é um alienígena azul fofinho! Desenhe uma cabeça redonda, orelhas enormes, olhos grandes, nariz preto e braços compridos. Não esqueça das garrinhas! 👽' },
-  { palavras: ['desenhar patrulha canina', 'patrulha canina'], resposta: 'A Patrulha Canina tem vários filhotes! Para desenhar o Chase, faça um cachorro com uniforme azul e distintivo. O Marshall é vermelho com manchinhas. Use cores vivas! 🐾' },
-  { palavras: ['desenhar barbie'], resposta: 'Barbie tem rosto delicado, cabelo loiro comprido e roupas fashion. Desenhe o corpo alongado e um sorriso. Pode colocar um vestido rosa! 👗' },
-  { palavras: ['desenhar bluey'], resposta: 'Bluey é uma cachorrinha azul da série australiana. Desenhe uma cabeça redonda, orelhas caídas, olhos grandes e patinhas. Ela adora brincar! 🐶' },
-  { palavras: ['desenhar masha e o urso'], resposta: 'Masha é uma menininha sapeca com vestido rosa e lenço na cabeça. O urso é grande e marrom. Desenhe Masha com bochechas rosadas e olhos vivos! 🐻' },
-  { palavras: ['desenhar mundo bita'], resposta: 'O Mundo Bita tem personagens coloridos! O Bita é um astronauta de capacete, o Dan é um peixinho, a Lina é uma menina e o Tito é um passarinho. Divirta-se! 🚀' },
-  { palavras: ['desenhar baby shark'], resposta: 'Baby Shark: um tubarãozinho com corpo cinza, olhos grandes, barbatanas e dentes afiados. Faça ele cantando "doo doo doo"! 🦈' },
-  { palavras: ['desenhar galinha pintadinha'], resposta: 'Galinha Pintadinha é uma galinha branca com pintinhas vermelhas. Desenhe um corpo oval, crista vermelha e olhos grandes. Ela está sempre dançando! 🐔' },
-  { palavras: ['desenhar pocoyo'], resposta: 'Pocoyo é um menino de macacão azul e gorro. Seu corpo é simples, com cabeça redonda. Junto dele, a Pato (amarela) e o Elly (elefante rosa). 🧢' },
-  { palavras: ['desenhar pequerruchos'], resposta: 'Os Pequerruchos são quatro irmãozinhos coloridos: Amarelo, Vermelho, Azul e Verde. Desenhe cada um com formato de gotinha e rostos alegres! 👶' },
-  { palavras: ['desenhar monica toy'], resposta: 'Monica Toy é a versão fofa da Mônica. Desenhe uma cabeça grande, olhos redondos, cabelo curto e o coelhinho Sansão na mão. Use vermelho no vestido! 🐰' },
-  { palavras: ['desenhar bob esponja'], resposta: 'Bob Esponja é uma esponja quadrada amarela, com calça marrom, gravata vermelha e olhos grandes. Seu amigo Patrick é uma estrela-do-rosa. 🧽' },
-  { palavras: ['desenhar mickey mouse'], resposta: 'Mickey tem orelhas redondas e grandes, calção vermelho e sapatos amarelos. Desenhe um círculo para a cabeça, duas orelhas e o rostinho simpático. 🐭' },
-  { palavras: ['desenhar backyardigans'], resposta: 'Os Backyardigans são amigos animais: Pablo (pinguim), Tyrone (alce), Uniqua (insetinho rosa), Tasha (hipopótamo) e Austin (canguru). Cores vibrantes! 🎵' },
-  { palavras: ['desenhar naruto'], resposta: 'Naruto tem cabelo loiro espetado, faixa na testa, roupa laranja e listras no rosto. Desenhe ele fazendo o sinal de "clone das sombras"! 🍥' },
-  { palavras: ['desenhar pokemon', 'pikachu'], resposta: 'Pikachu é amarelo, com orelhas pontudas, olhos redondos e bochechas vermelhas. Desenhe seu rabo em forma de raio. Pika pika! ⚡' },
-  { palavras: ['desenhar ben 10'], resposta: 'Ben 10 tem um relógio mágico (Omnitrix) no pulso. Desenhe um menino de camiseta preta e verde, com cabelo curto e expressão aventureira. ⌚' },
-  { palavras: ['desenhar one piece', 'luffy'], resposta: 'Luffy usa chapéu de palha, colete vermelho e tem cicatriz no rosto. Seu corpo é elástico! Desenhe um sorriso enorme e braços esticados. ☠️' },
-  { palavras: ['desenhar o show da luna'], resposta: 'Luna é uma menina curiosa com cabelo cacheado e óculos de sol. Ela adora ciência! Desenhe com jaleco branco e uma lupa. 🔬' },
-  { palavras: ['desenhar superhands'], resposta: 'SuperHands é um programa de arte. Desenhe mãos coloridas e criativas, com olhinhos e utensílios de desenho. Solte a imaginação! 👐' },
-  { palavras: ['desenhar elinor'], resposta: 'Elinor é uma coelhinha curiosa. Desenhe orelhas compridas, laço rosa, vestido azul e uma lupa. Ela adora descobrir coisas novas! 🔍' },
+  // ===== EXEMPLOS DE ARTISTAS E COR =====
+  { 
+    palavras: ['van gogh', 'vincent van gogh', 'noite estrelada'], 
+    resposta: 'Van Gogh pintava com pinceladas bem marcadas e cores vibrantes. Em "Noite Estrelada", os azuis profundos e amarelos intensos criam movimento e sentimento. Ele amava a natureza! 🌟' 
+  },
+  { 
+    palavras: ['matisse', 'henri matisse', 'a dança'], 
+    resposta: 'Matisse usava cores fortes e alegres. Em "A Dança", figuras vermelhas e laranjas dançam num céu azul, criando ritmo e vitalidade. Uma festa de cores! 💃' 
+  },
 
-  // ===== OBRAS FAMOSAS =====
-  { palavras: ['mona lisa'], resposta: 'A Mona Lisa foi pintada por Leonardo da Vinci. Ela tem um sorriso enigmático e é a pintura mais famosa do mundo! Está no museu do Louvre, em Paris. 😊' },
-  { palavras: ['abaporu'], resposta: 'Abaporu é a obra mais famosa de Tarsila do Amaral. É uma figura com cabeça pequena, pé gigante e um cacto. O nome significa "homem que come" em tupi. 🌵' },
-  { palavras: ['noite estrelada', 'noite estrelada'], resposta: 'Noite Estrelada é de Van Gogh. Mostra um céu cheio de estrelas brilhantes e redemoinhos. Van Gogh pintou de dentro de um hospital! ✨' },
-  { palavras: ['o grito'], resposta: 'O Grito, de Edvard Munch, mostra uma figura com o rosto assustado, em uma ponte. A pintura expressa desespero e solidão. 😨' },
-  { palavras: ['a última ceia', 'ultima ceia'], resposta: 'A Última Ceia, de Leonardo da Vinci, mostra Jesus e seus 12 apóstolos na última refeição antes da crucificação. Tem muitos detalhes! 🍞' },
-  { palavras: ['guernica'], resposta: 'Guernica, de Picasso, mostra os horrores da guerra. É enorme e em preto e branco, cheia de figuras sofrendo. Uma obra muito forte! 💣' },
-  { palavras: ['os girassóis'], resposta: 'Os Girassóis é uma série de pinturas de Van Gogh com flores amarelas em vasos. Ele adorava a cor amarela! 🌻' },
-  { palavras: ['a criação de adão'], resposta: 'A Criação de Adão, de Michelangelo, está no teto da Capela Sistina. Mostra Deus estendendo a mão para dar vida a Adão. Quase se tocam! 👆' },
-  { palavras: ['o pensador'], resposta: 'O Pensador é uma escultura de Rodin. Mostra um homem nu, sentado, pensando profundamente. O que será que ele está pensando? 🤔' },
-  { palavras: ['a persitência da memória'], resposta: 'A Persistência da Memória, de Dalí, tem relógios moles derretendo. Parece um sonho ou uma paisagem estranha. ⏳' },
-
-  // ===== MOVIMENTOS ARTÍSTICOS =====
-  { palavras: ['renascimento', 'renascença'], resposta: 'O Renascimento foi um período em que os artistas redescobriram a arte grega e romana. Eles queriam pintar de forma realista. Leonardo e Michelangelo são dessa época! 🏛️' },
-  { palavras: ['barroco', 'barroco brasileiro'], resposta: 'O Barroco é um estilo de arte cheio de detalhes e emoção. No Brasil, ele apareceu nas igrejas com muito ouro e nas esculturas do Aleijadinho. Parece que as imagens vão se mexer! ⛪' },
-  { palavras: ['modernismo', 'semana de 22'], resposta: 'O Modernismo foi um movimento que começou em 1922, com a Semana de Arte Moderna. Os artistas queriam criar uma arte brasileira, diferente da europeia. Tarsila e Portinari são exemplos! 🚀' },
-  { palavras: ['cubismo'], resposta: 'O Cubismo foi inventado por Picasso e Braque. Eles pintavam objetos e pessoas de todos os lados ao mesmo tempo, como se fossem quebra-cabeças! 🧩' },
-  { palavras: ['impressionismo'], resposta: 'Os impressionistas pintavam ao ar livre, captando a luz e as cores do momento. Monet é o mais famoso. As pinceladas são rápidas e soltas! 🌞' },
-  { palavras: ['expressionismo'], resposta: 'O Expressionismo mostra sentimentos fortes, como medo e angústia, através de cores fortes e formas distorcidas. Van Gogh e Munch são expressionistas! 😱' },
-  { palavras: ['surrealismo'], resposta: 'O Surrealismo é a arte dos sonhos! Artistas como Dalí pintavam cenas estranhas e irreais, misturando fantasia e realidade. 🌙' },
-  { palavras: ['pop art'], resposta: 'A Pop Art usava imagens da cultura popular, como quadrinhos e latas de sopa. Andy Warhol pintou a famosa lata de sopa Campbell! 🥫' },
-
-  // ===== DANÇA =====
-  { palavras: ['samba'], resposta: 'O samba é uma dança e música brasileira, cheia de alegria e ritmo. Tem pandeiro, tamborim e muito rebolado! É a cara do carnaval! 🎭' },
-  { palavras: ['frevo'], resposta: 'O frevo é uma dança de Pernambuco, muito rápida e colorida. Os dançarinos usam sombrinhas e fazem passos incríveis! ☂️🎶' },
-  { palavras: ['maracatu'], resposta: 'Maracatu é uma manifestação cultural com música, dança e desfile. Tem origem africana e indígena. As roupas são lindas e coloridas! 🥁' },
-  { palavras: ['balé', 'ballet'], resposta: 'O balé é uma dança clássica, cheia de graça e movimentos suaves. As bailarinas usam sapatilhas e tutus. Uma das mais famosas é a Ana Botafogo! 🩰' },
-  { palavras: ['isadora duncan'], resposta: 'Isadora Duncan foi uma dançarina que revolucionou a dança. Ela dançava descalça, com roupas leves, inspirada na natureza e na arte grega! 🌿' },
-  { palavras: ['vaslav nijinsky'], resposta: 'Nijinsky foi um grande bailarino russo. Ele dançava com tanta emoção que parecia flutuar no ar! Foi uma lenda do balé. ⭐' },
-  { palavras: ['merce cunningham'], resposta: 'Merce Cunningham foi um coreógrafo americano que criou danças bem diferentes, às vezes ao som de silêncio! Ele queria que o movimento fosse livre. 🕺' },
-  { palavras: ['pina bausch'], resposta: 'Pina Bausch criava danças-teatro, onde os bailarinos também atuavam. Suas coreografias mostravam sentimentos e histórias do dia a dia. 😢' },
-
-  // ===== TEATRO E ATORES =====
-  { palavras: ['teatro', 'o que é teatro'], resposta: 'Teatro é uma arte onde artistas representam histórias no palco, com personagens, figurinos e cenários. É como uma história que ganha vida! 🎭' },
-  { palavras: ['shakespeare', 'william shakespeare'], resposta: 'Shakespeare foi um famoso escritor de peças de teatro. Escreveu Romeu e Julieta, Hamlet e muitas outras. Suas histórias são contadas até hoje! 📜' },
-  { palavras: ['chaplin', 'charles chaplin'], resposta: 'Charles Chaplin foi um ator e diretor de cinema mudo. Ele criou o personagem Carlitos, um vagabundo engraçado e sensível. 🎩' },
-  { palavras: ['molière'], resposta: 'Molière foi um grande ator e escritor francês de comédias. Ele fazia piadas com a sociedade e a burguesia da época. Muito engraçado! 😂' },
-  { palavras: ['daniel day-lewis'], resposta: 'Daniel Day-Lewis é um ator que se transforma completamente nos personagens. Ele ganhou vários Oscars! Um dos melhores atores do cinema. 🎬' },
-  { palavras: ['fernanda montenegro'], resposta: 'Fernanda Montenegro é uma grande atriz brasileira de teatro, TV e cinema. Ela foi indicada ao Oscar pelo filme Central do Brasil. 👏' },
-
-  // ===== MÚSICA =====
-  { palavras: ['música', 'história da música'], resposta: 'A música existe desde os tempos antigos! Os primeiros instrumentos eram feitos de ossos e pedras. Hoje temos muitos estilos: pop, rock, samba, MPB... 🎵' },
-  { palavras: ['villa-lobos', 'heitor villa-lobos'], resposta: 'Villa-Lobos foi um grande compositor brasileiro. Ele misturava música clássica com sons do folclore brasileiro. Criou as Bachianas Brasileiras! 🎻' },
-  { palavras: ['tom jobim', 'antonio carlos jobim'], resposta: 'Tom Jobim foi um dos criadores da bossa nova. Sua música "Garota de Ipanema" é uma das mais tocadas no mundo todo! 🎹' },
-  { palavras: ['carmen miranda'], resposta: 'Carmen Miranda foi uma cantora e atriz brasileira famosa no mundo todo. Ela usava chapéus enormes com frutas e balançava muito os quadris! 🍌' },
-
-  // ===== ARTE AFRICANA E AFRO-BRASILEIRA =====
-  { palavras: ['arte africana', 'afro-brasileira'], resposta: 'A arte africana e afro-brasileira é cheia de cores, símbolos e significados. Máscaras, esculturas e pinturas que contam histórias dos orixás e da cultura negra. Muito linda! 🌍' },
-  { palavras: ['orixás', 'candomblé'], resposta: 'Os orixás são divindades africanas trazidas ao Brasil. Cada um tem suas cores e símbolos. Artistas como Mestre Didi e Rubem Valentim os representam em suas obras. 🕯️' },
-
-  // ===== RESPOSTA PADRÃO (fallback) =====
+  // ===== RESPOSTA PADRÃO =====
   { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé) ou teatro. Vamos tentar de novo? 😊' }
 ];
 
@@ -994,9 +1004,25 @@ function adicionarMensagem(tipo, texto) {
   const chat = document.getElementById('chatArea');
   const div = document.createElement('div');
   div.className = `mensagem ${tipo}`;
-  div.innerHTML = `<span>${texto}</span>`;
+  
+  if (tipo === 'resposta') {
+    const textoEscapado = texto.replace(/'/g, "\\'");
+    div.innerHTML = `<span>${texto} <button class="botao-audio" onclick="lerTexto('${textoEscapado}')"><i class="fas fa-volume-up"></i></button></span>`;
+  } else {
+    div.innerHTML = `<span>${texto}</span>`;
+  }
+  
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+}
+
+function lerTexto(texto) {
+  const textoLimpo = texto.replace(/[^\w\s\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]/g, '');
+  const utterance = new SpeechSynthesisUtterance(textoLimpo);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9;
+  utterance.pitch = 1.2;
+  window.speechSynthesis.speak(utterance);
 }
 
 function fazerPergunta(pergunta) {
@@ -1023,9 +1049,7 @@ function enviarPergunta() {
   adicionarMensagem('pergunta', pergunta);
   historicoPerguntas.push({ pergunta, data: new Date() });
 
-  const pincelAvatar = document.getElementById('pincelAvatar');
   const pincelFala = document.getElementById('pincelFala');
-  pincelAvatar.style.animation = 'tremer 0.5s infinite';
   pincelFala.innerText = 'Deixa eu pensar... 🤔';
 
   setTimeout(() => {
@@ -1047,7 +1071,6 @@ function enviarPergunta() {
       respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
     }
 
-    pincelAvatar.style.animation = '';
     pincelFala.innerText = respostaEncontrada;
     adicionarMensagem('resposta', respostaEncontrada);
     historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
