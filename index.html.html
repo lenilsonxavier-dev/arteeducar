@@ -170,7 +170,7 @@ button:hover { background: #ff9cbb; }
   100% { transform: scale(1); background-color: #fff; }
 }
 
-/* ========== PINCEL MÁGICO SIMPLES (VERSÃO ANTERIOR) ========== */
+/* ========== PINCEL MÁGICO SIMPLES ========== */
 .pincel-container {
   max-width: 800px;
   margin: 0 auto;
@@ -460,7 +460,7 @@ button:hover { background: #ff9cbb; }
   </div>
 </div>
 
-<!-- ========== TELA DO PINCEL MÁGICO SIMPLES ========== -->
+<!-- ========== TELA DO PINCEL MÁGICO ========== -->
 <div id="pincelIA" class="screen">
   <h2>🖌 Pincel Mágico</h2>
   <div class="pincel-container">
@@ -475,12 +475,12 @@ button:hover { background: #ff9cbb; }
     </div>
 
     <div class="perguntas-sugeridas">
-      <button onclick="fazerPergunta('Quem foi Djanira?')">Djanira</button>
-      <button onclick="fazerPergunta('Quem foi Beatriz Milhazes?')">Beatriz Milhazes</button>
-      <button onclick="fazerPergunta('O que é a Mona Lisa?')">Mona Lisa</button>
-      <button onclick="fazerPergunta('Quem pintou a Última Ceia?')">Última Ceia</button>
-      <button onclick="fazerPergunta('O que é a Criação de Adão?')">Criação de Adão</button>
-      <button onclick="fazerPergunta('O que é O Nascimento de Vênus?')">Nascimento de Vênus</button>
+      <button onclick="fazerPergunta('Quem foi Leonardo da Vinci?')">Leonardo da Vinci</button>
+      <button onclick="fazerPergunta('Quem foi Van Gogh?')">Van Gogh</button>
+      <button onclick="fazerPergunta('Quem foi Picasso?')">Picasso</button>
+      <button onclick="fazerPergunta('Quem foi Tarsila do Amaral?')">Tarsila</button>
+      <button onclick="fazerPergunta('Quem foi Frida Kahlo?')">Frida</button>
+      <button onclick="fazerPergunta('Quem foi Portinari?')">Portinari</button>
     </div>
 
     <div class="chat-area" id="chatArea">
@@ -814,7 +814,6 @@ function voltarEscolha() {
 }
 
 // ========== DESAFIOS DE ARTE ==========
-// ATENÇÃO: Substitua este array pelos 150 itens completos do seu código original
 const desafios = [
   { numero: 1, titulo: "Desenho às Cegas", descricao: "Cada aluno fecha os olhos e tenta desenhar um objeto simples (copo, casa, flor). Depois comparam os resultados, rindo e discutindo sobre formas e proporções.", objetivo: "estimular criatividade e percepção sem pressão estética." },
   { numero: 2, titulo: "Cores Musicais", descricao: "O professor coloca músicas diferentes (alegre, triste, calma, agitada). Os alunos devem pintar ou desenhar o que 'sentirem' com cada música.", objetivo: "trabalhar expressão artística e relação entre som e cor." },
@@ -871,8 +870,9 @@ window.sortearDesafio = function() {
   }
 };
 
-// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO ==========
+// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO ENRIQUECIDO ==========
 const conhecimento = [
+
   // ===== CONCEITOS GERAIS =====
   { palavras: ['arte', 'o que é arte'], resposta: 'Arte é uma forma de expressão! Pode ser um desenho, pintura, dança, música… É o jeito das pessoas mostrarem sentimentos e ideias. 🎨' },
   { palavras: ['desenho', 'o que é desenho'], resposta: 'Desenho é quando usamos lápis, caneta ou giz para criar linhas e formas. Dá para desenhar tudo o que a gente imagina! 🖍️' },
@@ -916,77 +916,163 @@ const conhecimento = [
     resposta: 'As cores são sensações visuais que nossos olhos captam quando há luz presente. A palavra "cor" vem do latim (color) e significa "cobrir" ou "ocultar". A luz branca é a união das sete cores do arco-íris: vermelho, laranja, amarelo, verde, azul, anil e violeta. Já a cor preta representa a ausência de luz. 🌈' 
   },
 
-  // ===== NOVAS ARTISTAS MULHERES =====
+  // ===== BIOGRAFIAS NOVAS - AGORA COM PALAVRAS-CHAVE CORRETAS =====
   { 
-    palavras: ['djanira'], 
-    resposta: 'Djanira foi uma pintora brasileira que retratava a cultura popular, o povo simples e as religiões. Suas obras são coloridas e cheias de emoção, como "Festa de São João" e "Orixás". Uma artista que amava o Brasil! 🇧🇷' 
+    palavras: ['leonardo da vinci', 'leonardo', 'da vinci', 'monalisa', 'última ceia', 'quem foi leonardo'], 
+    resposta: 'Leonardo da Vinci foi um gênio do Renascimento! Pintor, cientista e inventor, ele criou a "Mona Lisa" e "A Última Ceia". Ele usava uma técnica chamada sfumato, que deixa as cores bem suaves. A Mona Lisa é considerada a pintura mais famosa do mundo! 👨‍🎨' 
   },
   { 
-    palavras: ['lygia clark'], 
-    resposta: 'Lygia Clark foi uma artista brasileira que criou obras para as pessoas tocarem e interagirem! Ela inventou os "Bichos", esculturas que se movem e mudam de forma. Uma arte que brinca com a gente! 🐞' 
+    palavras: ['vincent van gogh', 'van gogh', 'gogh', 'noite estrelada', 'girassóis', 'quem foi van gogh'], 
+    resposta: 'Vincent van Gogh foi um pintor holandês do pós-impressionismo. Suas pinceladas são bem marcadas e vibrantes, como em "A Noite Estrelada" e "Os Girassóis". Ele só ficou famoso depois que morreu, mas hoje é um dos artistas mais amados do mundo! 🌟' 
   },
   { 
-    palavras: ['beatriz milhazes'], 
-    resposta: 'Beatriz Milhazes é uma pintora brasileira conhecida por suas obras coloridas e cheias de formas que parecem flores e rendas. Sua arte é alegre, vibrante e muito feliz! 🌸' 
+    palavras: ['pablo picasso', 'picasso', 'cubismo', 'guernica', 'quem foi picasso'], 
+    resposta: 'Pablo Picasso foi um artista espanhol que inventou o Cubismo junto com Braque. No Cubismo, ele mostrava as pessoas de vários ângulos ao mesmo tempo! A obra "Guernica" é um protesto contra a guerra. Ele foi super versátil e criou mais de 20 mil obras! 🎨' 
   },
   { 
-    palavras: ['frida kahlo'], 
-    resposta: 'Frida Kahlo foi uma pintora mexicana que fez muitos autorretratos mostrando sua vida, suas dores e suas paixões. Ela usava cores fortes, roupas tradicionais e elementos da natureza. Uma artista muito forte e inspiradora! 🌺' 
+    palavras: ['michelangelo', 'capela sistina', 'davi', 'criação de adão', 'quem foi michelangelo'], 
+    resposta: 'Michelangelo foi um artista renascentista italiano. Ele pintou o teto da Capela Sistina, com a famosa "Criação de Adão". Também esculpiu o "Davi", uma estátua gigante de mármore. Ele dizia que sua missão era libertar as figuras da pedra! 🗿' 
   },
   { 
-    palavras: ['georgia o keeffe', 'georgia okeeffe'], 
-    resposta: 'Georgia O\'Keeffe foi uma pintora americana famosa por suas pinturas gigantes de flores e paisagens do deserto. Ela dizia que suas flores faziam as pessoas pararem para apreciar a beleza da natureza. 🌵' 
+    palavras: ['claude monet', 'monet', 'impressionismo', 'ninfeias', 'quem foi monet'], 
+    resposta: 'Claude Monet foi o "pai" do Impressionismo! Ele adorava pintar ao ar livre e mostrar as mudanças da luz. Pintou várias vezes a mesma coisa em horários diferentes, como as "Ninfeias" e a "Catedral de Rouen". A palavra Impressionismo veio de um quadro dele! 🌞' 
+  },
+  { 
+    palavras: ['rembrandt', 'ronda noturna', 'barroco', 'quem foi rembrandt'], 
+    resposta: 'Rembrandt foi um mestre holandês do Barroco. Ele era craque no uso da luz e sombra (chiaroscuro). Sua obra mais famosa é "A Ronda Noturna", um retrato de grupo cheio de movimento. Ele também pintou muitos autorretratos durante a vida. 🕯️' 
+  },
+  { 
+    palavras: ['frida kahlo', 'kahlo', 'frida', 'autorretrato', 'quem foi frida kahlo'], 
+    resposta: 'Frida Kahlo foi uma pintora mexicana famosa por seus autorretratos intensos e coloridos. Ela pintava sua própria imagem para expressar suas dores, sua cultura e suas paixões. É um ícone da arte e do feminismo! 🌺' 
+  },
+  { 
+    palavras: ['rafael', 'raffaello sanzio', 'escola de atenas', 'madonas', 'quem foi rafael'], 
+    resposta: 'Rafael foi um grande pintor do Renascimento italiano. Ele é famoso por suas "Madonas" (pinturas da Virgem Maria) e pelo afresco "A Escola de Atenas", que mostra filósofos gregos num cenário grandioso. Suas obras são muito harmoniosas e equilibradas. 👼' 
+  },
+  { 
+    palavras: ['romero britto', 'britto', 'pop art', 'quem é romero britto'], 
+    resposta: 'Romero Britto é um artista brasileiro contemporâneo. Seu estilo é colorido, alegre e inspirado na pop art. Ele usa traços pretos e formas vibrantes. Suas obras espalham felicidade por onde passam! 🎈' 
+  },
+  { 
+    palavras: ['djanira', 'djanira da motta e silva', 'quem foi djanira'], 
+    resposta: 'Djanira foi uma pintora brasileira modernista. Ela retratava cenas do cotidiano, trabalhadores, festas populares e religiões. Suas cores são fortes e suas composições são simples, mas cheias de vida. Uma grande artista! 🇧🇷' 
+  },
+  { 
+    palavras: ['salvador dalí', 'dalí', 'surrealismo', 'persistência da memória', 'quem foi salvador dalí'], 
+    resposta: 'Salvador Dalí foi o principal nome do Surrealismo. Ele pintava imagens de sonho, como os relógios derretendo em "A Persistência da Memória". Usava um bigode extravagante e era muito criativo! ⏰' 
+  },
+  { 
+    palavras: ['caravaggio', 'claro escuro', 'tenebrismo', 'quem foi caravaggio'], 
+    resposta: 'Caravaggio foi um pintor italiano do Barroco. Ele revolucionou a arte com o uso dramático da luz e sombra, técnica chamada claro-escuro. Suas figuras parecem sair da escuridão! Muito dramático! 🔦' 
+  },
+  { 
+    palavras: ['tarsila do amaral', 'tarsila', 'abaporu', 'antropofagia', 'quem foi tarsila'], 
+    resposta: 'Tarsila do Amaral foi uma das principais artistas do Modernismo brasileiro. Ela pintou o "Abaporu", que inspirou o Movimento Antropofágico (a ideia de "devorar" influências estrangeiras e criar arte brasileira). Suas cores são vibrantes! 🎨' 
+  },
+  { 
+    palavras: ['ivan cruz', 'quem foi ivan cruz'], 
+    resposta: 'Ivan Cruz foi um artista brasileiro que ficou famoso por pintar brincadeiras infantis tradicionais: amarelinha, pular corda, pião... Ele valorizava a cultura popular e a infância. Que saudade de brincar! 🪁' 
+  },
+  { 
+    palavras: ['candido portinari', 'portinari', 'guerra e paz', 'quem foi portinari'], 
+    resposta: 'Candido Portinari foi um pintor brasileiro que retratou o povo trabalhador e temas sociais. Seus painéis "Guerra e Paz" estão na sede da ONU em Nova York. Ele pintava com muito realismo e emoção! 👨‍🌾' 
+  },
+  { 
+    palavras: ['henri matisse', 'matisse', 'fauvismo', 'quem foi matisse'], 
+    resposta: 'Henri Matisse foi um artista francês, líder do Fauvismo. Os fauvistas usavam cores fortes e irreais, só pela emoção. Matisse criava composições alegres e decorativas, cheias de vida! 🌈' 
+  },
+  { 
+    palavras: ['rené magritte', 'magritte', 'surrealismo', 'isto não é um cachimbo', 'quem foi magritte'], 
+    resposta: 'René Magritte foi um pintor surrealista belga. Suas obras brincam com a percepção, como no quadro "Isto não é um cachimbo" – porque é a pintura de um cachimbo, não o objeto de verdade. Ele adorava mistérios! 🧐' 
+  },
+  { 
+    palavras: ['georges seurat', 'seurat', 'pontilhismo', 'grande jatte', 'quem foi seurat'], 
+    resposta: 'Georges Seurat inventou o pontilhismo: em vez de misturar tintas, ele usava pequenos pontos de cor pura. De longe, os olhos da gente misturam as cores. "Tarde de Domingo na Ilha de Grande Jatte" é sua obra mais famosa. 🔵🔴' 
+  },
+  { 
+    palavras: ['edgar degas', 'degas', 'bailarinas', 'impressionismo', 'quem foi degas'], 
+    resposta: 'Edgar Degas foi um pintor impressionista francês. Ele adorava pintar bailarinas e cenas de bastidores, como se a gente estivesse espiando. Também fez muitas esculturas de bailarinas. 🩰' 
+  },
+  { 
+    palavras: ['edvard munch', 'munch', 'o grito', 'expressionismo', 'quem foi munch'], 
+    resposta: 'Edvard Munch foi um pintor norueguês expressionista. Sua obra mais famosa é "O Grito", que mostra a angústia e o desespero. Ele explorava sentimentos fortes como amor, medo e morte. 😱' 
+  },
+  { 
+    palavras: ['hélio oiticica', 'oiticica', 'neoconcreto', 'parangolés', 'quem foi hélio oiticica'], 
+    resposta: 'Hélio Oiticica foi um artista brasileiro inovador. Ele criou os "Parangolés", capas que as pessoas vestem e dançam. A obra só se completa com a participação de quem vê. Uma arte que é pura experiência! 🕺' 
+  },
+  { 
+    palavras: ['di cavalcanti', 'cavalcanti', 'modernismo', 'quem foi di cavalcanti'], 
+    resposta: 'Di Cavalcanti foi um modernista brasileiro. Ele retratou o samba, as mulatas, a vida urbana e a cultura popular. Suas cores e formas são bem brasileiras! 🇧🇷' 
+  },
+  { 
+    palavras: ['almeida júnior', 'almeida jr', 'quem foi almeida júnior'], 
+    resposta: 'José Ferraz de Almeida Júnior foi um pintor brasileiro do século XIX. Ele retratava cenas do interior paulista com muito realismo, como em "O Violeiro" e "Caipira Picando Fumo". 🎻' 
+  },
+  { 
+    palavras: ['georgina de albuquerque', 'georgina', 'quem foi georgina de albuquerque'], 
+    resposta: 'Georgina de Albuquerque foi uma pintora brasileira pioneira. Ela pintava temas históricos e também cenas do cotidiano. Foi a primeira mulher a dirigir a Escola Nacional de Belas Artes! 👩‍🎨' 
+  },
+  { 
+    palavras: ['pedro américo', 'independência ou morte', 'quem foi pedro américo'], 
+    resposta: 'Pedro Américo foi um pintor acadêmico brasileiro. Sua obra mais famosa é "Independência ou Morte", que mostra Dom Pedro I às margens do Ipiranga. Uma cena histórica bem dramática! ⚔️' 
+  },
+  { 
+    palavras: ['lasar segall', 'segall', 'expressionismo', 'quem foi lasar segall'], 
+    resposta: 'Lasar Segall foi um artista lituano naturalizado brasileiro. Sua obra tem temas sociais, como imigração e sofrimento. Ele foi um dos introdutores do expressionismo no Brasil. 🌍' 
+  },
+  { 
+    palavras: ['alfredo volpi', 'volpi', 'bandeirinhas', 'quem foi alfredo volpi'], 
+    resposta: 'Alfredo Volpi ficou conhecido por suas "bandeirinhas" coloridas e fachadas de casas. Ele explorava formas geométricas e cores suaves. Uma arte muito brasileira! 🏠' 
+  },
+  { 
+    palavras: ['beatriz milhazes', 'milhazes', 'quem é beatriz milhazes'], 
+    resposta: 'Beatriz Milhazes é uma artista contemporânea brasileira. Suas pinturas misturam cores intensas, padrões decorativos e referências à cultura popular. É uma explosão de alegria! 🌼' 
   },
 
-  // ===== NOVOS BRASILEIROS CONTEMPORÂNEOS =====
-  { 
-    palavras: ['ernesto neto'], 
-    resposta: 'Ernesto Neto é um artista brasileiro que cria esculturas sensoriais gigantes, feitas de tecido elástico e cheias de especiarias perfumadas. As pessoas podem entrar, tocar e sentir suas obras. Uma experiência incrível! 🧶' 
-  },
-  { 
-    palavras: ['cildo meireles'], 
-    resposta: 'Cildo Meireles é um artista conceitual brasileiro que cria obras para fazer a gente pensar. Ele usa objetos do dia a dia, como dinheiro e garrafas, para falar sobre política, sociedade e história. Muito inteligente! 💡' 
-  },
-  { 
-    palavras: ['regina silveira'], 
-    resposta: 'Regina Silveira é uma artista brasileira que trabalha com arte digital e ilusões de ótica. Ela cria sombras que não existem e distorce objetos, fazendo a gente duvidar do que vê. Uma arte que brinca com nossos olhos! 👀' 
-  },
+  // ===== PRÉ‑HISTÓRIA E ANTIGUIDADE (resumido) =====
+  { palavras: ['venus de willendorf', 'mulher de willendorf'], resposta: 'A Vênus de Willendorf é uma estatueta pré-histórica com mais de 25 mil anos! Ela tem formas bem exageradas e provavelmente era um símbolo de fertilidade. Foi encontrada na Áustria. 🪨' },
+  { palavras: ['altamira', 'pintura rupestre'], resposta: 'As pinturas de Altamira, na Espanha, mostram bisões, cavalos e cervos pintados nas cavernas há mais de 15 mil anos. Os artistas usavam as saliências das rochas para dar volume aos animais! 🐂' },
+  { palavras: ['bronzes de riace'], resposta: 'Os Bronzes de Riace são duas estátuas gregas de guerreiros, encontradas no mar na Itália. São exemplos incríveis da escultura grega clássica, com músculos e poses muito realistas. ⚔️' },
+  { palavras: ['laocoonte'], resposta: 'Laocoonte e seus filhos é uma escultura grega que mostra um sacerdote troiano e seus filhos sendo atacados por serpentes. É uma cena de muito sofrimento e drama! 😱' },
+  { palavras: ['marco aurélio'], resposta: 'A estátua equestre de Marco Aurélio é a única estátua de imperador romano a cavalo que sobreviveu. Ela mostra o imperador como um líder sábio e poderoso. Ficava no Capitólio em Roma. 🐎' },
 
-  // ===== OBRAS RENASCENTISTAS =====
-  { 
-    palavras: ['mona lisa'], 
-    resposta: 'A Mona Lisa é a pintura mais famosa do mundo! Foi pintada por Leonardo da Vinci no século XVI. Ela tem um sorriso misterioso e está no Museu do Louvre, em Paris. Até hoje as pessoas tentam descobrir o segredo do seu sorriso! 😊' 
-  },
-  { 
-    palavras: ['última ceia', 'ultima ceia'], 
-    resposta: 'A Última Ceia é uma pintura mural de Leonardo da Vinci que mostra Jesus e seus 12 apóstolos na última refeição antes da crucificação. Jesus acabou de dizer que um deles o trairá, e todos reagem com surpresa e tristeza. Está em Milão, na Itália. 🍞' 
-  },
-  { 
-    palavras: ['criação de adão', 'criação de adao'], 
-    resposta: 'A Criação de Adão é uma das cenas mais famosas do teto da Capela Sistina, pintada por Michelangelo. Mostra Deus estendendo a mão para dar vida a Adão, o primeiro homem. As mãos quase se tocando é uma das imagens mais conhecidas da arte! 👆' 
-  },
-  { 
-    palavras: ['nascimento de vênus', 'nascimento de venus'], 
-    resposta: 'O Nascimento de Vênus foi pintado por Sandro Botticelli. Mostra a deusa Vênus nascendo da espuma do mar dentro de uma concha. É uma pintura cheia de graça, beleza e cores suaves. Uma das obras-primas do Renascimento! 🌊' 
-  },
-  { 
-    palavras: ['escola de atenas'], 
-    resposta: 'A Escola de Atenas é um afresco de Rafael Sanzio no Vaticano. Mostra os grandes filósofos da Grécia Antiga, como Platão e Aristóteles, conversando em um cenário grandioso. É uma homenagem ao conhecimento e à filosofia! 📚' 
-  },
-  { 
-    palavras: ['primavera', 'a primavera'], 
-    resposta: 'A Primavera, de Sandro Botticelli, é uma pintura cheia de flores e figuras mitológicas. Mostra a deusa Vênus no centro de um jardim, cercada por cupidos, ninfas e o deus Mercúrio. Uma explosão de beleza e alegria! 🌸' 
-  },
+  // ===== MEDIEVAL =====
+  { palavras: ['livro de kells'], resposta: 'O Livro de Kells é um evangelho manuscrito irlandês do século VIII, cheio de desenhos coloridos e padrões entrelaçados. Os monges capricharam muito na decoração! É considerado uma obra-prima da arte celta. 📖' },
+  { palavras: ['shiva nataraja'], resposta: 'Shiva Nataraja é o deus hindu da dança, representado com quatro braços dançando dentro de um anel de fogo. Ele cria e destrói o universo com seus movimentos! 🔥' },
+  { palavras: ['ilha de páscoa', 'moais'], resposta: 'Os moais são enormes estátuas de pedra na Ilha de Páscoa. Representam chefes ancestrais e ficam de costas para o mar, vigiando a ilha. Como eles foram movidos até lá? É um mistério! 🗿' },
+  { palavras: ['giotto', 'capela bardi'], resposta: 'Giotto foi um pintor que começou a dar mais realismo e emoção às figuras. Na Capela Bardi, em Florença, ele pintou cenas da vida de São Francisco com pessoas de verdade, cheias de sentimento. 🎭' },
+  { palavras: ['ni zan'], resposta: 'Ni Zan foi um pintor chinês que criava paisagens simples e vazias, com poucas árvores e montanhas ao fundo. Sua arte reflete tranquilidade e isolamento. 🏞️' },
 
-  // ===== EXEMPLOS DE ARTISTAS E COR =====
-  { 
-    palavras: ['van gogh', 'vincent van gogh', 'noite estrelada'], 
-    resposta: 'Van Gogh pintava com pinceladas bem marcadas e cores vibrantes. Em "Noite Estrelada", os azuis profundos e amarelos intensos criam movimento e sentimento. Ele amava a natureza! 🌟' 
-  },
-  { 
-    palavras: ['matisse', 'henri matisse', 'a dança'], 
-    resposta: 'Matisse usava cores fortes e alegres. Em "A Dança", figuras vermelhas e laranjas dançam num céu azul, criando ritmo e vitalidade. Uma festa de cores! 💃' 
-  },
+  // ===== RENASCENÇA E MANEIRISMO =====
+  { palavras: ['masaccio', 'santíssima trindade'], resposta: 'Masaccio foi o primeiro a usar a perspectiva com ponto de fuga na pintura. Na "Santíssima Trindade", em Florença, ele criou a ilusão de uma capela de verdade atrás da parede! Um truque incrível. 🪄' },
+  { palavras: ['jan van eyck', 'arnolfini'], resposta: 'Jan van Eyck pintou "Giovanni Arnolfini e sua esposa" com tinta a óleo, que permitia detalhes super realistas. O espelho atrás do casal reflete a cena inteira, incluindo o próprio pintor! 👰' },
+  { palavras: ['botticelli', 'nascimento de vênus'], resposta: 'Botticelli pintou "O Nascimento de Vênus", mostrando a deusa do amor nascendo da espuma do mar dentro de uma concha. É cheia de graça, movimento e cores suaves. 🌊' },
+  { palavras: ['dürer', 'quatro cavaleiros'], resposta: 'Albrecht Dürer foi mestre da gravura. Em "Os quatro cavaleiros do Apocalipse", ele mostra a Morte, a Guerra, a Peste e a Fome galopando sobre a humanidade. Detalhes incríveis em madeira! 🏇' },
+  { palavras: ['bosch', 'jardim das delícias'], resposta: 'O "Jardim das Delícias" de Bosch é um tríptico cheio de criaturas fantásticas. Mostra o Paraíso, um mundo cheio de prazeres e o Inferno. É um sonho (ou pesadelo) pintado! 👾' },
+
+  // ===== BARROCO E NEOCLASSICISMO =====
+  { palavras: ['aleijadinho', 'os doze profetas'], resposta: 'Aleijadinho foi um grande escultor brasileiro. Seus "Doze profetas" em Congonhas são feitos em pedra‑sabão e têm expressões fortes, mesmo com as mãos deformadas pela doença. Ele trabalhava com ferramentas amarradas aos braços! 🙏' },
+  { palavras: ['bernini', 'êxtase de santa teresa'], resposta: 'Bernini esculpiu "O êxtase de santa Teresa" em mármore, mas parece que as roupas e nuvens são de verdade! A santa tem uma expressão de êxtase espiritual. Uma obra‑prima barroca. 😇' },
+  { palavras: ['velázquez', 'rendição de breda'], resposta: 'Velázquez pintou "A rendição de Breda" com respeito pelos vencidos. O general espanhol coloca a mão no ombro do holandês, sem humilhá-lo. As lanças do fundo deram à obra o apelido de "As Lanças". 🤝' },
+
+  // ===== ROMANTISMO E SIMBOLISMO =====
+  { palavras: ['goya', 'desastres da guerra'], resposta: 'Goya gravou "Os desastres da guerra" mostrando as atrocidades da invasão francesa na Espanha. Cenas fortes de violência, sem heróis – só vítimas e algozes. Uma denúncia poderosa. 💣' },
+  { palavras: ['ingres', 'grande odalisca'], resposta: 'Ingres pintou "A grande odalisca" com uma coluna muito longa, de propósito, para dar um ar mais sensual e exótico. A odalisca é uma concubina de harém, um tema orientalista. 👳' },
+  { palavras: ['friedrich', 'viajante sobre o mar de névoa'], resposta: 'Friedrich pintou "O viajante sobre o mar de névoa" mostrando um homem de costas contemplando uma paisagem montanhosa coberta de neblina. É a natureza sublime e a solidão do indivíduo. ⛰️' },
+  { palavras: ['delacroix', 'morte de sardanápalo'], resposta: 'Delacroix pintou "A morte de Sardanápalo" com cores vibrantes e muita violência. O rei assírio observa calmamente a destruição de seus bens e concubinas antes de morrer. Um turbilhão de emoções! 🔥' },
+
+  // ===== ARTE MODERNA =====
+  { palavras: ['klimt', 'friso de beethoven'], resposta: 'Klimt pintou o "Friso de Beethoven" para uma exposição dedicada ao compositor. É uma mistura de pintura, escultura e música – uma "obra de arte total". Cheio de dourado e simbolismo. 🎼' },
+  { palavras: ['kirchner', 'street dresden'], resposta: 'Kirchner, do grupo Die Brücke, pintava com cores ácidas e formas distorcidas para expressar a ansiedade da vida moderna. "Street, Dresden" mostra figuras isoladas na multidão. 🌃' },
+  { palavras: ['boccioni', 'estados de espírito'], resposta: 'Boccioni, futurista, queria mostrar movimento e velocidade. "Estados de espírito: Os que partem" transmite a agitação de uma estação de trem, com formas fragmentadas. 🚂' },
+  { palavras: ['kandinsky', 'composição vi'], resposta: 'Kandinsky foi um dos pioneiros da arte abstrata. "Composição VI" é um turbilhão de cores e linhas que representam o Dilúvio bíblico. Para ele, a cor tocava a alma como a música. 🎵' },
+  { palavras: ['duchamp', 'roda de bicicleta'], resposta: 'Duchamp criou os "ready‑mades": objetos comuns transformados em arte. "Roda de bicicleta" é uma roda num banco. A ideia é mais importante que a obra em si. 🚲' },
+  { palavras: ['brancusi', 'pássaro no espaço'], resposta: 'Brancusi simplificou as formas até a essência. "Pássaro no espaço" não tem asas nem penas, só a sensação de voo. Quando foi para os EUA, a alfândega não quis taxar como arte! 🕊️' },
+  { palavras: ['pollock', 'ritmo de outono', 'action painting'], resposta: 'Pollock criava suas pinturas jogando tinta diretamente no chão. "Ritmo de outono" é uma explosão de linhas e respingos. A ação de pintar era tão importante quanto o resultado. 🎨' },
+  { palavras: ['lygia clark', 'bichos'], resposta: 'Lygia Clark criou os "Bichos", esculturas de metal com dobradiças que o espectador pode mover. A obra só se completa quando você interage com ela. Uma arte participativa! 🤹' },
+  { palavras: ['lichtenstein', 'whaam'], resposta: 'Lichtenstein ampliava quadrinhos para a tela. "Whaam!" mostra um avião disparando um míssil, com pontos de impressão e cores berrantes. É a pop art! 💥' },
+  { palavras: ['warhol', 'andy warhol', 'pop art'], resposta: 'Andy Warhol pintou latas de sopa Campbell e retratos de Marilyn Monroe. Ele usava a repetição e as cores da publicidade. A pop art mostra que tudo pode ser arte, até produtos de supermercado! 🥫' },
 
   // ===== RESPOSTA PADRÃO =====
   { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé) ou teatro. Vamos tentar de novo? 😊' }
