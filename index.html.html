@@ -170,7 +170,7 @@ button:hover { background: #ff9cbb; }
   100% { transform: scale(1); background-color: #fff; }
 }
 
-/* ========== PINCEL MÁGICO SIMPLES ========== */
+/* ========== PINCEL MÁGICO ========== */
 .pincel-container {
   max-width: 800px;
   margin: 0 auto;
@@ -467,20 +467,20 @@ button:hover { background: #ff9cbb; }
     <div class="pincel-header">
       <div class="pincel-avatar" id="pincelAvatar">🖌️</div>
       <div class="pincel-fala" id="pincelFala">
-        Olá! Eu sou o Pincel Mágico. Pode me perguntar tudo sobre arte, desenho, pintura, dança, música e teatro!
-        <button class="botao-audio" onclick="lerTexto('Olá! Eu sou o Pincel Mágico. Pode me perguntar tudo sobre arte, desenho, pintura, dança, música e teatro!')">
+        Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!
+        <button class="botao-audio" onclick="lerTexto('Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!')">
           <i class="fas fa-volume-up"></i>
         </button>
       </div>
     </div>
 
     <div class="perguntas-sugeridas">
-      <button onclick="fazerPergunta('Quem foi Leonardo da Vinci?')">Leonardo da Vinci</button>
+      <button onclick="fazerPergunta('Quem foi Leonardo da Vinci?')">Leonardo</button>
       <button onclick="fazerPergunta('Quem foi Van Gogh?')">Van Gogh</button>
-      <button onclick="fazerPergunta('Quem foi Picasso?')">Picasso</button>
-      <button onclick="fazerPergunta('Quem foi Tarsila do Amaral?')">Tarsila</button>
-      <button onclick="fazerPergunta('Quem foi Frida Kahlo?')">Frida</button>
-      <button onclick="fazerPergunta('Quem foi Portinari?')">Portinari</button>
+      <button onclick="fazerPergunta('Quem foi Tarsila?')">Tarsila</button>
+      <button onclick="fazerPergunta('Me conte uma curiosidade')">🤔 Curiosidade</button>
+      <button onclick="fazerPergunta('Estou triste')">😢 Triste</button>
+      <button onclick="fazerPergunta('Estou feliz')">😊 Feliz</button>
     </div>
 
     <div class="chat-area" id="chatArea">
@@ -488,7 +488,7 @@ button:hover { background: #ff9cbb; }
     </div>
 
     <div class="input-area">
-      <input type="text" id="perguntaInput" placeholder="Digite sua pergunta...">
+      <input type="text" id="perguntaInput" placeholder="Digite sua pergunta ou como se sente...">
       <button onclick="enviarPergunta()">Enviar</button>
     </div>
 
@@ -512,7 +512,7 @@ function show(id) {
   if (id === "pincelIA") {
     const chat = document.getElementById('chatArea');
     if (chat.children.length === 0) {
-      adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre pintores, obras, dança, teatro e muito mais!');
+      adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!');
     }
   }
 }
@@ -873,6 +873,141 @@ window.sortearDesafio = function() {
 // ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO ENRIQUECIDO ==========
 const conhecimento = [
 
+  // ===== CURIOSIDADES SOBRE ARTE =====
+  { 
+    palavras: ['curiosidade', 'curiosidades', 'me conte alguma coisa', 'me conta alguma novidade', 'fale sobre curiosidades', 'conta algo legal'], 
+    resposta: '🤔 Vou sortear uma curiosidade para você!\n\n' +
+      '🎨 **Pintura e Desenho:**\n' +
+      '• Antes de existirem cadernos, as pessoas já pintavam nas cavernas, como nas pinturas de Altamira, usando terra e carvão.\n' +
+      '• Leonardo da Vinci desenhava máquinas voadoras séculos antes de o avião existir.\n' +
+      '• Vincent van Gogh usava pinceladas giratórias para mostrar emoção, como no céu cheio de movimento de "A Noite Estrelada".\n' +
+      '• Tarsila do Amaral pintava o Brasil com cores vibrantes e formas inventadas, como no famoso "Abaporu".\n' +
+      '• Pablo Picasso gostava de desenhar rostos vistos de vários ângulos ao mesmo tempo.\n' +
+      '• Frida Kahlo transformava sentimentos e momentos da própria vida em autorretratos cheios de símbolos.\n' +
+      '• Claude Monet pintava o mesmo lago muitas vezes, só para mostrar como a luz mudava tudo.\n' +
+      '• Romero Britto usa cores fortes e contornos marcados que parecem quadrinhos alegres.\n' +
+      '• Candido Portinari pintava trabalhadores e crianças para contar histórias do povo brasileiro.\n' +
+      '• Hélio Oiticica criava obras para as pessoas entrarem, vestirem e experimentarem com o corpo.\n\n' +
+      '🗿 **Escultura:**\n' +
+      '• Michelangelo dizia que a escultura já estava escondida na pedra, e ele só ajudava a revelar.\n' +
+      '• "O Pensador", de Auguste Rodin, mostra como uma postura pode expressar pensamento profundo.\n' +
+      '• No Brasil, Aleijadinho esculpiu profetas em pedra que parecem conversar com quem olha.\n' +
+      '• Algumas esculturas são feitas de sucata e materiais reciclados, mostrando que arte pode nascer do inesperado.\n' +
+      '• Existem esculturas gigantes feitas de gelo que derretem com o tempo, ensinando que arte também pode ser passageira.\n\n' +
+      '🩰 **Dança:**\n' +
+      '• O balé clássico nasceu nas cortes da Europa e ficou famoso com companhias como o Bolshoi Ballet.\n' +
+      '• A bailarina brasileira Ana Botafogo levou o balé brasileiro aos palcos internacionais.\n' +
+      '• A dança moderna surgiu quando artistas quiseram movimentos mais livres, como propôs Martha Graham.\n' +
+      '• Muitas danças brasileiras nasceram das culturas africanas, indígenas e europeias misturadas.\n' +
+      '• Em espetáculos como "O Lago dos Cisnes", o corpo conta a história sem precisar falar.\n\n' +
+      '🎶 **Música:**\n' +
+      '• Heitor Villa-Lobos misturava sons da floresta brasileira com música clássica.\n' +
+      '• Ludwig van Beethoven continuou compondo mesmo depois de perder a audição.\n' +
+      '• Wolfgang Amadeus Mozart começou a compor ainda criança.\n' +
+      '• Instrumentos podem ser feitos com latas e garrafas, como mostram muitos projetos de música experimental.\n' +
+      '• No samba, o ritmo é criado por instrumentos de percussão tocados em conjunto.\n\n' +
+      '🎭 **Teatro:**\n' +
+      '• O teatro começou na Grécia Antiga, com máscaras grandes para mostrar emoções.\n' +
+      '• William Shakespeare escreveu histórias que ainda são encenadas no mundo todo.\n' +
+      '• Ariano Suassuna misturou humor e cultura nordestina em suas peças.\n' +
+      '• O teatro infantil usa muito o corpo e a imaginação para contar histórias.\n' +
+      '• Improvisar no palco ajuda a desenvolver criatividade e coragem.\n\n' +
+      '🎨✨ **Arte e Imaginação:**\n' +
+      '• O grafite transforma muros em galerias ao ar livre.\n' +
+      '• Banksy cria arte urbana misteriosa e cheia de mensagens.\n' +
+      '• Alguns artistas pintam com os pés ou com a boca, mostrando que há muitas formas de criar.\n' +
+      '• Museus guardam obras antigas, como o Museu do Louvre.\n' +
+      '• No Brasil, o MASP exibe obras suspensas em suportes transparentes.\n' +
+      '• A arte pode misturar tecnologia e luz.\n' +
+      '• Quadrinhos também são arte, combinando desenho e narrativa.\n' +
+      '• Filmes misturam teatro, música, figurino e artes visuais.\n' +
+      '• A arte ajuda a contar a história de um povo.\n' +
+      '• Crianças também podem expor seus trabalhos em mostras escolares.\n\n' +
+      '🌈 **Curiosidades Finais:**\n' +
+      '• Muitos artistas erravam muito antes de acertar.\n' +
+      '• A prática é mais importante que o talento.\n' +
+      '• Cada cultura tem sua própria forma de arte.\n' +
+      '• A arte pode denunciar injustiças.\n' +
+      '• A arte pode celebrar festas e tradições.\n' +
+      '• Existem orquestras formadas só por crianças.\n' +
+      '• O corpo é instrumento, pincel e palco ao mesmo tempo.\n' +
+      '• Imaginação é um músculo que cresce quando usamos.\n' +
+      '• Toda obra começa com uma ideia pequena.\n' +
+      '• Quando uma criança cria arte, ela não copia o mundo, ela recria. ✨' 
+  },
+
+  // ===== RESPOSTAS EMOCIONAIS =====
+  { 
+    palavras: ['estou triste', 'triste', 'me sinto triste'], 
+    resposta: '😢 Que bom que você compartilhou. Vamos fazer uma atividade suave? Escolha uma:\n\n' +
+      '1. Desenho do Coração Falante: desenhe um coração e finja que ele fala com você.\n' +
+      '2. Dança da Chuva Leve: movimentos lentos como gotinhas caindo.\n' +
+      '3. Respiração da Borboleta: mãos no peito, inspire abrindo os braços, expire fechando.\n' +
+      '4. Boneco que Precisa de Abraço: dê um abraço num boneco e invente a voz dele.\n' +
+      '5. Música do Colo: ouça uma canção calma enquanto desenha.\n' +
+      '6. Estátuas da Tristeza que Viram Alegria: congele numa pose triste e vá transformando.\n' +
+      '7. Desenho com Cores Macias: use tons claros para pintar.\n' +
+      '8. História Cantada Baixinho: crie uma história cantarolando o final.\n' +
+      '9. Postura da Criança (Yoga): corpo recolhido, respiração lenta.\n' +
+      '10. Cartinha para Si Mesmo: desenhe uma mensagem de carinho e leia em voz alta. 💌' 
+  },
+  { 
+    palavras: ['estou entediado', 'entediado', 'tédio', 'sem nada para fazer'], 
+    resposta: '😐 Tédio? Hora de inventar! Olha só:\n\n' +
+      '1. Dança Maluca dos Animais Inventados: crie um bicho esquisito e dance como ele.\n' +
+      '2. Desenho sem Olhar: desenhe sem olhar pro papel enquanto ouve música.\n' +
+      '3. Orquestra do Corpo: faça sons com palmas, pés e boca.\n' +
+      '4. Teatro dos Objetos Perdidos: dê vida a objetos da sala.\n' +
+      '5. Yoga dos Nomes Estranhos: invente nomes para as posturas.\n' +
+      '6. Caminhada Musical: ande rápido ou devagar conforme a música.\n' +
+      '7. Desenho Gigante no Chão: use papel grande e desenhe em grupo.\n' +
+      '8. Espelho Maluco: imite o colega exagerando os movimentos.\n' +
+      '9. História em Três Sons: crie uma cena com 3 sons escolhidos.\n' +
+      '10. Dança Congela-Descongela: dance e congele quando a música parar! 🕺' 
+  },
+  { 
+    palavras: ['estou com raiva', 'raiva', 'com raiva', 'zangado'], 
+    resposta: '😤 A raiva é forte! Que tal transformá-la em arte? Escolha:\n\n' +
+      '1. Desenhe sua raiva: que cor ela tem? Que forma?\n' +
+      '2. Rasgue o papel bem forte (pode fazer tirinhas!).\n' +
+      '3. Crie um novo desenho com os pedaços – você transformou a raiva!\n' +
+      '4. Teatro do Monstro da Raiva: crie um monstro que só quer um abraço.\n' +
+      '5. Dança dos Pés Firmes: bata os pés no chão com força e ritmo.\n' +
+      '6. Pintura com os dedos: use tinta e espalhe com energia.\n' +
+      '7. Escultura de massinha: amasse bem a massinha para soltar a raiva.\n' +
+      '8. Grito no Papel: faça um desenho bem gritado (rabisque forte!).\n' +
+      '9. Respiração do Dragão: inspire fundo e solte o ar como fogo.\n' +
+      '10. Crie uma máscara da calma e experimente. ✨' 
+  },
+  { 
+    palavras: ['estou feliz', 'feliz', 'alegre', 'contente'], 
+    resposta: '😊 Que alegria! Vamos celebrar com arte:\n\n' +
+      '1. Dança da Alegria Espalhada: mova-se ocupando todo o espaço.\n' +
+      '2. Pintura da Música Preferida: desenhe enquanto ouve uma música animada.\n' +
+      '3. Teatro do Dia Perfeito: encene algo bom que você viveu ou sonha.\n' +
+      '4. Yoga do Guerreiro Brincante: posturas firmes com sorriso.\n' +
+      '5. Desfile de Personagens Criados: crie um personagem e desfile.\n' +
+      '6. Roda de Ritmos: cada um inventa um ritmo e o grupo repete.\n' +
+      '7. Estátuas Felizes: congele em poses de vitória e riso.\n' +
+      '8. Dança com Lenços Coloridos: mova-se com cores no ar.\n' +
+      '9. História Coletiva Cantada: cada pessoa canta uma parte.\n' +
+      '10. Respiração do Riso: inspire fundo e solte com gargalhada! 🎉' 
+  },
+  { 
+    palavras: ['estou ansioso', 'ansioso', 'ansiedade', 'nervoso'], 
+    resposta: '😰 A ansiedade pode ser acalmada com arte. Vamos juntos?\n\n' +
+      '1. Respiração do Balão: inspire inflando a barriga, expire esvaziando.\n' +
+      '2. Desenho em Mandala Livre: faça traços circulares repetitivos.\n' +
+      '3. Dança em Câmera Lenta: mova-se bem devagar.\n' +
+      '4. Teatro do Semáforo: verde (movimento), amarelo (lento), vermelho (pausa).\n' +
+      '5. Yoga da Árvore: fique num pé só, foco no equilíbrio.\n' +
+      '6. Som que Acalma: produza sons longos com a voz.\n' +
+      '7. Desenho da Respiração: trace linhas enquanto inspira e expira.\n' +
+      '8. Caminhada Silenciosa: sinta os pés tocando o chão.\n' +
+      '9. História do Lugar Seguro: desenhe um lugar onde você se sente bem.\n' +
+      '10. Relaxamento do Corpo que Derrete: deite e imagine o corpo ficando leve e calmo. 🌿' 
+  },
+
   // ===== CONCEITOS GERAIS =====
   { palavras: ['arte', 'o que é arte'], resposta: 'Arte é uma forma de expressão! Pode ser um desenho, pintura, dança, música… É o jeito das pessoas mostrarem sentimentos e ideias. 🎨' },
   { palavras: ['desenho', 'o que é desenho'], resposta: 'Desenho é quando usamos lápis, caneta ou giz para criar linhas e formas. Dá para desenhar tudo o que a gente imagina! 🖍️' },
@@ -916,7 +1051,7 @@ const conhecimento = [
     resposta: 'As cores são sensações visuais que nossos olhos captam quando há luz presente. A palavra "cor" vem do latim (color) e significa "cobrir" ou "ocultar". A luz branca é a união das sete cores do arco-íris: vermelho, laranja, amarelo, verde, azul, anil e violeta. Já a cor preta representa a ausência de luz. 🌈' 
   },
 
-  // ===== BIOGRAFIAS NOVAS - AGORA COM PALAVRAS-CHAVE CORRETAS =====
+  // ===== BIOGRAFIAS =====
   { 
     palavras: ['leonardo da vinci', 'leonardo', 'da vinci', 'monalisa', 'última ceia', 'quem foi leonardo'], 
     resposta: 'Leonardo da Vinci foi um gênio do Renascimento! Pintor, cientista e inventor, ele criou a "Mona Lisa" e "A Última Ceia". Ele usava uma técnica chamada sfumato, que deixa as cores bem suaves. A Mona Lisa é considerada a pintura mais famosa do mundo! 👨‍🎨' 
@@ -1030,7 +1165,7 @@ const conhecimento = [
     resposta: 'Beatriz Milhazes é uma artista contemporânea brasileira. Suas pinturas misturam cores intensas, padrões decorativos e referências à cultura popular. É uma explosão de alegria! 🌼' 
   },
 
-  // ===== PRÉ‑HISTÓRIA E ANTIGUIDADE (resumido) =====
+  // ===== PRÉ‑HISTÓRIA E ANTIGUIDADE =====
   { palavras: ['venus de willendorf', 'mulher de willendorf'], resposta: 'A Vênus de Willendorf é uma estatueta pré-histórica com mais de 25 mil anos! Ela tem formas bem exageradas e provavelmente era um símbolo de fertilidade. Foi encontrada na Áustria. 🪨' },
   { palavras: ['altamira', 'pintura rupestre'], resposta: 'As pinturas de Altamira, na Espanha, mostram bisões, cavalos e cervos pintados nas cavernas há mais de 15 mil anos. Os artistas usavam as saliências das rochas para dar volume aos animais! 🐂' },
   { palavras: ['bronzes de riace'], resposta: 'Os Bronzes de Riace são duas estátuas gregas de guerreiros, encontradas no mar na Itália. São exemplos incríveis da escultura grega clássica, com músculos e poses muito realistas. ⚔️' },
@@ -1075,7 +1210,7 @@ const conhecimento = [
   { palavras: ['warhol', 'andy warhol', 'pop art'], resposta: 'Andy Warhol pintou latas de sopa Campbell e retratos de Marilyn Monroe. Ele usava a repetição e as cores da publicidade. A pop art mostra que tudo pode ser arte, até produtos de supermercado! 🥫' },
 
   // ===== RESPOSTA PADRÃO =====
-  { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé) ou teatro. Vamos tentar de novo? 😊' }
+  { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé) ou teatro. Ou me conte como você está se sentindo! Vamos tentar de novo? 😊' }
 ];
 
 // Lista de palavras bloqueadas
@@ -1182,7 +1317,7 @@ function bloquearPalavra() {
 function iniciarPincel() {
   const chat = document.getElementById('chatArea');
   if (chat.children.length === 0) {
-    adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre pintores, obras, dança, teatro e muito mais!');
+    adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!');
   }
 }
 
