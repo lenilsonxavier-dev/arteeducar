@@ -433,7 +433,7 @@ button:hover { background: #ff9cbb; }
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
 </div>
 
-<!-- ========== DESENHO LIVRE (VERSÃO TOOLBAR SUPERIOR) ========== -->
+<!-- ========== DESENHO LIVRE ========== -->
 <div id="desenho" class="screen">
   <h2>🖍 Super Estúdio de Desenho</h2>
   <div id="toolbar">
@@ -644,7 +644,7 @@ function lerTextoMusical(texto) {
   lerTexto(texto);
 }
 
-// ========== DESENHO LIVRE (TOOLBAR SUPERIOR) ==========
+// ========== DESENHO LIVRE ==========
 const paintCanvas = document.getElementById('paintCanvas');
 const paintCtx = paintCanvas.getContext('2d', { willReadFrequently: true });
 const paintColorPicker = document.getElementById('colorPicker');
@@ -1233,60 +1233,65 @@ window.sortearDesafio = function() {
   }
 };
 
-// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO EXPANDIDO ==========
+// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO EXPANDIDO E CORRIGIDO ==========
 // Atividades emocionais
 const atividadesTriste = [
   "Sinto muito que você esteja se sentindo triste. 💙 Vamos transformar essa tristeza em arte? Desenhe um coração e imagine o que ele gostaria de dizer.",
-  "Que pena que você está triste. ☔ Que tal fazer a Dança da Chuva Leve? Faça movimentos bem lentos, como se seus braços fossem gotinhas caindo do céu."
+  "Que pena que você está triste. ☔ Que tal fazer a Dança da Chuva Leve? Faça movimentos bem lentos, como se seus braços fossem gotinhas caindo do céu.",
+  "Entendo que às vezes a gente fica triste. 🦋 Vamos tentar a Respiração da Borboleta? Sente-se, coloque as mãos no peito, inspire abrindo os braços como asas e expire fechando."
 ];
 const atividadesFeliz = [
   "Que bom que você está feliz! 💃 Vamos espalhar essa alegria? Dance pela sala fazendo movimentos bem grandes, abrindo os braços e ocupando todo o espaço.",
-  "Alegria combina com música animada! 🎨 Escute sua música preferida e desenhe o que ela te faz sentir."
+  "Alegria combina com música animada! 🎨 Escute sua música preferida e desenhe o que ela te faz sentir.",
+  "Feliz, feliz, feliz! 🎬 Que tal encenar o dia mais feliz que você já teve?"
 ];
 const atividadesTedio = [
-  "Ah, tédio! 🦄 Vamos inventar um animal que não existe e dançar como ele? Pode ser um 'elefante voador' ou um 'cachorro com asas'!"
+  "Ah, tédio! 🦄 Vamos inventar um animal que não existe e dançar como ele? Pode ser um 'elefante voador' ou um 'cachorro com asas'!",
+  "Tédio, tédio... 🙈 Que tal desenhar sem olhar para o papel? Coloque uma música e desenhe o que vier na cabeça, de olhos fechados."
 ];
 const atividadesAnsioso = [
-  "A ansiedade pode ser difícil, mas você consegue superar! 🎈 Vamos fazer a Respiração do Balão? Inspire enchendo a barriga como se fosse um balão e expire esvaziando bem devagar."
+  "A ansiedade pode ser difícil, mas você consegue superar! 🎈 Vamos fazer a Respiração do Balão? Inspire enchendo a barriga como se fosse um balão e expire esvaziando bem devagar.",
+  "Ansiedade pede calma. ⭕ Vamos desenhar uma mandala? Faça círculos e traços repetitivos, sem pressa."
 ];
 const atividadesRaiva = [
-  "A raiva é forte, mas você é mais forte ainda! 😤 Vamos transformar essa raiva em arte. Desenhe sua raiva e depois rasgue o papel bem forte."
+  "A raiva é forte, mas você é mais forte ainda! 😤 Vamos transformar essa raiva em arte. Primeiro, desenhe sua raiva: que cor ela tem? Depois, rasgue o papel bem forte e crie um novo desenho com os pedaços.",
+  "Teatro do Monstro da Raiva: 👹 Crie um monstro que só quer um abraço. Depois, abrace esse monstro bem forte."
 ];
 
-// Conceitos musicais
+// Conceitos musicais (com palavras-chave variadas)
 const conceitosMusicais = [
-  { palavras: ['som', 'o que é som'], resposta: '🎵 Som é tudo o que podemos ouvir. O silêncio também faz parte da música, ele ajuda o som a “respirar”.' },
-  { palavras: ['altura do som', 'som agudo', 'som grave'], resposta: '🎵 Som agudo é fininho e alto, como o canto de um passarinho 🐦. Som grave é grosso e forte, como um tambor 🥁.' },
-  { palavras: ['intensidade', 'volume', 'som forte', 'som fraco'], resposta: '🎵 Intensidade é o volume do som: forte é o som alto; fraco é o som baixinho. A música pode crescer e diminuir como uma onda 🌊.' },
-  { palavras: ['duração', 'sons curtos', 'sons longos'], resposta: '🎵 Duração é quanto tempo um som dura. Sons curtos e longos juntos criam o ritmo da música.' },
-  { palavras: ['ritmo', 'o que é ritmo'], resposta: '🎵 Ritmo é o coração da música 💓. Acontece quando batemos palmas, pés ou acompanhamos uma canção.' },
-  { palavras: ['melodia', 'o que é melodia'], resposta: '🎵 Melodia é a linha musical que cantamos 🎶. É aquela parte da música que fica na cabeça o dia todo.' },
-  { palavras: ['instrumentos musicais', 'tipos de instrumentos'], resposta: '🎵 Instrumentos musicais: sopro (flauta, trompete), cordas (violão, violino), percussão (tambor, pandeiro). Cada instrumento tem sua voz especial.' },
-  { palavras: ['música é expressão'], resposta: '🎵 A música pode mostrar alegria, tristeza, calma ou energia 😊😢. Não precisa falar para comunicar!' },
+  { palavras: ['som', 'o que é som', 'definição de som'], resposta: '🎵 Som é tudo o que podemos ouvir. O silêncio também faz parte da música, ele ajuda o som a “respirar”.' },
+  { palavras: ['altura do som', 'som agudo', 'som grave', 'agudo', 'grave'], resposta: '🎵 Som agudo é fininho e alto, como o canto de um passarinho 🐦. Som grave é grosso e forte, como um tambor 🥁.' },
+  { palavras: ['intensidade', 'volume', 'som forte', 'som fraco', 'forte', 'fraco'], resposta: '🎵 Intensidade é o volume do som: forte é o som alto; fraco é o som baixinho. A música pode crescer e diminuir como uma onda 🌊.' },
+  { palavras: ['duração', 'sons curtos', 'sons longos', 'curto', 'longo'], resposta: '🎵 Duração é quanto tempo um som dura. Sons curtos e longos juntos criam o ritmo da música.' },
+  { palavras: ['ritmo', 'o que é ritmo', 'batida'], resposta: '🎵 Ritmo é o coração da música 💓. Acontece quando batemos palmas, pés ou acompanhamos uma canção.' },
+  { palavras: ['melodia', 'o que é melodia', 'linha musical'], resposta: '🎵 Melodia é a linha musical que cantamos 🎶. É aquela parte da música que fica na cabeça o dia todo.' },
+  { palavras: ['instrumentos musicais', 'instrumentos', 'tipos de instrumentos'], resposta: '🎵 Instrumentos musicais: sopro (flauta, trompete), cordas (violão, violino), percussão (tambor, pandeiro). Cada instrumento tem sua voz especial.' },
+  { palavras: ['música é expressão', 'expressão musical'], resposta: '🎵 A música pode mostrar alegria, tristeza, calma ou energia 😊😢. Não precisa falar para comunicar!' },
 ];
 
-// Compositores clássicos
+// Compositores clássicos (com palavras-chave)
 const compositores = [
-  { palavras: ['idade média', 'música medieval', 'hildegard von bingen'], resposta: '🎶 Na Idade Média (séc. V–XV), a música era ligada à igreja, cantada em grupo, sem instrumentos. Hildegard von Bingen foi uma monja compositora e pensadora. Obra famosa: Ordo Virtutum.' },
+  { palavras: ['idade média', 'música medieval', 'hildegard von bingen', 'hildegard'], resposta: '🎶 Na Idade Média (séc. V–XV), a música era ligada à igreja, cantada em grupo, sem instrumentos. Hildegard von Bingen foi uma monja compositora e pensadora. Obra famosa: Ordo Virtutum.' },
   { palavras: ['renascimento', 'música renascentista', 'palestrina'], resposta: '🎶 No Renascimento (séc. XV–XVI), a música ficou mais suave, com várias vozes juntas. Giovanni Pierluigi da Palestrina foi um compositor italiano de música sacra. Obra famosa: Missa Papae Marcelli.' },
-  { palavras: ['barroco', 'bach', 'vivaldi'], resposta: '🎶 O período Barroco (1600–1750) tem música cheia de emoção e contrastes. Johann Sebastian Bach foi um mestre alemão da harmonia. Obra: Toccata e Fuga. Antonio Vivaldi, italiano, criou As Quatro Estações.' },
-  { palavras: ['clássico', 'mozart', 'haydn'], resposta: '🎶 No período Clássico (1750–1820), a música é equilibrada e clara. Wolfgang Amadeus Mozart foi um gênio desde criança. Obra: Eine kleine Nachtmusik. Joseph Haydn, austríaco, compôs a Sinfonia Surpresa.' },
-  { palavras: ['romântico', 'beethoven', 'chopin'], resposta: '🎶 O Romantismo (séc. XIX) trouxe música intensa e cheia de sentimentos. Ludwig van Beethoven revolucionou a música mesmo surdo. Obra: Sinfonia nº 9. Frédéric Chopin, polonês, criou os Noturnos.' },
-  { palavras: ['moderno', 'debussy'], resposta: '🎶 Na música moderna (séc. XX), Claude Debussy, francês, criou músicas como pinturas sonoras. Obra: Clair de Lune.' },
-  { palavras: ['resumo períodos musicais'], resposta: '✨ Resumo rápido: Idade Média: música religiosa; Renascimento: harmonia vocal; Barroco: emoção e movimento; Clássico: equilíbrio e clareza; Romântico: sentimento e drama; Moderno: experimentação.' },
+  { palavras: ['barroco', 'bach', 'vivaldi', 'johann sebastian bach', 'antonio vivaldi'], resposta: '🎶 O período Barroco (1600–1750) tem música cheia de emoção e contrastes. Johann Sebastian Bach foi um mestre alemão da harmonia. Obra: Toccata e Fuga. Antonio Vivaldi, italiano, criou As Quatro Estações.' },
+  { palavras: ['clássico', 'mozart', 'haydn', 'wolfgang amadeus mozart', 'joseph haydn'], resposta: '🎶 No período Clássico (1750–1820), a música é equilibrada e clara. Wolfgang Amadeus Mozart foi um gênio desde criança. Obra: Eine kleine Nachtmusik. Joseph Haydn, austríaco, compôs a Sinfonia Surpresa.' },
+  { palavras: ['romântico', 'beethoven', 'chopin', 'ludwig van beethoven', 'frédéric chopin'], resposta: '🎶 O Romantismo (séc. XIX) trouxe música intensa e cheia de sentimentos. Ludwig van Beethoven revolucionou a música mesmo surdo. Obra: Sinfonia nº 9. Frédéric Chopin, polonês, criou os Noturnos.' },
+  { palavras: ['moderno', 'debussy', 'claude debussy'], resposta: '🎶 Na música moderna (séc. XX), Claude Debussy, francês, criou músicas como pinturas sonoras. Obra: Clair de Lune.' },
+  { palavras: ['resumo períodos musicais', 'períodos da música'], resposta: '✨ Resumo rápido: Idade Média: música religiosa; Renascimento: harmonia vocal; Barroco: emoção e movimento; Clássico: equilíbrio e clareza; Romântico: sentimento e drama; Moderno: experimentação.' },
 ];
 
 // Música infantil
 const musicaInfantil = [
-  { palavras: ['palavra cantada'], resposta: '🧸 A Palavra Cantada é a dupla Sandra Peres e Paulo Tatit, que faz músicas educativas, poéticas e divertidas para crianças.' },
+  { palavras: ['palavra cantada', 'sandra peres', 'paulo tatit'], resposta: '🧸 A Palavra Cantada é a dupla Sandra Peres e Paulo Tatit, que faz músicas educativas, poéticas e divertidas para crianças.' },
   { palavras: ['toquinho'], resposta: '🧸 Toquinho é um cantor e compositor brasileiro com canções suaves e afetivas que encantam crianças e adultos.' },
   { palavras: ['bia bedran'], resposta: '🧸 Bia Bedran traz brincadeiras cantadas, folclore e histórias, com forte ligação com a educação infantil.' },
-  { palavras: ['hélio ziskind'], resposta: '🧸 Hélio Ziskind é conhecido por canções educativas e trilhas infantis para TV.' },
+  { palavras: ['hélio ziskind', 'helio ziskind'], resposta: '🧸 Hélio Ziskind é conhecido por canções educativas e trilhas infantis para TV.' },
   { palavras: ['xuxa'], resposta: '🧸 Xuxa é um ícone do pop infantil, com coreografias, cores e refrões fáceis que marcaram época.' },
-  { palavras: ['tiquequê'], resposta: '🧸 Tiquequê é um grupo com humor, jogos de palavras e criatividade.' },
-  { palavras: ['the wiggles'], resposta: '🧸 The Wiggles é um grupo australiano que une música e dança para aprender brincando.' },
+  { palavras: ['tiquequê', 'tique que'], resposta: '🧸 Tiquequê é um grupo com humor, jogos de palavras e criatividade.' },
+  { palavras: ['the wiggles', 'wiggles'], resposta: '🧸 The Wiggles é um grupo australiano que une música e dança para aprender brincando.' },
   { palavras: ['raffi'], resposta: '🧸 Raffi é um cantor de folk infantil com mensagens de respeito, natureza e amizade.' },
-  { palavras: ['disney'], resposta: '🧸 As músicas da Disney são trilhas sonoras de filmes que encantam com histórias, emoção e canções inesquecíveis.' },
+  { palavras: ['disney', 'músicas da disney'], resposta: '🧸 As músicas da Disney são trilhas sonoras de filmes que encantam com histórias, emoção e canções inesquecíveis.' },
 ];
 
 // Gêneros musicais
@@ -1302,38 +1307,81 @@ const generosMusicais = [
   { palavras: ['blues'], resposta: '🎤 Blues é música de sentimento profundo, que fala de tristeza, esperança e vida.' },
   { palavras: ['jazz'], resposta: '🎤 Jazz é improvisação e liberdade musical. Cada músico cria no momento.' },
   { palavras: ['reggae'], resposta: '🎤 Reggae tem ritmo tranquilo e marcado, com mensagens de paz, amor e igualdade.' },
-  { palavras: ['heavy metal'], resposta: '🎤 Heavy metal é a versão mais pesada do rock, com guitarras distorcidas e temas intensos.' },
+  { palavras: ['heavy metal', 'metal'], resposta: '🎤 Heavy metal é a versão mais pesada do rock, com guitarras distorcidas e temas intensos.' },
   { palavras: ['house'], resposta: '🎤 House é música eletrônica dançante, com batida constante.' },
   { palavras: ['techno', 'tecno'], resposta: '🎤 Techno é eletrônica mais minimalista e futurista, com sons repetidos.' },
-  { palavras: ['hip hop'], resposta: '🎤 Hip hop é uma cultura que envolve música, dança e arte visual. Letras sobre a realidade.' },
+  { palavras: ['hip hop', 'hiphop'], resposta: '🎤 Hip hop é uma cultura que envolve música, dança e arte visual. Letras sobre a realidade.' },
   { palavras: ['gospel'], resposta: '🎤 Gospel é música religiosa cristã, com letras de fé, esperança e louvor.' },
   { palavras: ['country'], resposta: '🎤 Country é música ligada à vida no campo, com instrumentos acústicos.' },
   { palavras: ['rap'], resposta: '🎤 Rap é forma musical falada e ritmada, com letras fortes e críticas.' },
 ];
 
+// Artistas plásticos (já existentes, com palavras-chave)
+const artistasPlasticos = [
+  { palavras: ['leonardo da vinci', 'leonardo', 'da vinci', 'monalisa'], resposta: 'Leonardo da Vinci (1452–1519) foi um gênio multifacetado do Renascimento. Pintor da “Mona Lisa” e de “A Última Ceia”, também foi cientista, inventor e anatomista. 🔍' },
+  { palavras: ['van gogh', 'gogh', 'vincent'], resposta: 'Vincent van Gogh (1853–1890) foi um pintor holandês do pós-impressionismo. Criou obras vibrantes como “Noite Estrelada”. 🌟' },
+  { palavras: ['tarsila', 'tarsila do amaral', 'abaporu'], resposta: 'Tarsila do Amaral (1886–1973) foi uma das principais artistas do Modernismo brasileiro. Criadora de “Abaporu”. 🎨' },
+  { palavras: ['portinari', 'candido portinari'], resposta: 'Candido Portinari (1903–1962) foi um pintor brasileiro que retratou temas sociais e o povo trabalhador. 👨‍🌾' },
+  { palavras: ['michelangelo'], resposta: 'Michelangelo (1475–1564) foi um artista renascentista italiano, mestre da escultura, pintura e arquitetura. Criou o teto da Capela Sistina e a escultura “Davi”. 🗿' },
+  { palavras: ['frida kahlo', 'frida'], resposta: 'Frida Kahlo (1907–1954) foi uma pintora mexicana famosa por seus autorretratos intensos e obras que exploram identidade, dor e cultura mexicana. 🌺' },
+  { palavras: ['romero britto', 'britto'], resposta: 'Romero Britto (1963– ) é um artista brasileiro contemporâneo conhecido por seu estilo colorido, alegre e inspirado na pop art. 🎈' },
+];
+
 // Curiosidades
 const curiosidadesDesenho = [
   "Antes de existirem cadernos, as pessoas já pintavam nas cavernas, como nas pinturas de Caverna de Altamira, usando terra e carvão. 🎨",
-  "Leonardo da Vinci desenhava máquinas voadoras séculos antes de o avião existir. ✈️"
+  "Leonardo da Vinci desenhava máquinas voadoras séculos antes de o avião existir. ✈️",
+  "Vincent van Gogh pintou mais de 30 autorretratos ao longo da vida. 🎨",
+  "Tarsila do Amaral se inspirou em sonhos para criar o Abaporu. 💭"
 ];
-const curiosidadesDanca = ["O balé clássico nasceu nas cortes da Europa e ficou famoso com companhias como o Bolshoi Ballet. 🩰"];
-const curiosidadesTeatro = ["O teatro começou na Grécia Antiga, há mais de 2.500 anos, em festas dedicadas ao deus Dionísio. 🎭"];
-const curiosidadesEscultura = ["Michelangelo dizia que a escultura já estava escondida na pedra, e ele só ajudava a revelar. 🗿"];
-const curiosidadesArteGeral = ["O grafite transforma muros em galerias ao ar livre. 🧱"];
+const curiosidadesDanca = [
+  "O balé clássico nasceu nas cortes da Europa e ficou famoso com companhias como o Bolshoi Ballet. 🩰",
+  "A dança contemporânea permite que cada bailarino crie seus próprios movimentos. 💃"
+];
+const curiosidadesTeatro = [
+  "O teatro começou na Grécia Antiga, há mais de 2.500 anos, em festas dedicadas ao deus Dionísio. 🎭",
+  "Shakespeare escreveu 37 peças, incluindo Romeu e Julieta e Hamlet. 📜"
+];
+const curiosidadesEscultura = [
+  "Michelangelo dizia que a escultura já estava escondida na pedra, e ele só ajudava a revelar. 🗿",
+  "O Pensador, de Auguste Rodin, foi criado originalmente para fazer parte de uma obra maior chamada A Porta do Inferno. 🤔"
+];
+const curiosidadesArteGeral = [
+  "O grafite transforma muros em galerias ao ar livre. 🧱",
+  "Banksy é um artista de rua famoso, mas ninguém sabe quem ele realmente é. 🕵️",
+  "A arte pode ser feita com qualquer material: sucata, gelo, areia, luz... ♻️"
+];
 
-// Unir todo o conhecimento
+// Função para responder curiosidades
+function responderCuriosidade(perguntaNormalizada) {
+  if (perguntaNormalizada.includes('desenho') || perguntaNormalizada.includes('pintura') || perguntaNormalizada.includes('pintar')) {
+    return "🎨 " + curiosidadesDesenho[Math.floor(Math.random() * curiosidadesDesenho.length)];
+  }
+  if (perguntaNormalizada.includes('dança') || perguntaNormalizada.includes('danca') || perguntaNormalizada.includes('bailar')) {
+    return "💃 " + curiosidadesDanca[Math.floor(Math.random() * curiosidadesDanca.length)];
+  }
+  if (perguntaNormalizada.includes('teatro') || perguntaNormalizada.includes('peça') || perguntaNormalizada.includes('shakespeare')) {
+    return "🎭 " + curiosidadesTeatro[Math.floor(Math.random() * curiosidadesTeatro.length)];
+  }
+  if (perguntaNormalizada.includes('escultura') || perguntaNormalizada.includes('estátua') || perguntaNormalizada.includes('esculpir')) {
+    return "🗿 " + curiosidadesEscultura[Math.floor(Math.random() * curiosidadesEscultura.length)];
+  }
+  return "✨ " + curiosidadesArteGeral[Math.floor(Math.random() * curiosidadesArteGeral.length)];
+}
+
+// Montagem do array conhecimento (ordem: específicos primeiro, depois genéricos)
 const conhecimento = [
-  // Emoções
-  { palavras: ['estou triste', 'triste', 'me sinto triste'], resposta: () => atividadesTriste[Math.floor(Math.random() * atividadesTriste.length)] },
-  { palavras: ['estou feliz', 'feliz', 'alegre'], resposta: () => atividadesFeliz[Math.floor(Math.random() * atividadesFeliz.length)] },
-  { palavras: ['estou entediado', 'tedio', 'sem nada'], resposta: () => atividadesTedio[Math.floor(Math.random() * atividadesTedio.length)] },
-  { palavras: ['estou ansioso', 'ansioso', 'ansiedade'], resposta: () => atividadesAnsioso[Math.floor(Math.random() * atividadesAnsioso.length)] },
-  { palavras: ['estou com raiva', 'raiva', 'zangado'], resposta: () => atividadesRaiva[Math.floor(Math.random() * atividadesRaiva.length)] },
+  // Emoções (vêm primeiro para capturar sentimentos)
+  { palavras: ['estou triste', 'triste', 'me sinto triste', 'sentindo triste', 'tristeza'], resposta: () => atividadesTriste[Math.floor(Math.random() * atividadesTriste.length)] },
+  { palavras: ['estou feliz', 'feliz', 'alegre', 'contente', 'felicidade'], resposta: () => atividadesFeliz[Math.floor(Math.random() * atividadesFeliz.length)] },
+  { palavras: ['estou entediado', 'entediado', 'tédio', 'sem nada para fazer', 'chateado'], resposta: () => atividadesTedio[Math.floor(Math.random() * atividadesTedio.length)] },
+  { palavras: ['estou ansioso', 'ansioso', 'ansiedade', 'nervoso', 'preocupado'], resposta: () => atividadesAnsioso[Math.floor(Math.random() * atividadesAnsioso.length)] },
+  { palavras: ['estou com raiva', 'raiva', 'zangado', 'com raiva', 'irritado'], resposta: () => atividadesRaiva[Math.floor(Math.random() * atividadesRaiva.length)] },
   
-  // Conceitos musicais
-  ...conceitosMusicais,
+  // Artistas plásticos específicos
+  ...artistasPlasticos,
   
-  // Compositores
+  // Compositores e períodos musicais
   ...compositores,
   
   // Música infantil
@@ -1342,14 +1390,11 @@ const conhecimento = [
   // Gêneros musicais
   ...generosMusicais,
   
-  // Artistas plásticos (já existentes no original, mantendo alguns)
-  { palavras: ['leonardo da vinci', 'leonardo'], resposta: 'Leonardo da Vinci (1452–1519) foi um gênio multifacetado do Renascimento. Pintor da “Mona Lisa” e de “A Última Ceia”, também foi cientista, inventor e anatomista. 🔍' },
-  { palavras: ['van gogh'], resposta: 'Vincent van Gogh (1853–1890) foi um pintor holandês do pós-impressionismo. Criou obras vibrantes como “Noite Estrelada”. 🌟' },
-  { palavras: ['tarsila'], resposta: 'Tarsila do Amaral (1886–1973) foi uma das principais artistas do Modernismo brasileiro. Criadora de “Abaporu”. 🎨' },
-  { palavras: ['portinari'], resposta: 'Candido Portinari (1903–1962) foi um pintor brasileiro que retratou temas sociais e o povo trabalhador. 👨‍🌾' },
+  // Conceitos musicais
+  ...conceitosMusicais,
   
-  // Resposta padrão
-  { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre artistas (Tarsila, Van Gogh), música (ritmo, melodias, compositores), gêneros musicais (MPB, rock, samba) ou me contar como você está se sentindo! 😊' }
+  // Resposta padrão (genérica, deve vir por último)
+  { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre artistas (Tarsila, Van Gogh, Portinari), música (ritmo, melodias, compositores), gêneros musicais (MPB, rock, samba) ou me contar como você está se sentindo! 😊' }
 ];
 
 // Lista de palavras bloqueadas
@@ -1358,22 +1403,6 @@ let historicoPerguntas = [];
 
 function removerAcentos(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
-function responderCuriosidade(perguntaNormalizada) {
-  if (perguntaNormalizada.includes('desenho') || perguntaNormalizada.includes('pintura')) {
-    return "🎨 " + curiosidadesDesenho[Math.floor(Math.random() * curiosidadesDesenho.length)];
-  }
-  if (perguntaNormalizada.includes('dança') || perguntaNormalizada.includes('danca')) {
-    return "💃 " + curiosidadesDanca[Math.floor(Math.random() * curiosidadesDanca.length)];
-  }
-  if (perguntaNormalizada.includes('teatro')) {
-    return "🎭 " + curiosidadesTeatro[Math.floor(Math.random() * curiosidadesTeatro.length)];
-  }
-  if (perguntaNormalizada.includes('escultura') || perguntaNormalizada.includes('estátua')) {
-    return "🗿 " + curiosidadesEscultura[Math.floor(Math.random() * curiosidadesEscultura.length)];
-  }
-  return "✨ " + curiosidadesArteGeral[Math.floor(Math.random() * curiosidadesArteGeral.length)];
 }
 
 function adicionarMensagem(tipo, texto) {
@@ -1418,10 +1447,15 @@ function enviarPergunta() {
     const perguntaNormalizada = removerAcentos(perguntaLower);
     let respostaEncontrada = null;
 
-    const palavrasCuriosidade = ['curiosidade', 'curiosidades', 'me conte algo', 'fale sobre'];
-    if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
+    // Primeiro verifica se é um pedido de curiosidade (mas cuidado para não capturar perguntas específicas)
+    const palavrasCuriosidade = ['curiosidade', 'curiosidades', 'me conte algo', 'me conta uma', 'fale sobre algo', 'me diga uma'];
+    const ehCuriosidade = palavrasCuriosidade.some(p => perguntaNormalizada.includes(p));
+    
+    if (ehCuriosidade && !perguntaNormalizada.includes('quem foi') && !perguntaNormalizada.includes('o que é')) {
+      // Se for curiosidade genérica, responde com curiosidade
       respostaEncontrada = responderCuriosidade(perguntaNormalizada);
     } else {
+      // Procura no banco de conhecimento
       for (let item of conhecimento) {
         for (let palavra of item.palavras) {
           const palavraNormalizada = removerAcentos(palavra.toLowerCase());
@@ -1435,6 +1469,7 @@ function enviarPergunta() {
     }
 
     if (!respostaEncontrada) {
+      // Se não achou, usa a resposta padrão
       respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
     }
 
