@@ -394,7 +394,7 @@ button:hover { background: #ff9cbb; }
   font-size: 14px;
 }
 
-/* ========== NOVO DESENHO LIVRE ========== */
+/* ========== DESENHO LIVRE (TOOLBAR SUPERIOR) ========== */
 #toolbar { 
     background: white; padding: 15px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     margin-bottom: 15px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 950px;
@@ -415,6 +415,7 @@ button:hover { background: #ff9cbb; }
     background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     cursor: url('https://cur.cursors-4u.net/games/gam-4/gam372.cur'), auto;
     touch-action: none; max-width: 100%; height: auto; display: block; margin: 0 auto;
+    border: 4px solid #001858;
 }
 </style>
 </head>
@@ -432,7 +433,7 @@ button:hover { background: #ff9cbb; }
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
 </div>
 
-<!-- ========== DESENHO LIVRE (NOVO) ========== -->
+<!-- ========== DESENHO LIVRE (VERSÃO TOOLBAR SUPERIOR) ========== -->
 <div id="desenho" class="screen">
   <h2>🖍 Super Estúdio de Desenho</h2>
   <div id="toolbar">
@@ -460,7 +461,7 @@ button:hover { background: #ff9cbb; }
     <button id="btnSalvar" class="btn-action save">Salvar</button>
   </div>
   <canvas id="paintCanvas" width="900" height="550"></canvas>
-  <button onclick="show('home')">⬅ Voltar</button>
+  <button onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
 </div>
 
 <!-- ========== COLORIR ONLINE ========== -->
@@ -587,10 +588,10 @@ button:hover { background: #ff9cbb; }
       <button onclick="fazerPergunta('Quem foi Van Gogh?')">Van Gogh</button>
       <button onclick="fazerPergunta('Quem foi Tarsila?')">Tarsila</button>
       <button onclick="fazerPergunta('Me conte uma curiosidade')">🤔 Curiosidade</button>
-      <button onclick="fazerPergunta('Curiosidade do desenho')">🎨 Desenho</button>
-      <button onclick="fazerPergunta('Curiosidade da música')">🎵 Música</button>
-      <button onclick="fazerPergunta('Curiosidade da dança')">💃 Dança</button>
-      <button onclick="fazerPergunta('Curiosidade do teatro')">🎭 Teatro</button>
+      <button onclick="fazerPergunta('O que é som?')">🎵 Som</button>
+      <button onclick="fazerPergunta('O que é ritmo?')">🥁 Ritmo</button>
+      <button onclick="fazerPergunta('Quem foi Mozart?')">🎼 Mozart</button>
+      <button onclick="fazerPergunta('O que é MPB?')">🇧🇷 MPB</button>
       <button onclick="fazerPergunta('Estou triste')">😢 Triste</button>
       <button onclick="fazerPergunta('Estou feliz')">😊 Feliz</button>
     </div>
@@ -629,7 +630,7 @@ function show(id) {
   }
 }
 
-// ========== FUNÇÃO DE ÁUDIO (para todo o app) ==========
+// ========== FUNÇÃO DE ÁUDIO ==========
 function lerTexto(texto) {
   const textoLimpo = texto.replace(/[^\w\s\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]/g, '');
   const utterance = new SpeechSynthesisUtterance(textoLimpo);
@@ -643,7 +644,7 @@ function lerTextoMusical(texto) {
   lerTexto(texto);
 }
 
-// ========== NOVO DESENHO LIVRE ==========
+// ========== DESENHO LIVRE (TOOLBAR SUPERIOR) ==========
 const paintCanvas = document.getElementById('paintCanvas');
 const paintCtx = paintCanvas.getContext('2d', { willReadFrequently: true });
 const paintColorPicker = document.getElementById('colorPicker');
@@ -656,7 +657,6 @@ let paintInicioX, paintInicioY;
 let paintSnapshot;
 let paintPontos = [];
 
-// Funções do novo desenho
 function paintDefinirFerramenta(e, tipo) {
     document.querySelectorAll('#toolbar button').forEach(b => b.classList.remove('active'));
     if(e) e.target.classList.add('active');
@@ -722,9 +722,10 @@ function paintDrawStar(cx, cy, r, p, m) {
 }
 
 function paintInserirTexto(x, y) {
-    const txt = prompt("Escreve a tua mensagem:");
+    const txt = prompt("Escreva a sua mensagem:");
     if (txt) {
-        paintCtx.font = `${paintLineWidth.value * 3}px Comic Sans MS`;
+        let fontSize = Math.min(48, Math.max(12, paintLineWidth.value * 3));
+        paintCtx.font = `${fontSize}px Comic Sans MS`;
         paintCtx.fillStyle = paintColorPicker.value;
         paintCtx.fillText(txt, x, y);
     }
@@ -802,7 +803,7 @@ paintCanvas.addEventListener('mouseleave', () => {
     paintDesenhando = false;
 });
 
-// Eventos de toque (para dispositivos móveis)
+// Eventos de toque
 paintCanvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const rect = paintCanvas.getBoundingClientRect();
@@ -854,7 +855,7 @@ document.getElementById('btnEstrela').onclick = (e) => paintDefinirFerramenta(e,
 document.getElementById('btnTexto').onclick = (e) => paintDefinirFerramenta(e, 'texto');
 paintPincelEstilo.onchange = () => paintDefinirFerramenta(null, paintPincelEstilo.value);
 
-// Funções de salvar e limpar (substituem as antigas)
+// Funções de salvar e limpar
 window.saveDrawing = function() {
     const data = paintCanvas.toDataURL();
     const imgs = JSON.parse(localStorage.getItem("arts") || "[]");
@@ -873,10 +874,7 @@ document.getElementById('btnSalvar').onclick = saveDrawing;
 // Inicializa ferramenta padrão
 paintFerramenta = 'normal';
 
-// ========== FUNÇÕES ANTIGAS (MANTIDAS PARA OUTRAS TELAS) ==========
-// (As funções de desenho antigas foram removidas, mas as outras telas continuam funcionando)
-
-// ========== COLORIR ONLINE (já existente) ==========
+// ========== COLORIR ONLINE ==========
 const imagensColorir = [
   "https://i.imgur.com/Q6oaW2D.jpg",
   "https://i.imgur.com/of23VQu.jpg",
@@ -895,6 +893,8 @@ const ctxColorir = canvasColorir.getContext("2d");
 const ferramentasColorir = document.getElementById("ferramentasColorir");
 let ferramentaAtual = "pincel";
 let corAtual = "#ff0000";
+let drawing = false;
+let size = 6;
 
 // Miniaturas
 imagensColorir.forEach((url, index) => {
@@ -1035,7 +1035,7 @@ function voltarEscolha() {
   limparCanvasColorir();
 }
 
-// ========== GALERIA (já existente) ==========
+// ========== GALERIA ==========
 function loadGallery() {
   const gallery = document.getElementById("gallery");
   gallery.innerHTML = "";
@@ -1059,7 +1059,7 @@ function limparGaleria() {
   }
 }
 
-// ========== MURAL VIRTUAL (já existente) ==========
+// ========== MURAL VIRTUAL ==========
 let savedUploads = JSON.parse(localStorage.getItem("muralUploads") || "[]");
 let muralItems = [...savedUploads];
 
@@ -1157,7 +1157,7 @@ function carregarMural() {
   currentFilter = 'todos';
 }
 
-// ========== DESAFIOS DE ARTE (já existente) ==========
+// ========== DESAFIOS DE ARTE ==========
 const desafios = [
   { 
     numero: 1, 
@@ -1233,17 +1233,246 @@ window.sortearDesafio = function() {
   }
 };
 
-// ========== PINCEL MÁGICO (já existente) ==========
-// (mantido o mesmo código do original, apenas omitido por brevidade, mas presente no código final)
-// ... (todo o código do Pincel Mágico, atividades emocionais, conhecimento, etc.)
+// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO EXPANDIDO ==========
+// Atividades emocionais
+const atividadesTriste = [
+  "Sinto muito que você esteja se sentindo triste. 💙 Vamos transformar essa tristeza em arte? Desenhe um coração e imagine o que ele gostaria de dizer.",
+  "Que pena que você está triste. ☔ Que tal fazer a Dança da Chuva Leve? Faça movimentos bem lentos, como se seus braços fossem gotinhas caindo do céu."
+];
+const atividadesFeliz = [
+  "Que bom que você está feliz! 💃 Vamos espalhar essa alegria? Dance pela sala fazendo movimentos bem grandes, abrindo os braços e ocupando todo o espaço.",
+  "Alegria combina com música animada! 🎨 Escute sua música preferida e desenhe o que ela te faz sentir."
+];
+const atividadesTedio = [
+  "Ah, tédio! 🦄 Vamos inventar um animal que não existe e dançar como ele? Pode ser um 'elefante voador' ou um 'cachorro com asas'!"
+];
+const atividadesAnsioso = [
+  "A ansiedade pode ser difícil, mas você consegue superar! 🎈 Vamos fazer a Respiração do Balão? Inspire enchendo a barriga como se fosse um balão e expire esvaziando bem devagar."
+];
+const atividadesRaiva = [
+  "A raiva é forte, mas você é mais forte ainda! 😤 Vamos transformar essa raiva em arte. Desenhe sua raiva e depois rasgue o papel bem forte."
+];
 
-// ========== ATIVIDADES EMOCIONAIS E CONHECIMENTO ==========
-// (todo o conteúdo do Pincel Mágico original deve ser mantido aqui)
-// Por questões de espaço, não repetimos, mas no arquivo final deve estar completo.
+// Conceitos musicais
+const conceitosMusicais = [
+  { palavras: ['som', 'o que é som'], resposta: '🎵 Som é tudo o que podemos ouvir. O silêncio também faz parte da música, ele ajuda o som a “respirar”.' },
+  { palavras: ['altura do som', 'som agudo', 'som grave'], resposta: '🎵 Som agudo é fininho e alto, como o canto de um passarinho 🐦. Som grave é grosso e forte, como um tambor 🥁.' },
+  { palavras: ['intensidade', 'volume', 'som forte', 'som fraco'], resposta: '🎵 Intensidade é o volume do som: forte é o som alto; fraco é o som baixinho. A música pode crescer e diminuir como uma onda 🌊.' },
+  { palavras: ['duração', 'sons curtos', 'sons longos'], resposta: '🎵 Duração é quanto tempo um som dura. Sons curtos e longos juntos criam o ritmo da música.' },
+  { palavras: ['ritmo', 'o que é ritmo'], resposta: '🎵 Ritmo é o coração da música 💓. Acontece quando batemos palmas, pés ou acompanhamos uma canção.' },
+  { palavras: ['melodia', 'o que é melodia'], resposta: '🎵 Melodia é a linha musical que cantamos 🎶. É aquela parte da música que fica na cabeça o dia todo.' },
+  { palavras: ['instrumentos musicais', 'tipos de instrumentos'], resposta: '🎵 Instrumentos musicais: sopro (flauta, trompete), cordas (violão, violino), percussão (tambor, pandeiro). Cada instrumento tem sua voz especial.' },
+  { palavras: ['música é expressão'], resposta: '🎵 A música pode mostrar alegria, tristeza, calma ou energia 😊😢. Não precisa falar para comunicar!' },
+];
 
-// ========== INICIALIZAÇÃO ==========
-// Garantir que a galeria seja carregada se a tela for ativa
-// O restante já está ok.
+// Compositores clássicos
+const compositores = [
+  { palavras: ['idade média', 'música medieval', 'hildegard von bingen'], resposta: '🎶 Na Idade Média (séc. V–XV), a música era ligada à igreja, cantada em grupo, sem instrumentos. Hildegard von Bingen foi uma monja compositora e pensadora. Obra famosa: Ordo Virtutum.' },
+  { palavras: ['renascimento', 'música renascentista', 'palestrina'], resposta: '🎶 No Renascimento (séc. XV–XVI), a música ficou mais suave, com várias vozes juntas. Giovanni Pierluigi da Palestrina foi um compositor italiano de música sacra. Obra famosa: Missa Papae Marcelli.' },
+  { palavras: ['barroco', 'bach', 'vivaldi'], resposta: '🎶 O período Barroco (1600–1750) tem música cheia de emoção e contrastes. Johann Sebastian Bach foi um mestre alemão da harmonia. Obra: Toccata e Fuga. Antonio Vivaldi, italiano, criou As Quatro Estações.' },
+  { palavras: ['clássico', 'mozart', 'haydn'], resposta: '🎶 No período Clássico (1750–1820), a música é equilibrada e clara. Wolfgang Amadeus Mozart foi um gênio desde criança. Obra: Eine kleine Nachtmusik. Joseph Haydn, austríaco, compôs a Sinfonia Surpresa.' },
+  { palavras: ['romântico', 'beethoven', 'chopin'], resposta: '🎶 O Romantismo (séc. XIX) trouxe música intensa e cheia de sentimentos. Ludwig van Beethoven revolucionou a música mesmo surdo. Obra: Sinfonia nº 9. Frédéric Chopin, polonês, criou os Noturnos.' },
+  { palavras: ['moderno', 'debussy'], resposta: '🎶 Na música moderna (séc. XX), Claude Debussy, francês, criou músicas como pinturas sonoras. Obra: Clair de Lune.' },
+  { palavras: ['resumo períodos musicais'], resposta: '✨ Resumo rápido: Idade Média: música religiosa; Renascimento: harmonia vocal; Barroco: emoção e movimento; Clássico: equilíbrio e clareza; Romântico: sentimento e drama; Moderno: experimentação.' },
+];
+
+// Música infantil
+const musicaInfantil = [
+  { palavras: ['palavra cantada'], resposta: '🧸 A Palavra Cantada é a dupla Sandra Peres e Paulo Tatit, que faz músicas educativas, poéticas e divertidas para crianças.' },
+  { palavras: ['toquinho'], resposta: '🧸 Toquinho é um cantor e compositor brasileiro com canções suaves e afetivas que encantam crianças e adultos.' },
+  { palavras: ['bia bedran'], resposta: '🧸 Bia Bedran traz brincadeiras cantadas, folclore e histórias, com forte ligação com a educação infantil.' },
+  { palavras: ['hélio ziskind'], resposta: '🧸 Hélio Ziskind é conhecido por canções educativas e trilhas infantis para TV.' },
+  { palavras: ['xuxa'], resposta: '🧸 Xuxa é um ícone do pop infantil, com coreografias, cores e refrões fáceis que marcaram época.' },
+  { palavras: ['tiquequê'], resposta: '🧸 Tiquequê é um grupo com humor, jogos de palavras e criatividade.' },
+  { palavras: ['the wiggles'], resposta: '🧸 The Wiggles é um grupo australiano que une música e dança para aprender brincando.' },
+  { palavras: ['raffi'], resposta: '🧸 Raffi é um cantor de folk infantil com mensagens de respeito, natureza e amizade.' },
+  { palavras: ['disney'], resposta: '🧸 As músicas da Disney são trilhas sonoras de filmes que encantam com histórias, emoção e canções inesquecíveis.' },
+];
+
+// Gêneros musicais
+const generosMusicais = [
+  { palavras: ['mpb', 'música popular brasileira'], resposta: '🇧🇷 MPB mistura tradição e modernidade. Letras poéticas, sociais e afetivas. Usa violão, piano e ritmos brasileiros.' },
+  { palavras: ['funk'], resposta: '🎤 Funk tem batida forte e repetitiva. Surgiu nas periferias como forma de expressão social e dança.' },
+  { palavras: ['pop'], resposta: '🎤 Pop é música popular e acessível, com refrões fáceis e ritmo dançante.' },
+  { palavras: ['rock'], resposta: '🎤 Rock tem energia, atitude e guitarras elétricas. Fala de liberdade e juventude.' },
+  { palavras: ['samba'], resposta: '🇧🇷 Samba é ritmo brasileiro ligado à dança e à comunidade. Usa percussão e alegria.' },
+  { palavras: ['bossa nova'], resposta: '🇧🇷 Bossa nova é um samba mais suave e sofisticado, com clima calmo e violão delicado.' },
+  { palavras: ['axé'], resposta: '🎤 Axé é ritmo festivo da Bahia, para dançar, pular e cantar em grupo.' },
+  { palavras: ['forró'], resposta: '🎤 Forró é ritmo nordestino animado ou romântico, com sanfona, zabumba e triângulo.' },
+  { palavras: ['blues'], resposta: '🎤 Blues é música de sentimento profundo, que fala de tristeza, esperança e vida.' },
+  { palavras: ['jazz'], resposta: '🎤 Jazz é improvisação e liberdade musical. Cada músico cria no momento.' },
+  { palavras: ['reggae'], resposta: '🎤 Reggae tem ritmo tranquilo e marcado, com mensagens de paz, amor e igualdade.' },
+  { palavras: ['heavy metal'], resposta: '🎤 Heavy metal é a versão mais pesada do rock, com guitarras distorcidas e temas intensos.' },
+  { palavras: ['house'], resposta: '🎤 House é música eletrônica dançante, com batida constante.' },
+  { palavras: ['techno', 'tecno'], resposta: '🎤 Techno é eletrônica mais minimalista e futurista, com sons repetidos.' },
+  { palavras: ['hip hop'], resposta: '🎤 Hip hop é uma cultura que envolve música, dança e arte visual. Letras sobre a realidade.' },
+  { palavras: ['gospel'], resposta: '🎤 Gospel é música religiosa cristã, com letras de fé, esperança e louvor.' },
+  { palavras: ['country'], resposta: '🎤 Country é música ligada à vida no campo, com instrumentos acústicos.' },
+  { palavras: ['rap'], resposta: '🎤 Rap é forma musical falada e ritmada, com letras fortes e críticas.' },
+];
+
+// Curiosidades
+const curiosidadesDesenho = [
+  "Antes de existirem cadernos, as pessoas já pintavam nas cavernas, como nas pinturas de Caverna de Altamira, usando terra e carvão. 🎨",
+  "Leonardo da Vinci desenhava máquinas voadoras séculos antes de o avião existir. ✈️"
+];
+const curiosidadesDanca = ["O balé clássico nasceu nas cortes da Europa e ficou famoso com companhias como o Bolshoi Ballet. 🩰"];
+const curiosidadesTeatro = ["O teatro começou na Grécia Antiga, há mais de 2.500 anos, em festas dedicadas ao deus Dionísio. 🎭"];
+const curiosidadesEscultura = ["Michelangelo dizia que a escultura já estava escondida na pedra, e ele só ajudava a revelar. 🗿"];
+const curiosidadesArteGeral = ["O grafite transforma muros em galerias ao ar livre. 🧱"];
+
+// Unir todo o conhecimento
+const conhecimento = [
+  // Emoções
+  { palavras: ['estou triste', 'triste', 'me sinto triste'], resposta: () => atividadesTriste[Math.floor(Math.random() * atividadesTriste.length)] },
+  { palavras: ['estou feliz', 'feliz', 'alegre'], resposta: () => atividadesFeliz[Math.floor(Math.random() * atividadesFeliz.length)] },
+  { palavras: ['estou entediado', 'tedio', 'sem nada'], resposta: () => atividadesTedio[Math.floor(Math.random() * atividadesTedio.length)] },
+  { palavras: ['estou ansioso', 'ansioso', 'ansiedade'], resposta: () => atividadesAnsioso[Math.floor(Math.random() * atividadesAnsioso.length)] },
+  { palavras: ['estou com raiva', 'raiva', 'zangado'], resposta: () => atividadesRaiva[Math.floor(Math.random() * atividadesRaiva.length)] },
+  
+  // Conceitos musicais
+  ...conceitosMusicais,
+  
+  // Compositores
+  ...compositores,
+  
+  // Música infantil
+  ...musicaInfantil,
+  
+  // Gêneros musicais
+  ...generosMusicais,
+  
+  // Artistas plásticos (já existentes no original, mantendo alguns)
+  { palavras: ['leonardo da vinci', 'leonardo'], resposta: 'Leonardo da Vinci (1452–1519) foi um gênio multifacetado do Renascimento. Pintor da “Mona Lisa” e de “A Última Ceia”, também foi cientista, inventor e anatomista. 🔍' },
+  { palavras: ['van gogh'], resposta: 'Vincent van Gogh (1853–1890) foi um pintor holandês do pós-impressionismo. Criou obras vibrantes como “Noite Estrelada”. 🌟' },
+  { palavras: ['tarsila'], resposta: 'Tarsila do Amaral (1886–1973) foi uma das principais artistas do Modernismo brasileiro. Criadora de “Abaporu”. 🎨' },
+  { palavras: ['portinari'], resposta: 'Candido Portinari (1903–1962) foi um pintor brasileiro que retratou temas sociais e o povo trabalhador. 👨‍🌾' },
+  
+  // Resposta padrão
+  { palavras: [], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre artistas (Tarsila, Van Gogh), música (ritmo, melodias, compositores), gêneros musicais (MPB, rock, samba) ou me contar como você está se sentindo! 😊' }
+];
+
+// Lista de palavras bloqueadas
+let palavrasBloqueadas = ['violência', 'guerra', 'tiro', 'sangue', 'briga', 'morte'];
+let historicoPerguntas = [];
+
+function removerAcentos(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function responderCuriosidade(perguntaNormalizada) {
+  if (perguntaNormalizada.includes('desenho') || perguntaNormalizada.includes('pintura')) {
+    return "🎨 " + curiosidadesDesenho[Math.floor(Math.random() * curiosidadesDesenho.length)];
+  }
+  if (perguntaNormalizada.includes('dança') || perguntaNormalizada.includes('danca')) {
+    return "💃 " + curiosidadesDanca[Math.floor(Math.random() * curiosidadesDanca.length)];
+  }
+  if (perguntaNormalizada.includes('teatro')) {
+    return "🎭 " + curiosidadesTeatro[Math.floor(Math.random() * curiosidadesTeatro.length)];
+  }
+  if (perguntaNormalizada.includes('escultura') || perguntaNormalizada.includes('estátua')) {
+    return "🗿 " + curiosidadesEscultura[Math.floor(Math.random() * curiosidadesEscultura.length)];
+  }
+  return "✨ " + curiosidadesArteGeral[Math.floor(Math.random() * curiosidadesArteGeral.length)];
+}
+
+function adicionarMensagem(tipo, texto) {
+  const chat = document.getElementById('chatArea');
+  const div = document.createElement('div');
+  div.className = `mensagem ${tipo}`;
+  if (tipo === 'resposta') {
+    const textoEscapado = texto.replace(/'/g, "\\'");
+    div.innerHTML = `<span>${texto} <button class="botao-audio" onclick="lerTexto('${textoEscapado}')"><i class="fas fa-volume-up"></i></button></span>`;
+  } else {
+    div.innerHTML = `<span>${texto}</span>`;
+  }
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function fazerPergunta(pergunta) {
+  document.getElementById('perguntaInput').value = pergunta;
+  enviarPergunta();
+}
+
+function enviarPergunta() {
+  const input = document.getElementById('perguntaInput');
+  const pergunta = input.value.trim();
+  if (pergunta === '') return;
+
+  const perguntaLower = pergunta.toLowerCase();
+  for (let palavra of palavrasBloqueadas) {
+    if (perguntaLower.includes(palavra)) {
+      adicionarMensagem('pergunta', pergunta);
+      adicionarMensagem('resposta', 'Ops! Essa pergunta não posso responder. Que tal perguntar sobre arte, desenho ou música? 🖌️');
+      input.value = '';
+      return;
+    }
+  }
+
+  adicionarMensagem('pergunta', pergunta);
+  const pincelFala = document.getElementById('pincelFala');
+  pincelFala.innerText = 'Deixa eu pensar... 🤔';
+
+  setTimeout(() => {
+    const perguntaNormalizada = removerAcentos(perguntaLower);
+    let respostaEncontrada = null;
+
+    const palavrasCuriosidade = ['curiosidade', 'curiosidades', 'me conte algo', 'fale sobre'];
+    if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
+      respostaEncontrada = responderCuriosidade(perguntaNormalizada);
+    } else {
+      for (let item of conhecimento) {
+        for (let palavra of item.palavras) {
+          const palavraNormalizada = removerAcentos(palavra.toLowerCase());
+          if (perguntaNormalizada.includes(palavraNormalizada)) {
+            respostaEncontrada = item.resposta;
+            break;
+          }
+        }
+        if (respostaEncontrada) break;
+      }
+    }
+
+    if (!respostaEncontrada) {
+      respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
+    }
+
+    if (typeof respostaEncontrada === 'function') {
+      respostaEncontrada = respostaEncontrada();
+    }
+
+    pincelFala.innerText = respostaEncontrada;
+    adicionarMensagem('resposta', respostaEncontrada);
+  }, 800);
+
+  input.value = '';
+}
+
+function limparHistorico() {
+  document.getElementById('chatArea').innerHTML = '';
+  adicionarMensagem('resposta', 'Histórico limpo! Pode fazer novas perguntas.');
+  historicoPerguntas = [];
+}
+
+function bloquearPalavra() {
+  const palavra = prompt('Digite a palavra que deseja bloquear (ex: violência, guerra):');
+  if (palavra && palavra.trim() !== '') {
+    palavrasBloqueadas.push(palavra.trim().toLowerCase());
+    alert(`Palavra "${palavra}" bloqueada!`);
+  }
+}
+
+function iniciarPincel() {
+  const chat = document.getElementById('chatArea');
+  if (chat.children.length === 0) {
+    adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!');
+  }
+}
+
+document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') enviarPergunta();
+});
 </script>
 </body>
 </html>
