@@ -1895,5 +1895,12 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
 </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+  
 </body>
 </html>
+
