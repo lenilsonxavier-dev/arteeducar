@@ -5,6 +5,7 @@
   "description": "Pequenos Artistas é um aplicativo educativo para crianças explorarem desenho, pintura e criatividade de forma divertida e segura.",
   "start_url": ".",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#ffcc00",
   "icons": [
