@@ -1,17 +1,23 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Pequenos Artistas 🎨</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffcc00">
+
+  <!-- Manifest e tema -->
+  <link rel="manifest" href="/pequenos_artistas_pwa/manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+
+  <!-- PWA no mobile -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pequenos Artistas">
 
+  <title>Pequenos Artistas 🎨</title>
+
+  <!-- CSS externo -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 
 <style>
 /* ========== ESTILOS GLOBAIS (Otimizados) ========== */
@@ -85,8 +91,14 @@ function show(id) {
   if (id === "pincelIA") iniciarPincel();
 }
 
-// ... Suas funções de desenho, mural e desafios continuam aqui ...
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/pequenos_artistas_pwa/service-worker.js')
+    .then(() => console.log('Service Worker registrado!'))
+    .catch(err => console.log('Erro ao registrar SW:', err));
+}
 </script>
 
 </body>
 </html>
+
