@@ -1,7 +1,7 @@
 {
   "name": "Arte Educar",
   "short_name": "ArteEducar",
-  "description": "Aplicativo educativo de arte para pequenos artistas explorarem criatividade com cores, traços e atividades interativas.",
+  "description": "Aplicativo educativo de Arte para estimular a criatividade com cores, traços e atividades interativas.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
