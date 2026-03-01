@@ -8,11 +8,11 @@ self.addEventListener("activate", event => {
 
 const CACHE_NAME = "arteeducar-cache-v1";
 const URLS_TO_CACHE = [
-  "/arteeducar/",
-  "/index.html",
-  "/manifest.json",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+  "/pequenos_artistas_pwa/",
+  "/pequenos_artistas_pwa/index.html",
+  "/pequenos_artistas_pwa/manifest.json",
+  "/pequenos_artistas_pwa/icons/icon-192.png",
+  "/pequenos_artistas_pwa/icons/icon-512.png"
 ];
 
 self.addEventListener("fetch", event => {
@@ -25,6 +25,6 @@ self.addEventListener("fetch", event => {
           return response;
         });
       });
-    }).catch(() => caches.match("/index.html"))
+    }).catch(() => caches.match("/pequenos_artistas_pwa/index.html"))
   );
 });
