@@ -1,11 +1,11 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Manifest e tema -->
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#4CAF50">
 
   <!-- PWA no mobile -->
@@ -17,43 +17,40 @@
 
   <!-- CSS externo -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
 
-<style>
-/* ========== ESTILOS GLOBAIS (Otimizados) ========== */
-body {
-  margin: 0;
-  font-family: "Comic Sans MS", "Chalkboard SE", Arial, sans-serif;
-  background: #fef6e4;
-  text-align: center;
-  color: #001858;
-}
-h1, h2 { color: #001858; }
-.screen { display: none; padding: 10px; animation: fadeIn 0.3s; }
-.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  <!-- CSS interno -->
+  <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "Chalkboard SE", Arial, sans-serif;
+      background: #fef6e4;
+      text-align: center;
+      color: #001858;
+    }
+    h1, h2 { color: #001858; }
 
-button {
-  padding: 14px; margin: 6px; border-radius: 16px; border: none;
-  background: #f582ae; font-size: 16px; color: #001858; cursor: pointer;
-  transition: 0.2s; box-shadow: 0 4px 0 #d96a92;
-}
-button:active { transform: translateY(3px); box-shadow: none; }
-button:hover { background: #ff9cbb; }
+    .screen { display: none; padding: 10px; animation: fadeIn 0.3s; }
+    .active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.menu button { width: 90%; max-width: 320px; font-size: 18px; display: block; margin: 10px auto; }
+    button {
+      padding: 14px; margin: 6px; border-radius: 16px; border: none;
+      background: #f582ae; font-size: 16px; color: #001858; cursor: pointer;
+      transition: 0.2s; box-shadow: 0 4px 0 #d96a92;
+    }
+    button:active { transform: translateY(3px); box-shadow: none; }
+    button:hover { background: #ff9cbb; }
+    .menu button { width: 90%; max-width: 320px; font-size: 18px; display: block; margin: 10px auto; }
 
-.canvas {
-  border: 4px solid #001858; border-radius: 20px; background: white;
-  touch-action: none; max-width: 95%; height: auto; cursor: crosshair;
-}
-
-/* ... Restante do seu CSS mantido exatamente igual ... */
-/* (Para poupar espaço, o CSS interno que você enviou está preservado mentalmente aqui) */
-</style>
+    .canvas {
+      border: 4px solid #001858; border-radius: 20px; background: white;
+      touch-action: none; max-width: 95%; height: auto; cursor: crosshair;
+    }
+  </style>
 </head>
 <body>
 
+<!-- Tela inicial -->
 <div id="home" class="screen active menu">
   <h1>🎨 Pequenos Artistas</h1>
   <p>O que vamos criar hoje?</p>
@@ -66,41 +63,69 @@ button:hover { background: #ff9cbb; }
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
 </div>
 
-<script>
-// Registro do Service Worker ajustado para GitHub Pages
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => console.log('PWA: Service Worker ativo!', reg.scope))
-      .catch(err => console.warn('PWA: Erro no SW', err));
-  });
-}
+<!-- Outras telas (exemplo, adicione conteúdo real) -->
+<div id="desenho" class="screen">
+  <h2>Desenho Livre</h2>
+  <canvas class="canvas" id="canvasDesenho"></canvas>
+</div>
 
-// Função show corrigida para garantir scroll ao topo
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  const target = document.getElementById(id);
-  if(target) {
-    target.classList.add("active");
-    window.scrollTo(0, 0);
+<div id="colorir" class="screen">
+  <h2>Colorir Online</h2>
+  <!-- conteúdo do colorir -->
+</div>
+
+<div id="museu" class="screen">
+  <h2>Museu Virtual</h2>
+  <!-- conteúdo do museu -->
+</div>
+
+<div id="galeria" class="screen">
+  <h2>Galeria</h2>
+  <!-- conteúdo da galeria -->
+</div>
+
+<div id="mural" class="screen">
+  <h2>Mural Virtual</h2>
+  <!-- conteúdo do mural -->
+</div>
+
+<div id="desafiosArte" class="screen">
+  <h2>Desafios de Arte</h2>
+  <!-- conteúdo dos desafios -->
+</div>
+
+<div id="pincelIA" class="screen">
+  <h2>Pincel Mágico</h2>
+  <!-- conteúdo do pincel IA -->
+</div>
+
+<!-- Scripts -->
+<script>
+  // Registro do Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('PWA: Service Worker ativo!', reg.scope))
+        .catch(err => console.warn('PWA: Erro no SW', err));
+    });
   }
-  
-  // Gatilhos específicos de cada tela
-  if (id === "galeria") loadGallery();
-  if (id === "desafiosArte") (typeof renderDesafios === 'function') && renderDesafios();
-  if (id === "pincelIA") iniciarPincel();
-}
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/pequenos_artistas_pwa/service-worker.js')
-    .then(() => console.log('Service Worker registrado!'))
-    .catch(err => console.log('Erro ao registrar SW:', err));
-}
+  // Função para trocar de tela
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    const target = document.getElementById(id);
+    if(target) {
+      target.classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    // Funções específicas de cada tela
+    if (id === "galeria") (typeof loadGallery === 'function') && loadGallery();
+    if (id === "desafiosArte") (typeof renderDesafios === 'function') && renderDesafios();
+    if (id === "pincelIA") (typeof iniciarPincel === 'function') && iniciarPincel();
+    if (id === "mural") (typeof carregarMural === 'function') && carregarMural();
+  }
 </script>
 
 </body>
 </html>
-
-
-
