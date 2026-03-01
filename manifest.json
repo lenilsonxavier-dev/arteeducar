@@ -1,0 +1,13 @@
+{
+  "id": "pequenos-artistas-pwa",
+  "name": "Pequenos Artistas",
+  "short_name": "Pequenos Artistas",
+  "description": "Aplicativo educativo infantil focado em artes visuais, desenho e pintura.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffcc00",
+  "lang": "pt-BR",
+  "icons": []
+}
