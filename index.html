@@ -63,7 +63,7 @@
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
 </div>
 
-<!-- Outras telas (exemplo, adicione conteúdo real) -->
+<!-- Outras telas (exemplo) -->
 <div id="desenho" class="screen">
   <h2>Desenho Livre</h2>
   <canvas class="canvas" id="canvasDesenho"></canvas>
@@ -94,9 +94,19 @@
   <!-- conteúdo dos desafios -->
 </div>
 
+<!-- Pincel Mágico -->
 <div id="pincelIA" class="screen">
   <h2>Pincel Mágico</h2>
-  <!-- conteúdo do pincel IA -->
+  <p>Use o mouse ou o dedo para pintar!</p>
+  <canvas class="canvas" id="canvasPincel"></canvas>
+  <br>
+  <button onclick="clearCanvas()">Limpar</button>
+  <label>Cor:
+    <input type="color" id="corPincel" value="#f582ae">
+  </label>
+  <label>Tamanho:
+    <input type="range" id="tamanhoPincel" min="1" max="30" value="5">
+  </label>
 </div>
 
 <!-- Scripts -->
@@ -124,6 +134,75 @@
     if (id === "desafiosArte") (typeof renderDesafios === 'function') && renderDesafios();
     if (id === "pincelIA") (typeof iniciarPincel === 'function') && iniciarPincel();
     if (id === "mural") (typeof carregarMural === 'function') && carregarMural();
+  }
+
+  // Função Pincel Mágico
+  function iniciarPincel() {
+    const canvas = document.getElementById("canvasPincel");
+    const ctx = canvas.getContext("2d");
+
+    // Ajusta tamanho do canvas
+    canvas.width = window.innerWidth * 0.95;
+    canvas.height = 400;
+
+    let desenhando = false;
+    let ultimaX = 0;
+    let ultimaY = 0;
+
+    function startDraw(e) {
+      desenhando = true;
+      const pos = getPos(e);
+      ultimaX = pos.x;
+      ultimaY = pos.y;
+    }
+
+    function stopDraw() { desenhando = false; }
+
+    function getPos(e) {
+      if(e.touches) {
+        return { x: e.touches[0].clientX - canvas.offsetLeft,
+                 y: e.touches[0].clientY - canvas.offsetTop };
+      } else {
+        return { x: e.offsetX, y: e.offsetY };
+      }
+    }
+
+    function draw(e) {
+      if(!desenhando) return;
+      const pos = getPos(e);
+      ctx.strokeStyle = document.getElementById("corPincel").value;
+      ctx.lineWidth = document.getElementById("tamanhoPincel").value;
+      ctx.lineCap = "round";
+
+      ctx.beginPath();
+      ctx.moveTo(ultimaX, ultimaY);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+
+      ultimaX = pos.x;
+      ultimaY = pos.y;
+    }
+
+    // Eventos mouse
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseout", stopDraw);
+    canvas.addEventListener("mousemove", draw);
+
+    // Eventos toque
+    canvas.addEventListener("touchstart", startDraw);
+    canvas.addEventListener("touchend", stopDraw);
+    canvas.addEventListener("touchcancel", stopDraw);
+    canvas.addEventListener("touchmove", draw);
+  }
+
+  // Limpar canvas
+  function clearCanvas() {
+    const canvas = document.getElementById("canvasPincel");
+    if(canvas) {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
   }
 </script>
 
