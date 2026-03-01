@@ -1,13 +1,15 @@
 {
-  "id": "pequenos-artistas-pwa",
-  "name": "Pincel Mágico",
-  "short_name": "Pincel",
-  "description": "Pequenos Artistas é um aplicativo educativo para crianças explorarem desenho, pintura e criatividade de forma divertida e segura.",
-  "start_url": ".",
+  "name": "Arte Educar",
+  "short_name": "ArteEducar",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#ffcc00",
+  "theme_color": "#4CAF50",
+  "lang": "pt-BR",
+  "dir": "ltr",
+
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -20,12 +22,12 @@
       "type": "image/png"
     }
   ],
+
   "screenshots": [
     {
       "src": "screenshots/screenshot-1.png",
       "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow"
+      "type": "image/png"
     }
   ]
 }
