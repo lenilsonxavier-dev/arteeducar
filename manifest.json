@@ -2,7 +2,7 @@
   "name": "Pequenos Artistas",
   "short_name": "Artistas",
   "description": "App infantil para desenhar, colorir, explorar arte e se divertir com desafios criativos.",
-  "start_url": "/pequenos-artistas/",
+  "start_url": "/pequenos-artistas/index.html",
   "display": "standalone",
   "background_color": "#fef6e4",
   "theme_color": "#ffcc00",
