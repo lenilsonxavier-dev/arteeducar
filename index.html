@@ -279,12 +279,16 @@
 <body>
 
 <div id="splash">
-  <video id="splash-video" muted playsinline webkit-playsinline preload="auto">
+  <video id="splash-video" playsinline webkit-playsinline preload="auto">
     <source src="abertura.mp4" type="video/mp4">
   </video>
-  <div id="splash-fallback">
+  
+  <div id="splash-fallback" style="display: flex; z-index: 20;">
     <div class="splash-icon">🎨</div>
-    <div>Carregando Pequenos Artistas do Quirino...</div>
+    <div id="status-carregamento">Preparando as tintas...</div>
+    <button id="start-btn" style="display: none; padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
+       Entrar no Ateliê! 🖌️
+    </button>
   </div>
 </div>
 
@@ -438,72 +442,56 @@
 </div>
 
 <script>
+
 // ========== LÓGICA DE ABERTURA COM FALLBACK ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
-  const home = document.getElementById('home');
-  const fallback = document.getElementById('splash-fallback');
-
+  const startBtn = document.getElementById('start-btn');
+  const statusTxt = document.getElementById('status-carregamento');
   let transicaoFeita = false;
 
-  function ativarFallback() {
-    if (!splash.classList.contains('fallback-mode')) {
-      splash.classList.add('fallback-mode');
-    }
-  }
+  // 1. Monitora se o vídeo consegue carregar
+  video.addEventListener('canplaythrough', () => {
+    statusTxt.style.display = 'none';
+    startBtn.style.display = 'block'; // Mostra o botão só quando o vídeo está pronto
+  });
+
+  // 2. Ação ao clicar no botão (Libera o som!)
+  startBtn.onclick = () => {
+    startBtn.style.display = 'none';
+    video.play().catch(e => {
+      console.error("Erro ao dar play:", e);
+      abrirApp(); // Se falhar mesmo assim, abre o app
+    });
+  };
 
   function abrirApp() {
     if (transicaoFeita) return;
     transicaoFeita = true;
-    
-    console.log("Transição iniciada...");
     splash.style.opacity = '0';
-    
     setTimeout(() => {
       splash.style.display = 'none';
-      if (home) {
-        home.classList.add('active');
-        console.log("Menu principal ativado!");
-      } else {
-        console.error("ERRO: Div 'home' não encontrada!");
-      }
+      document.getElementById('home').classList.add('active');
     }, 800);
   }
 
-  // Se o vídeo rodar até o fim, abre o app
   video.addEventListener('ended', abrirApp);
 
-  // Se o vídeo der erro (comum no Android ou arquivo não encontrado), ativa fallback e abre
-  video.addEventListener('error', function(e) {
-    console.log("Erro no vídeo, ativando fallback", e);
-    ativarFallback();
-    // Mesmo com erro, tentamos abrir o app após um tempo
+  // Se o vídeo falhar criticamente (arquivo não encontrado)
+  video.addEventListener('error', () => {
+    statusTxt.innerText = "Carregando Pequenos Artistas...";
     setTimeout(abrirApp, 2000);
   });
 
-  // Tentar dar play no vídeo
-  let playPromise = video.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(error => {
-      // Autoplay bloqueado ou vídeo não carregou
-      console.log("Play automático falhou:", error);
-      ativarFallback();
-      // Se falhou, abrimos o app após 2 segundos
-      setTimeout(abrirApp, 2000);
-    });
-  }
-
-  // SEGURANÇA: Se em 6 segundos nada acontecer, FORÇA a abertura
+  // Segurança: se em 10 segundos nada carregar, libera o botão ou entra
   setTimeout(() => {
-    if (!transicaoFeita) {
-      console.log("Segurança: Forçando abertura do app");
-      ativarFallback();
-      abrirApp();
+    if (startBtn.style.display === 'none' && !transicaoFeita) {
+      statusTxt.innerText = "Quase pronto...";
+      startBtn.style.display = 'block';
     }
-  }, 6000);
+  }, 10000);
 })();
-
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
@@ -1778,5 +1766,6 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
 
 
