@@ -13,16 +13,45 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: #00ca85;
+      background: linear-gradient(135deg, #00ca85, #0099cc);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
       transition: opacity 0.8s ease;
+      color: white;
+      font-size: 2rem;
+      text-align: center;
+      flex-direction: column;
     }
     #splash video {
       width: 100%; height: 100%;
       object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #splash-fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+    #splash.fallback-mode #splash-video {
+      display: none;
+    }
+    #splash.fallback-mode #splash-fallback {
+      display: flex;
+    }
+    .splash-icon {
+      font-size: 5rem;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     /* ========== ESTILOS GLOBAIS ========== */
@@ -250,9 +279,13 @@
 <body>
 
 <div id="splash">
-  <video id="splash-video" autoplay muted playsinline webkit-playsinline preload="auto">
+  <video id="splash-video" muted playsinline webkit-playsinline preload="auto">
     <source src="abertura.mp4" type="video/mp4">
   </video>
+  <div id="splash-fallback">
+    <div class="splash-icon">🎨</div>
+    <div>Carregando Pequenos Artistas...</div>
+  </div>
 </div>
 
 <!-- ========== MENU PRINCIPAL ========== -->
@@ -405,13 +438,20 @@
 </div>
 
 <script>
-// ========== LÓGICA DE ABERTURA (VERSÃO APK) ==========
+// ========== LÓGICA DE ABERTURA COM FALLBACK ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
   const home = document.getElementById('home');
+  const fallback = document.getElementById('splash-fallback');
 
   let transicaoFeita = false;
+
+  function ativarFallback() {
+    if (!splash.classList.contains('fallback-mode')) {
+      splash.classList.add('fallback-mode');
+    }
+  }
 
   function abrirApp() {
     if (transicaoFeita) return;
@@ -434,20 +474,31 @@
   // Se o vídeo rodar até o fim, abre o app
   video.addEventListener('ended', abrirApp);
 
-  // Se o vídeo der erro (comum no Android), abre o app direto
-  video.addEventListener('error', abrirApp);
-
-  // FORÇAR O PLAY (O Android às vezes pausa o vídeo sozinho)
-  video.play().catch(() => {
-    console.log("Play automático impedido, tentando abrir app...");
-    // Se o vídeo nem começar, esperamos 2 segundos e abrimos o app
+  // Se o vídeo der erro (comum no Android ou arquivo não encontrado), ativa fallback e abre
+  video.addEventListener('error', function(e) {
+    console.log("Erro no vídeo, ativando fallback", e);
+    ativarFallback();
+    // Mesmo com erro, tentamos abrir o app após um tempo
     setTimeout(abrirApp, 2000);
   });
 
-  // SEGURANÇA MÁXIMA: Se em 6 segundos nada acontecer, FORÇA a abertura
+  // Tentar dar play no vídeo
+  let playPromise = video.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(error => {
+      // Autoplay bloqueado ou vídeo não carregou
+      console.log("Play automático falhou:", error);
+      ativarFallback();
+      // Se falhou, abrimos o app após 2 segundos
+      setTimeout(abrirApp, 2000);
+    });
+  }
+
+  // SEGURANÇA: Se em 6 segundos nada acontecer, FORÇA a abertura
   setTimeout(() => {
     if (!transicaoFeita) {
       console.log("Segurança: Forçando abertura do app");
+      ativarFallback();
       abrirApp();
     }
   }, 6000);
