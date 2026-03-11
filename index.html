@@ -8,11 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <script>
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("/arteeducar/sw.js");
-}
-</script>
+  
   <style>
     /* ========== TELA DE ABERTURA ========== */
     #splash {
@@ -283,7 +279,12 @@ navigator.serviceWorker.register("/arteeducar/sw.js");
   </style>
 </head>
 <body>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/arteeducar/sw.js');
+}
+</script>
+  
 <div id="splash">
   <video id="splash-video" playsinline webkit-playsinline preload="auto">
     <source src="abertura.mp4" type="video/mp4">
@@ -1771,6 +1772,7 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
 
 
 
