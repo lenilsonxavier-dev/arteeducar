@@ -3,7 +3,6 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("fetch", event => {});
-
 const CACHE_NAME = 'pequenos-artistas-v1';
 const urlsToCache = [
   '/',
