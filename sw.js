@@ -1,3 +1,9 @@
+self.addEventListener("install", event => {
+  console.log("Service Worker instalado");
+});
+
+self.addEventListener("fetch", event => {});
+
 const CACHE_NAME = 'pequenos-artistas-v1';
 const urlsToCache = [
   '/',
