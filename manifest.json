@@ -3,7 +3,7 @@
   "short_name": "Artistas",
   "description": "App infantil para desenhar, colorir, explorar arte e se divertir com desafios criativos.",
   "lang": "pt-BR",
-  "start_url": "index.html",
+  "start_url": "/arteeducar/",
   "scope": "/arteeducar/",
   "display": "fullscreen",
   "background_color": "#fef6e4",
