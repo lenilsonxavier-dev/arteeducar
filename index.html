@@ -13,73 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: "Comic Sans MS", Arial, sans-serif;
-      background: #ffcc00;
-    }
-
-    #splash {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg,#00ca85,#0099cc);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      font-size: 2rem;
-      z-index: 9999;
-      transition: opacity 0.8s ease;
-    }
-
-    #splash video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
-
-    #splash-fallback {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      z-index: 2;
-    }
-
-    #splash.fallback-mode #splash-video {
-      display: none;
-    }
-
-    #splash.fallback-mode #splash-fallback {
-      display: flex;
-    }
-
-    .splash-icon {
-      font-size: 5rem;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-  </style>
-</head>
-  
+   
     /* ========== TELA DE ABERTURA ========== */
     #splash {
       position: fixed;
@@ -1843,6 +1777,7 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
 
 
 
