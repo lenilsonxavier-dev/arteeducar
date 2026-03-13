@@ -1772,6 +1772,22 @@ window.onload = function() {
   // Inicializar outras seções se necessário
   renderDesafios();
 };
+  // Função para esconder tudo (inclusive a barra de status/relógio)
+function entrarEmModoImersivo() {
+  const docElm = document.documentElement;
+  if (docElm.requestFullscreen) {
+    docElm.requestFullscreen();
+  } else if (docElm.webkitRequestFullscreen) { // Safari/Chrome Antigo
+    docElm.webkitRequestFullscreen();
+  }
+}
+
+// Quando o usuário tocar em "Entrar" ou clicar em qualquer lugar 
+// para fechar o Splash, o fullscreen ativa.
+document.addEventListener('click', function() {
+  entrarEmModoImersivo();
+}, { once: true }); // Executa apenas uma vez para não dar erro
+</script>
 </script>
 </body>
 </html>
