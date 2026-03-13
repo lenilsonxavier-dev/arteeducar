@@ -2,22 +2,92 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+
+  <!-- Manifesto PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffcc00">
 
-  <!-- Viewport completo para PWA -->
+  <!-- Viewport completo para PWA / tela cheia -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-  <!-- Ícones -->
+  <!-- Ícones e Font Awesome -->
+  <link rel="icon" href="icon-192.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <!-- Tela cheia PWA -->
+  <!-- Tela cheia PWA / Android e iOS -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-</head>
-  
+
+  <!-- CSS básico para tela cheia e splash -->
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Comic Sans MS", Arial, sans-serif;
+      background: #ffcc00;
+    }
+
+    /* Splash */
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg,#00ca85,#0099cc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      font-size: 2rem;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+
+    #splash video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    #splash-fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    #splash.fallback-mode #splash-video {
+      display: none;
+    }
+
+    #splash.fallback-mode #splash-fallback {
+      display: flex;
+    }
+
+    .splash-icon {
+      font-size: 5rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+  </style>
+</head>
     /* ========== TELA DE ABERTURA ========== */
     #splash {
       position: fixed;
@@ -1781,6 +1851,7 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
 
 
 
