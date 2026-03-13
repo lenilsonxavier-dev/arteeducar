@@ -1787,8 +1787,39 @@ function entrarEmModoImersivo() {
 document.addEventListener('click', function() {
   entrarEmModoImersivo();
 }, { once: true }); // Executa apenas uma vez para não dar erro
+function entrarEmModoImersivo() {
+  const docElm = document.documentElement;
+  const request = docElm.requestFullscreen || 
+                  docElm.webkitRequestFullscreen || 
+                  docElm.mozRequestFullScreen || 
+                  docElm.msRequestFullscreen;
+
+  if (request) {
+    request.call(docElm);
+  }
+  
+  // Função robusta para esconder tudo (inclusive a barra de status/relógio)
+function entrarEmModoImersivo() {
+  const docElm = document.documentElement;
+  const request = docElm.requestFullscreen || 
+                  docElm.webkitRequestFullscreen || 
+                  docElm.mozRequestFullScreen || 
+                  docElm.msRequestFullscreen;
+
+  if (request) {
+    request.call(docElm).catch(err => {
+      console.log(`Erro ao tentar modo imersivo: ${err.message}`);
+    });
+  }
+}
+
+// Quando o usuário tocar em qualquer lugar pela primeira vez, o fullscreen ativa.
+document.addEventListener('click', function() {
+  entrarEmModoImersivo();
+}, { once: true });
+  
 </script>
-</script>
+
 </body>
 </html>
 
