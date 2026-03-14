@@ -66,6 +66,29 @@
     .screen { display: none; padding: 20px; }
     .active { display: block; }
 
+   /* Estilo Especial do Botão Sair */
+.btn-sair {
+    background: linear-gradient(135deg, #ff6b6b, #ee5253) !important;
+    color: white !important;
+    width: 80% !important;
+    max-width: 320px !important;
+    padding: 15px !important;
+    border-radius: 50px !important;
+    border: 4px solid #fff !important;
+    margin: 30px auto 50px auto !important; /* Centraliza e dá respiro no final da página */
+    font-weight: bold !important;
+    font-size: 20px !important;
+    display: block !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+/* Efeito de clique (botão afundando) */
+.btn-sair:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+}
     /* ========== BOTÕES E INTERFACE ========== */
     button {
       padding: 14px; margin: 6px; border-radius: 16px; border: none;
@@ -278,15 +301,15 @@
 </head>
 <body>
 
-<div id="splash">
+  <div id="splash">
   <video id="splash-video" playsinline webkit-playsinline preload="auto">
     <source src="abertura.mp4" type="video/mp4">
   </video>
   
-  <div id="splash-fallback" style="display: flex; z-index: 20;">
-    <div class="splash-icon">🎨</div>
+  <div id="splash-fallback" style="display: flex; z-index: 20; flex-direction: column; align-items: center; gap: 20px;">
+    <div class="splash-icon" id="icone-paleta">🎨</div>
     <div id="status-carregamento">Preparando as tintas...</div>
-    <button id="start-btn" style="display: none; padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
+    <button id="start-btn" style="padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
        Entrar no Ateliê! 🖌️
     </button>
   </div>
@@ -301,6 +324,9 @@
   <button onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
+  <button class="btn-sair" onclick="fecharApp()">
+    <i class="fas fa-times-circle"></i> Sair do Ateliê
+  </button>
 </div>
 
 <!-- ========== DESENHO ========== -->
@@ -448,49 +474,28 @@
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
   const startBtn = document.getElementById('start-btn');
-  const statusTxt = document.getElementById('status-carregamento');
-  let transicaoFeita = false;
+  const fallback = document.getElementById('splash-fallback');
 
-  // 1. Monitora se o vídeo consegue carregar
-  video.addEventListener('canplaythrough', () => {
-    statusTxt.style.display = 'none';
-    startBtn.style.display = 'block'; // Mostra o botão só quando o vídeo está pronto
-  });
-
-  // 2. Ação ao clicar no botão (Libera o som!)
   startBtn.onclick = () => {
-    startBtn.style.display = 'none';
+    // 1. Tira a paleta e o botão da frente na hora!
+    fallback.style.display = 'none';
+    
+    // 2. Toca o vídeo
     video.play().catch(e => {
-      console.error("Erro ao dar play:", e);
-      abrirApp(); // Se falhar mesmo assim, abre o app
+      console.log("Sem vídeo, entrando...");
+      abrirApp();
     });
   };
 
+  video.onended = abrirApp;
+
   function abrirApp() {
-    if (transicaoFeita) return;
-    transicaoFeita = true;
     splash.style.opacity = '0';
     setTimeout(() => {
       splash.style.display = 'none';
-      document.getElementById('home').classList.add('active');
+      show('home'); // Abre o menu
     }, 800);
   }
-
-  video.addEventListener('ended', abrirApp);
-
-  // Se o vídeo falhar criticamente (arquivo não encontrado)
-  video.addEventListener('error', () => {
-    statusTxt.innerText = "Carregando Pequenos Artistas...";
-    setTimeout(abrirApp, 2000);
-  });
-
-  // Segurança: se em 10 segundos nada carregar, libera o botão ou entra
-  setTimeout(() => {
-    if (startBtn.style.display === 'none' && !transicaoFeita) {
-      statusTxt.innerText = "Quase pronto...";
-      startBtn.style.display = 'block';
-    }
-  }, 10000);
 })();
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
@@ -1778,6 +1783,16 @@ function entrarEmModoImersivo() {
 document.addEventListener('click', function() {
   entrarEmModoImersivo();
 }, { once: true }); // Executa apenas uma vez para não dar erro
+
+function fecharApp() {
+    if (confirm("Deseja mesmo sair do Ateliê? 🎨")) {
+        // Como navegadores não permitem fechar abas por segurança, 
+        // o padrão é recarregar ou mandar para uma página de tchau.
+        location.reload(); 
+        // Se for um app instalado (PWA), você pode tentar:
+        // window.close();
+    }
+}
 </script>
 
 </body>
