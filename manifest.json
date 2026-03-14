@@ -6,6 +6,7 @@
   "start_url": "/arteeducar/",
   "scope": "/arteeducar/",
   "display": "fullscreen",
+  "display_override": ["fullscreen", "minimal-ui"],
   "background_color": "#fef6e4",
   "theme_color": "#ffcc00",
   "orientation": "portrait",
