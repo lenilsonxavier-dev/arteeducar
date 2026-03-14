@@ -772,27 +772,34 @@ function loadGallery() {
 }
 function limparGaleria() {
   Swal.fire({
-    title: 'Tem certeza?',
-    text: "Todas as suas obras de arte serão apagadas da galeria! 🎨🗑️",
+    title: 'Limpar tudo?',
+    text: "Suas pinturas serão apagadas para sempre! 🎨🗑️",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ff6b6b', // Cor para apagar
-    cancelButtonColor: '#ffcc00',  // Cor para manter (cor do seu app)
-    confirmButtonText: 'Sim, apagar tudo',
-    cancelButtonText: 'Não, quero guardar!',
+    confirmButtonColor: '#ff6b6b',
+    cancelButtonColor: '#ffcc00',
+    confirmButtonText: 'Sim, apagar!',
+    cancelButtonText: 'Não, guardar!',
     background: '#fff9e6',
     borderRadius: '20px'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Aqui vai a lógica que você já tinha para limpar
-      localStorage.removeItem('galeria'); // ou o nome que você usa
-      loadGallery(); // recarrega a galeria vazia
+      // 1. Limpa os dados salvos
+      localStorage.removeItem('arts'); // Verifique se o nome aqui é 'arts' ou 'galeria'
       
+      // 2. Avisa que limpou
       Swal.fire({
         title: 'Galeria Limpa!',
         icon: 'success',
         confirmButtonColor: '#ffcc00'
       });
+
+      // 3. Atualiza a tela para sumir os desenhos
+      if (typeof loadGallery === "function") {
+          loadGallery(); 
+      } else {
+          location.reload(); // Se não tiver a função loadGallery, ele recarrega a página
+      }
     }
   });
 }
