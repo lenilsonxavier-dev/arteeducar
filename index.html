@@ -772,34 +772,27 @@ function loadGallery() {
 }
 function limparGaleria() {
   Swal.fire({
-    title: 'Limpar tudo?',
-    text: "Suas pinturas serão apagadas para sempre! 🎨🗑️",
+    title: 'Tem certeza?',
+    text: "Todas as suas obras de arte serão apagadas da galeria! 🎨🗑️",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ff6b6b',
-    cancelButtonColor: '#ffcc00',
-    confirmButtonText: 'Sim, apagar!',
-    cancelButtonText: 'Não, guardar!',
+    confirmButtonColor: '#ff6b6b', // Cor para apagar
+    cancelButtonColor: '#ffcc00',  // Cor para manter (cor do seu app)
+    confirmButtonText: 'Sim, apagar tudo',
+    cancelButtonText: 'Não, quero guardar!',
     background: '#fff9e6',
     borderRadius: '20px'
   }).then((result) => {
     if (result.isConfirmed) {
-      // 1. Limpa os dados salvos
-      localStorage.removeItem('arts'); // Verifique se o nome aqui é 'arts' ou 'galeria'
+      // Aqui vai a lógica que você já tinha para limpar
+      localStorage.removeItem('galeria'); // ou o nome que você usa
+      loadGallery(); // recarrega a galeria vazia
       
-      // 2. Avisa que limpou
       Swal.fire({
         title: 'Galeria Limpa!',
         icon: 'success',
         confirmButtonColor: '#ffcc00'
       });
-
-      // 3. Atualiza a tela para sumir os desenhos
-      if (typeof loadGallery === "function") {
-          loadGallery(); 
-      } else {
-          location.reload(); // Se não tiver a função loadGallery, ele recarrega a página
-      }
     }
   });
 }
@@ -1833,24 +1826,21 @@ function fecharApp() {
     text: "Se você sair agora, poderá perder sua pintura atual! 🎨",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ff6b6b',
-    cancelButtonColor: '#ffcc00',
+    confirmButtonColor: '#ff6b6b', // Cor rosa/vermelha para sair
+    cancelButtonColor: '#ffcc00',  // Cor amarela para ficar
     confirmButtonText: 'Sim, quero sair',
     cancelButtonText: 'Ficar e pintar!',
     background: '#fff9e6',
     borderRadius: '20px'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Tenta chamar a ponte do Android para fechar o APK
-      if (window.AndroidInterface) {
-          window.AndroidInterface.fechar();
-      } else {
-          // Caso teste no navegador comum, ele apenas recarrega
-          location.reload();
-      }
+      // Isso faz o app voltar para a tela inicial
+      location.reload(); 
     }
   });
 }
+</script>
 
-
+</body>
+</html>
 
