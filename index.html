@@ -7,6 +7,8 @@
   <meta name="theme-color" content="#ffcc00">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-borderless/borderless.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     /* ========== TELA DE ABERTURA ========== */
     #splash {
@@ -724,7 +726,16 @@ function salvarDesenho() {
   const arts = JSON.parse(localStorage.getItem('arts')||'[]');
   arts.push(canvas.toDataURL('image/png'));
   localStorage.setItem('arts', JSON.stringify(arts));
-  alert('Salvo na galeria!');
+  
+Swal.fire({
+  title: 'Obra de Arte Salva! 🎨',
+  text: 'Sua pintura já está guardada na Galeria dos Artistas!',
+  icon: 'success',
+  confirmButtonColor: '#ffcc00', // O amarelo do seu botão principal
+  confirmButtonText: 'Oba, entendi!',
+  background: '#fff9e6',
+  borderRadius: '20px'
+});
 }
 
 function configurarBotoesDesenho() {
@@ -759,7 +770,32 @@ function loadGallery() {
   if (!imgs.length) g.innerHTML = '<p>Nenhum desenho salvo.</p>';
   else imgs.forEach(src => { let img = document.createElement('img'); img.src = src; g.appendChild(img); });
 }
-function limparGaleria() { if(confirm('Limpar galeria?')) { localStorage.removeItem('arts'); loadGallery(); } }
+function limparGaleria() {
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: "Todas as suas obras de arte serão apagadas da galeria! 🎨🗑️",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ff6b6b', // Cor para apagar
+    cancelButtonColor: '#ffcc00',  // Cor para manter (cor do seu app)
+    confirmButtonText: 'Sim, apagar tudo',
+    cancelButtonText: 'Não, quero guardar!',
+    background: '#fff9e6',
+    borderRadius: '20px'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Aqui vai a lógica que você já tinha para limpar
+      localStorage.removeItem('galeria'); // ou o nome que você usa
+      loadGallery(); // recarrega a galeria vazia
+      
+      Swal.fire({
+        title: 'Galeria Limpa!',
+        icon: 'success',
+        confirmButtonColor: '#ffcc00'
+      });
+    }
+  });
+}
 
 // ========== MURAL ==========
 let savedUploads = JSON.parse(localStorage.getItem('muralUploads')||'[]');
@@ -1785,13 +1821,23 @@ document.addEventListener('click', function() {
 }, { once: true }); // Executa apenas uma vez para não dar erro
 
 function fecharApp() {
-    if (confirm("Deseja mesmo sair do Ateliê? 🎨")) {
-        // Como navegadores não permitem fechar abas por segurança, 
-        // o padrão é recarregar ou mandar para uma página de tchau.
-        location.reload(); 
-        // Se for um app instalado (PWA), você pode tentar:
-        // window.close();
+  Swal.fire({
+    title: 'Deseja mesmo sair do Ateliê?',
+    text: "Se você sair agora, poderá perder sua pintura atual! 🎨",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ff6b6b', // Cor rosa/vermelha para sair
+    cancelButtonColor: '#ffcc00',  // Cor amarela para ficar
+    confirmButtonText: 'Sim, quero sair',
+    cancelButtonText: 'Ficar e pintar!',
+    background: '#fff9e6',
+    borderRadius: '20px'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Isso faz o app voltar para a tela inicial
+      location.reload(); 
     }
+  });
 }
 </script>
 
