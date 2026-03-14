@@ -7,78 +7,8 @@
   <meta name="theme-color" content="#ffcc00">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    /* ========== ESTILOS GLOBAIS ========== */
   <style>
-    body {
-      margin: 0;
-      font-family: "Comic Sans MS", Arial, sans-serif;
-      background: #fef6e4;
-      text-align: center;
-      color: #001858;
-    }
-    
-    /* 1. Estilo base para TODOS os botões principais do menu */
-    .menu button {
-      padding: 15px 30px;
-      margin: 10px;
-      border-radius: 50px;
-      border: 4px solid #fff;
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 6px 0 rgba(0,0,0,0.2);
-      transition: all 0.1s ease;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-      width: 80%;
-      max-width: 320px;
-      background: #f582ae; /* Cor padrão */
-    }
-
-    .menu button:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-    }
-
-    /* 3. Configuração do Menu Principal */
-    /* 3. Configuração do Menu Principal */
-    #home {
-      display: none; 
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      
-      /* AJUSTES PARA CELULAR: */
-      overflow-y: auto !important; /* Força a rolagem */
-      height: 100vh;
-      width: 100%;
-      padding: 40px 20px 100px 20px; /* Aumentamos o espaço no fundo (100px) */
-      box-sizing: border-box;
-      -webkit-overflow-scrolling: touch; /* Deixa a rolagem macia no iPhone/Android */
-    }
-
-    #home.active { 
-      display: flex !important; 
-    }
-
-    /* 5. O Botão de Sair (Destaque Vermelho) */
-    .btn-sair {
-    background: linear-gradient(135deg, #ff6b6b, #ee5253) !important;
-    color: white !important;
-    width: 80% !important;
-    max-width: 300px !important;
-    padding: 15px !important;
-    border-radius: 50px !important;
-    border: 4px solid #fff !important;
-    margin-top: 30px !important;
-    margin-bottom: 50px !important;
-    font-weight: bold !important;
-    display: block !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-}
-
-    /* ========== TELA DE ABERTURA (SPLASH) ========== */
+    /* ========== TELA DE ABERTURA ========== */
     #splash {
       position: fixed;
       top: 0; left: 0;
@@ -90,41 +20,41 @@
       z-index: 9999;
       transition: opacity 0.8s ease;
       color: white;
+      font-size: 2rem;
+      text-align: center;
       flex-direction: column;
     }
     #splash video {
       width: 100%; height: 100%;
       object-fit: cover;
       position: absolute;
+      top: 0;
+      left: 0;
     }
     #splash-fallback {
-      position: relative;
-      z-index: 10;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      z-index: 10;
     }
-    .splash-icon { font-size: 5rem; animation: pulse 1.5s infinite; }
+    #splash.fallback-mode #splash-video {
+      display: none;
+    }
+    #splash.fallback-mode #splash-fallback {
+      display: flex;
+    }
+    .splash-icon {
+      font-size: 5rem;
+      animation: pulse 1.5s infinite;
+    }
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    /* ========== OUTRAS TELAS ========== */
-    .screen { display: none; padding: 20px; }
-    .screen.active { display: block; }
-    
-    /* Estilos das outras ferramentas (Simplificados para o exemplo) */
-    .gallery img { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; margin: 5px; }
-    .canvas-wrapper { display: flex; justify-content: center; margin: 20px 0; }
-    canvas { border: 4px solid #001858; border-radius: 20px; background: white; max-width: 95%; }
-  </style>
-</head>
-<body>
-
-      /* ========== ESTILOS GLOBAIS ========== */
+    /* ========== ESTILOS GLOBAIS ========== */
     body {
       margin: 0;
       font-family: "Comic Sans MS", Arial, sans-serif;
@@ -160,7 +90,6 @@
       background: #8bd3dd; border-radius: 50%; width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
- 
 
     /* ========== MURAL ========== */
     .mural-container { max-width: 1200px; margin: 0 auto; padding: 10px; }
@@ -354,14 +283,10 @@
     <source src="abertura.mp4" type="video/mp4">
   </video>
   
-  <div id="splash">
-  <video id="splash-video" playsinline preload="auto">
-    <source src="abertura.mp4" type="video/mp4">
-  </video>
-  <div id="splash-fallback">
+  <div id="splash-fallback" style="display: flex; z-index: 20;">
     <div class="splash-icon">🎨</div>
     <div id="status-carregamento">Preparando as tintas...</div>
-    <button id="start-btn" style="display: none; background: #ffcc00; color: #001858; border-radius: 50px; padding: 15px 30px; border:none; font-weight:bold;">
+    <button id="start-btn" style="display: none; padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
        Entrar no Ateliê! 🖌️
     </button>
   </div>
@@ -376,11 +301,7 @@
   <button onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
   <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
-    
-  <button class="btn-sair" onclick="fecharApp()">
-       <i class="fas fa-times-circle"></i> Sair do Ateliê
-    </button>
-</div> ```
+</div>
 
 <!-- ========== DESENHO ========== -->
 <div id="desenho" class="screen">
@@ -1831,155 +1752,36 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
 
-<button class="btn-sair" onclick="fecharApp()">
-    <i class="fas fa-times-circle"></i> Sair do Ateliê
-  </button>
-</div> 
-  
-<script>
-// === VARIÁVEIS DO DESENHO ===
-const canvas = document.getElementById('canvasDesenho');
-const ctx = canvas ? canvas.getContext('2d') : null;
-let desenhando = false;
-let corAtual = '#ff4d4d';
-
-// === FUNÇÕES DE DESENHO ===
-function mostrarListaDesenhos() {
-    const lista = document.getElementById('listaDesenhos');
-    if (lista) {
-        // Aqui você pode adicionar as miniaturas novamente
-        lista.style.display = 'grid';
-    }
-}
-
-function criarPaletaCores() {
-    const paleta = document.getElementById('paletaCores');
-    const cores = ['#ff4d4d', '#4dff4d', '#4d4dff', '#ffff4d', '#000000', '#ffffff'];
-    if (paleta) {
-        paleta.innerHTML = '';
-        cores.forEach(cor => {
-            const btn = document.createElement('button');
-            btn.style.backgroundColor = cor;
-            btn.style.width = '30px';
-            btn.style.height = '30px';
-            btn.onclick = () => corAtual = cor;
-            paleta.appendChild(btn);
-        });
-    }
-}
-
-// === LÓGICA DO PINCEL MÁGICO ===
-function iniciarPincel() {
-    const fala = document.getElementById('pincelFala');
-    if (fala) fala.innerText = "Olá! Eu sou o Pincel Mágico. O que vamos criar hoje?";
-}
-
-function fazerPergunta(texto) {
-    const input = document.getElementById('perguntaInput');
-    if (input) {
-        input.value = texto;
-        enviarPergunta();
-    }
-}
-
-function enviarPergunta() {
-    const input = document.getElementById('perguntaInput');
-    const chat = document.getElementById('chatArea');
-    if (input && input.value.trim() !== "") {
-        const msg = document.createElement('p');
-        msg.innerHTML = `<b>Você:</b> ${input.value}`;
-        chat.appendChild(msg);
-        
-        // Resposta simples de exemplo (IA fake para teste)
-        const resp = document.createElement('p');
-        resp.innerHTML = `<b>Pincel:</b> Que ideia incrível! Vamos usar cores vibrantes!`;
-        chat.appendChild(resp);
-        
-        input.value = "";
-        chat.scrollTop = chat.scrollHeight;
-    }
-}
-
-// ========== INICIALIZAÇÃO BLINDADA ==========
+// ========== INICIALIZAÇÃO ==========
 window.onload = function() {
-  console.log("App iniciado...");
-  if (typeof criarPaletaCores === 'function') criarPaletaCores();
-  if (typeof mostrarListaDesenhos === 'function') mostrarListaDesenhos();
-  
-  // Estas só serão chamadas SE você tiver o código delas, senão o app ignora e continua
-  if (typeof configurarBotoesDesenho === 'function') configurarBotoesDesenho();
-  if (typeof configurarCanvasEvents === 'function') configurarCanvasEvents();
-  if (typeof setCor === 'function') setCor('#ff4d4d');
-  if (typeof renderDesafios === 'function') renderDesafios();
+  criarPaletaCores();
+  configurarBotoesDesenho();
+  configurarCanvasEvents();
+  mostrarListaDesenhos();
+  setCor('#ff4d4d');
+  atualizarTamanhoExibido();
+  // Inicializar outras seções se necessário
+  renderDesafios();
 };
-
-// LÓGICA DE NAVEGAÇÃO
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  const target = document.getElementById(id);
-  if(target) target.classList.add("active");
-}
-
-// LÓGICA DO SPLASH
-(function() {
-  const splash = document.getElementById('splash');
-  const video = document.getElementById('splash-video');
-  const startBtn = document.getElementById('start-btn');
-  const statusTxt = document.getElementById('status-carregamento');
-
-  if (video) {
-    video.addEventListener('canplaythrough', () => {
-      statusTxt.style.display = 'none';
-      startBtn.style.display = 'block';
-    });
-
-    startBtn.onclick = () => {
-      video.play();
-      startBtn.style.display = 'none';
-    };
-
-    video.onended = () => {
-      splash.style.opacity = '0';
-      setTimeout(() => {
-        splash.style.display = 'none';
-        show('home');
-      }, 800);
-    };
-  }
-
-  setTimeout(() => {
-    if (splash && splash.style.display !== 'none') {
-      startBtn.style.display = 'block';
-      startBtn.onclick = () => { splash.style.display = 'none'; show('home'); };
-    }
-  }, 5000);
-})();
-
-// MODO IMERSIVO (Fullscreen)
+// Função para esconder tudo (inclusive a barra de status/relógio)
 function entrarEmModoImersivo() {
   const docElm = document.documentElement;
-  const request = docElm.requestFullscreen || docElm.webkitRequestFullscreen || docElm.mozRequestFullScreen || docElm.msRequestFullscreen;
-  if (request) {
-    request.call(docElm).catch(err => console.warn("Erro ao entrar em fullscreen:", err));
+  if (docElm.requestFullscreen) {
+    docElm.requestFullscreen();
+  } else if (docElm.webkitRequestFullscreen) { // Safari/Chrome Antigo
+    docElm.webkitRequestFullscreen();
   }
 }
 
-// FUNÇÃO PARA SAIR DO APP
-function fecharApp() {
-  if (confirm("Deseja mesmo sair do Ateliê? 🎨")) {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-    }
-    location.reload(); 
-  }
-}
-
-// EVENTO DE CLIQUE ÚNICO
+// Quando o usuário tocar em "Entrar" ou clicar em qualquer lugar 
+// para fechar o Splash, o fullscreen ativa.
 document.addEventListener('click', function() {
   entrarEmModoImersivo();
-}, { once: true });
-
+}, { once: true }); // Executa apenas uma vez para não dar erro
 </script>
+
 </body>
 </html>
+
+
+
