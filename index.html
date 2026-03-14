@@ -748,10 +748,40 @@ function configurarBotoesDesenho() {
   zoomIn.onclick = aumentarZoom;
   zoomOut.onclick = diminuirZoom;
   limparBtn.onclick = limparCanvas;
-  salvarBtn.onclick = salvarDesenho;
+  
+salvarBtn.onclick = () => {
+    // 1. Cria a imagem do desenho
+    const dataURL = canvas.toDataURL("image/png");
+    
+    // 2. Pega a galeria atual ou cria uma vazia
+    const galeria = JSON.parse(localStorage.getItem('galeria')) || [];
+    
+    // 3. ADICIONA o desenho na lista (o "push" corrigido)
+    galeria.push(dataURL);
+    
+    // 4. SALVA na memória (localStorage corrigido)
+    localStorage.setItem('galeria', JSON.stringify(galeria));
+
+    // 5. Mostra o aviso
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Obra Salva! 🎨',
+        text: 'Seu desenho já está na galeria!',
+        icon: 'success',
+        confirmButtonColor: '#ffcc00'
+      });
+    } else {
+      alert("Obra Salva! 🎨");
+    }
+
+    // 6. Atualiza a tela da galeria na hora
+    if (typeof loadGallery === "function") loadGallery();
+  };
+
   voltarBtn.onclick = voltarEscolha;
-  seletorCor.addEventListener('input', (e)=>setCor(e.target.value));
+  seletorCor.addEventListener('input', (e) => setCor(e.target.value));
 }
+
 function configurarCanvasEvents() {
   canvas.addEventListener('mousedown', iniciarDesenho);
   canvas.addEventListener('mousemove', desenhar);
@@ -763,12 +793,20 @@ function configurarCanvasEvents() {
 }
 
 // ========== GALERIA ==========
-function loadGallery() {
-  const g = document.getElementById('gallery');
-  g.innerHTML = '';
-  const imgs = JSON.parse(localStorage.getItem('arts')||'[]');
-  if (!imgs.length) g.innerHTML = '<p>Nenhum desenho salvo.</p>';
-  else imgs.forEach(src => { let img = document.createElement('img'); img.src = src; g.appendChild(img); });
+ function loadGallery() {
+  const container = document.getElementById('gallery'); // ou 'gallery-container'
+  if (!container) return;
+  const desenhos = JSON.parse(localStorage.getItem('galeria')) || [];
+  if (desenhos.length === 0) {
+    container.innerHTML = '<p>A galeria está vazia! 🎨</p>';
+    return;
+  }
+
+  desenhos.forEach(imgData => {
+    const img = document.createElement('img');
+    img.src = imgData;
+    container.appendChild(img);
+  });
 }
 function limparGaleria() {
   Swal.fire({
@@ -776,27 +814,38 @@ function limparGaleria() {
     text: "Todas as suas obras de arte serão apagadas da galeria! 🎨🗑️",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ff6b6b', // Cor para apagar
-    cancelButtonColor: '#ffcc00',  // Cor para manter (cor do seu app)
+    confirmButtonColor: '#ff6b6b',
+    cancelButtonColor: '#ffcc00',
     confirmButtonText: 'Sim, apagar tudo',
     cancelButtonText: 'Não, quero guardar!',
     background: '#fff9e6',
+    color: '#001858', // Cor do texto para combinar com seu app
     borderRadius: '20px'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Aqui vai a lógica que você já tinha para limpar
-      localStorage.removeItem('galeria'); // ou o nome que você usa
-      loadGallery(); // recarrega a galeria vazia
+      // Dentro do if (result.isConfirmed), coloque assim:
+     localStorage.removeItem('galeria'); 
+     localStorage.removeItem('galeriaArtistas'); // desencargo de consciência
+     loadGallery();
+      
+      // 2. LIMPA O VISUAL NA HORA (Importante!)
+      const container = document.getElementById('gallery-container'); // Use o ID do seu container de fotos
+      if (container) container.innerHTML = ""; 
+
+      // 3. Recarrega a galeria (que agora voltará vazia)
+      if (typeof loadGallery === "function") {
+        loadGallery();
+      }
       
       Swal.fire({
         title: 'Galeria Limpa!',
+        text: 'Sua galeria está prontinha para novas artes! 🧹',
         icon: 'success',
         confirmButtonColor: '#ffcc00'
       });
     }
   });
 }
-
 // ========== MURAL ==========
 let savedUploads = JSON.parse(localStorage.getItem('muralUploads')||'[]');
 let muralItems = [...savedUploads];
@@ -1843,4 +1892,6 @@ function fecharApp() {
 
 </body>
 </html>
+
+
 
