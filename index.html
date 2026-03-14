@@ -1833,23 +1833,24 @@ function fecharApp() {
     text: "Se você sair agora, poderá perder sua pintura atual! 🎨",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ff6b6b', // Cor rosa/vermelha para sair
-    cancelButtonColor: '#ffcc00',  // Cor amarela para ficar
+    confirmButtonColor: '#ff6b6b',
+    cancelButtonColor: '#ffcc00',
     confirmButtonText: 'Sim, quero sair',
     cancelButtonText: 'Ficar e pintar!',
     background: '#fff9e6',
     borderRadius: '20px'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Isso faz o app voltar para a tela inicial
-      location.reload(); 
+      // Tenta chamar a ponte do Android para fechar o APK
+      if (window.AndroidInterface) {
+          window.AndroidInterface.fechar();
+      } else {
+          // Caso teste no navegador comum, ele apenas recarrega
+          location.reload();
+      }
     }
   });
 }
-</script>
-
-</body>
-</html>
 
 
 
