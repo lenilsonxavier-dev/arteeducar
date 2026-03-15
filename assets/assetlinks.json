@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.artistas.twa", 
+    "sha256_cert_fingerprints": ["23:1D:FC:02:10:01:3B:56:23:EA:71:D2:D2:10:25:E5:57:C4:91:50:4D:F3:71:75:1E:EA:14:19:47:A2:28:8B"]
+  }
+}]
