@@ -202,22 +202,40 @@
       margin-top: 25px; width: 100%; font-weight: bold; border: 4px solid white;
     }
 
-    /* ========== DESAFIOS ========== */
+    /* ========== DESAFIOS ATUALIZADOS (150 itens) ========== */
     .desafios-container { max-width: 800px; margin: 0 auto; padding: 10px; }
+    
     .search-box {
       width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #8bd3dd;
       border-radius: 30px; font-size: 16px; font-family: inherit;
     }
-    .desafios-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
+
+    /* AQUI ESTÁ A MUDANÇA: Adicionamos altura máxima e scroll */
+    .desafios-grid { 
+      display: grid; 
+      grid-template-columns: 1fr; 
+      gap: 20px; 
+      margin-top: 20px; 
+      max-height: 60vh; /* Faz a lista ter um tamanho fixo */
+      overflow-y: auto; /* Cria a barrinha de rolagem */
+      padding-right: 5px; 
+    }
+
     .desafio-card {
       background: white; border-radius: 20px; padding: 20px; text-align: left;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-left: 8px solid #f582ae; position: relative;
     }
+
     .desafio-card .audio-btn {
       position: absolute; top: 20px; right: 20px;
       background: #8bd3dd; border-radius: 50%; width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
+      border: none; /* Garante que não tenha borda feia */
     }
+
+    /* Estilo da barrinha de rolagem para ficar bonitinha */
+    .desafios-grid::-webkit-scrollbar { width: 6px; }
+    .desafios-grid::-webkit-scrollbar-thumb { background: #8bd3dd; border-radius: 10px; }
 
     /* ========== PINCEL MÁGICO ========== */
     .pincel-container {
@@ -409,35 +427,60 @@
 </div>
 
 <!-- ========== MURAL ========== -->
-<div id="mural" class="screen" style="display: none; height: 100vh; flex-direction: column; background: #001858;">
-    <div class="mural-header" style="height: 60px; background: #001858; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 2px solid #ffcc00;">
-        <h2 style="color: white; margin: 0; font-size: 1.2rem;">🖼️ Mural Virtual: Artistas do Quirino</h2>
-        <button onclick="sairDoMural()" style="background: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #001858;">
-            ⬅ Sair do Mural
-        </button>
+<div id="mural" class="screen">
+  <h2>🖼️ Mural Virtual</h2>
+  <div class="mural-container">
+    <div class="mural-toolbar">
+      <button class="mural-btn active" data-filter="todos">
+        <i class="fas fa-images"></i> Todos
+      </button>
+
+      <button class="mural-btn upload-btn" onclick="dispararUpload()" style="background-color: #ffcc00; color: #001858; border: none; cursor: pointer;">
+        <i class="fas fa-cloud-upload-alt"></i> Enviar Imagem
+      </button>
+
+      <button class="mural-btn reset-btn" onclick="resetMural()">
+        <i class="fas fa-trash-alt"></i> Limpar Mural
+      </button>
+
+      <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
     </div>
-    <div style="flex-grow: 1; overflow: hidden;">
-        <iframe 
-            src="https://padlet.com/embed/lvlhw1rjc22sd338" 
-            style="width:100%; height:100%; border:none;"
-            allow="camera; microphone; geolocation; clipboard-write; fullscreen"
-            allowfullscreen>
-        </iframe>
-    </div>
+
+    <div class="mural-grid" id="mural-grid"></div>
+
+    <button onclick="show('home')" class="mural-btn" style="margin-top:20px; background: #eee;">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </button>
+  </div>
 </div>
 <!-- ========== DESAFIOS ========== -->
-<div id="desafiosArte" class="screen">
+<div id="desafiosArte" class="screen" style="display: none;">
   <div style="display: flex; justify-content: flex-start; padding: 10px;">
-    <button onclick="show('home')" style="background: #8bd3dd;">⬅ Voltar</button>
+    <button onclick="show('home')" style="background: #8bd3dd; border: none; padding: 10px; border-radius: 10px; cursor: pointer;">⬅ Voltar</button>
   </div>
-  <h2>🎲 Desafios de Arte</h2>
-  <div class="desafios-container">
-    <button class="random-btn" onclick="sortearDesafio()">🎲 Desafio Aleatório</button>
-    <input type="text" id="buscaDesafio" class="search-box" placeholder="🔍 Procure um desafio..." onkeyup="filtrarDesafios()">
-    <div id="desafiosGrid" class="desafios-grid"></div>
+
+  <h2 style="text-align: center; color: #001858;">🎲 Desafios de Arte</h2>
+
+  <div class="desafios-container" style="text-align: center; padding: 10px;">
+    <button class="random-btn" onclick="sortearDesafio()" style="background: #f06292; color: white; border: none; padding: 15px; border-radius: 25px; margin-bottom: 15px; width: 80%; font-weight: bold;">
+        🎲 Desafio Aleatório
+    </button>
+    
+    <input 
+      type="search" 
+      id="buscaDesafio" 
+      class="search-box" 
+      placeholder="🔍 Procure um desafio..." 
+      oninput="filtrarDesafios()" 
+      autocomplete="off"
+      spellcheck="false"
+      style="width: 80%; padding: 12px; border-radius: 25px; border: 2px solid #001858; margin-bottom: 20px;"
+    >
+
+    <div id="desafiosGrid" style="display: flex; flex-direction: column; gap: 15px; max-height: 50vh; overflow-y: auto; padding: 10px;">
+    </div>
   </div>
 </div>
-
 <!-- ========== PINCEL MÁGICO ========== -->
 <div id="pincelIA" class="screen">
   <h2>🖌 Pincel Mágico</h2>
@@ -501,14 +544,84 @@
   }
 })();
 // ========== FUNÇÕES GLOBAIS ==========
+
+function confirmarEntrada() {
+    const video = document.getElementById('splash-video');
+    Swal.fire({
+        title: 'Pronto para pintar?',
+        text: 'O Ateliê do Quirino está esperando por você! 🎨',
+        iconHtml: '🖌️',
+        confirmButtonText: 'Sim, vamos lá!',
+        confirmButtonColor: '#ffcc00',
+        background: '#fff9e6',
+        borderRadius: '25px',
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (video) {
+                video.muted = false; 
+                video.play().catch(e => console.log("Erro som"));
+            }
+            const splash = document.getElementById('splash');
+            if(splash) splash.style.display = 'none';
+            
+            show('home'); // Chama a função unificada abaixo
+            
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+        }
+    });
+}
+
+function fecharApp() {
+    Swal.fire({
+        title: 'Deseja sair?',
+        text: "Sua jornada artística ainda não terminou! 🎨",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b6b',
+        cancelButtonColor: '#ffcc00',
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Ficar e Pintar',
+        background: '#fff9e6'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (window.AndroidInterface) {
+                window.AndroidInterface.fechar();
+            } else {
+                location.reload();
+            }
+        }
+    });
+}
+
+// VERSÃO ÚNICA DA FUNÇÃO SHOW (Substitua as duas por esta)
 function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  const screens = document.querySelectorAll(".screen");
+  const target = document.getElementById(id);
+  
+  if (!target) return; // Segurança caso o ID não exista
+
+  screens.forEach(s => s.classList.remove("active"));
+  target.classList.add("active");
+
+  // Gatilhos de cada tela
   if (id === "galeria") loadGallery();
   if (id === "desafiosArte") renderDesafios();
   if (id === "pincelIA") iniciarPincel();
   if (id === "desenho") mostrarListaDesenhos();
   if (id === "mural") carregarMural();
+}
+
+// ========== SISTEMA DO MURAL ==========
+// Certifique-se de que a carregarMural está assim:
+function carregarMural() {
+  savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
+  muralItems = [...savedUploads];
+  renderMural();
+  if (typeof setActiveFilterButton === 'function') setActiveFilterButton('todos');
+  currentFilter = 'todos';
 }
 
 function lerTexto(texto) {
@@ -852,7 +965,6 @@ function limparGaleria() {
 }
 
 // ========== MURAL ==========
-// --- VARIÁVEIS DO MURAL LOCAL (Se ainda quiser guardar fotos no celular) ---
 let savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
 let muralItems = [...savedUploads];
 const muralGrid = document.getElementById('mural-grid');
@@ -860,14 +972,86 @@ const filterButtons = document.querySelectorAll('.mural-btn[data-filter]');
 const fileInput = document.getElementById('file-input');
 let currentFilter = 'todos';
 
-// ... (Suas funções renderMural, deletarImagem e resetMural continuam aqui) ...
+function renderMural() {
+    let filtered = currentFilter === 'todos' ? muralItems : muralItems.filter(i => i.category === 'upload');
+    let html = '';
+    filtered.forEach(item => {
+        html += `<div class="mural-card" data-id="${item.id}"><div class="card-image"><img src="${item.imageUrl}"></div><button class="delete-btn" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button><div class="card-label">${item.label}</div></div>`;
+    });
+    if (!filtered.length) html = '<div style="grid-column:1/-1; padding:30px;">Nenhuma imagem.</div>';
+    if (muralGrid) muralGrid.innerHTML = html;
+}
 
-// --- CORREÇÃO DO EVENTO DE UPLOAD ---
+function deletarImagem(id) {
+    muralItems = muralItems.filter(i => i.id !== id);
+    savedUploads = savedUploads.filter(i => i.id !== id);
+    localStorage.setItem('muralUploads', JSON.stringify(savedUploads));
+    renderMural();
+}
+
+if (muralGrid) {
+    muralGrid.addEventListener('click', e => {
+        let btn = e.target.closest('.delete-btn');
+        if (btn) deletarImagem(btn.closest('.mural-card').dataset.id);
+    });
+}
+
+window.resetMural = function() {
+    Swal.fire({
+        title: 'Limpar todo o mural?',
+        text: "Isso apagará todos os desenhos salvos! 🎨",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b6b',
+        cancelButtonColor: '#ffcc00',
+        confirmButtonText: 'Sim, apagar tudo!',
+        cancelButtonText: 'Não, quero guardar!',
+        background: '#fff9e6',
+        color: '#001858',
+        borderRadius: '20px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('muralUploads');
+            savedUploads = [];
+            muralItems = [];
+            renderMural();
+            setActiveFilterButton('todos');
+            currentFilter = 'todos';
+            Swal.fire({
+                title: 'Mural Limpo!',
+                text: 'Sua galeria está prontinha para novas artes! 🧹',
+                icon: 'success',
+                confirmButtonColor: '#00ca85'
+            });
+        }
+    });
+};
+
+function setActiveFilterButton(filter) {
+    if (filterButtons) {
+        filterButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+    }
+}
+
+if (filterButtons) {
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentFilter = btn.dataset.filter;
+            setActiveFilterButton(currentFilter);
+            renderMural();
+        });
+    });
+}
+
 if (fileInput) {
     fileInput.addEventListener('change', e => {
-        Array.from(e.target.files).forEach(file => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        files.forEach(file => {
             if (!file.type.startsWith('image/')) return;
             const reader = new FileReader();
+
             reader.onload = ev => {
                 let id = Date.now() + '-' + Math.random().toString(36);
                 let item = {
@@ -876,63 +1060,69 @@ if (fileInput) {
                     category: 'upload',
                     imageUrl: ev.target.result
                 };
+
                 muralItems.push(item);
                 savedUploads.push(item);
                 localStorage.setItem('muralUploads', JSON.stringify(savedUploads));
                 if (currentFilter === 'uploads' || currentFilter === 'todos') renderMural();
+
+                Swal.fire({
+                    title: 'Obra Recebida! 🎨',
+                    text: 'Clique abaixo para esconder a barra e continuar.',
+                    icon: 'success',
+                    confirmButtonText: 'Restaurar Tela Cheia 📱',
+                    confirmButtonColor: '#ffcc00',
+                    background: '#fff9e6',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        ativarFullScreen();
+                    }
+                });
             };
             reader.readAsDataURL(file);
         });
+        fileInput.value = '';
     });
 }
 
-// --- FUNÇÕES DO MUSEU VIRTUAL (Agora fora de qualquer outra função) ---
+function ativarFullScreen() {
+    const doc = document.documentElement;
+    if (doc.requestFullscreen) {
+        doc.requestFullscreen().catch(err => console.log("Erro ao restaurar"));
+    } else if (doc.webkitRequestFullscreen) {
+        doc.webkitRequestFullscreen();
+    }
+}
 
-async function abrirMuralVirtual() {
-    const result = await Swal.fire({
-        title: 'Entrar no Mural? 🖼️',
-        text: 'Você vai ver os trabalhos da turma e poderá enviar o seu também!',
-        icon: 'info',
+function carregarMural() {
+    savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
+    muralItems = [...savedUploads];
+    renderMural();
+    setActiveFilterButton('todos');
+    currentFilter = 'todos';
+} // <--- AQUI ESTAVA FALTANDO ESSA CHAVE!
+
+function dispararUpload() {
+    Swal.fire({
+        title: 'Enviar Nova Arte?',
+        text: 'Escolha uma foto ou um desenho da sua galeria para o nosso mural! 🎨',
+        icon: 'image',
         showCancelButton: true,
-        confirmButtonText: 'Sim, entrar! 🚀',
-        cancelButtonText: 'Ficar pintando',
+        confirmButtonText: 'Escolher Arquivo 📂',
+        cancelButtonText: 'Agora não',
         confirmButtonColor: '#ffcc00',
         cancelButtonColor: '#ff6b6b',
         background: '#fff9e6',
-        color: '#001858'
+        borderRadius: '20px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const input = document.getElementById('file-input');
+            if (input) input.click();
+        }
     });
-
-    if (result.isConfirmed) {
-        show('mural');
-        ativarFullscreen();
-    }
 }
 
-function sairDoMural() {
-    show('home');
-    ativarFullscreen(); // Garante que volta em tela cheia para o ateliê
-}
-
-function ativarFullscreen() {
-    const doc = document.documentElement;
-    if (doc.requestFullscreen) doc.requestFullscreen();
-    else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-}
-
-function show(id) {
-    const screens = document.querySelectorAll('.screen');
-    screens.forEach(s => {
-        s.style.display = 'none';
-        s.classList.remove('active');
-    });
-
-    const target = document.getElementById(id);
-    if (target) {
-        // Se for mural usa flex para o iframe ocupar tudo, senão usa block
-        target.style.display = (id === 'mural') ? 'flex' : 'block';
-        target.classList.add('active');
-    }
-}
 // ========== DESAFIOS ==========
 const desafios = [
   { numero: 1, titulo: "Desenho às Cegas", descricao: "Cada aluno fecha os olhos e tenta desenhar um objeto simples (copo, casa, flor). Depois comparam os resultados, rindo e discutindo sobre formas e proporções.", objetivo: "estimular criatividade e percepção sem pressão estética." },
@@ -1088,22 +1278,43 @@ const desafios = [
 ];
 
 function renderDesafios() {
-  const busca = document.getElementById('buscaDesafio').value.toLowerCase();
+  const buscaInput = document.getElementById('buscaDesafio');
   const grid = document.getElementById('desafiosGrid');
-  let html = '';
-  desafios.filter(d => d.titulo.toLowerCase().includes(busca)||d.descricao.toLowerCase().includes(busca)||d.objetivo.toLowerCase().includes(busca))
-    .forEach(d => {
-      let txt = `Desafio ${d.numero}: ${d.titulo}. ${d.descricao} Objetivo: ${d.objetivo}`;
-      html += `<div class="desafio-card" id="desafio-${d.numero}"><button class="audio-btn" onclick="lerTexto('${txt.replace(/'/g,"\\'")}')"><i class="fas fa-volume-up"></i></button><span class="numero">#${d.numero}</span><h3>${d.titulo}</h3><div class="descricao">${d.descricao}</div><div class="objetivo"><strong>Objetivo:</strong> ${d.objetivo}</div></div>`;
-    });
-  if (!html) html = '<p style="padding:40px;">Nenhum desafio encontrado.</p>';
-  grid.innerHTML = html;
+  if (!buscaInput || !grid) return;
+
+  const busca = buscaInput.value.toLowerCase();
+  
+  // Filtra nos 150 desafios
+  const filtrados = desafios.filter(d => 
+    d.titulo.toLowerCase().includes(busca) || 
+    d.descricao.toLowerCase().includes(busca) || 
+    d.objetivo.toLowerCase().includes(busca)
+  );
+
+  grid.innerHTML = filtrados.map(d => {
+    let txtAcessibilidade = `Desafio ${d.numero}: ${d.titulo}. ${d.descricao}`;
+    
+    return `
+      <div class="desafio-card" id="desafio-${d.numero}" style="background:white; padding:15px; border-radius:15px; border:2px solid #ff6b6b; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <button class="audio-btn" onclick="lerTexto('${txtAcessibilidade.replace(/'/g,"\\'")}')" style="background:#8bd3dd; border:none; border-radius:50%; width:30px; height:30px;">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <span style="font-weight:bold; color:#ff6b6b;">#${d.numero}</span>
+        </div>
+        <h3 style="color:#001858; margin:10px 0;">${d.titulo}</h3>
+        <p style="font-size:0.9rem; color:#444;">${d.descricao}</p>
+        <div style="font-size:0.8rem; color:#777; margin-top:5px;"><strong>Objetivo:</strong> ${d.objetivo}</div>
+        <button onclick="aceitarDesafio('${d.titulo.replace(/'/g,"\\'")}')" style="width:100%; margin-top:10px; background:#00ca85; color:white; border:none; padding:10px; border-radius:10px; font-weight:bold;">
+            Fazer este!
+        </button>
+      </div>`;
+  }).join('');
+
+  if (filtrados.length === 0) {
+    grid.innerHTML = '<p style="text-align:center; padding:20px; color:white;">Nenhum dos 150 desafios encontrado. 🔍</p>';
+  }
 }
-document.getElementById('buscaDesafio')?.addEventListener('input', renderDesafios);
-window.sortearDesafio = function() {
-  let d = desafios[Math.floor(Math.random()*desafios.length)];
-  let el = document.getElementById(`desafio-${d.numero}`);
-  if(el) { el.scrollIntoView({behavior:'smooth'}); el.classList.add('highlight'); setTimeout(()=>el.classList.remove('highlight'),1500); }
 };
 
 // ========== ARRAIS DE ATIVIDADES EMOCIONAIS (HUMANIZADAS) ==========
