@@ -1226,9 +1226,15 @@ function lerTexto(texto) {
 
 // --- FUNÇÃO DE ACEITAR DESAFIO ---
 function aceitarDesafio(titulo) {
-    alert("Desafio Aceito: " + titulo + "! 🎨");
+    // 1. Mostra a mensagem de sucesso
+    Swal.fire({
+        title: 'Desafio Aceito!',
+        text: `Prepare-se para: ${titulo} 🎨`,
+        icon: 'success',
+        confirmButtonColor: '#00ca85'
+    }).then(() => {
+   });
 }
-
 // --- INICIALIZAÇÃO ---
 document.addEventListener('DOMContentLoaded', () => {
     renderDesafios();
