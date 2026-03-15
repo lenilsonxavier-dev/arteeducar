@@ -414,7 +414,6 @@
   <div class="mural-container">
     <div class="mural-toolbar">
       <button class="mural-btn active" data-filter="todos"><i class="fas fa-images"></i> Todos</button>
-      <button class="mural-btn" data-filter="uploads"><i class="fas fa-upload"></i> Uploads</button>
       <label for="file-input" class="mural-btn upload-btn"><i class="fas fa-cloud-upload-alt"></i> Enviar Imagem</label>
       <button class="mural-btn reset-btn" onclick="resetMural()"><i class="fas fa-trash-alt"></i> Limpar Mural</button>
       <input type="file" id="file-input" accept="image/*" multiple>
@@ -749,20 +748,13 @@ function configurarBotoesDesenho() {
   zoomOut.onclick = diminuirZoom;
   limparBtn.onclick = limparCanvas;
   
-salvarBtn.onclick = () => {
-    // 1. Cria a imagem do desenho
+    salvarBtn.onclick = () => {
     const dataURL = canvas.toDataURL("image/png");
+    const galeria = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
     
-    // 2. Pega a galeria atual ou cria uma vazia
-    const galeria = JSON.parse(localStorage.getItem('galeria')) || [];
-    
-    // 3. ADICIONA o desenho na lista (o "push" corrigido)
     galeria.push(dataURL);
-    
-    // 4. SALVA na memória (localStorage corrigido)
-    localStorage.setItem('galeria', JSON.stringify(galeria));
+    localStorage.setItem('galeria_artistas', JSON.stringify(galeria));
 
-    // 5. Mostra o aviso
     if (typeof Swal !== 'undefined') {
       Swal.fire({
         title: 'Obra Salva! 🎨',
@@ -770,18 +762,29 @@ salvarBtn.onclick = () => {
         icon: 'success',
         confirmButtonColor: '#ffcc00'
       });
-    } else {
-      alert("Obra Salva! 🎨");
     }
 
-    // 6. Atualiza a tela da galeria na hora
-    if (typeof loadGallery === "function") loadGallery();
-  };
+    if (typeof loadGallery === "function") {
+      loadGallery();
+    }
+  }; // Fim do onclick
 
   voltarBtn.onclick = voltarEscolha;
-  seletorCor.addEventListener('input', (e) => setCor(e.target.value));
-}
+  if (seletorCor) {
+    seletorCor.addEventListener('input', (e) => setCor(e.target.value));
+  }
+} // <--- ESTA CHAVE FECHA A FUNÇÃO configurarBotoesDesenho
 
+// Esta função fica FORA da configurarBotoesDesenho
+function limparGaleria() {
+  localStorage.removeItem('galeria_artistas');
+  const galleryDiv = document.getElementById('gallery');
+  if (galleryDiv) {
+    galleryDiv.innerHTML = ''; 
+  }
+  alert("Galeria limpa!");
+}
+// ========== EVENTOS DO CANVAS ==========
 function configurarCanvasEvents() {
   canvas.addEventListener('mousedown', iniciarDesenho);
   canvas.addEventListener('mousemove', desenhar);
@@ -792,11 +795,17 @@ function configurarCanvasEvents() {
   canvas.addEventListener('touchend', pararDesenho);
 }
 
-// ========== GALERIA ==========
- function loadGallery() {
-  const container = document.getElementById('gallery'); // ou 'gallery-container'
+// ========== GALERIA: CARREGAR ==========
+function loadGallery() {
+  const container = document.getElementById('gallery'); 
   if (!container) return;
-  const desenhos = JSON.parse(localStorage.getItem('galeria')) || [];
+
+  // Limpa o visual antes de carregar para não duplicar
+  container.innerHTML = ''; 
+
+  // IMPORTANTE: Nome da chave deve ser 'galeria_artistas'
+  const desenhos = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
+  
   if (desenhos.length === 0) {
     container.innerHTML = '<p>A galeria está vazia! 🎨</p>';
     return;
@@ -808,6 +817,8 @@ function configurarCanvasEvents() {
     container.appendChild(img);
   });
 }
+
+// ========== GALERIA: LIMPAR TUDO ==========
 function limparGaleria() {
   Swal.fire({
     title: 'Tem certeza?',
@@ -819,23 +830,14 @@ function limparGaleria() {
     confirmButtonText: 'Sim, apagar tudo',
     cancelButtonText: 'Não, quero guardar!',
     background: '#fff9e6',
-    color: '#001858', // Cor do texto para combinar com seu app
-    borderRadius: '20px'
+    color: '#001858'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Dentro do if (result.isConfirmed), coloque assim:
-     localStorage.removeItem('galeria'); 
-     localStorage.removeItem('galeriaArtistas'); // desencargo de consciência
-     loadGallery();
+      // 1. Limpa a chave correta no banco de dados
+      localStorage.removeItem('galeria_artistas'); 
       
-      // 2. LIMPA O VISUAL NA HORA (Importante!)
-      const container = document.getElementById('gallery-container'); // Use o ID do seu container de fotos
-      if (container) container.innerHTML = ""; 
-
-      // 3. Recarrega a galeria (que agora voltará vazia)
-      if (typeof loadGallery === "function") {
-        loadGallery();
-      }
+      // 2. Atualiza a tela (vai mostrar a mensagem de vazia)
+      loadGallery(); 
       
       Swal.fire({
         title: 'Galeria Limpa!',
@@ -846,6 +848,7 @@ function limparGaleria() {
     }
   });
 }
+
 // ========== MURAL ==========
 let savedUploads = JSON.parse(localStorage.getItem('muralUploads')||'[]');
 let muralItems = [...savedUploads];
@@ -874,13 +877,39 @@ muralGrid.addEventListener('click', e => {
   if(btn) deletarImagem(btn.closest('.mural-card').dataset.id);
 });
 window.resetMural = function() {
-  if(confirm('Apagar todas as imagens?')) {
-    localStorage.removeItem('muralUploads');
-    savedUploads = []; muralItems = []; renderMural();
-    setActiveFilterButton('todos'); currentFilter = 'todos';
-  }
-};
-function setActiveFilterButton(filter) {
+  // Chamada do SweetAlert2 para substituir o confirm do navegador
+  Swal.fire({
+    title: 'Limpar todo o mural?',
+    text: "Isso apagará todos os desenhos salvos! 🎨",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ff6b6b', // Cor vermelha para apagar
+    cancelButtonColor: '#ffcc00',  // Cor amarela para cancelar
+    confirmButtonText: 'Sim, apagar tudo!',
+    cancelButtonText: 'Não, quero guardar!',
+    background: '#fff9e6',         // Fundo bege clarinho lúdico
+    color: '#001858',              // Cor do texto
+    borderRadius: '20px'
+  }).then((result) => {
+    // Se a criança (ou você) confirmar no botão "Sim"
+    if (result.isConfirmed) {
+      localStorage.removeItem('muralUploads');
+      savedUploads = []; 
+      muralItems = []; 
+      renderMural();
+      setActiveFilterButton('todos'); 
+      currentFilter = 'todos';
+      
+      // Mensagem de sucesso após limpar
+      Swal.fire({
+        title: 'Mural Limpo!',
+        text: 'Sua galeria está prontinha para novas artes! 🧹',
+        icon: 'success',
+        confirmButtonColor: '#00ca85'
+      });
+    }
+  });
+};function setActiveFilterButton(filter) {
   filterButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.filter===filter));
 }
 filterButtons.forEach(btn => {
@@ -1870,23 +1899,38 @@ document.addEventListener('click', function() {
 }, { once: true }); // Executa apenas uma vez para não dar erro
 
 function fecharApp() {
-  Swal.fire({
-    title: 'Deseja mesmo sair do Ateliê?',
-    text: "Se você sair agora, poderá perder sua pintura atual! 🎨",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#ff6b6b', // Cor rosa/vermelha para sair
-    cancelButtonColor: '#ffcc00',  // Cor amarela para ficar
-    confirmButtonText: 'Sim, quero sair',
-    cancelButtonText: 'Ficar e pintar!',
-    background: '#fff9e6',
-    borderRadius: '20px'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Isso faz o app voltar para a tela inicial
-      location.reload(); 
-    }
-  });
+    Swal.fire({
+        title: 'Sair do Ateliê? 🎨',
+        text: "Espero que tenha se divertido! Até logo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b6b',
+        cancelButtonColor: '#ffcc00',
+        confirmButtonText: 'Sair agora',
+        cancelButtonText: 'Continuar pintando',
+        background: '#fff9e6',
+        borderRadius: '20px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 1. Tenta o comando padrão de APKs (Cordova/PhoneGap/Web2APK)
+            if (navigator.app && navigator.app.exitApp) {
+                navigator.app.exitApp();
+            } 
+            // 2. Tenta o comando para outros tipos de containers
+            else if (navigator.device && navigator.device.exitApp) {
+                navigator.device.exitApp();
+            } 
+            // 3. Tenta fechar a janela (comum em alguns WebViews)
+            else {
+                window.close();
+                // Se tudo falhar (porque o Android bloqueou), 
+                // ele volta para o Splash para não ficar travado.
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }
+        }
+    });
 }
 </script>
 
