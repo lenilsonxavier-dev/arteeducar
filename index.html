@@ -925,15 +925,43 @@ fileInput.addEventListener('change', e => {
     const reader = new FileReader();
     reader.onload = ev => {
       let id = Date.now()+'-'+Math.random().toString(36);
-      let item = { id, label: file.name.length>20 ? file.name.substr(0,20)+'…' : file.name, category:'upload', imageUrl: ev.target.result };
-      muralItems.push(item); savedUploads.push(item);
+      let item = { 
+        id, 
+        label: file.name.length>20 ? file.name.substr(0,20)+'…' : file.name, 
+        category:'upload', 
+        imageUrl: ev.target.result 
+      };
+      
+      muralItems.push(item); 
+      savedUploads.push(item);
       localStorage.setItem('muralUploads', JSON.stringify(savedUploads));
+      
       if(currentFilter==='uploads' || currentFilter==='todos') renderMural();
+
+      // --- CORREÇÃO AQUI: FORÇA VOLTAR PARA TELA CHEIA E MASCARAR O GITHUB ---
+      setTimeout(() => {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.log("Erro ao tentar voltar para tela cheia");
+          });
+        }
+      }, 500); // Aguarda meio segundo para garantir que o seletor fechou
+      
+      // Mensagem de sucesso opcional para distrair da transição da barra
+      Swal.fire({
+        title: 'Sucesso!',
+        text: 'Sua arte foi enviada para o mural! 🎨',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false,
+        background: '#fff9e6'
+      });
     };
     reader.readAsDataURL(file);
   });
   fileInput.value = '';
 });
+
 function carregarMural() {
   savedUploads = JSON.parse(localStorage.getItem('muralUploads')||'[]');
   muralItems = [...savedUploads];
