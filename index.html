@@ -27,11 +27,13 @@
       flex-direction: column;
     }
     #splash video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
+  width: 100vw;  /* Ocupa 100% da largura da janela */
+  height: 100vh; /* Ocupa 100% da altura da janela */
+  object-fit: cover; /* Faz o vídeo preencher a tela sem distorcer (corta as sobras) */
+  position: absolute;
+  top: 0;
+  left: 0;
+
     }
     #splash-fallback {
       display: none;
@@ -344,9 +346,8 @@
 <body>
 
  <div id="splash">
-  <video id="splash-video" playsinline webkit-playsinline preload="auto" autoplay muted>
+  <video id="splash-video" playsinline webkit-playsinline autoplay muted preload="auto">
   <source src="abertura.mp4" type="video/mp4">
-  Seu navegador não suporta vídeos.
 </video>
   
   <div id="splash-fallback" style="display: flex; z-index: 20; flex-direction: column; align-items: center; gap: 20px;">
@@ -523,15 +524,24 @@
 </div>
 
 <script>
-// ========== LÓGICA DE ABERTURA - FOCO EM ESTABILIDADE LOCAL ==========
+// ========== LÓGICA DE ABERTURA - FOCO EM ESTABILIDADE E TELA CHEIA ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
   const fallback = document.getElementById('splash-fallback');
 
+  // Função única e correta para entrar no app
   function abrirApp() {
-    if (splash.style.display !== 'none') {
+    if (splash && splash.style.display !== 'none') {
       splash.style.opacity = '0';
+      
+      // Tenta colocar em tela cheia (opcional, requer interação do usuário antes)
+      try {
+        if (document.documentElement.requestFullscreen) {
+          // document.documentElement.requestFullscreen(); 
+        }
+      } catch (e) { console.log("Fullscreen bloqueado"); }
+
       setTimeout(() => {
         splash.style.display = 'none';
         show('home');
@@ -539,30 +549,30 @@
     }
   }
 
-  // 1. Tira o display:none do fallback para garantir que algo apareça
+  // 1. Garante que o fallback apareça se o vídeo demorar
   if(fallback) fallback.style.display = 'flex';
 
-  // 2. Força o navegador a tentar carregar o vídeo
+  // 2. Configura o vídeo e tenta o play
   video.load();
 
-  // 3. Tenta dar o play assim que houver o mínimo de dados
   video.addEventListener('loadeddata', () => {
     video.play().then(() => {
       console.log("Vídeo rodando!");
-      if(fallback) fallback.style.opacity = '0'; // Esconde o texto quando o vídeo começar
+      if(fallback) {
+          fallback.style.transition = "opacity 0.5s";
+          fallback.style.opacity = '0'; 
+      }
     }).catch(e => {
-      console.log("Erro ao iniciar vídeo local:", e);
+      console.log("Autoplay bloqueado ou erro no vídeo local.");
     });
   });
 
-  // 4. Se o vídeo terminar, abre o app
+  // 3. Evento de final do vídeo
   video.onended = abrirApp;
 
-  // 5. Ajuste o tempo de segurança: 
-  // Se o seu vídeo tem 3 segundos, coloque 4000 (4 segundos) aqui.
-  // Se ele estiver pulando muito rápido, aumente este número para 6000.
+  // 4. SEGURANÇA: Se em 5 segundos não abrir, força a entrada
   setTimeout(() => {
-    if (video.paused || video.ended) {
+    if (splash && splash.style.display !== 'none') {
       abrirApp();
     }
   }, 5000); 
