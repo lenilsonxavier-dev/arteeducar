@@ -359,14 +359,25 @@
 <!-- ========== MENU PRINCIPAL ========== -->
 <div id="home" class="screen menu">
   <h1>🎨 Pequenos Artistas do Quirino</h1>
+
   <button onclick="show('desenho')">🖍 Desenho Livre / Colorir</button>
+
   <button onclick="show('museu')">🏛 Museu Virtual</button>
+
   <button onclick="show('galeria')">🏆 Galeria</button>
-  <button onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
+
+  <button onclick="show('mural'); carregarMural()">
+    🖼️ Mural Virtual
+  </button>
+
   <button onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
-  <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
+
+  <button onclick="show('pincelIA'); iniciarPincel()">
+    🖌 Pincel Mágico
+  </button>
+
   <button class="btn-sair" onclick="fecharApp()">
-    <i class="fas fa-times-circle"></i> Sair do Ateliê
+    ❌ Sair do Ateliê
   </button>
 </div>
 
@@ -580,21 +591,119 @@
 })();
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  if (id === "galeria") loadGallery();
-  if (id === "desafiosArte") renderDesafios();
-  if (id === "pincelIA") iniciarPincel();
-  if (id === "desenho") mostrarListaDesenhos();
-  if (id === "mural") carregarMural();
+  const screens = document.querySelectorAll('.screen');
+
+  screens.forEach(s => {
+    s.style.display = 'none';
+  });
+
+  const target = document.getElementById(id);
+
+  if (target) {
+    target.style.display = 'block';
+  }
+
+  // 🎤 FALAS DO PERSONAGEM
+  if (id === "desenho") {
+    setTimeout(() => {
+      falarComoPersonagem("Hora de soltar a criatividade!", "desenho");
+    }, 300);
+  }
+
+  if (id === "galeria") {
+    setTimeout(() => {
+      falarComoPersonagem("Olha quanta arte linda você já fez!", "galeria");
+    }, 300);
+  }
+
+  if (id === "desafiosArte") {
+    setTimeout(() => {
+      falarComoPersonagem("Vamos escolher um desafio divertido!", "desafios");
+    }, 300);
+  }
+
+  if (id === "mural") {
+    setTimeout(() => {
+      falarComoPersonagem("Bem-vindo ao mural dos artistas!", "mural");
+    }, 300);
+  }
+
+  if (id === "pincelIA") {
+    setTimeout(() => {
+      falarComoPersonagem("Pode me perguntar sobre arte!", "ia");
+    }, 300);
+  }
 }
 
+// ========= FUNÇÕES DE VOZ =========
+
+// 🔥 ativa vozes no Android
+document.addEventListener('click', () => {
+  new Audio().play().catch(() => {});
+}, { once: true });
+
 function lerTexto(texto) {
-  const utterance = new SpeechSynthesisUtterance(texto.replace(/[^\w\s\u00C0-\u00FF]/g, ''));
-  utterance.lang = 'pt-BR';
-  utterance.rate = 0.9;
-  window.speechSynthesis.speak(utterance);
+    if (!('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    const msg = new SpeechSynthesisUtterance(texto);
+
+    msg.lang = 'pt-BR';
+    msg.rate = 0.95;
+    msg.pitch = 1.4;
+    msg.volume = 1;
+
+    const voices = speechSynthesis.getVoices();
+    const voz = voices.find(v => v.lang === 'pt-BR') || voices[0];
+
+    if (voz) msg.voice = voz;
+
+    speechSynthesis.speak(msg);
 }
+
+function falarComoPersonagem(texto, audioNome = null) {
+    if (!('speechSynthesis' in window)) {
+        if (audioNome) falarAudio(audioNome);
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const frases = [
+        "🎨 Ei, artista!",
+        "✨ Olha só!",
+        "🖌️ Que incrível!",
+        "🌈 Vamos lá!",
+        "🎭 Preparado?"
+    ];
+
+    const inicio = frases[Math.floor(Math.random() * frases.length)];
+
+    const msg = new SpeechSynthesisUtterance(inicio + " " + texto);
+
+    msg.lang = 'pt-BR';
+    msg.rate = 0.95;
+    msg.pitch = 1.4;
+    msg.volume = 1;
+
+    const voices = speechSynthesis.getVoices();
+    const voz = voices.find(v => v.lang === 'pt-BR') || voices[0];
+
+    if (voz) msg.voice = voz;
+
+    // 💥 se der erro → usa áudio
+    msg.onerror = () => {
+        if (audioNome) falarAudio(audioNome);
+    };
+
+    speechSynthesis.speak(msg);
+}
+  function falarAudio(nome) {
+  const audio = new Audio('sons/' + nome + '.mp3');
+  audio.play();
+}
+
 
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
@@ -2089,5 +2198,4 @@ function fecharApp() {
 
 </body>
 </html>
-
 
