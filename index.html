@@ -634,10 +634,9 @@ function show(id) {
       falarComoPersonagem("Pode me perguntar sobre arte!", "pincel-novo");
     }, 300);
   }
-} 
-
-// ========= FUNÇÕES DE VOZ =========
- 🔥 ativa áudio no Android
+}
+ // ========= FUNÇÕES DE VOZ =========
+// 🔥 ativa áudio no Android
 document.addEventListener('click', () => {
   new Audio().play().catch(() => {});
   speechSynthesis.getVoices();
