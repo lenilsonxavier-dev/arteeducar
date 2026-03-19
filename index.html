@@ -634,6 +634,8 @@ function show(id) {
       falarComoPersonagem("Pode me perguntar sobre arte!", "pincel-novo");
     }, 300);
   }
+} // ✅ FECHAMENTO QUE FALTAVA
+
 
 // ========= FUNÇÕES DE VOZ =========
 
@@ -666,6 +668,18 @@ function falarAudio(nome) {
   }
 }
 
+
+// 🎤 CARREGAMENTO CORRETO DAS VOZES
+let vozesCarregadas = [];
+
+function carregarVozes() {
+  vozesCarregadas = speechSynthesis.getVoices();
+}
+
+speechSynthesis.onvoiceschanged = carregarVozes;
+carregarVozes();
+
+
 function lerTexto(texto) {
   if (!('speechSynthesis' in window)) return;
 
@@ -678,21 +692,21 @@ function lerTexto(texto) {
   msg.pitch = 1.6;
   msg.volume = 1;
 
-  const aplicarVoz = () => {
-    const voices = speechSynthesis.getVoices();
-    const voz = voices.find(v => v.lang === 'pt-BR') || voices[0];
-    if (voz) msg.voice = voz;
-    speechSynthesis.speak(msg);
-  };
+  let voz = vozesCarregadas.find(v => v.lang.includes('pt'));
 
-  if (speechSynthesis.getVoices().length === 0) {
-    speechSynthesis.onvoiceschanged = aplicarVoz;
-  } else {
-    aplicarVoz();
+  if (!voz && vozesCarregadas.length > 0) {
+    voz = vozesCarregadas[0];
   }
+
+  if (voz) msg.voice = voz;
+
+  speechSynthesis.speak(msg);
 }
 
+
+// 🎭 PERSONAGEM
 function falarComoPersonagem(texto, audioNome = null) {
+
   // 🎧 PRIORIDADE: áudio infantil
   if (audioNome) {
     falarAudio(audioNome);
