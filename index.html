@@ -634,12 +634,10 @@ function show(id) {
       falarComoPersonagem("Pode me perguntar sobre arte!", "pincel-novo");
     }, 300);
   }
-} // ✅ FECHAMENTO QUE FALTAVA
-
+} 
 
 // ========= FUNÇÕES DE VOZ =========
-
-// 🔥 ativa áudio no Android
+ 🔥 ativa áudio no Android
 document.addEventListener('click', () => {
   new Audio().play().catch(() => {});
   speechSynthesis.getVoices();
@@ -667,7 +665,6 @@ function falarAudio(nome) {
     console.log("Erro ao tocar áudio:", e);
   }
 }
-
 
 // 🎤 CARREGAMENTO CORRETO DAS VOZES
 let vozesCarregadas = [];
@@ -703,17 +700,24 @@ function lerTexto(texto) {
   speechSynthesis.speak(msg);
 }
 
-
 // 🎭 PERSONAGEM
 function falarComoPersonagem(texto, audioNome = null) {
 
-  // 🎧 PRIORIDADE: áudio infantil
   if (audioNome) {
-    falarAudio(audioNome);
+    const audio = new Audio('sons/' + audioNome + '.mp3');
+
+    audio.onerror = () => {
+      console.log("Áudio não encontrado, usando voz...");
+      lerTexto(texto);
+    };
+
+    audio.play().catch(() => {
+      lerTexto(texto);
+    });
+
     return;
   }
 
-  // 🤖 fallback
   lerTexto(texto);
 }
 // ========== FERRAMENTA DE DESENHO ==========
