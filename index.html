@@ -589,6 +589,7 @@
   }, 5000); 
 
 })();
+
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
   const screens = document.querySelectorAll('.screen');
@@ -618,7 +619,7 @@ function show(id) {
 
   if (id === "desafiosArte") {
     setTimeout(() => {
-      falarComoPersonagem("Vamos escolher um desafio divertido!", "desafios");
+      falarComoPersonagem("Vamos escolher um desafio divertido!", "desafios-novo");
     }, 300);
   }
 
@@ -630,81 +631,77 @@ function show(id) {
 
   if (id === "pincelIA") {
     setTimeout(() => {
-      falarComoPersonagem("Pode me perguntar sobre arte!", "ia");
+      falarComoPersonagem("Pode me perguntar sobre arte!", "pincel-novo");
     }, 300);
   }
-}
 
 // ========= FUNÇÕES DE VOZ =========
 
-// 🔥 ativa vozes no Android
+// 🔥 ativa áudio no Android
 document.addEventListener('click', () => {
   new Audio().play().catch(() => {});
+  speechSynthesis.getVoices();
 }, { once: true });
 
+let audioAtual = null;
+
+function falarAudio(nome) {
+  try {
+    if (audioAtual) {
+      audioAtual.pause();
+      audioAtual.currentTime = 0;
+    }
+
+    const audio = new Audio('sons/' + nome + '.mp3');
+
+    audio.onerror = () => {
+      console.log("Áudio não encontrado:", nome);
+    };
+
+    audio.play();
+    audioAtual = audio;
+
+  } catch (e) {
+    console.log("Erro ao tocar áudio:", e);
+  }
+}
+
 function lerTexto(texto) {
-    if (!('speechSynthesis' in window)) return;
+  if (!('speechSynthesis' in window)) return;
 
-    window.speechSynthesis.cancel();
+  window.speechSynthesis.cancel();
 
-    const msg = new SpeechSynthesisUtterance(texto);
+  const msg = new SpeechSynthesisUtterance(texto);
 
-    msg.lang = 'pt-BR';
-    msg.rate = 0.95;
-    msg.pitch = 1.4;
-    msg.volume = 1;
+  msg.lang = 'pt-BR';
+  msg.rate = 0.9;
+  msg.pitch = 1.6;
+  msg.volume = 1;
 
+  const aplicarVoz = () => {
     const voices = speechSynthesis.getVoices();
     const voz = voices.find(v => v.lang === 'pt-BR') || voices[0];
-
     if (voz) msg.voice = voz;
-
     speechSynthesis.speak(msg);
+  };
+
+  if (speechSynthesis.getVoices().length === 0) {
+    speechSynthesis.onvoiceschanged = aplicarVoz;
+  } else {
+    aplicarVoz();
+  }
 }
 
 function falarComoPersonagem(texto, audioNome = null) {
-    if (!('speechSynthesis' in window)) {
-        if (audioNome) falarAudio(audioNome);
-        return;
-    }
+  // 🎧 PRIORIDADE: áudio infantil
+  if (audioNome) {
+    falarAudio(audioNome);
+    return;
+  }
 
-    window.speechSynthesis.cancel();
-
-    const frases = [
-        "🎨 Ei, artista!",
-        "✨ Olha só!",
-        "🖌️ Que incrível!",
-        "🌈 Vamos lá!",
-        "🎭 Preparado?"
-    ];
-
-    const inicio = frases[Math.floor(Math.random() * frases.length)];
-
-    const msg = new SpeechSynthesisUtterance(inicio + " " + texto);
-
-    msg.lang = 'pt-BR';
-    msg.rate = 0.95;
-    msg.pitch = 1.4;
-    msg.volume = 1;
-
-    const voices = speechSynthesis.getVoices();
-    const voz = voices.find(v => v.lang === 'pt-BR') || voices[0];
-
-    if (voz) msg.voice = voz;
-
-    // 💥 se der erro → usa áudio
-    msg.onerror = () => {
-        if (audioNome) falarAudio(audioNome);
-    };
-
-    speechSynthesis.speak(msg);
+  // 🤖 fallback
+  lerTexto(texto);
 }
-  function falarAudio(nome) {
-  const audio = new Audio('sons/' + nome + '.mp3');
-  audio.play();
-}
-
-
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
 const ctx = canvas.getContext('2d');
@@ -1348,7 +1345,7 @@ function desafioAleatorio() {
 }
 
 // --- FUNÇÃO DE ÁUDIO ---
-function lerTexto(texto) {
+falarComoPersonagem(desafio.texto, "desafios");
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(texto);
@@ -2036,7 +2033,13 @@ function adicionarMensagem(tipo, texto) {
   
   if (tipo === 'resposta') {
     const textoEscapado = texto.replace(/'/g, "\\'");
-    div.innerHTML = `<span>${texto} <button class="botao-audio" onclick="lerTexto('${textoEscapado}')"><i class="fas fa-volume-up"></i></button></span>`;
+    div.innerHTML = `
+      <span>
+        ${texto}
+        <button class="botao-audio" onclick="falarComoPersonagem('${textoEscapado}', 'ia')">
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </span>`;
   } else {
     div.innerHTML = `<span>${texto}</span>`;
   }
@@ -2102,7 +2105,10 @@ function enviarPergunta() {
 
     pincelFala.innerText = respostaEncontrada;
     adicionarMensagem('resposta', respostaEncontrada);
-    historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
+
+// 🎤 FAZ O PINCEL FALAR
+falarComoPersonagem(respostaEncontrada, "ia");    
+historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
   }, 800);
 
   input.value = '';
@@ -2125,7 +2131,9 @@ function bloquearPalavra() {
 function iniciarPincel() {
   const chat = document.getElementById('chatArea');
   if (chat.children.length === 0) {
-    adicionarMensagem('resposta', 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!');
+    const msg = 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre arte!';
+adicionarMensagem('resposta', msg);
+falarComoPersonagem(msg, "ia");
   }
 }
 
