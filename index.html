@@ -511,31 +511,50 @@ document.addEventListener('click', () => {
 let audioAtual = null;
 
 function falarComoPersonagem(texto, audioNome = null) {
-  if (!audioNome) return;
 
-  const caminho = 'sons/' + audioNome + '.mp3';
+  // 🔊 Se tiver nome de áudio → usa MP3
+  if (audioNome) {
+    const caminho = 'sons/' + audioNome + '.mp3';
+    console.log("🎧 tentando:", caminho);
 
-  console.log("Tentando tocar:", caminho); // 🔍 debug
+    if (audioAtual) {
+      audioAtual.pause();
+      audioAtual.currentTime = 0;
+    }
 
-  if (audioAtual) {
-    audioAtual.pause();
-    audioAtual.currentTime = 0;
-  }
+    const audio = new Audio(caminho);
 
-  const audio = new Audio(caminho);
-  audio.preload = "auto";
+    audio.onerror = () => {
+      console.warn("⚠️ MP3 não encontrado, usando voz do navegador...");
+      falarTexto(texto); // fallback
+    };
 
-  audio.onerror = () => {
-    console.error("❌ ERRO ao carregar:", caminho);
-  };
-
-  audio.oncanplaythrough = () => {
     audio.play().catch(() => {
-      console.warn("⚠️ Bloqueado pelo navegador:", caminho);
+      console.warn("⚠️ bloqueado, usando voz do navegador...");
+      falarTexto(texto); // fallback
     });
-  };
 
-  audioAtual = audio;
+    audioAtual = audio;
+
+  } else {
+    // 🧠 Se NÃO tiver áudio → usa voz do navegador
+    falarTexto(texto);
+  }
+}
+
+
+// 🗣️ VOZ DO NAVEGADOR (FUNCIONA SEM MP3)
+function falarTexto(texto) {
+  const synth = window.speechSynthesis;
+
+  const utterance = new SpeechSynthesisUtterance(texto);
+
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9;
+  utterance.pitch = 1.1;
+
+  synth.cancel(); // para fala anterior
+  synth.speak(utterance);
 }
 // ========== FRASES ALEATÓRIAS ==========
 const frases = [
@@ -1133,27 +1152,30 @@ function renderDesafios() {
         d.descricao.toLowerCase().includes(busca)
     );
 
-    grid.innerHTML = filtrados.map(d => `
-        <div class="desafio-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <button class="audio-btn" onclick="lerTexto('Desafio ${d.numero}: ${d.titulo}. ${d.descricao}')">
-                    <i class="fas fa-volume-up"></i>
-                </button>
-                <span class="numero-badge">#${d.numero}</span>
-            </div>
-            <h3>${d.titulo}</h3>
-            <p>${d.descricao}</p>
-            <small><strong>Objetivo:</strong> ${d.objetivo}</small>
-            <button class="btn-fazer" onclick="aceitarDesafio('${d.titulo.replace(/'/g, "\\'")}')">
-                Fazer este!
-            </button>
-        </div>
-    `).join('');
+    grid.innerHTML = filtrados.map(d => {
 
-    if (filtrados.length === 0) {
-        grid.innerHTML = '<p style="text-align:center; color:gray;">Nenhum desafio encontrado. 🔍</p>';
-    }
-}
+  const textoAudio = `Desafio ${d.numero}: ${d.titulo}. ${d.descricao}`
+    .replace(/'/g, "\\'");
+
+  return `
+    <div class="desafio-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="audio-btn" onclick="falarComoPersonagem('${textoAudio}')">
+          <i class="fas fa-volume-up"></i>
+        </button>
+        <span class="numero-badge">#${d.numero}</span>
+      </div>
+
+      <h3>${d.titulo}</h3>
+      <p>${d.descricao}</p>
+      <small><strong>Objetivo:</strong> ${d.objetivo}</small>
+
+      <button class="btn-fazer" onclick="aceitarDesafio('${d.titulo.replace(/'/g, "\\'")}')">
+        Fazer este!
+      </button>
+    </div>
+  `;
+}).join('');
 
 function desafioAleatorio() {
     if (typeof desafios === 'undefined') return;
@@ -1627,7 +1649,7 @@ function enviarPergunta() {
     pincelFala.innerText = respostaEncontrada;
     adicionarMensagem('resposta', respostaEncontrada);
 
-    falarComoPersonagem(respostaEncontrada, "pincel");    
+    falarComoPersonagem(respostaEncontrada);    
     historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
   }, 800);
 
