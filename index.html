@@ -454,14 +454,10 @@
   <button class="big-back-btn" onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
 </div>
 
-<script>
-// ========== LÓGICA DE ABERTURA ==========
-<script>
 // ========== LÓGICA DE ABERTURA ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
-  const fallback = document.getElementById('splash-fallback');
 
   function abrirApp() {
     if (splash && splash.style.display !== 'none') {
@@ -470,35 +466,13 @@
       setTimeout(() => {
         splash.style.display = 'none';
         show('home');
-
-        // 🎤 BOAS-VINDAS NO MOMENTO CERTO
-        setTimeout(() => {
-          falarComoPersonagem(
-            "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
-            "boas-vindas"
-          );
-        }, 300);
-
       }, 800);
     }
   }
 
-  if (fallback) fallback.style.display = 'flex';
-
-  video.load();
-
-  video.addEventListener('loadeddata', () => {
-    video.play().then(() => {
-      if (fallback) {
-        fallback.style.transition = "opacity 0.5s";
-        fallback.style.opacity = '0';
-      }
-    }).catch(() => {
-      console.log("Autoplay bloqueado ou erro no vídeo.");
-    });
-  });
-
-  video.onended = abrirApp;
+  if (video) {
+    video.onended = abrirApp;
+  }
 
   setTimeout(() => {
     if (splash && splash.style.display !== 'none') {
@@ -506,61 +480,86 @@
     }
   }, 5000);
 
-})(); // ✅ FECHAMENTO CORRETO
+})();
 
 
-// ========== ÁUDIO DO PERSONAGEM ==========
+// ========== TTS (VOZ DO SISTEMA) ==========
+let vozSelecionada = null;
+
+function carregarVoz() {
+  const vozes = speechSynthesis.getVoices();
+
+  // tenta voz PT-BR primeiro
+  vozSelecionada = vozes.find(v => v.lang === "pt-BR") 
+                || vozes.find(v => v.lang.startsWith("pt"))
+                || vozes[0];
+}
+
+// algumas vezes precisa esperar carregar
+speechSynthesis.onvoiceschanged = carregarVoz;
+
+
+// ========== FUNÇÃO DE FALA (MP3 + TTS) ==========
 let audioAtual = null;
-let synth = window.speechSynthesis;
 
 function falarComoPersonagem(texto, audioNome = null) {
 
-  // 🔇 PARA TUDO antes
+  // 🔇 parar tudo antes
   if (audioAtual) {
     audioAtual.pause();
     audioAtual.currentTime = 0;
-    audioAtual = null;
   }
+  speechSynthesis.cancel();
 
-  if (synth.speaking) {
-    synth.cancel();
-  }
-
-  // 🔊 MP3
+  // 🎧 SE TEM MP3 → tenta usar
   if (audioNome) {
-    const caminho = 'sons/' + audioNome + '.mp3';
-    console.log("🎧 tentando:", caminho);
+    const audio = new Audio('sons/' + audioNome + '.mp3');
+    audio.preload = "auto";
 
-    const audio = new Audio(caminho);
-
-    audio.onerror = () => {
-      console.warn("⚠️ MP3 falhou → usando voz");
-      falarTexto(texto);
+    audio.oncanplaythrough = () => {
+      audio.play().catch(() => usarTTS(texto));
     };
 
-    audio.play().catch(() => {
-      console.warn("⚠️ bloqueado → usando voz");
-      falarTexto(texto);
-    });
+    audio.onerror = () => {
+      console.warn("MP3 não encontrado, usando TTS:", audioNome);
+      usarTTS(texto);
+    };
 
     audioAtual = audio;
-
   } else {
-    falarTexto(texto);
+    // 🎤 sem áudio → usa TTS direto
+    usarTTS(texto);
   }
 }
 
 
-// 🗣️ FALLBACK (voz do navegador)
-function falarTexto(texto) {
+// ========== FUNÇÃO TTS ==========
+function usarTTS(texto) {
   const utterance = new SpeechSynthesisUtterance(texto);
-  utterance.lang = 'pt-BR';
-  utterance.rate = 0.9;
-  utterance.pitch = 1.1;
 
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  if (!vozSelecionada) carregarVoz();
+
+  if (vozSelecionada) {
+    utterance.voice = vozSelecionada;
+  }
+
+  utterance.lang = "pt-BR";
+  utterance.rate = 0.95; // velocidade suave
+  utterance.pitch = 1.1; // tom levemente infantil
+
+  speechSynthesis.speak(utterance);
 }
+
+
+// ========== LIBERAR ÁUDIO + BOAS-VINDAS ==========
+document.addEventListener('click', () => {
+
+  falarComoPersonagem(
+    "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
+    "boas-vindas" // se não existir, vai no TTS
+  );
+
+}, { once: true });
 
 
 // ========== FRASES ALEATÓRIAS ==========
@@ -573,6 +572,8 @@ const frases = [
 
 function falarAleatorio() {
   const frase = frases[Math.floor(Math.random() * frases.length)];
+
+  // tenta mp3 "ia.mp3", se não tiver → TTS
   falarComoPersonagem(frase, "ia");
 }
 
@@ -593,11 +594,11 @@ function show(id) {
     target.classList.add('active');
   }
 
-  // 🎤 FALAS DO PERSONAGEM
+  // 🎤 FALAS DO PERSONAGEM (MP3 OU TTS)
   if (id === "desenho") {
     setTimeout(() => {
       falarComoPersonagem(
-        "Hora de dar asas à imaginação. Vamos desenhar e colorir!",
+        "Hora de soltar a criatividade. Vamos desenhar e colorir!",
         "desenho"
       );
     }, 300);
@@ -626,15 +627,6 @@ function show(id) {
       falarComoPersonagem(
         "Mural dos artistas. Veja as criações de todos e inspire-se.",
         "mural"
-      );
-    }, 300);
-  }
-
-  if (id === "museu") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Bem-vindo ao museu virtual. Vamos conhecer as infâncias de Cândido Portinari.",
-        "museu"
       );
     }, 300);
   }
@@ -1587,7 +1579,7 @@ function adicionarMensagem(tipo, texto) {
     div.innerHTML = `
       <span>
         ${texto}
-        <button class="botao-audio" onclick="falarComoPersonagem('${textoEscapado}', 'pincel')">
+        <button class="botao-audio" onclick="lerTexto('${textoEscapado}')">
           <i class="fas fa-volume-up"></i>
         </button>
       </span>`;
@@ -1598,6 +1590,21 @@ function adicionarMensagem(tipo, texto) {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
+
+
+// 🗣️ LEITURA DINÂMICA (ESSENCIAL)
+function lerTexto(texto) {
+  const synth = window.speechSynthesis;
+
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9;
+  utterance.pitch = 1.1;
+
+  synth.cancel();
+  synth.speak(utterance);
+}
+
 
 function fazerPergunta(pergunta) {
   document.getElementById('perguntaInput').value = pergunta;
@@ -1630,7 +1637,12 @@ function enviarPergunta() {
     const perguntaNormalizada = removerAcentos(perguntaLower);
     let respostaEncontrada = null;
 
-    const palavrasCuriosidade =['curiosidade', 'curiosidades', 'me conte alguma coisa', 'me conta alguma novidade', 'fale sobre', 'conta algo', 'me diga algo', 'me fala uma'];
+    const palavrasCuriosidade = [
+      'curiosidade', 'curiosidades', 'me conte alguma coisa',
+      'me conta alguma novidade', 'fale sobre', 'conta algo',
+      'me diga algo', 'me fala uma'
+    ];
+
     if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
       respostaEncontrada = responderCuriosidade(perguntaNormalizada);
     } else {
@@ -1657,12 +1669,16 @@ function enviarPergunta() {
     pincelFala.innerText = respostaEncontrada;
     adicionarMensagem('resposta', respostaEncontrada);
 
-    falarComoPersonagem(respostaEncontrada);    
-    historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
+    // 🗣️ AGORA FUNCIONA SEMPRE
+    lerTexto(respostaEncontrada);
+
+    historicoPerguntas[historicoPerguntas.length - 1].resposta = respostaEncontrada;
   }, 800);
 
   input.value = '';
 }
+
+
 function limparHistorico() {
   document.getElementById('chatArea').innerHTML = '';
   adicionarMensagem('resposta', 'Histórico limpo! Pode fazer novas perguntas.');
@@ -1682,14 +1698,15 @@ function iniciarPincel() {
   if (chat.children.length === 0) {
     const msg = 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre arte!';
     adicionarMensagem('resposta', msg);
-    falarComoPersonagem(msg, "ia");
+
+    // 🔊 entrada com MP3 (fixo)
+    falarComoPersonagem(msg, "pincel-novo");
   }
 }
 
 document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
-
 // ========== INICIALIZAÇÃO ==========
 window.onload = function() {
   criarPaletaCores();
