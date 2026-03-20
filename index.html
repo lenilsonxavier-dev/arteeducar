@@ -494,67 +494,54 @@
     }
   }, 5000);
 
-})();
+});
 
-// ========== LIBERAR ÁUDIO + BOAS-VINDAS ==========
-document.addEventListener('click', () => {
-
+setTimeout(() => {
   falarComoPersonagem(
     "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
     "boas-vindas"
   );
-
-}, { once: true });
-
+}, 500);
 
 // ========== ÁUDIO DO PERSONAGEM ==========
 let audioAtual = null;
+let synth = window.speechSynthesis;
 
 function falarComoPersonagem(texto, audioNome = null) {
 
-  // 🔊 Se tiver nome de áudio → usa MP3
+  // 🔇 PARA TUDO antes
+  if (audioAtual) {
+    audioAtual.pause();
+    audioAtual.currentTime = 0;
+    audioAtual = null;
+  }
+
+  if (synth.speaking) {
+    synth.cancel();
+  }
+
+  // 🔊 MP3
   if (audioNome) {
     const caminho = 'sons/' + audioNome + '.mp3';
     console.log("🎧 tentando:", caminho);
 
-    if (audioAtual) {
-      audioAtual.pause();
-      audioAtual.currentTime = 0;
-    }
-
     const audio = new Audio(caminho);
 
     audio.onerror = () => {
-      console.warn("⚠️ MP3 não encontrado, usando voz do navegador...");
-      falarTexto(texto); // fallback
+      console.warn("⚠️ fallback voz");
+      falarTexto(texto);
     };
 
     audio.play().catch(() => {
-      console.warn("⚠️ bloqueado, usando voz do navegador...");
-      falarTexto(texto); // fallback
+      console.warn("⚠️ bloqueado → voz");
+      falarTexto(texto);
     });
 
     audioAtual = audio;
 
   } else {
-    // 🧠 Se NÃO tiver áudio → usa voz do navegador
     falarTexto(texto);
   }
-}
-
-
-// 🗣️ VOZ DO NAVEGADOR (FUNCIONA SEM MP3)
-function falarTexto(texto) {
-  const synth = window.speechSynthesis;
-
-  const utterance = new SpeechSynthesisUtterance(texto);
-
-  utterance.lang = 'pt-BR';
-  utterance.rate = 0.9;
-  utterance.pitch = 1.1;
-
-  synth.cancel(); // para fala anterior
-  synth.speak(utterance);
 }
 // ========== FRASES ALEATÓRIAS ==========
 const frases = [
