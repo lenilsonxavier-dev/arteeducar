@@ -484,6 +484,22 @@
       console.log("Autoplay bloqueado ou erro no vídeo local.");
     });
   });
+<script>
+// ========== LÓGICA DE ABERTURA ==========
+(function() {
+  const splash = document.getElementById('splash');
+  const video = document.getElementById('splash-video');
+
+  function abrirApp() {
+    if (splash && splash.style.display !== 'none') {
+      splash.style.opacity = '0';
+
+      setTimeout(() => {
+        splash.style.display = 'none';
+        show('home');
+      }, 800);
+    }
+  }
 
   video.onended = abrirApp;
 
@@ -491,90 +507,123 @@
     if (splash && splash.style.display !== 'none') {
       abrirApp();
     }
-  }, 5000); 
+  }, 5000);
+
 })();
 
-// ========== LÓGICA DE VOZ E ÁUDIO ==========
+
+// ========== LIBERAR ÁUDIO + BOAS-VINDAS ==========
 document.addEventListener('click', () => {
-  new Audio().play().catch(() => {});
-  if ('speechSynthesis' in window) {
-      speechSynthesis.getVoices();
-  }
+
+  falarComoPersonagem(
+    "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
+    "boas-vindas"
+  );
+
 }, { once: true });
 
-let vozesCarregadas =[];
-function carregarVozes() {
-  vozesCarregadas = speechSynthesis.getVoices();
-}
-if ('speechSynthesis' in window) {
-  speechSynthesis.onvoiceschanged = carregarVozes;
-  carregarVozes();
-}
 
-function lerTexto(texto) {
-  if (!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(texto);
-  msg.lang = 'pt-BR';
-  msg.rate = 0.95;
-  msg.pitch = 1.8;
-  msg.volume = 1;
-
-  let voz = vozesCarregadas.find(v =>
-    v.lang.includes('pt') &&
-    (v.name.toLowerCase().includes('female') ||
-     v.name.toLowerCase().includes('google') ||
-     v.name.toLowerCase().includes('luciana'))
-  );
-  if (!voz && vozesCarregadas.length > 0) {
-    voz = vozesCarregadas[0];
-  }
-  if (voz) msg.voice = voz;
-  speechSynthesis.speak(msg);
-}
+// ========== ÁUDIO DO PERSONAGEM ==========
+let audioAtual = null;
 
 function falarComoPersonagem(texto, audioNome = null) {
-  if (audioNome) {
-    const audio = new Audio('sons/' + audioNome + '.mp3');
-    audio.onerror = () => { lerTexto(texto); };
-    audio.play().catch(() => { lerTexto(texto); });
-    return;
+  if (!audioNome) return;
+
+  if (audioAtual) {
+    audioAtual.pause();
+    audioAtual.currentTime = 0;
   }
-  lerTexto(texto);
+
+  const audio = new Audio('sons/' + audioNome + '.mp3');
+  audio.preload = "auto";
+
+  audio.onerror = () => {
+    console.warn("Erro ao carregar áudio:", audioNome);
+  };
+
+  audio.play().catch(() => {
+    console.warn("Erro ao tocar áudio:", audioNome);
+  });
+
+  audioAtual = audio;
+}
+
+// ========== FRASES ALEATÓRIAS ==========
+const frases = [
+  "Obaaa! Vamos criar arte!",
+  "Que desenho incrível!",
+  "Vamos tentar algo novo hoje?",
+  "Estou adorando isso!"
+];
+
+function falarAleatorio() {
+  const frase = frases[Math.floor(Math.random() * frases.length)];
+  falarComoPersonagem(frase, "ia");
 }
 
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
   const screens = document.querySelectorAll('.screen');
+
   screens.forEach(s => {
     s.style.display = 'none';
     s.classList.remove('active');
   });
 
   const target = document.getElementById(id);
+
   if (target) {
     target.style.display = (id === 'mural') ? 'flex' : 'block';
     target.classList.add('active');
   }
 
-  // 🎤 FALAS DO PERSONAGEM (SINCRONIZADAS COM OS ÁUDIOS DO GITHUB)
+  // 🎤 FALAS DO PERSONAGEM
   if (id === "desenho") {
-    setTimeout(() => { falarComoPersonagem("Hora de soltar a criatividade. Vamos desenhar e colorir!", "desenho"); }, 300);
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Hora de soltar a criatividade. Vamos desenhar e colorir!",
+        "desenho"
+      );
+    }, 300);
   }
+
   if (id === "galeria") {
-    setTimeout(() => { falarComoPersonagem("Olha só quanta arte linda você já fez! Que orgulho de você.", "galeria"); }, 300);
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Olha só quanta arte linda você já fez! Que orgulho de você.",
+        "galeria"
+      );
+    }, 300);
   }
+
   if (id === "desafiosArte") {
-    setTimeout(() => { falarComoPersonagem("Vamos escolher um desafio bem divertido! Mostre toda a criatividade.", "desafios"); }, 300);
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Vamos escolher um desafio bem divertido! Mostre toda a criatividade.",
+        "desafios-novo"
+      );
+    }, 300);
   }
+
   if (id === "mural") {
-    setTimeout(() => { falarComoPersonagem("Mural dos artistas. Veja as criações de todos e inspire-se.", "mural"); }, 300);
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Mural dos artistas. Veja as criações de todos e inspire-se.",
+        "mural"
+      );
+    }, 300);
   }
+
   if (id === "pincelIA") {
-    setTimeout(() => { falarComoPersonagem("É sobre arte? Pergunte ao Pincel Mágico e vamos descobrir!", "pincel"); }, 300);
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Olá! Eu sou o pincel mágico. Vou te guiar em sua jornada pelo mundo da Arte!",
+        "pincel-novo"
+      );
+    }, 300);
   }
 }
-
+</script>
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
 const ctx = canvas.getContext('2d');
@@ -923,7 +972,7 @@ function ativarFullscreen() {
 
 // ========== DESAFIOS ==========
 const desafios =[
-  { numero: 1, titulo: "Desenho às Cegas", descricao: "Cada aluno fecha os olhos e tenta desenhar um objeto simples (copo, casa, flor). Depois comparam os resultados.", objetivo: "estimular criatividade e percepção sem pressão estética." },
+  { numero: 1, titulo: "Desenho às Cegas", descricao: "Fechem os olhos e tentem desenhar um objeto simples (copo, casa, flor). Depois comparem os resultados com quem fez o desafio com você.", objetivo: "estimular criatividade e percepção sem pressão estética." },
   { numero: 2, titulo: "Cores Musicais", descricao: "O professor coloca músicas diferentes (alegre, triste, calma, agitada). Os alunos devem pintar ou desenhar o que sentirem com cada música.", objetivo: "trabalhar expressão artística e relação entre som e cor." },
   { numero: 3, titulo: "Retrato Maluco", descricao: "Em dupla: um aluno descreve o colega sem que ele se veja, e o outro desenha. No final, comparam o desenho com a realidade.", objetivo: "exercitar escuta, imaginação e interpretação visual." },
   { numero: 4, titulo: "Colagem Coletiva", descricao: "A turma cria uma grande obra com recortes de revistas, jornais e papéis coloridos. Cada grupo contribui com uma parte da colagem.", objetivo: "estimular cooperação e composição visual." },
