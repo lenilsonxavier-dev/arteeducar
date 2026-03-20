@@ -454,193 +454,96 @@
   <button class="big-back-btn" onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
 </div>
 
+<script>
 // ========== LÓGICA DE ABERTURA ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
 
   function abrirApp() {
-    if (splash && splash.style.display !== 'none') {
-      splash.style.opacity = '0';
-
-      setTimeout(() => {
-        splash.style.display = 'none';
-        show('home');
-      }, 800);
-    }
+    if (!splash) return;
+    splash.style.opacity = '0';
+    setTimeout(() => {
+      splash.style.display = 'none';
+      show('home');
+    }, 800);
   }
 
   if (video) {
     video.onended = abrirApp;
   }
-
-  setTimeout(() => {
-    if (splash && splash.style.display !== 'none') {
-      abrirApp();
-    }
-  }, 5000);
-
+  setTimeout(abrirApp, 5000);
 })();
 
-
-// ========== TTS (VOZ DO SISTEMA) ==========
+// ========== TTS (SEGURO) ==========
 let vozSelecionada = null;
-
 function carregarVoz() {
-  const vozes = speechSynthesis.getVoices();
-
-  // tenta voz PT-BR primeiro
-  vozSelecionada = vozes.find(v => v.lang === "pt-BR") 
-                || vozes.find(v => v.lang.startsWith("pt"))
-                || vozes[0];
+  try {
+    const vozes = speechSynthesis.getVoices();
+    vozSelecionada = vozes.find(v => v.lang === "pt-BR") || vozes.find(v => v.lang.startsWith("pt")) || vozes[0];
+  } catch (e) { console.warn("Erro ao carregar vozes:", e); }
+}
+if ('speechSynthesis' in window) {
+  speechSynthesis.onvoiceschanged = carregarVoz;
 }
 
-// algumas vezes precisa esperar carregar
-speechSynthesis.onvoiceschanged = carregarVoz;
+function usarTTS(texto) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    const utterance = new SpeechSynthesisUtterance(texto);
+    if (!vozSelecionada) carregarVoz();
+    if (vozSelecionada) utterance.voice = vozSelecionada;
+    utterance.lang = "pt-BR";
+    utterance.rate = 0.95;
+    utterance.pitch = 1.1;
+    speechSynthesis.speak(utterance);
+  } catch (e) { console.warn("Erro no TTS:", e); }
+}
 
-
-// ========== FUNÇÃO DE FALA (MP3 + TTS) ==========
+// ========== ÁUDIO (MP3 + TTS FALLBACK) ==========
 let audioAtual = null;
-
 function falarComoPersonagem(texto, audioNome = null) {
+  if (audioAtual) { audioAtual.pause(); audioAtual.currentTime = 0; }
+  if ('speechSynthesis' in window) { speechSynthesis.cancel(); }
 
-  // 🔇 parar tudo antes
-  if (audioAtual) {
-    audioAtual.pause();
-    audioAtual.currentTime = 0;
-  }
-  speechSynthesis.cancel();
-
-  // 🎧 SE TEM MP3 → tenta usar
   if (audioNome) {
     const audio = new Audio('sons/' + audioNome + '.mp3');
-    audio.preload = "auto";
-
-    audio.oncanplaythrough = () => {
-      audio.play().catch(() => usarTTS(texto));
-    };
-
-    audio.onerror = () => {
-      console.warn("MP3 não encontrado, usando TTS:", audioNome);
-      usarTTS(texto);
-    };
-
+    audio.oncanplaythrough = () => { audio.play().catch(() => usarTTS(texto)); };
+    audio.onerror = () => { usarTTS(texto); };
     audioAtual = audio;
   } else {
-    // 🎤 sem áudio → usa TTS direto
     usarTTS(texto);
   }
 }
 
-
-// ========== FUNÇÃO TTS ==========
-function usarTTS(texto) {
-  const utterance = new SpeechSynthesisUtterance(texto);
-
-  if (!vozSelecionada) carregarVoz();
-
-  if (vozSelecionada) {
-    utterance.voice = vozSelecionada;
-  }
-
-  utterance.lang = "pt-BR";
-  utterance.rate = 0.95; // velocidade suave
-  utterance.pitch = 1.1; // tom levemente infantil
-
-  speechSynthesis.speak(utterance);
-}
-
-
-// ========== LIBERAR ÁUDIO + BOAS-VINDAS ==========
 document.addEventListener('click', () => {
-
-  falarComoPersonagem(
-    "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
-    "boas-vindas" // se não existir, vai no TTS
-  );
-
+  falarComoPersonagem("Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?", "boas-vindas");
 }, { once: true });
 
-
-// ========== FRASES ALEATÓRIAS ==========
-const frases = [
-  "Obaaa! Vamos criar arte!",
-  "Que desenho incrível!",
-  "Vamos tentar algo novo hoje?",
-  "Estou adorando isso!"
-];
-
+const frases = ["Obaaa! Vamos criar arte!", "Que desenho incrível!", "Vamos tentar algo novo hoje?", "Estou adorando isso!"];
 function falarAleatorio() {
   const frase = frases[Math.floor(Math.random() * frases.length)];
-
-  // tenta mp3 "ia.mp3", se não tiver → TTS
   falarComoPersonagem(frase, "ia");
 }
 
-
-// ========== FUNÇÕES GLOBAIS ==========
+// ========== NAVEGAÇÃO ==========
 function show(id) {
   const screens = document.querySelectorAll('.screen');
-
-  screens.forEach(s => {
-    s.style.display = 'none';
-    s.classList.remove('active');
-  });
-
+  screens.forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
   const target = document.getElementById(id);
+  if (!target) return;
+  target.style.display = (id === 'mural') ? 'flex' : 'block';
+  target.classList.add('active');
 
-  if (target) {
-    target.style.display = (id === 'mural') ? 'flex' : 'block';
-    target.classList.add('active');
-  }
-
-  // 🎤 FALAS DO PERSONAGEM (MP3 OU TTS)
-  if (id === "desenho") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Hora de soltar a criatividade. Vamos desenhar e colorir!",
-        "desenho"
-      );
-    }, 300);
-  }
-
-  if (id === "galeria") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Olha só quanta arte linda você já fez! Que orgulho de você.",
-        "galeria"
-      );
-    }, 300);
-  }
-
-  if (id === "desafiosArte") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Vamos escolher um desafio bem divertido! Mostre toda a criatividade.",
-        "desafios-novo"
-      );
-    }, 300);
-  }
-
-  if (id === "mural") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Mural dos artistas. Veja as criações de todos e inspire-se.",
-        "mural"
-      );
-    }, 300);
-  }
-
-  if (id === "pincelIA") {
-    setTimeout(() => {
-      falarComoPersonagem(
-        "Olá! Eu sou o pincel mágico. Vou te guiar em sua jornada pelo mundo da Arte!",
-        "pincel-novo"
-      );
-    }, 300);
-  }
+  setTimeout(() => {
+    if (id === "desenho") falarComoPersonagem("Hora de soltar a criatividade. Vamos desenhar e colorir!", "desenho");
+    if (id === "galeria") { loadGallery(); falarComoPersonagem("Olha só quanta arte linda você já fez!", "galeria"); }
+    if (id === "desafiosArte") { renderDesafios(); falarComoPersonagem("Vamos escolher um desafio bem divertido!", "desafios-novo"); }
+    if (id === "mural") falarComoPersonagem("Mural dos artistas. Inspire-se nas criações!", "mural");
+    if (id === "pincelIA") falarComoPersonagem("Olá! Eu sou o pincel mágico!", "pincel-novo");
+  }, 300);
 }
-</script>
+
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
 const ctx = canvas.getContext('2d');
@@ -1145,37 +1048,17 @@ function renderDesafios() {
     const buscaInput = document.getElementById('buscaDesafio');
     const grid = document.getElementById('desafiosGrid');
     if (!grid) return;
-
     const busca = buscaInput ? buscaInput.value.toLowerCase() : '';
-    const filtrados = desafios.filter(d => 
-        d.titulo.toLowerCase().includes(busca) || 
-        d.descricao.toLowerCase().includes(busca)
-    );
+    const filtrados = desafios.filter(d => d.titulo.toLowerCase().includes(busca));
 
-    grid.innerHTML = filtrados.map(d => {
-
-  const textoAudio = `Desafio ${d.numero}: ${d.titulo}. ${d.descricao}`
-    .replace(/'/g, "\\'");
-
-  return `
-    <div class="desafio-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button class="audio-btn" onclick="falarComoPersonagem('${textoAudio}')">
-          <i class="fas fa-volume-up"></i>
-        </button>
-        <span class="numero-badge">#${d.numero}</span>
-      </div>
-
-      <h3>${d.titulo}</h3>
-      <p>${d.descricao}</p>
-      <small><strong>Objetivo:</strong> ${d.objetivo}</small>
-
-      <button class="btn-fazer" onclick="aceitarDesafio('${d.titulo.replace(/'/g, "\\'")}')">
-        Fazer este!
-      </button>
-    </div>
-  `;
-}).join('');
+    grid.innerHTML = filtrados.map(d => `
+        <div class="desafio-card">
+            <h3>${d.titulo}</h3>
+            <p>${d.descricao}</p>
+            <button onclick="falarComoPersonagem('${d.descricao}')">Ouvir 🔊</button>
+        </div>
+    `).join('');
+} //
 
 function desafioAleatorio() {
     if (typeof desafios === 'undefined') return;
