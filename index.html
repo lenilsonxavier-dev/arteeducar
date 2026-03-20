@@ -513,25 +513,30 @@ let audioAtual = null;
 function falarComoPersonagem(texto, audioNome = null) {
   if (!audioNome) return;
 
+  const caminho = 'sons/' + audioNome + '.mp3';
+
+  console.log("Tentando tocar:", caminho); // 🔍 debug
+
   if (audioAtual) {
     audioAtual.pause();
     audioAtual.currentTime = 0;
   }
 
-  const audio = new Audio('sons/' + audioNome + '.mp3');
+  const audio = new Audio(caminho);
   audio.preload = "auto";
 
   audio.onerror = () => {
-    console.warn("Erro ao carregar áudio:", audioNome);
+    console.error("❌ ERRO ao carregar:", caminho);
   };
 
-  audio.play().catch(() => {
-    console.warn("Erro ao tocar áudio:", audioNome);
-  });
+  audio.oncanplaythrough = () => {
+    audio.play().catch(() => {
+      console.warn("⚠️ Bloqueado pelo navegador:", caminho);
+    });
+  };
 
   audioAtual = audio;
 }
-
 // ========== FRASES ALEATÓRIAS ==========
 const frases = [
   "Obaaa! Vamos criar arte!",
@@ -565,7 +570,7 @@ function show(id) {
   if (id === "desenho") {
     setTimeout(() => {
       falarComoPersonagem(
-        "Hora de soltar a criatividade. Vamos desenhar e colorir!",
+        "Hora de dar asas à imaginação.Vamos desenhar e colorir!",
         "desenho"
       );
     }, 300);
@@ -597,6 +602,15 @@ function show(id) {
       );
     }, 300);
   }
+
+if (id === "museu") {
+  setTimeout(() => {
+    falarComoPersonagem(
+      "Bem-vindo ao museu virtual. Vamos conhecer as infâncias de Cândido Portinari.",
+      "museu"
+    );
+  }, 300);
+}
 
   if (id === "pincelIA") {
     setTimeout(() => {
