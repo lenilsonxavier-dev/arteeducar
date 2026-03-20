@@ -456,6 +456,8 @@
 
 <script>
 // ========== LÓGICA DE ABERTURA ==========
+<script>
+// ========== LÓGICA DE ABERTURA ==========
 (function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
@@ -464,9 +466,19 @@
   function abrirApp() {
     if (splash && splash.style.display !== 'none') {
       splash.style.opacity = '0';
+
       setTimeout(() => {
         splash.style.display = 'none';
         show('home');
+
+        // 🎤 BOAS-VINDAS NO MOMENTO CERTO
+        setTimeout(() => {
+          falarComoPersonagem(
+            "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
+            "boas-vindas"
+          );
+        }, 300);
+
       }, 800);
     }
   }
@@ -494,14 +506,8 @@
     }
   }, 5000);
 
-});
+})(); // ✅ FECHAMENTO CORRETO
 
-setTimeout(() => {
-  falarComoPersonagem(
-    "Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?",
-    "boas-vindas"
-  );
-}, 500);
 
 // ========== ÁUDIO DO PERSONAGEM ==========
 let audioAtual = null;
@@ -528,12 +534,12 @@ function falarComoPersonagem(texto, audioNome = null) {
     const audio = new Audio(caminho);
 
     audio.onerror = () => {
-      console.warn("⚠️ fallback voz");
+      console.warn("⚠️ MP3 falhou → usando voz");
       falarTexto(texto);
     };
 
     audio.play().catch(() => {
-      console.warn("⚠️ bloqueado → voz");
+      console.warn("⚠️ bloqueado → usando voz");
       falarTexto(texto);
     });
 
@@ -543,6 +549,20 @@ function falarComoPersonagem(texto, audioNome = null) {
     falarTexto(texto);
   }
 }
+
+
+// 🗣️ FALLBACK (voz do navegador)
+function falarTexto(texto) {
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9;
+  utterance.pitch = 1.1;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+
 // ========== FRASES ALEATÓRIAS ==========
 const frases = [
   "Obaaa! Vamos criar arte!",
@@ -555,6 +575,7 @@ function falarAleatorio() {
   const frase = frases[Math.floor(Math.random() * frases.length)];
   falarComoPersonagem(frase, "ia");
 }
+
 
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
@@ -576,7 +597,7 @@ function show(id) {
   if (id === "desenho") {
     setTimeout(() => {
       falarComoPersonagem(
-        "Hora de dar asas à imaginação.Vamos desenhar e colorir!",
+        "Hora de dar asas à imaginação. Vamos desenhar e colorir!",
         "desenho"
       );
     }, 300);
@@ -609,14 +630,14 @@ function show(id) {
     }, 300);
   }
 
-if (id === "museu") {
-  setTimeout(() => {
-    falarComoPersonagem(
-      "Bem-vindo ao museu virtual. Vamos conhecer as infâncias de Cândido Portinari.",
-      "museu"
-    );
-  }, 300);
-}
+  if (id === "museu") {
+    setTimeout(() => {
+      falarComoPersonagem(
+        "Bem-vindo ao museu virtual. Vamos conhecer as infâncias de Cândido Portinari.",
+        "museu"
+      );
+    }, 300);
+  }
 
   if (id === "pincelIA") {
     setTimeout(() => {
@@ -627,7 +648,7 @@ if (id === "museu") {
     }, 300);
   }
 }
-
+</script>
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
 const ctx = canvas.getContext('2d');
