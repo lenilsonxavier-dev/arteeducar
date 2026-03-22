@@ -509,11 +509,17 @@ let audioAtual = null;
 
 function tocarAudio(nomeArquivo) {
   if (!nomeArquivo) return;
+
+  // 🔇 Para o áudio anterior
   if (audioAtual) {
     audioAtual.pause();
     audioAtual.currentTime = 0;
   }
+
+  // 🎵 Caminho do áudio
   audioAtual = new Audio('sons/' + nomeArquivo + '.mp3');
+
+  // ▶️ Toca o áudio
   audioAtual.play().catch(e => console.log("Erro ao tocar áudio:", e));
 }
 
@@ -1631,7 +1637,7 @@ function responderCuriosidade(perguntaNormalizada) {
   return todas[Math.floor(Math.random() * todas.length)];
 }
 
-function adicionarMensagem(tipo, texto, audio = null) {
+function adicionarMensagem(tipo, texto, audio = null){
   const chat = document.getElementById('chatArea');
   const div = document.createElement('div');
   div.className = `mensagem ${tipo}`;
@@ -1690,7 +1696,7 @@ function enviarPergunta() {
       respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
     }
     pincelFala.innerText = respostaEncontrada;
-    adicionarMensagem('resposta', respostaEncontrada, null);
+    adicionarMensagem('resposta', respostaEncontrada, 'resposta-padrao');
     historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
   }, 800);
   input.value = '';
