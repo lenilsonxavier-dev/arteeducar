@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -526,6 +525,7 @@
 </div>
 
 <script>
+<script>
 
 // ========== LÓGICA DE ABERTURA COM FALLBACK ==========
 (function() {
@@ -535,10 +535,8 @@
   const fallback = document.getElementById('splash-fallback');
 
   startBtn.onclick = () => {
-    // 1. Tira a paleta e o botão da frente na hora!
     fallback.style.display = 'none';
-    
-    // 2. Toca o vídeo
+
     video.play().catch(e => {
       console.log("Sem vídeo, entrando...");
       abrirApp();
@@ -551,23 +549,10 @@
     splash.style.opacity = '0';
     setTimeout(() => {
       splash.style.display = 'none';
-      show('home'); // Abre o menu
+      show('home');
     }, 800);
   }
 })();
-// ========== FUNÇÕES GLOBAIS ==========
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  if (id === "galeria") loadGallery();
-  if (id === "desafiosArte") renderDesafios();
-  if (id === "pincelIA") iniciarPincel();
-  if (id === "desenho") mostrarListaDesenhos();
-  if (id === "mural") carregarMural();
-}
-
-// 🎧 PLAYER GLOBAL
-let audioAtual = null;
 
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
@@ -581,1038 +566,41 @@ function show(id) {
   if (id === "mural") carregarMural();
 }
 
-// 🔊 NOVA FUNÇÃO (MP3)
-function lerTexto(nomeAudio) {
-  if (!nomeAudio) return;
+// ========== PLAYER MP3 ==========
+function tocarAudio(nomeArquivo) {
+  if (!nomeArquivo) return;
 
-  // 🔇 Para o áudio anterior
-  if (audioAtual) {
-    audioAtual.pause();
-    audioAtual.currentTime = 0;
-  }
-
-  // 🎵 Toca novo áudio
-  audioAtual = new Audio('sons/' + nomeAudio + '.mp3');
-
-  audioAtual.play().catch(e => {
-    console.log("Erro ao tocar áudio:", e);
-  });
-}
-// ========== FERRAMENTA DE DESENHO ==========
-const canvas = document.getElementById('canvasDesenho');
-const ctx = canvas.getContext('2d');
-const listaDesenhos = document.getElementById('listaDesenhos');
-const ferramentasDiv = document.getElementById('ferramentasDesenho');
-const tamanhoSlider = document.getElementById('tamanhoFerramenta');
-const tamanhoValor = document.getElementById('tamanhoValor');
-const corCircle = document.getElementById('corAtualCircle');
-const seletorCor = document.getElementById('seletorCor');
-const btnPincel = document.getElementById('btnPincel');
-const btnLapis = document.getElementById('btnLapis');
-const btnSpray = document.getElementById('btnSpray');
-const btnBalde = document.getElementById('btnBalde');
-const btnBorrachaP = document.getElementById('btnBorrachaP');
-const btnBorrachaG = document.getElementById('btnBorrachaG');
-const zoomIn = document.getElementById('zoomIn');
-const zoomOut = document.getElementById('zoomOut');
-const limparBtn = document.getElementById('limparBtn');
-const salvarBtn = document.getElementById('salvarBtn');
-const voltarBtn = document.getElementById('voltarBtn');
-
-let ferramentaAtual = 'pincel';
-let corAtual = '#ff4d4d';
-let zoom = 1;
-let desenhando = false;
-
-const imagensModelo = [
-  { nome: 'Desenho 1 🎈', src: 'https://i.imgur.com/6JfY8vS.jpeg' },
-  { nome: 'Desenho 2 🐶', src: 'https://i.imgur.com/Tb4CYtP.jpg' },
-  { nome: 'Desenho 3 🌟', src: 'https://i.imgur.com/UpY3Zy0.jpg' },
-  { nome: 'Desenho 4 🦋', src: 'https://i.imgur.com/McV5Sma.jpg' },
-  { nome: 'Desenho 5 🚀', src: 'https://i.imgur.com/rCSfucZ.jpg' }
-];
-
-function criarPaletaCores() {
-  const paleta = document.getElementById('paletaCores');
-  const cores = ['#ff4d4d','#ff9f4b','#f7dc6f','#6fcf97','#5dade2','#d7bde2','#f5b041','#a569bd','#5d6d7e','#ff80b5','#48c9b0','#f1948a'];
-  paleta.innerHTML = '';
-  cores.forEach(cor => {
-    const btn = document.createElement('button');
-    btn.style.backgroundColor = cor;
-    btn.onclick = () => setCor(cor);
-    paleta.appendChild(btn);
-  });
-}
-
-function setCor(cor) {
-  corAtual = cor;
-  seletorCor.value = cor;
-  corCircle.style.backgroundColor = cor;
-}
-
-function setFerramenta(ferramenta) {
-  ferramentaAtual = ferramenta;
-  [btnPincel, btnLapis, btnSpray, btnBalde, btnBorrachaP, btnBorrachaG].forEach(b => b.classList.remove('selected-tool'));
-  const mapa = { pincel: btnPincel, lapis: btnLapis, spray: btnSpray, balde: btnBalde, borrachaP: btnBorrachaP, borrachaG: btnBorrachaG };
-  if (mapa[ferramenta]) mapa[ferramenta].classList.add('selected-tool');
-}
-
-tamanhoSlider.addEventListener('input', () => { tamanhoValor.textContent = tamanhoSlider.value; });
-function getTamanho() { return parseInt(tamanhoSlider.value); }
-
-function mostrarListaDesenhos() {
-  listaDesenhos.innerHTML = '';
-  const livreDiv = document.createElement('div');
-  livreDiv.className = 'colorir-thumb';
-  livreDiv.style.display = 'flex'; livreDiv.style.flexDirection = 'column'; livreDiv.style.alignItems = 'center';
-  livreDiv.innerHTML = '<div style="font-size: 4rem;">🆕</div><div>✨ Tela Livre</div>';
-  livreDiv.onclick = iniciarTelaLivre;
-  listaDesenhos.appendChild(livreDiv);
-  imagensModelo.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'colorir-thumb';
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.alt = item.nome;
-    div.appendChild(img);
-    div.appendChild(document.createTextNode(item.nome));
-    div.onclick = () => carregarDesenhoModelo(idx);
-    listaDesenhos.appendChild(div);
-  });
-  listaDesenhos.style.display = 'grid';
-  ferramentasDiv.style.display = 'none';
-  canvas.style.display = 'none';
-}
-
-function iniciarTelaLivre() {
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  listaDesenhos.style.display = 'none';
-  ferramentasDiv.style.display = 'block';
-  canvas.style.display = 'block';
-  zoom = 1;
-  canvas.style.transform = 'scale(1)';
-}
-
-function carregarDesenhoModelo(idx) {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.src = imagensModelo[idx].src;
-  img.onload = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    listaDesenhos.style.display = 'none';
-    ferramentasDiv.style.display = 'block';
-    canvas.style.display = 'block';
-    zoom = 1;
-    canvas.style.transform = 'scale(1)';
-  };
-  img.onerror = () => alert('Erro ao carregar imagem.');
-}
-
-function voltarEscolha() { mostrarListaDesenhos(); }
-
-function getMousePos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  let clientX, clientY;
-  if (e.touches) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  } else {
-    clientX = e.clientX;
-    clientY = e.clientY;
-  }
-  const x = (clientX - rect.left) / zoom * scaleX;
-  const y = (clientY - rect.top) / zoom * scaleY;
-  return { x: Math.min(canvas.width-1, Math.max(0, x)), y: Math.min(canvas.height-1, Math.max(0, y)) };
-}
-
-function iniciarDesenho(e) {
-  e.preventDefault();
-  desenhando = true;
-  const pos = getMousePos(e);
-  if (ferramentaAtual === 'balde') {
-    floodFill(Math.floor(pos.x), Math.floor(pos.y));
-    desenhando = false;
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  }
-}
-
-function desenhar(e) {
-  if (!desenhando) return;
-  e.preventDefault();
-  const pos = getMousePos(e);
-  const tam = getTamanho();
-  ctx.save();
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  if (ferramentaAtual === 'spray') {
-    ctx.fillStyle = corAtual;
-    for (let i=0; i<15; i++) {
-      let dx = (Math.random()-0.5)*tam*3.5;
-      let dy = (Math.random()-0.5)*tam*3.5;
-      ctx.fillRect(pos.x+dx, pos.y+dy, tam*0.5, tam*0.5);
-    }
-  } else {
-    ctx.strokeStyle = ferramentaAtual.includes('borracha') ? '#ffffff' : corAtual;
-    ctx.lineWidth = tam;
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  }
-  ctx.restore();
-}
-
-function pararDesenho() { desenhando = false; ctx.beginPath(); }
-
-function floodFill(x, y) {
-  const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
-  const data = imgData.data;
-  const target = getPixelColor(data, x, y);
-  const fill = hexToRgb(corAtual);
-  if (colorMatch(target, fill, 5)) return;
-  const stack = [[x,y]];
-  const w = canvas.width, h = canvas.height;
-  while(stack.length) {
-    const [px, py] = stack.pop();
-    if (px<0 || px>=w || py<0 || py>=h) continue;
-    const idx = (py*w+px)*4;
-    if (!colorMatch({r:data[idx],g:data[idx+1],b:data[idx+2]}, target, 10)) continue;
-    data[idx]=fill.r; data[idx+1]=fill.g; data[idx+2]=fill.b; data[idx+3]=255;
-    stack.push([px+1,py],[px-1,py],[px,py+1],[px,py-1]);
-  }
-  ctx.putImageData(imgData,0,0);
-}
-function getPixelColor(data, x, y) {
-  const idx = (y*canvas.width+x)*4;
-  return {r:data[idx],g:data[idx+1],b:data[idx+2]};
-}
-function colorMatch(c1, c2, tol) {
-  return Math.abs(c1.r-c2.r)<=tol && Math.abs(c1.g-c2.g)<=tol && Math.abs(c1.b-c2.b)<=tol;
-}
-function hexToRgb(hex) {
-  const v = parseInt(hex.slice(1),16);
-  return {r:v>>16&255, g:v>>8&255, b:v&255};
-}
-
-function aumentarZoom() { zoom = Math.min(zoom+0.2,3); canvas.style.transform = `scale(${zoom})`; }
-function diminuirZoom() { zoom = Math.max(zoom-0.2,0.5); canvas.style.transform = `scale(${zoom})`; }
-function limparCanvas() { ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height); }
-function salvarDesenho() {
-  const arts = JSON.parse(localStorage.getItem('arts')||'[]');
-  arts.push(canvas.toDataURL('image/png'));
-  localStorage.setItem('arts', JSON.stringify(arts));
-  
-Swal.fire({
-  title: 'Obra de Arte Salva! 🎨',
-  text: 'Sua pintura já está guardada na Galeria dos Artistas!',
-  icon: 'success',
-  confirmButtonColor: '#ffcc00', // O amarelo do seu botão principal
-  confirmButtonText: 'Oba, entendi!',
-  background: '#fff9e6',
-  borderRadius: '20px'
-});
-}
-
-function configurarBotoesDesenho() {
-  btnPincel.onclick = ()=>setFerramenta('pincel');
-  btnLapis.onclick = ()=>setFerramenta('lapis');
-  btnSpray.onclick = ()=>setFerramenta('spray');
-  btnBalde.onclick = ()=>setFerramenta('balde');
-  btnBorrachaP.onclick = ()=>setFerramenta('borrachaP');
-  btnBorrachaG.onclick = ()=>setFerramenta('borrachaG');
-  zoomIn.onclick = aumentarZoom;
-  zoomOut.onclick = diminuirZoom;
-  limparBtn.onclick = limparCanvas;
-  
-    salvarBtn.onclick = () => {
-    const dataURL = canvas.toDataURL("image/png");
-    const galeria = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
-    
-    galeria.push(dataURL);
-    localStorage.setItem('galeria_artistas', JSON.stringify(galeria));
-
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        title: 'Obra Salva! 🎨',
-        text: 'Seu desenho já está na galeria!',
-        icon: 'success',
-        confirmButtonColor: '#ffcc00'
-      });
-    }
-
-    if (typeof loadGallery === "function") {
-      loadGallery();
-    }
-  }; // Fim do onclick
-
-  voltarBtn.onclick = voltarEscolha;
-  if (seletorCor) {
-    seletorCor.addEventListener('input', (e) => setCor(e.target.value));
-  }
-} // <--- ESTA CHAVE FECHA A FUNÇÃO configurarBotoesDesenho
-
-// Esta função fica FORA da configurarBotoesDesenho
-function limparGaleria() {
-  localStorage.removeItem('galeria_artistas');
-  const galleryDiv = document.getElementById('gallery');
-  if (galleryDiv) {
-    galleryDiv.innerHTML = ''; 
-  }
-  alert("Galeria limpa!");
-}
-// ========== EVENTOS DO CANVAS ==========
-function configurarCanvasEvents() {
-  canvas.addEventListener('mousedown', iniciarDesenho);
-  canvas.addEventListener('mousemove', desenhar);
-  canvas.addEventListener('mouseup', pararDesenho);
-  canvas.addEventListener('mouseleave', pararDesenho);
-  canvas.addEventListener('touchstart', iniciarDesenho, {passive:false});
-  canvas.addEventListener('touchmove', (e)=>{e.preventDefault(); desenhar(e);}, {passive:false});
-  canvas.addEventListener('touchend', pararDesenho);
-}
-
-// ========== GALERIA: CARREGAR ==========
-function loadGallery() {
-  const container = document.getElementById('gallery'); 
-  if (!container) return;
-
-  // Limpa o visual antes de carregar para não duplicar
-  container.innerHTML = ''; 
-
-  // IMPORTANTE: Nome da chave deve ser 'galeria_artistas'
-  const desenhos = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
-  
-  if (desenhos.length === 0) {
-    container.innerHTML = '<p>A galeria está vazia! 🎨</p>';
+  const player = document.getElementById('player');
+  if (!player) {
+    console.log("Player não encontrado");
     return;
   }
 
-  desenhos.forEach(imgData => {
-    const img = document.createElement('img');
-    img.src = imgData;
-    container.appendChild(img);
-  });
+  player.src = 'sons/' + nomeArquivo + '.mp3';
+  player.play().catch(e => console.log("Erro ao tocar:", e));
 }
 
-// ========== GALERIA: LIMPAR TUDO ==========
-function limparGaleria() {
-  Swal.fire({
-    title: 'Tem certeza?',
-    text: "Todas as suas obras de arte serão apagadas da galeria! 🎨🗑️",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#ff6b6b',
-    cancelButtonColor: '#ffcc00',
-    confirmButtonText: 'Sim, apagar tudo',
-    cancelButtonText: 'Não, quero guardar!',
-    background: '#fff9e6',
-    color: '#001858'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // 1. Limpa a chave correta no banco de dados
-      localStorage.removeItem('galeria_artistas'); 
-      
-      // 2. Atualiza a tela (vai mostrar a mensagem de vazia)
-      loadGallery(); 
-      
-      Swal.fire({
-        title: 'Galeria Limpa!',
-        text: 'Sua galeria está prontinha para novas artes! 🧹',
-        icon: 'success',
-        confirmButtonColor: '#ffcc00'
-      });
-    }
-  });
-}
+// ========== EXEMPLO: PINCEL COM ÁUDIO ==========
+function iniciarPincel() {
+  const chat = document.getElementById('chatArea');
 
-// ========== MURAL ==========
-// --- VARIÁVEIS DO MURAL LOCAL (Se ainda quiser guardar fotos no celular) ---
-let savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
-let muralItems = [...savedUploads];
-const muralGrid = document.getElementById('mural-grid');
-const filterButtons = document.querySelectorAll('.mural-btn[data-filter]');
-const fileInput = document.getElementById('file-input');
-let currentFilter = 'todos';
+  if (chat.children.length === 0) {
+    const mensagem = `
+      <span>
+        🎨 Olá! Eu sou o Pincel Mágico!
+        <button onclick="tocarAudio('museu')">🔊</button>
+      </span>
+    `;
 
-// ... (Suas funções renderMural, deletarImagem e resetMural continuam aqui) ...
+    const div = document.createElement('div');
+    div.className = "mensagem resposta";
+    div.innerHTML = mensagem;
 
-// --- CORREÇÃO DO EVENTO DE UPLOAD ---
-if (fileInput) {
-    fileInput.addEventListener('change', e => {
-        Array.from(e.target.files).forEach(file => {
-            if (!file.type.startsWith('image/')) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                let id = Date.now() + '-' + Math.random().toString(36);
-                let item = {
-                    id,
-                    label: file.name.length > 20 ? file.name.substr(0, 20) + '…' : file.name,
-                    category: 'upload',
-                    imageUrl: ev.target.result
-                };
-                muralItems.push(item);
-                savedUploads.push(item);
-                localStorage.setItem('muralUploads', JSON.stringify(savedUploads));
-                if (currentFilter === 'uploads' || currentFilter === 'todos') renderMural();
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-}
+    chat.appendChild(div);
 
-// --- FUNÇÕES DO MUSEU VIRTUAL (Agora fora de qualquer outra função) ---
-
-async function abrirMuralVirtual() {
-    const result = await Swal.fire({
-        title: 'Entrar no Mural? 🖼️',
-        text: 'Você vai ver os trabalhos da turma e poderá enviar o seu também!',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, entrar! 🚀',
-        cancelButtonText: 'Ficar pintando',
-        confirmButtonColor: '#ffcc00',
-        cancelButtonColor: '#ff6b6b',
-        background: '#fff9e6',
-        color: '#001858'
-    });
-
-    if (result.isConfirmed) {
-        show('mural');
-        ativarFullscreen();
-    }
-}
-
-function sairDoMural() {
-    show('home');
-    ativarFullscreen(); // Garante que volta em tela cheia para o ateliê
-}
-
-function ativarFullscreen() {
-    const doc = document.documentElement;
-    if (doc.requestFullscreen) doc.requestFullscreen();
-    else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-}
-
-function show(id) {
-    const screens = document.querySelectorAll('.screen');
-    screens.forEach(s => {
-        s.style.display = 'none';
-        s.classList.remove('active');
-    });
-
-    const target = document.getElementById(id);
-    if (target) {
-        // Se for mural usa flex para o iframe ocupar tudo, senão usa block
-        target.style.display = (id === 'mural') ? 'flex' : 'block';
-        target.classList.add('active');
-    }
-}
-
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Pequenos Artistas do Quirino 🎨</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffcc00">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-borderless/borderless.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    /* ========== TELA DE ABERTURA ========== */
-    #splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, #00ca85, #0099cc);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.8s ease;
-      color: white;
-      font-size: 2rem;
-      text-align: center;
-      flex-direction: column;
-    }
-    #splash video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    #splash-fallback {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      z-index: 10;
-    }
-    #splash.fallback-mode #splash-video {
-      display: none;
-    }
-    #splash.fallback-mode #splash-fallback {
-      display: flex;
-    }
-    .splash-icon {
-      font-size: 5rem;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* ========== ESTILOS GLOBAIS ========== */
-    body {
-      margin: 0;
-      font-family: "Comic Sans MS", Arial, sans-serif;
-      background: #fef6e4;
-      text-align: center;
-      color: #001858;
-    }
-    h1, h2 { color: #001858; }
-    .screen { display: none; padding: 20px; }
-    .active { display: block; }
-
-   /* Estilo Especial do Botão Sair */
-.btn-sair {
-    background: linear-gradient(135deg, #ff6b6b, #ee5253) !important;
-    color: white !important;
-    width: 80% !important;
-    max-width: 320px !important;
-    padding: 15px !important;
-    border-radius: 50px !important;
-    border: 4px solid #fff !important;
-    margin: 30px auto 50px auto !important; /* Centraliza e dá respiro no final da página */
-    font-weight: bold !important;
-    font-size: 20px !important;
-    display: block !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-    cursor: pointer;
-    transition: transform 0.1s ease;
-}
-
-/* Efeito de clique (botão afundando) */
-.btn-sair:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
-}
-    /* ========== BOTÕES E INTERFACE ========== */
-    button {
-      padding: 14px; margin: 6px; border-radius: 16px; border: none;
-      background: #f582ae; font-size: 16px; color: #001858; cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover { background: #ff9cbb; }
-    .menu button { width: 80%; max-width: 320px; font-size: 18px; }
-
-    /* ========== CARDS E GALERIA ========== */
-    .card {
-      background: #fff; border-radius: 20px; padding: 14px; margin: 12px; 
-      text-align: left; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .gallery img {
-      width: 120px; height: 120px; object-fit: cover;
-      border-radius: 12px; border: 3px solid #001858;
-    }
-    .audio-btn {
-      position: absolute; top: 10px; right: 10px;
-      background: #8bd3dd; border-radius: 50%; width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-    }
-
-    /* ========== MURAL ========== */
-    .mural-container { max-width: 1200px; margin: 0 auto; padding: 10px; }
-    .mural-toolbar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0; }
-    .mural-btn {
-      background: #fff; border: 2px solid #8bd3dd; border-radius: 30px; padding: 8px 16px;
-      font-size: 0.9rem; color: #001858; display: inline-flex; align-items: center; gap: 5px;
-      cursor: pointer; transition: 0.2s;
-    }
-    .mural-btn:hover { background: #8bd3dd; }
-    .mural-btn.active { background: #f582ae; border-color: #f582ae; }
-    .upload-btn { background: #28a745; border-color: #28a745; color: white; }
-    .reset-btn { background: #ff6b6b; border-color: #ff6b6b; color: white; }
-    #file-input { display: none; }
-    .mural-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;
-      padding: 10px;
-    }
-    .mural-card {
-      background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border: 2px solid #f582ae; position: relative;
-    }
-    .card-image {
-      width: 100%; aspect-ratio: 1/1; background: #f3d2c1; display: flex; align-items: center;
-      justify-content: center; overflow: hidden;
-    }
-    .card-image img { width: 100%; height: 100%; object-fit: cover; }
-    .card-label {
-      padding: 8px; font-size: 0.85rem; background: #fef6e4; color: #001858;
-      border-top: 1px solid #f582ae; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .delete-btn {
-      position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.8);
-      border: none; border-radius: 50%; width: 30px; height: 30px;
-      font-size: 16px; cursor: pointer; color: #d32f2f;
-      display: flex; align-items: center; justify-content: center;
-      transition: 0.2s; z-index: 10;
-    }
-    .delete-btn:hover { background: white; transform: scale(1.1); 
-    }
-
-    /* ========== FERRAMENTA DE DESENHO ========== */
-    .colorir-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;
-      margin: 20px 0; max-width: 600px; margin-left: auto; margin-right: auto;
-    }
-    .colorir-thumb {
-      border: 3px solid #001858; border-radius: 12px; overflow: hidden; cursor: pointer;
-      transition: 0.2s;
-    }
-    .colorir-thumb:hover { transform: scale(1.05); border-color: #f582ae; }
-    .colorir-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .canvas-wrapper { display: flex; justify-content: center; margin: 20px 0; overflow: auto; max-width: 100%; }
-    .canvas {
-      border: 4px solid #001858; border-radius: 20px; background: white;
-      touch-action: none; max-width: 100%; height: auto;
-    }
-    .colorir-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 15px 0; }
-    .colorir-tools button { background: #8bd3dd; padding: 10px 20px; }
-    .selected-tool { background: #f582ae !important; color: white; }
-    .palette {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 10px 0;
-    }
-    .palette button {
-      width: 40px; height: 40px; border-radius: 50%; border: 2px solid #001858;
-      cursor: pointer;
-    }
-    .size-control {
-      display: flex; align-items: center; gap: 12px; background: #e8f0fe; border-radius: 50px;
-      padding: 8px 20px; border: 3px solid white; box-shadow: 0 4px 0 #8fbbaf; margin: 10px;
-    }
-    .current-color-indicator {
-      display: flex; align-items: center; gap: 10px; background: white; border-radius: 50px;
-      padding: 5px 20px 5px 10px; border: 3px solid #f0b27a;
-    }
-    .color-circle { width: 45px; height: 45px; border-radius: 50%; border: 3px solid white; }
-    #seletorCor {
-      width: 60px; height: 60px; border-radius: 50%; border: 4px solid white; cursor: pointer;
-      background: transparent;
-    }
-    .extra-tools { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0 0; }
-    .big-back-btn {
-      background: #b0d0ff; border: none; border-radius: 60px; padding: 16px 30px;
-      font-size: 1.9rem; color: #1f3a5f; box-shadow: 0 8px 0 #6b8cbb; cursor: pointer;
-      margin-top: 25px; width: 100%; font-weight: bold; border: 4px solid white;
-    }
-
-    /* ========== DESAFIOS ATUALIZADOS (150 itens) ========== */
-.desafios-container { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 10px; 
-}
-
-.search-box {
-    width: 100%; 
-    padding: 12px; 
-    margin: 20px 0; 
-    border: 2px solid #8bd3dd;
-    border-radius: 30px; 
-    font-size: 16px; 
-    font-family: inherit;
-}
-
-.desafios-grid { 
-    display: grid; 
-    grid-template-columns: 1fr; 
-    gap: 20px; 
-    margin-top: 20px; 
-    max-height: 60vh; 
-    overflow-y: auto; 
-    padding-right: 5px; 
-}
-
-.desafio-card {
-    background: white; 
-    border-radius: 20px; 
-    padding: 20px; 
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-    border-left: 8px solid #f582ae; 
-    position: relative;
-    margin-bottom: 5px; /* Margem extra para não colarem */
-}
-
-.desafio-card .audio-btn {
-    position: absolute; 
-    top: 20px; 
-    right: 20px;
-    background: #8bd3dd; 
-    border-radius: 50%; 
-    width: 40px; 
-    height: 40px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    cursor: pointer;
-    border: none;
-}
-
-/* Estilo da barrinha de rolagem */
-.desafios-grid::-webkit-scrollbar { width: 6px; }
-.desafios-grid::-webkit-scrollbar-thumb { background: #8bd3dd; border-radius: 10px; }
-
-    /* ========== PINCEL MÁGICO ========== */
-    .pincel-container {
-      max-width: 800px; margin: 0 auto; padding: 20px; background: #fff0e0;
-      border-radius: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .pincel-header {
-      display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
-      background: #f8d5c4; padding: 15px 25px; border-radius: 60px;
-    }
-    .pincel-avatar { font-size: 70px; animation: tremer 2s infinite ease-in-out; }
-    @keyframes tremer {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      50% { transform: rotate(-5deg); }
-      100% { transform: rotate(0deg); }
-    }
-    .pincel-fala {
-      background: white; border-radius: 30px 30px 30px 5px; padding: 15px 20px;
-      font-size: 1.2rem; color: #172c66; text-align: left; flex: 1;
-      border: 2px solid #f582ae; position: relative;
-    }
-    .pincel-fala:before {
-      content: ''; position: absolute; left: -15px; top: 20px;
-      border-top: 15px solid transparent; border-bottom: 15px solid transparent;
-      border-right: 15px solid #f582ae;
-    }
-    .perguntas-sugeridas {
-      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;
-    }
-    .perguntas-sugeridas button {
-      background: #8bd3dd; font-size: 14px; padding: 8px 16px; border-radius: 40px;
-    }
-    .chat-area {
-      background: #ffe9d6; border-radius: 30px; padding: 15px; max-height: 300px;
-      overflow-y: auto; margin: 20px 0; border: 2px solid #f582ae; text-align: left;
-    }
-    .mensagem { margin: 10px 0; display: flex; align-items: flex-start; gap: 10px; }
-    .mensagem.pergunta { justify-content: flex-end; }
-    .mensagem.pergunta span {
-      background: #f582ae; color: white; padding: 10px 15px;
-      border-radius: 20px 20px 5px 20px; max-width: 70%;
-    }
-    .mensagem.resposta { justify-content: flex-start; align-items: center; }
-    .mensagem.resposta span {
-      background: white; padding: 10px 15px; border-radius: 20px 20px 20px 5px;
-      border: 2px solid #8bd3dd; max-width: 70%;
-    }
-    .botao-audio {
-      background: none; border: none; font-size: 20px; cursor: pointer; margin-left: 5px;
-      color: #172c66; transition: 0.2s;
-    }
-    .input-area { display: flex; gap: 10px; margin-top: 15px; }
-    .input-area input {
-      flex: 1; padding: 15px; border: 3px solid #8bd3dd; border-radius: 50px;
-      font-size: 16px; outline: none;
-    }
-    .input-area button { background: #f582ae; border-radius: 50px; padding: 15px 25px; font-size: 18px; }
-    .modo-pais {
-      background: #f8d5c4; border-radius: 30px; padding: 15px; margin-top: 20px;
-      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    }
-
-    /* ========== MUSEU ========== */
-    .content { max-width: 1400px; margin: 0 auto; background: rgba(255,255,255,0.9); border-radius: 60px; padding: 25px; border: 4px solid white; }
-    .header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; background: #7fc9ff; padding: 15px 25px; border-radius: 80px 80px 40px 40px; border: 3px solid #ffffff; }
-    .btn-voltar { background: #3399ff; color: white; border: none; font-size: 1.4rem; font-weight: bold; padding: 12px 25px; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 5px 0 #1a5c9e; border: 3px solid #c3e2ff; }
-    .title-group h1 { font-size: 2.2rem; color: #ffffff; }
-    .title-group span { background: #ffdd77; color: #2b5f8a; padding: 0 15px; border-radius: 50px; border: 2px solid white; display: inline-block; margin-top: 5px; }
-    .exhibition-3d { background: #2b6c9e; border-radius: 50px; padding: 15px; border: 5px solid #ffffff; }
-    .iframe-container { position: relative; width: 100%; height: 70vh; border-radius: 40px; overflow: hidden; }
-    .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    .tour-guide { background: #fee5b1; margin-top: 15px; padding: 15px 20px; border-radius: 40px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; border: 3px solid white; color: #154256; font-weight: bold; font-size: 1.3rem; justify-content: center; }
-
-    /* ========== MEDIA QUERY ========== */
-    @media (max-width: 700px) {
-      .title-group h1 { font-size: 1.6rem !important; }
-      .btn-voltar { font-size: 1.2rem !important; padding: 10px 18px !important; }
-      .tour-guide { font-size: 1.1rem !important; }
-      .iframe-container { height: 55vh !important; }
-    }
-  </style>
-</head>
-<body>
-
-  <div id="splash">
-  <video id="splash-video" playsinline webkit-playsinline preload="auto">
-    <source src="abertura.mp4" type="video/mp4">
-  </video>
-  
-  <div id="splash-fallback" style="display: flex; z-index: 20; flex-direction: column; align-items: center; gap: 20px;">
-    <div class="splash-icon" id="icone-paleta">🎨</div>
-    <div id="status-carregamento">Preparando as tintas...</div>
-    <button id="start-btn" style="padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
-       Entrar no Ateliê! 🖌️
-    </button>
-  </div>
-</div>
-
-<!-- ========== MENU PRINCIPAL ========== -->
-<div id="home" class="screen menu">
-  <h1>🎨 Pequenos Artistas do Quirino</h1>
-  <button onclick="show('desenho')">🖍 Desenho Livre / Colorir</button>
-  <button onclick="show('museu')">🏛 Museu Virtual</button>
-  <button onclick="show('galeria')">🏆 Galeria</button>
-  <button onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
-  <button onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
-  <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
-  <button class="btn-sair" onclick="fecharApp()">
-    <i class="fas fa-times-circle"></i> Sair do Ateliê
-  </button>
-</div>
-
-<!-- ========== DESENHO ========== -->
-<div id="desenho" class="screen">
-  <h2>🖍 Desenho Livre & Colorir</h2>
-  <p style="font-size:1.8rem; margin:0 0 20px;">✨ Escolha um modelo ou tela livre ✨</p>
-  <div class="colorir-grid" id="listaDesenhos"></div>
-  <div class="canvas-wrapper">
-    <canvas id="canvasDesenho" width="520" height="520" class="canvas" style="display:none;"></canvas>
-  </div>
-  <div id="ferramentasDesenho" style="display:none;">
-    <div style="background:rgba(255,255,240,0.7); border-radius:90px; padding:20px; margin:15px 0; border:3px solid white;">
-      <div class="colorir-tools">
-        <button id="btnPincel" class="selected-tool">🖌️ Pincel</button>
-        <button id="btnLapis">✏️ Lápis</button>
-        <button id="btnSpray">💨 Spray</button>
-        <button id="btnBalde">🪣 Balde</button>
-        <button id="btnBorrachaP">🧽 Peq</button>
-        <button id="btnBorrachaG">🧼 Grande</button>
-      </div>
-      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px; margin: 15px 0;">
-        <div class="size-control">
-          <label>🔘 Tam.:</label>
-          <input type="range" id="tamanhoFerramenta" min="1" max="50" value="8" step="1">
-          <span id="tamanhoValor" class="size-value">8</span>
-        </div>
-        <div class="current-color-indicator">
-          <span style="font-size:1.4rem;">Cor:</span>
-          <div id="corAtualCircle" class="color-circle" style="background:#ff4d4d;"></div>
-          <input type="color" id="seletorCor" value="#ff4d4d">
-        </div>
-      </div>
-      <div class="palette" id="paletaCores"></div>
-      <div class="extra-tools">
-        <button id="zoomIn">🔍 +</button>
-        <button id="zoomOut">🔍 -</button>
-        <button id="limparBtn">🧽 Limpar tudo</button>
-        <button id="salvarBtn">💾 Salvar na Galeria</button>
-        <button id="voltarBtn">⬅ Outro desenho</button>
-      </div>
-    </div>
-  </div>
-  <button class="big-back-btn" onclick="show('home')">⬅ Voltar ao Menu</button>
-</div>
-
-<!-- ========== MUSEU ========== -->
-<div id="museu" class="screen">
-  <div class="content">
-    <div class="header">
-      <button class="btn-voltar" onclick="show('home')">⬅️ Voltar</button>
-      <div class="title-group">
-        <h1>✨ As infâncias de <span>Cândido Portinari</span></h1>
-      </div>
-    </div>
-    <div style="display: flex; flex-direction: column; gap: 25px;">
-      <div class="exhibition-3d">
-        <div class="iframe-container">
-          <iframe src="https://app.emaze.com/@ALFTCCRLT/esta-obra-de-cndido-portinari-chama-se-menino-com" allowfullscreen></iframe>
-        </div>
-        <div class="tour-guide">
-          <span style="font-size: 2.5rem;">🎨</span>
-          <p><em>“Na minha infância, os meninos brincavam de pião, de bola, de roda. Eu pintei isso tudo.”</em> — Portinari</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== GALERIA ========== -->
-<div id="galeria" class="screen">
-  <h2>🏆 Galeria dos Artistas</h2>
-  <div class="gallery-controls">
-    <button onclick="loadGallery()">🔄 Atualizar</button>
-    <button class="clear-gallery-btn" onclick="limparGaleria()">🗑️ Limpar Galeria</button>
-  </div>
-  <div id="gallery" class="gallery"></div>
-  <button onclick="show('home')">⬅ Voltar</button>
-</div>
-
-<!-- ========== MURAL ========== -->
-<div id="mural" class="screen" style="display: none; height: 100vh; flex-direction: column; background: #001858;">
-    <div class="mural-header" style="height: 60px; background: #001858; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 2px solid #ffcc00;">
-        <h2 style="color: white; margin: 0; font-size: 1.2rem;">🖼️ Mural Virtual: Artistas do Quirino</h2>
-        <button onclick="sairDoMural()" style="background: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #001858;">
-            ⬅ Sair do Mural
-        </button>
-    </div>
-    <div style="flex-grow: 1; overflow: hidden;">
-        <iframe 
-            src="https://padlet.com/embed/lvlhw1rjc22sd338" 
-            style="width:100%; height:100%; border:none;"
-            allow="camera; microphone; geolocation; clipboard-write; fullscreen"
-            allowfullscreen>
-        </iframe>
-    </div>
-</div>
-
-<!-- ========== DESAFIOS ========== -->
-<div id="desafiosArte" class="screen">
-  
-    <div style="display: flex; justify-content: flex-start; padding: 10px;">
-        <button onclick="show('home')" style="background: #8bd3dd; border-radius: 10px; border: none; padding: 8px 15px;">⬅ Voltar</button>
-    </div>
-
-    <h2 style="text-align: center;">🎲 Desafios de Arte</h2>
-
-    <button onclick="desafioAleatorio()" class="btn-sorte" style="width: 100%; padding: 15px; margin: 10px 0; background: #ffcc00; border: none; border-radius: 20px; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    🎲 Sortear Desafio Aleatório
-</button>
-
-        <input 
-            type="search" 
-            id="buscaDesafio" 
-            class="search-box" 
-            placeholder="🔍 Procure um desafio..." 
-            oninput="renderDesafios()"
-            autocomplete="off"
-        >
-
-        <div id="desafiosGrid" class="desafios-grid"></div>
-        
-    </div>
-</div>
-<!-- ========== PINCEL MÁGICO ========== -->
-<div id="pincelIA" class="screen">
-  <h2>🖌 Pincel Mágico</h2>
-  <div class="pincel-container">
-    <div class="pincel-header">
-      <div class="pincel-avatar">🖌️</div>
-      <div class="pincel-fala" id="pincelFala">
-        Olá! Eu sou o Pincel Mágico.
-        <button class="botao-audio" onclick="lerTexto('Olá! Eu sou o Pincel Mágico.')"><i class="fas fa-volume-up"></i></button>
-      </div>
-    </div>
-    <div class="perguntas-sugeridas">
-      <button onclick="fazerPergunta('Quem foi Leonardo da Vinci?')">Leonardo</button>
-      <button onclick="fazerPergunta('Quem foi Van Gogh?')">Van Gogh</button>
-      <button onclick="fazerPergunta('Quem foi Tarsila?')">Tarsila</button>
-      <button onclick="fazerPergunta('Me conte uma curiosidade')">🤔 Curiosidade</button>
-      <button onclick="fazerPergunta('Estou feliz')">😊 Feliz</button>
-      <button onclick="fazerPergunta('Estou triste')">😢 Triste</button>
-    </div>
-    <div class="chat-area" id="chatArea"></div>
-    <div class="input-area">
-      <input type="text" id="perguntaInput" placeholder="Digite sua pergunta...">
-      <button onclick="enviarPergunta()">Enviar</button>
-    </div>
-    <div class="modo-pais">
-      <button onclick="limparHistorico()">🧹 Limpar histórico</button>
-      <button onclick="bloquearPalavra()">🚫 Bloquear palavra</button>
-    </div>
-  </div>
-  <button onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
-</div>
-
-<script>
-
-// ========== LÓGICA DE ABERTURA COM FALLBACK ==========
-(function() {
-  const splash = document.getElementById('splash');
-  const video = document.getElementById('splash-video');
-  const startBtn = document.getElementById('start-btn');
-  const fallback = document.getElementById('splash-fallback');
-
-  startBtn.onclick = () => {
-    // 1. Tira a paleta e o botão da frente na hora!
-    fallback.style.display = 'none';
-    
-    // 2. Toca o vídeo
-    video.play().catch(e => {
-      console.log("Sem vídeo, entrando...");
-      abrirApp();
-    });
-  };
-
-  video.onended = abrirApp;
-
-  function abrirApp() {
-    splash.style.opacity = '0';
-    setTimeout(() => {
-      splash.style.display = 'none';
-      show('home'); // Abre o menu
-    }, 800);
+    // 🔊 toca automaticamente também
+    tocarAudio('museu');
   }
-})();
-// ========== FUNÇÕES GLOBAIS ==========
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  if (id === "galeria") loadGallery();
-  if (id === "desafiosArte") renderDesafios();
-  if (id === "pincelIA") iniciarPincel();
-  if (id === "desenho") mostrarListaDesenhos();
-  if (id === "mural") carregarMural();
-}
-
-// 🎧 PLAYER GLOBAL
-let audioAtual = null;
-
-// ========== FUNÇÕES GLOBAIS ==========
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-
-  if (id === "galeria") loadGallery();
-  if (id === "desafiosArte") renderDesafios();
-  if (id === "pincelIA") iniciarPincel();
-  if (id === "desenho") mostrarListaDesenhos();
-  if (id === "mural") carregarMural();
-}
-
-// 🔊 NOVA FUNÇÃO (MP3)
-function lerTexto(nomeAudio) {
-  if (!nomeAudio) return;
-
-  // 🔇 Para o áudio anterior
-  if (audioAtual) {
-    audioAtual.pause();
-    audioAtual.currentTime = 0;
-  }
-
-  // 🎵 Toca novo áudio
-  audioAtual = new Audio('sons/' + nomeAudio + '.mp3');
-
-  audioAtual.play().catch(e => {
-    console.log("Erro ao tocar áudio:", e);
-  });
 }
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
@@ -3727,14 +2715,24 @@ function responderCuriosidade(perguntaNormalizada) {
   return todas[Math.floor(Math.random() * todas.length)];
 }
 
-function adicionarMensagem(tipo, texto) {
+function adicionarMensagem(tipo, texto, audio = null) {
   const chat = document.getElementById('chatArea');
   const div = document.createElement('div');
   div.className = `mensagem ${tipo}`;
   
   if (tipo === 'resposta') {
-    const textoEscapado = texto.replace(/'/g, "\\'");
-    div.innerHTML = `<span>${texto} <button class="botao-audio" onclick="lerTexto('${textoEscapado}')"><i class="fas fa-volume-up"></i></button></span>`;
+    div.innerHTML = `
+      <span>
+        ${texto}
+        ${
+          audio 
+          ? `<button class="botao-audio" onclick="tocarAudio('${audio}')">
+              <i class="fas fa-volume-up"></i>
+            </button>`
+          : ''
+        }
+      </span>
+    `;
   } else {
     div.innerHTML = `<span>${texto}</span>`;
   }
@@ -3742,7 +2740,6 @@ function adicionarMensagem(tipo, texto) {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
-
 function fazerPergunta(pergunta) {
   document.getElementById('perguntaInput').value = pergunta;
   enviarPergunta();
@@ -3839,9 +2836,9 @@ window.onload = function() {
   mostrarListaDesenhos();
   setCor('#ff4d4d');
   atualizarTamanhoExibido();
-  // Inicializar outras seções se necessário
   renderDesafios();
 };
+
 // Função para esconder tudo (inclusive a barra de status/relógio)
 function entrarEmModoImersivo() {
   const docElm = document.documentElement;
@@ -3893,6 +2890,9 @@ function fecharApp() {
     });
 }
 </script>
+
+<!-- 🎧 PLAYER GLOBAL -->
+<audio id="player"></audio>
 
 </body>
 </html>
