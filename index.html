@@ -476,75 +476,64 @@
   setTimeout(abrirApp, 5000);
 })();
 
-// ========== TTS (SEGURO) ==========
-let vozSelecionada = null;
-function carregarVoz() {
-  try {
-    const vozes = speechSynthesis.getVoices();
-    vozSelecionada = vozes.find(v => v.lang === "pt-BR") || vozes.find(v => v.lang.startsWith("pt")) || vozes[0];
-  } catch (e) { console.warn("Erro ao carregar vozes:", e); }
-}
-if ('speechSynthesis' in window) {
-  speechSynthesis.onvoiceschanged = carregarVoz;
-}
-
-function usarTTS(texto) {
-  if (!('speechSynthesis' in window)) return;
-  try {
-    const utterance = new SpeechSynthesisUtterance(texto);
-    if (!vozSelecionada) carregarVoz();
-    if (vozSelecionada) utterance.voice = vozSelecionada;
-    utterance.lang = "pt-BR";
-    utterance.rate = 0.95;
-    utterance.pitch = 1.1;
-    speechSynthesis.speak(utterance);
-  } catch (e) { console.warn("Erro no TTS:", e); }
-}
-
-// ========== ÁUDIO (MP3 + TTS FALLBACK) ==========
+// ========== SISTEMA DE ÁUDIO (APENAS MP3) ==========
 let audioAtual = null;
-function falarComoPersonagem(texto, audioNome = null) {
-  if (audioAtual) { audioAtual.pause(); audioAtual.currentTime = 0; }
-  if ('speechSynthesis' in window) { speechSynthesis.cancel(); }
 
-  if (audioNome) {
-    const audio = new Audio('sons/' + audioNome + '.mp3');
-    audio.oncanplaythrough = () => { audio.play().catch(() => usarTTS(texto)); };
-    audio.onerror = () => { usarTTS(texto); };
-    audioAtual = audio;
-  } else {
-    usarTTS(texto);
-  }
+function tocarAudio(nomeArquivo) {
+    if (!nomeArquivo) return;
+
+    // Para o áudio que estiver tocando antes de iniciar o novo
+    if (audioAtual) {
+        audioAtual.pause();
+        audioAtual.currentTime = 0;
+    }
+
+    // Toca o arquivo MP3 da pasta 'sons/'
+    audioAtual = new Audio('sons/' + nomeArquivo + '.mp3');
+    audioAtual.play().catch(e => console.warn("Erro ao reproduzir áudio: " + nomeArquivo, e));
 }
 
-document.addEventListener('click', () => {
-  falarComoPersonagem("Bem-vindo, pequeno artista! Vamos criar algo lindo juntos?", "boas-vindas");
-}, { once: true });
-
-const frases = ["Obaaa! Vamos criar arte!", "Que desenho incrível!", "Vamos tentar algo novo hoje?", "Estou adorando isso!"];
-function falarAleatorio() {
-  const frase = frases[Math.floor(Math.random() * frases.length)];
-  falarComoPersonagem(frase, "ia");
-}
-
-// ========== NAVEGAÇÃO ==========
+// ========== NAVEGAÇÃO ENTRE TELAS ==========
 function show(id) {
-  const screens = document.querySelectorAll('.screen');
-  screens.forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
-  const target = document.getElementById(id);
-  if (!target) return;
-  target.style.display = (id === 'mural') ? 'flex' : 'block';
-  target.classList.add('active');
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => { 
+        s.style.display = 'none'; 
+        s.classList.remove('active'); 
+    });
 
-  setTimeout(() => {
-    if (id === "desenho") falarComoPersonagem("Hora de soltar a criatividade. Vamos desenhar e colorir!", "desenho");
-    if (id === "galeria") { loadGallery(); falarComoPersonagem("Olha só quanta arte linda você já fez!", "galeria"); }
-    if (id === "desafiosArte") { renderDesafios(); falarComoPersonagem("Vamos escolher um desafio bem divertido!", "desafios-novo"); }
-    if (id === "mural") falarComoPersonagem("Mural dos artistas. Inspire-se nas criações!", "mural");
-    if (id === "pincelIA") falarComoPersonagem("Olá! Eu sou o pincel mágico!", "pincel-novo");
-  }, 300);
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    // Ajuste de layout para o mural (flex) ou telas normais (block)
+    target.style.display = (id === 'mural') ? 'flex' : 'block';
+    target.classList.add('active');
+
+    // Dispara o áudio correspondente à tela após um pequeno delay (300ms)
+    setTimeout(() => {
+        switch(id) {
+            case "desenho":
+                tocarAudio("desenho");
+                break;
+            case "galeria":
+                if (typeof loadGallery === "function") loadGallery();
+                tocarAudio("galeria");
+                break;
+            case "desafiosArte":
+                if (typeof renderDesafios === "function") renderDesafios();
+                tocarAudio("desafios-novo");
+                break;
+            case "mural":
+                tocarAudio("mural");
+                break;
+            case "pincelIA":
+                tocarAudio("pincel-novo");
+                break;
+            case "museu":
+                tocarAudio("museu");
+                break;
+        }
+    }, 300);
 }
-
 // ========== FERRAMENTA DE DESENHO ==========
 const canvas = document.getElementById('canvasDesenho');
 const ctx = canvas.getContext('2d');
@@ -893,162 +882,43 @@ function ativarFullscreen() {
 
 // ========== DESAFIOS ==========
 const desafios =[
-  { numero: 1, titulo: "Desenho às Cegas", descricao: "Fechem os olhos e tentem desenhar um objeto simples (copo, casa, flor). Depois comparem os resultados com quem fez o desafio com você.", objetivo: "estimular criatividade e percepção sem pressão estética." },
-  { numero: 2, titulo: "Cores Musicais", descricao: "O professor coloca músicas diferentes (alegre, triste, calma, agitada). Os alunos devem pintar ou desenhar o que sentirem com cada música.", objetivo: "trabalhar expressão artística e relação entre som e cor." },
-  { numero: 3, titulo: "Retrato Maluco", descricao: "Em dupla: um aluno descreve o colega sem que ele se veja, e o outro desenha. No final, comparam o desenho com a realidade.", objetivo: "exercitar escuta, imaginação e interpretação visual." },
-  { numero: 4, titulo: "Colagem Coletiva", descricao: "A turma cria uma grande obra com recortes de revistas, jornais e papéis coloridos. Cada grupo contribui com uma parte da colagem.", objetivo: "estimular cooperação e composição visual." },
-  { numero: 5, titulo: "História em Quadrinhos Rápida", descricao: "Os alunos recebem 4 quadros em branco. Devem criar uma HQ curta sobre um tema escolhido (amizade, natureza, escola).", objetivo: "exercitar narrativa visual e síntese criativa." },
-  { numero: 6, titulo: "Escultura com Material Reciclado", descricao: "Cada grupo recebe papéis, garrafas, caixas ou sucata. Criam esculturas criativas em 20 minutos.", objetivo: "estimular consciência ambiental e criatividade tridimensional." },
-  { numero: 7, titulo: "Jogo das Cores Proibidas", descricao: "O professor dá um tema (ex.: pôr do sol). Mas escolhe uma cor que não pode ser usada (ex.: laranja). Os alunos devem se virar para criar sem a cor óbvia.", objetivo: "incentivar alternativas criativas." },
-  { numero: 8, titulo: "Pintura com Objetos Inusitados", descricao: "Em vez de pincéis, usar cotonetes, esponjas, folhas ou até tampas de garrafa. Criar uma pintura coletiva.", objetivo: "experimentar texturas e técnicas diferentes." },
-  { numero: 9, titulo: "Teatro das Formas", descricao: "Em grupo, os alunos desenham formas geométricas no quadro. Depois, transformam essas formas em personagens para uma pequena cena.", objetivo: "unir artes visuais e teatro, estimulando imaginação." },
-  { numero: 10, titulo: "Arte Contínua", descricao: "Cada aluno começa um desenho. Após 2 minutos, passa o papel para o colega continuar. No final, todos observam a obra coletiva.", objetivo: "cooperação, improviso e desapego criativo." },
-  { numero: 11, titulo: "Desenho de Memória", descricao: "Mostre rapidamente uma imagem (um objeto, quadro famoso ou cena simples) por 15 segundos. Depois os alunos devem desenhar o que lembram.", objetivo: "exercitar memória visual, atenção aos detalhes e criatividade." },
-  { numero: 12, titulo: "Arte com Dobradura", descricao: "Cada aluno faz uma dobradura simples (avião, barco, chapéu) e depois deve personalizar com desenho ou pintura.", objetivo: "estimular coordenação motora e customização criativa." },
-  { numero: 13, titulo: "Retrato em Dupla", descricao: "Em duplas, um aluno posa e o outro desenha em tempo limitado (2 min). Depois trocam os papéis.", objetivo: "desenvolver observação rápida e improviso." },
-  { numero: 14, titulo: "Linha Contínua", descricao: "Os alunos devem desenhar sem levantar o lápis do papel, criando a imagem com uma única linha.", objetivo: "estimular fluidez, coordenação e desapego ao 'perfeito'." },
-  { numero: 15, titulo: "Pintura com Mãos", descricao: "Em vez de pincéis, usar apenas as mãos e dedos para criar uma obra.", objetivo: "explorar sensações táteis e liberdade criativa." },
-  { numero: 16, titulo: "Jogo das Emoções em Cores", descricao: "Cada aluno recebe uma emoção (alegria, tristeza, raiva, calma) e deve representar apenas com cores e formas abstratas.", objetivo: "trabalhar expressão emocional e subjetiva." },
-  { numero: 17, titulo: "História Ilustrada Coletiva", descricao: "Cada aluno desenha um quadro de uma história (sem saber o que o anterior desenhou). No final, juntam todos os quadros e contam a história formada.", objetivo: "estimular narrativa visual coletiva e improviso." },
-  { numero: 18, titulo: "Arte com Objetos da Natureza", descricao: "Usar folhas, flores, pedras ou galhos para criar composições artísticas em papel ou cartolina.", objetivo: "aproximar a arte da natureza e estimular criatividade ecológica." },
-  { numero: 19, titulo: "Sombras Criativas", descricao: "Colocar objetos na frente da luz e pedir que os alunos contornem as sombras no papel, transformando em personagens ou paisagens.", objetivo: "desenvolver percepção de formas e imaginação." },
-  { numero: 20, titulo: "Autoexpressão com Colagem", descricao: "Cada aluno deve criar uma colagem que represente sua personalidade, usando recortes de revistas e jornais.", objetivo: "autoconhecimento e expression artística pessoal." },
-  { numero: 21, titulo: "Desafio do Tempo", descricao: "Os alunos têm apenas 1 minuto para criar um desenho sobre um tema escolhido (ex.: animais, natureza, escola). Depois, repetem o mesmo tema em 5 minutos.", objetivo: "mostrar como o tempo influencia a criatividade." },
-  { numero: 22, titulo: "Desenho de Música", descricao: "O professor coloca diferentes tipos de músicas (clássica, pop, rock, relaxante). Os alunos devem traduzir em formas e cores o que sentem.", objetivo: "explorar a relação entre som e expressão visual." },
-  { numero: 23, titulo: "Transforma o Rabisco", descricao: "O professor faz rabiscos aleatórios no quadro ou nas folhas dos alunos. Cada aluno deve transformar o rabisco em um desenho criativo.", objetivo: "estimular a imaginação e a capacidade de dar novos significados." },
-  { numero: 24, titulo: "Jogo da Perspectiva", descricao: "Escolher um objeto simples (copo, cadeira, livro). Cada aluno deve desenhar esse objeto de um ângulo diferente.", objetivo: "trabalhar noções de perspectiva e observação." },
-  { numero: 25, titulo: "Arte com Texturas", descricao: "Distribuir diferentes materiais (lixa, algodão, folhas, tecidos). Os alunos devem colar ou esfregar sobre papel.", objetivo: "estimular o tato e explorar novas possibilidades visuais." },
-  { numero: 26, titulo: "Mímica das Obras de Arte", descricao: "O professor mostra imagens de obras famosas (Mona Lisa, O Grito, etc.). Em grupos, os alunos devem representar a obra com o corpo.", objetivo: "estimular interpretação, memória visual e expressão corporal." },
-  { numero: 27, titulo: "Arte com Palavras", descricao: "Os alunos recebem uma palavra (ex.: alegria). Devem criar uma obra que represente essa palavra sem escrever letras, apenas imagens.", objetivo: "trabalhar a simbologia e o poder da linguagem visual." },
-  { numero: 28, titulo: "Mandala Coletiva", descricao: "A turma desenha juntos uma grande mandala no papel, cada aluno acrescentando formas e cores.", objetivo: "desenvolver concentração, relaxamento e cooperação." },
-  { numero: 29, titulo: "Retrato com Objetos", descricao: "Cada grupo recebe objetos simples (tampinhas, folhas, botões). Devem montar o retrato de alguém organizando os objetos.", objetivo: "estimular criatividade e noção de composição." },
-  { numero: 30, titulo: "Obra Invertida", descricao: "Os alunos devem desenhar de cabeça para baixo (virando a folha). No final, revelam a obra no ângulo correto.", objetivo: "desenvolver percepção espacial e desafio criativo." },
-  { numero: 31, titulo: "Quebra-Cabeça Artístico", descricao: "O professor divide uma imagem famosa em pedaços. Cada aluno desenha uma parte. Depois, montam a obra inteira.", objetivo: "promover cooperação e percepção do todo." },
-  { numero: 32, titulo: "Expressão Corporal em Pintura", descricao: "Em grandes folhas no chão, os alunos pintam usando movimentos corporais amplos (braços, mãos, até pés).", objetivo: "liberar energia, trabalhar corpo e arte em conjunto." },
-  { numero: 33, titulo: "O Jogo do Rosto Maluco", descricao: "Cada aluno desenha apenas uma parte do rosto (cabelo, olhos, boca). Depois juntam os pedaços para formar rostos engraçados.", objetivo: "estimular humor, imaginação e trabalho coletivo." },
-  { numero: 34, titulo: "Colagem Abstrata", descricao: "Em vez de formar imagens figurativas, os alunos criam apenas composições com formas e cores.", objetivo: "estimular criatividade abstrata e noção estética." },
-  { numero: 35, titulo: "Escultura Rápida", descricao: "Em 10 minutos, os alunos devem criar uma escultura usando massinha, argila ou papel alumínio.", objetivo: "incentivar improviso e criatividade tridimensional." },
-  { numero: 36, titulo: "Cenas Congeladas", descricao: "Em grupos, os alunos criam uma cena como se fosse uma pintura viva. Ao sinal do professor, todos congelam.", objetivo: "estimular expressão corporal e leitura de imagens." },
-  { numero: 37, titulo: "Arte com Sopro", descricao: "Usando canudos, os alunos assopram tinta diluída no papel para criar formas inesperadas.", objetivo: "trabalhar improviso, texturas e criatividade espontânea." },
-  { numero: 38, titulo: "Paisagem Imaginária", descricao: "Cada aluno deve criar uma paisagem que não existe (cidade no céu, floresta colorida, mar de fogo).", objetivo: "estimular imaginação e liberdade criativa." },
-  { numero: 39, titulo: "Objeto Fantástico", descricao: "O professor mostra um objeto comum (copo, tesoura, régua). Os alunos devem redesenhar esse objeto como se fosse mágico.", objetivo: "incentivar reinvenção e pensamento fora da caixa." },
-  { numero: 40, titulo: "Retrato em Estilo Famoso", descricao: "Cada aluno desenha um colega, mas inspirado em um estilo artístico (cubismo, impressionismo).", objetivo: "explorar movimentos artísticos de forma prática e divertida." },
-  { numero: 41, titulo: "Arte com Música ao Vivo", descricao: "Enquanto uma música toca, os alunos devem desenhar/pintar sem parar, deixando o ritmo guiar a obra.", objetivo: "conectar ritmo musical e expressão artística." },
-  { numero: 42, titulo: "Colagem de Sonhos", descricao: "Usando revistas e recortes, os alunos criam uma colagem que represente um sonho ou desejo pessoal.", objetivo: "estimular autoconhecimento e simbolismo visual." },
-  { numero: 43, titulo: "História em 3 Cenas", descricao: "Cada aluno deve criar uma pequena sequência de 3 quadros que contem uma história curta.", objetivo: "desenvolver síntese narrativa e criatividade." },
-  { numero: 44, titulo: "Arte com Balões", descricao: "Encher balões com tinta e estourar sobre uma tela protegida.", objetivo: "criar obras abstratas de forma lúdica (importante usar proteção plástica)." },
-  { numero: 45, titulo: "Escultura Corporal em Duplas", descricao: "Em duplas, um aluno se posiciona e o outro molda sua postura para parecer uma escultura viva. Depois trocam.", objetivo: "estimular consciência corporal e cooperação." },
-  { numero: 46, titulo: "O Objeto Invisível", descricao: "Cada aluno finge segurar um objeto invisível e o desenha como imagina.", objetivo: "estimular imaginação e liberdade criativa." },
-  { numero: 47, titulo: "Retrato de Emoções", descricao: "Em vez de desenhar o rosto real do colega, os alunos devem representar apenas a emoção predominante.", objetivo: "desenvolver sensibilidade emocional e interpretação artística." },
-  { numero: 48, titulo: "Arte com Linhas Malucas", descricao: "O professor pede que todos façam várias linhas aleatórias no papel. Depois, os alunos devem transformar essas linhas em algo reconhecível.", objetivo: "trabalhar improviso e criatividade a partir do caos." },
-  { numero: 49, titulo: "Círculo Criativo", descricao: "Um aluno começa um desenho no quadro. Cada colega acrescenta um detalhe, formando uma obra coletiva.", objetivo: "estimular trabalho em equipe e construção compartilhada." },
-  { numero: 50, titulo: "Caderno de Texturas", descricao: "Cada aluno sai pela escola para coletar texturas (lápis de cor esfregado em parede, folha, moeda).", objetivo: "desenvolver olhar investigativo e sensibilidade tátil." },
-  { numero: 51, titulo: "Teatro dos Objetos", descricao: "Escolha objetos simples (garrafa, cadeira). Em grupos, os alunos devem inventar uma cena onde o objeto é protagonista.", objetivo: "unir artes visuais e teatro, estimulando narrativa criativa." },
-  { numero: 52, titulo: "Cartaz Expressivo", descricao: "Em duplas, os alunos criam um cartaz sobre um tema atual (amizade, meio ambiente).", objetivo: "trabalhar composição gráfica e impacto visual." },
-  { numero: 53, titulo: "Escultura com Massa de Modelar", descricao: "Cada aluno cria uma mini-escultura de um tema sorteado.", objetivo: "desenvolver coordenação motora fina e criatividade tridimensional." },
-  { numero: 54, titulo: "Arte em Silhueta", descricao: "O professor projeta a sombra de cada aluno no papel pardo preso à parede. Os colegas contornam.", objetivo: "valorizar identidade e autoexpressão." },
-  { numero: 55, titulo: "Cenas com Objetos Aleatórios", descricao: "O professor distribui objetos comuns. Os alunos precisam criar uma obra usando o objeto como parte central.", objetivo: "estimular reinvenção do cotidiano através da arte." },
-  { numero: 56, titulo: "Retrato em Duas Metades", descricao: "Cada aluno recebe meia folha com metade de um rosto impresso e deve completar a outra metade.", objetivo: "desenvolver simetria, observação e interpretação criativa." },
-  { numero: 57, titulo: "Arte com Pegadas", descricao: "Usar tinta lavável para fazer pegadas com os pés em papel grande. Depois, transformar as marcas em personagens.", objetivo: "estimular experimentação corporal e percepção de formas." },
-  { numero: 58, titulo: "Construindo Personagens", descricao: "Em grupos, cada aluno desenha uma parte do corpo de um personagem. No final juntam todas as partes.", objetivo: "exercitar imaginação coletiva e humor." },
-  { numero: 59, titulo: "Pintura com Esponjas", descricao: "Forneça esponjas cortadas em diferentes formatos. Os alunos usam para criar texturas.", objetivo: "explorar técnicas alternativas de pintura." },
-  { numero: 60, titulo: "Expressão Livre ao Som de Instrumentos", descricao: "Tocar instrumentos simples (tambor, chocalho). Os alunos desenham ou pintam conforme o ritmo.", objetivo: "conectar som, ritmo e expressão visual." },
-  { numero: 61, titulo: "Retrato Futurista", descricao: "Os alunos criam uma versão futurista de si mesmos.", objetivo: "estimular imaginação e reflexão sobre identidade." },
-  { numero: 62, titulo: "A Obra de Arte Secreta", descricao: "O professor descreve uma obra famosa sem mostrar a imagem. Os alunos tentam recriar só pela descrição.", objetivo: "exercitar escuta atenta e interpretação criativa." },
-  { numero: 63, titulo: "Mapa da Imaginação", descricao: "Cada aluno desenha um mapa inventado: uma cidade mágica, uma ilha fantástica.", objetivo: "desenvolver narrativa visual e imaginação espacial." },
-  { numero: 64, titulo: "Quebra-Gelo das Cores", descricao: "Cada aluno escolhe uma cor que representa seu humor no dia e compartilha o porquê.", objetivo: "integrar turma e estimular autoconhecimento através das cores." },
-  { numero: 65, titulo: "Cartas Artísticas", descricao: "Cada aluno cria uma carta ilustrada e no final trocam entre si como lembrança.", objetivo: "estimular personalização, troca e expressão artística." },
-  { numero: 66, titulo: "Colagem Surrealista", descricao: "Usando recortes de revistas, os alunos criam cenas inusitadas (ex.: peixe voando).", objetivo: "trabalhar imaginação e estilo surrealista." },
-  { numero: 67, titulo: "Painel da Turma", descricao: "Cada aluno contribui com uma pequena ilustração. No final, unem tudo em um grande painel.", objetivo: "desenvolver senso de pertencimento e colaboração." },
-  { numero: 68, titulo: "Jogo do Retrato Trocado", descricao: "Em duplas, os alunos desenham um ao outro... mas não podem olhar para o papel até o final.", objetivo: "estimular humor, criatividade e desapego ao resultado." },
-  { numero: 69, titulo: "Desenho com Barbante", descricao: "Com tinta e barbante, cada aluno cria marcas no papel para transformar em imagens.", objetivo: "explorar texturas e improviso artístico." },
-  { numero: 70, titulo: "Teatro dos Animais", descricao: "Cada grupo recebe um animal e deve representa-lo por meio de movimentos.", objetivo: "integrar teatro e artes visuais, estimulando expressão corporal." },
-  { numero: 71, titulo: "Pintura de Emojis", descricao: "Os alunos escolhem um emoji e recriam em versão artística, com tinta, lápis ou colagem.", objetivo: "aproximar a arte do cotidiano digital dos alunos." },
-  { numero: 72, titulo: "Objeto Ganha Vida", descricao: "Um objeto do dia a dia deve ser redesenhado como personagem com rosto e sentimentos.", objetivo: "estimular criatividade e antropomorfismo." },
-  { numero: 73, titulo: "Mandala de Cores", descricao: "Cada aluno cria uma mandala apenas com uma cor e suas variações de tons.", objetivo: "trabalhar tonalidades e harmonia monocromática." },
-  { numero: 74, titulo: "História Ilustrada em Grupo", descricao: "Em grupos, cada aluno ilustra um trecho de uma história. No final, juntam todas.", objetivo: "desenvolver narrativa coletiva e cooperação." },
-  { numero: 75, titulo: "Máscaras Teatrais", descricao: "Usando cartolina, os alunos criam máscaras personalizadas e fazem uma pequena encenação.", objetivo: "estimular artes plásticas e teatrais ao mesmo tempo." },
-  { numero: 76, titulo: "Colagem de Identidade", descricao: "Cada aluno deve montar uma colagem que represente quem ele é (gostos, sonhos).", objetivo: "estimular autoconhecimento e expressão artística pessoal." },
-  { numero: 77, titulo: "Arte com Folhas Naturais", descricao: "Usando folhas coletadas, os alunos fazem impressões com tinta ou colagens.", objetivo: "aproximar a arte da natureza e explorar texturas naturais." },
-  { numero: 78, titulo: "Retrato Espelhado", descricao: "Metade de um rosto é impressa, e o aluno deve completar a outra metade.", objetivo: "desenvolver simetria, criatividade e estilo próprio." },
-  { numero: 79, titulo: "Jogo do Objeto Imaginário", descricao: "Cada aluno inventa um objeto que não existe e faz o desenho dele.", objetivo: "exercitar imaginação, design e inovação." },
-  { numero: 80, titulo: "Teatro de Sombras", descricao: "Com lanterna e papelão recortado, os alunos criam histórias projetadas na parede.", objetivo: "integrar artes visuais, narrativa e experimentação com luz." },
-  { numero: 81, titulo: "Arte com Pontilhismo", descricao: "Os alunos devem criar uma imagem apenas com pontos coloridos.", objetivo: "explorar paciência, técnica e cor." },
-  { numero: 82, titulo: "Quadrinho Relâmpago", descricao: "Cada aluno cria uma tirinha de 3 quadros em apenas 10 minutos.", objetivo: "estimular síntese visual, humor e rapidez criativa." },
-  { numero: 83, titulo: "Escultura de Balão", descricao: "Usar balões de diferentes formas para criar figuras decorativas.", objetivo: "trabalhar formas tridimensionais de forma divertida." },
-  { numero: 84, titulo: "Mapa dos Sentimentos", descricao: "Em um papel grande, os alunos representam seus sentimentos atuais usando cores.", objetivo: "promover expressão emocional e empatia." },
-  { numero: 85, titulo: "Cartaz de Campanha", descricao: "Os alunos criam cartazes artísticos de uma campanha fictícia.", objetivo: "trabalhar impacto visual, design e consciência social." },
-  { numero: 86, titulo: "Retrato Abstrato", descricao: "Cada aluno deve desenhar o rosto de um colega sem usar formas realistas.", objetivo: "estimular criatividade e desprendimento da realidade." },
-  { numero: 87, titulo: "Pintura com Palitos", descricao: "Usando palitos de sorvete, os alunos criam texturas e desenhos na pintura.", objetivo: "explorar materiais alternativos e técnicas diferentes." },
-  { numero: 88, titulo: "História com Colagem", descricao: "A turma recebe revistas para recortar e montar uma história apenas com imagens coladas.", objetivo: "desenvolver narrativa visual e cooperação." },
-  { numero: 89, titulo: "Estátua Viva", descricao: "Em duplas, um aluno faz uma pose de estátua. O outro deve desenhar rapidamente.", objetivo: "trabalhar observação e expressão corporal." },
-  { numero: 90, titulo: "Obra em Movimento", descricao: "Em grandes papéis no chão, os alunos pintam andando, trocando de lugar.", objetivo: "estimular improviso e construção coletiva." },
-  { numero: 91, titulo: "Retrato do Futuro", descricao: "Cada aluno se desenha como imagina que será daqui 20 anos.", objetivo: "trabalhar identidade, imaginação e perspectiva de vida." },
-  { numero: 92, titulo: "Mural da Amizade", descricao: "Cada aluno cria uma pequena arte que represente amizade. Colam juntas em um mural.", objetivo: "promover integração e valores positivos." },
-  { numero: 93, titulo: "Cores de um Poema", descricao: "O professor lê um poema curto e os alunos transformam as palavras em pintura abstrata.", objetivo: "integrar literatura e artes visuais." },
-  { numero: 94, titulo: "Objeto Transformado", descricao: "Cada aluno redesenha um objeto em três versões: engraçada, futurista e monstruosa.", objetivo: "estimular reinvenção e variação criativa." },
-  { numero: 95, titulo: "Máscara da Personalidade", descricao: "Os alunos criam máscaras que representem como eles se veem.", objetivo: "autoconhecimento, criatividade e expressão simbólica." },
-  { numero: 96, titulo: "Escultura de Papel Alumínio", descricao: "Cada aluno cria uma escultura rápida usando papel alumínio.", objetivo: "estimular improviso e criatividade tridimensional." },
-  { numero: 97, titulo: "Retrato em Estilo Livre", descricao: "Cada aluno desenha um colega em qualquer estilo artístico (mangá, cubismo, caricatura).", objetivo: "explorar diversidade de estilos e identidade artística." },
-  { numero: 98, titulo: "Obra com Recicláveis", descricao: "Em grupos, os alunos recebem materiais recicláveis para construir uma obra coletiva.", objetivo: "incentivar sustentabilidade e trabalho colaborativo." },
-  { numero: 99, titulo: "Arte em Camadas", descricao: "Cada aluno cria uma camada transparente. No final, sobrepõem as camadas.", objetivo: "explorar composição visual e cooperação." },
-  { numero: 100, titulo: "Retrato Rápido em Série", descricao: "Cada aluno tem 1 minuto para desenhar o colega. Trocam de posição e repetem.", objetivo: "desenvolver agilidade e espontaneidade no traço." },
-  { numero: 101, titulo: "Paisagem Sonhada", descricao: "Os alunos devem desenhar uma paisagem que já sonharam.", objetivo: "estimular imaginação e memória subjetiva." },
-  { numero: 102, titulo: "História em Cartaz", descricao: "Em grupos, os alunos criam cartazes como se fossem pôsteres de filmes inventados.", objetivo: "integrar narrativa, design gráfico e criatividade." },
-  { numero: 103, titulo: "Pintura com Água", descricao: "Usando pincéis molhados em papel craft, criam imagens que vão desaparecendo.", objetivo: "trabalhar desapego, efemeridade e processo criativo." },
-  { numero: 104, titulo: "Retrato Trocado de Estilo", descricao: "Cada dupla troca estilos: um faz um retrato realista, o outro faz abstrato.", objetivo: "comparar interpretações diferentes de um mesmo tema." },
-  { numero: 105, titulo: "Círculo das Palavras", descricao: "O professor fala uma palavra. Cada aluno desenha uma associação e depois compartilham.", objetivo: "estimular diversidade de pensamento e simbologia visual." },
-  { numero: 106, titulo: "Retrato com Linhas Coloridas", descricao: "Em vez de pintar, criam retratos apenas usando linhas coloridas.", objetivo: "estimular simplicidade e experimentação gráfica." },
-  { numero: 107, titulo: "Arte com Bolhas de Sabão", descricao: "Misturar tinta com sabão e soprar bolhas sobre o papel para formar padrões.", objetivo: "explorar texturas inesperadas e técnicas lúdicas." },
-  { numero: 108, titulo: "Cenas Incompletas", descricao: "O professor entrega desenhos começados. Os alunos devem completar de forma criativa.", objetivo: "trabalhar imaginação e interpretação pessoal." },
-  { numero: 109, titulo: "Retrato Espelhado em Dupla", descricao: "Um aluno se olha no espelho e descreve. O colega desenha apenas ouvindo.", objetivo: "exercitar comunicação e interpretação artística." },
-  { numero: 110, titulo: "Painel da Diversidade", descricao: "Cada aluno cria uma arte representando algo que valoriza em si e formam um painel.", objetivo: "promover autoestima, diversidade e colaboração." },
-  { numero: 111, titulo: "Arte com Sombras de Objetos", descricao: "Posicionar objetos na luz, contornar a sombra e transformar em desenho.", objetivo: "trabalhar observação e criatividade a partir de formas." },
-  { numero: 112, titulo: "Escultura de Papel Amassado", descricao: "Amassar uma folha e transformar o formato em mini-escultura.", objetivo: "estimular improviso e olhar criativo sobre formas simples." },
-  { numero: 113, titulo: "Cartão Criativo", descricao: "Os alunos produzem cartões artísticos para dar a alguém especial.", objetivo: "incentivar expressão afetiva através da arte." },
-  { numero: 114, titulo: "Teatro Ilustrado", descricao: "Em grupos, uns inventam uma cena teatral e outros ilustram a cena em cartazes.", objetivo: "integrar artes visuais e artes cênicas." },
-  { numero: 115, titulo: "Arte com Carvão ou Giz", descricao: "Criar desenhos usando carvão ou giz colorido, esfumando para sombras.", objetivo: "experimentar técnicas artísticas clássicas de desenho." },
-  { numero: 116, titulo: "Retrato de Olhos Vendados", descricao: "Em duplas, um aluno posa e o outro desenha vendado. Depois comparam.", objetivo: "estimular humor, improviso e desapego à perfeição." },
-  { numero: 117, titulo: "Mural dos Sonhos", descricao: "Cada aluno desenha um sonho que deseja realizar e formam um mural.", objetivo: "promover motivação, expressão pessoal e integração." },
-  { numero: 118, titulo: "Pintura com Escovas de Dente", descricao: "Usar escovas de dente com tinta para criar respingos e efeitos de spray.", objetivo: "explorar novas técnicas e texturas criativas." },
-  { numero: 119, titulo: "Cena Congelada em Quadrinhos", descricao: "Criar uma pequena cena teatral congelando em 3 momentos, desenhados como HQ.", objetivo: "unir teatro e artes visuais em uma narrativa híbrida." },
-  { numero: 120, titulo: "Arte com Recortes Geométricos", descricao: "Montar uma obra apenas com triângulos, quadrados e círculos coloridos.", objetivo: "estimular composição visual e criatividade com limitações." },
-  { numero: 121, titulo: "Retrato Monocromático", descricao: "Cada aluno desenha usando apenas uma cor e suas variações de tonalidade.", objetivo: "trabalhar noção de matizes e harmonia cromática." },
-  { numero: 122, titulo: "Objeto Invertido", descricao: "Redesenhar um objeto de ponta cabeça, reinventando seu uso.", objetivo: "estimular pensamento fora da caixa e inovação criativa." },
-  { numero: 123, titulo: "Colagem do Cotidiano", descricao: "Recortar imagens de revistas que representem o dia a dia.", objetivo: "promover reflexão sobre rotina e identidade cultural." },
-  { numero: 124, titulo: "Pintura com Paleta Limitada", descricao: "Pintar uma obra usando apenas 3 cores escolhidas pelo professor.", objetivo: "desafiar a criatividade dentro de restrições." },
-  { numero: 125, titulo: "Retrato em Estilo Cartum", descricao: "Desenhar colegas como se fossem personagens de desenho animado.", objetivo: "estimular humor, caricatura e simplificação artística." },
-  { numero: 126, titulo: "Desenho em Movimento", descricao: "Desenhar sem parar enquanto a música toca e interromper quando pausa.", objetivo: "estimular ritmo, improviso e foco." },
-  { numero: 127, titulo: "Retrato com Objetos", descricao: "Montar retratos usando objetos pequenos em vez de desenhar rostos.", objetivo: "desenvolver composição criativa e visão não convencional." },
-  { numero: 128, titulo: "Pintura Espelhada", descricao: "Dobrar uma folha ao meio, pintar em um lado e fechar para formar imagem simétrica.", objetivo: "explorar simetria e efeitos visuais espontâneos." },
-  { numero: 129, titulo: "Colagem Abstrata Musical", descricao: "Ouvir uma música e criar colagens apenas com formas, sem imagens figurativas.", objetivo: "trabalhar expressão abstrata guiada por sons." },
-  { numero: 130, titulo: "Teatro da Natureza", descricao: "Montar pequenas encenações usando elementos naturais (galhos, folhas).", objetivo: "integrar teatro e natureza na criação artística." },
-  { numero: 131, titulo: "Arte com Luz Colorida", descricao: "Projetar luzes sobre desenhos usando lanternas com papéis celofane coloridos.", objetivo: "explorar efeitos visuais e relação entre cor e iluminação." },
-  { numero: 132, titulo: "Personagem de Fantasia", descricao: "Inventar um personagem fantástico, desenhar, dar nome e poderes.", objetivo: "estimular criatividade, design de personagens e narrativa." },
-  { numero: 133, titulo: "Retrato Fragmentado", descricao: "Dividir o rosto em partes desenhadas em estilos diferentes (realista, caricata).", objetivo: "trabalhar variações estilísticas dentro de um mesmo tema." },
-  { numero: 134, titulo: "Pintura com Rolo de Papel", descricao: "Carimbar círculos e padrões usando rolos de papel higiênico.", objetivo: "explorar repetição e criatividade com materiais simples." },
-  { numero: 135, titulo: "Mural dos Sentimentos", descricao: "Desenhar como está se sentindo no dia para formar um mural da turma.", objetivo: "promover empatia, integração e expressão emocional." },
-  { numero: 136, titulo: "Escultura Humana Coletiva", descricao: "Posicionar-se como uma escultura viva para a turma observar e desenhar a cena.", objetivo: "unir teatro e artes visuais, estimulando observação." },
-  { numero: 137, titulo: "Retrato com Emojis", descricao: "Desenhar um colega como se fosse um emoji.", objetivo: "aproximar arte do universo digital e estimular humor criativo." },
-  { numero: 138, titulo: "Arte com Palitos de Sorvete", descricao: "Construir pequenas esculturas ou mosaicos com palitos e tintas.", objetivo: "desenvolver coordenação e design estrutural." },
-  { numero: 139, titulo: "Pintura Invertida", descricao: "Pintar de ponta-cabeça, virando o papel ou tela.", objetivo: "estimular percepção espacial e desafio criativo." },
-  { numero: 140, titulo: "História com Máscaras", descricao: "Criar máscaras rápidas e encenar uma pequena história em grupos.", objetivo: "integrar artes visuais e teatro." },
-  { numero: 141, titulo: "Cartaz de Super-Herói", descricao: "Inventar um super-herói inspirado em si e criar um cartaz.", objetivo: "estimular identidade, imaginação e design criativo." },
-  { numero: 142, titulo: "Obra com Giz no Pátio", descricao: "Criar desenhos grandes no chão do pátio usando giz colorido.", objetivo: "explorar arte em grandes formatos e espaços alternativos." },
-  { numero: 143, titulo: "Arte com Sal e Cola", descricao: "Desenhar com cola, jogar sal e pintar com aquarela para criar efeitos.", objetivo: "trabalhar experimentação de técnicas mistas." },
-  { numero: 144, titulo: "Livro Ilustrado Coletivo", descricao: "Criar um livro onde cada aluno ilustra uma página da história.", objetivo: "estimular narrativa conjunta e autoria coletiva." },
-  { numero: 145, titulo: "Mural da Gratidão", descricao: "Desenhar algo pelo qual é grato para um mural da turma.", objetivo: "promover valores positivos, integração e reflexão." },
-  { numero: 146, titulo: "Retrato em Movimento", descricao: "O modelo se move lentamente enquanto o aluno desenha a postura.", objetivo: "estimular observação de movimento e síntese visual." },
-  { numero: 147, titulo: "Arte com Cordas", descricao: "Criar padrões no papel usando cordas embebidas em tinta.", objetivo: "explorar linhas orgânicas e experimentação." },
-  { numero: 148, titulo: "Obra Efêmera", descricao: "Criar desenhos com areia, gelo ou materiais que podem ser desfeitos.", objetivo: "refletir sobre o processo e o desapego." },
-  { numero: 149, titulo: "Retrato de Memória em Grupo", descricao: "Observar um colega por 1 minuto e tentar desenhá-lo de memória em grupo.", objetivo: "trabalhar memória coletiva e colaboração." },
-  { numero: 150, titulo: "Gratidão em Cores", descricao: "Expressar gratidão através de cores e formas em um mural.", objetivo: "encerrar o ano com reflexão positiva e união da turma." }
-];
+  { numero: 1, titulo: "Desenho às Cegas", descricao: "Fechem os olhos e tentem desenhar um objeto simples (copo, casa, flor). Depois comparem os resultados com quem fez o desafio com você." },
+  { numero: 2, titulo: "Cores Musicais", descricao: "Ouça músicas diferentes (alegre, triste, calma, agitada). Desenhe e pinte o que sentir em cada música." },
+  { numero: 3, titulo: "Retrato Maluco", descricao: "Em dupla: observe as características da pessoa e desenhe de forma divertida ou fantástica. No final, comparem os desenhos." },
+  { numero: 4, titulo: "Escultura com Material Reciclado", descricao: "Use papéis, garrafas, caixas ou sucata. Crie esculturas criativas em 20 minutos." },
+  { numero: 5, titulo: "Pintura com Objetos Inusitados", descricao: "Em vez de pincéis, use cotonetes, esponjas, folhas ou até tampas de garrafa. Crie uma pintura colaborativa com outras pessoas." },
+  { numero: 6, titulo: "Desenho de Memória", descricao: "Olhe rapidamente uma imagem (um objeto, quadro famoso ou cena simples) por 15 segundos. Depois desenhe o que lembrar" },
+  { numero: 7, titulo: "Arte com dobraduras", descricao: "Faça uma dobradura simples (avião, barco, chapéu) e depois personalize com desenho ou pintura." },
+  { numero: 8, titulo: "Linha contínua", descricao: "Desenhe sem levantar o lápis do papel, criando a imagem com uma única linha." },
+  { numero: 9, titulo: "Pintura com as mãos", descricao: "Em vez de pincéis, use apenas as mãos e dedos para criar uma obra." },
+  { numero: 10, titulo: "Escultura humana", descricao: "Posicione-se como uma escultura viva para que alguém observe e desenhe a cena." },
+  { numero: 11, titulo: "Jogo das emoções em cores", descricao: "Pense em uma emoção (alegria, tristeza, raiva, calma) e a represente apenas com cores e formas abstratas." },
+  { numero: 12, titulo: "Teatro da natureza", descricao: "Montar pequenas encenações usando elementos naturais (galhos, folhas)" },
+  { numero: 13, titulo: "Personagem de fantasia", descricao: "Invente um personagem fantástico, desenhe, dê nome e poderes." },
+  { numero: 14, titulo: "Retrato estilo cartum", descricao: "Desenhe uma pessoa como se ela fosse personagem de desenho animado." },
+  { numero: 15, titulo: "Arte com recortes geométricos", descricao: "Monte uma obra apenas com triângulos, quadrados e círculos coloridos." },
+  { numero: 16, titulo: "Teatro ilustrado", descricao: "Em grupo de amigos ou amigas, uns inventam uma cena teatral e outros ilustram a cena em cartazes." },
+  { numero: 17, titulo: "Escultura de papel amassado", descricao: "Em grupo de amigos ou amigas, uns inventam uma cena teatral e outros ilustram a cena em cartazes." },
+  { numero: 18, titulo: "Cartão criativo", descricao: "Faça um cartão artístico, com uma mensagem para dar a alguém especial." },
+  { numero: 19, titulo: "Máscara da personalidade", descricao: "Crie uma máscara de papel ou papelão que represente como você se vê." },
+  { numero: 20, titulo: "Arte com pontilhismo", descricao: "Crie uma imagem apenas com pontos coloridos,use lápis de cor ou canetinha." },
+  { numero: 21, titulo: "Pintura de emojis", descricao: "Escolha um emoji e recrie em versão artística, com tinta, lápis ou colagem." },
+  { numero: 22, titulo: "Mapa da imaginação", descricao: "Desenhe um mapa inventado: uma cidade mágica, uma ilha fantástica, um reino flutuante e seus personagens que os habitam." },
+  { numero: 23, titulo: "Cenas com objetos aleatórios", descricao: "Você é um ator, uma atriz! Escolha um objeto e faça uma cena sobre  tristeza, alegria, amor, ou saudade." },
+  { numero: 24, titulo: "História em 3 cenas", descricao: "Crie uma pequena sequência de 3 quadros que contem uma história curta!." },
+  { numero: 25, titulo: "Arte com música ao vivo", descricao: "Enquanto uma música toca, desenhe ou pinte sem parar, deixando o ritmo guiar a obra." },
+  { numero: 26, titulo: "Ritmo das cores", descricao: "Dance rápido com a cor vermelha. Pule com o amarelo. Rode com o verde. Dance lento com o azul. Faça cartões com as cores e sorteie seu ritmo!." },
+  { numero: 27, titulo: "Dança do objeto invisível", descricao: "Dance imaginando que segura um objeto que o seu companheiro vai inventar: uma caixa pesada, um balão, uma pena, imaginem o que quiser leve e pesado!." },
+  { numero: 28, titulo: "Movimento que cresce", descricao: "Comece a dançar mexendo um dedo, agora a mão, depois o braço e por último o corpo todo." },
+  { numero: 29, titulo: "Pintar o ar", descricao: "Dançando desenhe um círculo grande com o corpo, depois uma linha reta, por último uma estrela." },
+  { numero: 30, titulo: "Missão de dança", descricao: "Missão 1, sobreviva na selva dançando. Missão 2: fuja do vulcão. Missão 3: explore o espaço sideral." },
+  ];
 
 function renderDesafios() {
     const buscaInput = document.getElementById('buscaDesafio');
     const grid = document.getElementById('desafiosGrid');
     if (!grid) return;
+
     const busca = buscaInput ? buscaInput.value.toLowerCase() : '';
     const filtrados = desafios.filter(d => d.titulo.toLowerCase().includes(busca));
 
@@ -1056,10 +926,11 @@ function renderDesafios() {
         <div class="desafio-card">
             <h3>${d.titulo}</h3>
             <p>${d.descricao}</p>
-            <button onclick="falarComoPersonagem('${d.descricao}')">Ouvir 🔊</button>
+            <!-- O botão agora toca o arquivo MP3 definido no objeto do desafio -->
+            <button onclick="tocarAudio('${d.audio}')">Ouvir Desafio 🔊</button>
         </div>
     `).join('');
-} //
+}
 
 function desafioAleatorio() {
     if (typeof desafios === 'undefined') return;
@@ -1412,58 +1283,47 @@ const conhecimento =[
   { palavras:['adriana varejão', 'varejão', 'quem é adriana varejão'], resposta: 'Adriana Varejão é uma artista brasileira contemporânea. 🏛️ Ela mistura história e imaginação em suas obras. O que ela ensina: arte também faz pensar.' },
   { palavras:['arthur bispo do rosário', 'bispo', 'quem foi arthur bispo do rosário'], resposta: 'Arthur Bispo do Rosário foi um artista brasileiro de arte singular. 🧵 Ele criava arte com objetos do dia a dia, como tecidos e linhas. O que ele ensina: tudo pode virar arte.' },
 
-  // ===== RESPOSTA PADRÃO =====
-  { palavras:[], resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé), música ou teatro. Ou me conte como você está se sentindo! Vamos tentar de novo? 😊' }
+ // ========== CONFIGURAÇÃO DO PINCEL (BASE DE DADOS) ==========
+// Importante: Adicionei a propriedade 'audio' em cada item
+const conhecimento = [
+  { 
+    palavras: ['tarsila', 'abaporu'], 
+    resposta: 'Tarsila do Amaral pintou o Abaporu! É uma das obras mais famosas do Brasil.', 
+    audio: 'tarsila_abaporu' 
+  },
+  { 
+    palavras: ['portinari', 'candido'], 
+    resposta: 'Portinari adorava pintar as crianças e o povo brasileiro.', 
+    audio: 'portinari_info' 
+  },
+  { 
+    palavras: ['van gogh', 'girassois'], 
+    resposta: 'Van Gogh amava cores vibrantes, como o amarelo dos seus girassóis.', 
+    audio: 'vangogh_info' 
+  },
+  // RESPOSTA PADRÃO (Quando ele não entende)
+  { 
+    palavras: [], 
+    resposta: 'Que pergunta legal! Ainda não sei essa, mas tente perguntar sobre Tarsila, Portinari ou Van Gogh!', 
+    audio: 'resposta_padrao' 
+  }
 ];
 
-let palavrasBloqueadas =['violência', 'guerra', 'tiro', 'sangue', 'briga', 'morte'];
-let historicoPerguntas =[];
+let palavrasBloqueadas = ['violência', 'guerra', 'tiro', 'sangue', 'briga', 'morte'];
 
-function removerAcentos(str) {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
+// ========== LÓGICA DO CHAT ==========
 
-function responderCuriosidade(perguntaNormalizada) {
-  if (perguntaNormalizada.includes('desenho') || perguntaNormalizada.includes('pintura') || perguntaNormalizada.includes('pintar')) {
-    return "🎨 " + curiosidadesDesenho[Math.floor(Math.random() * curiosidadesDesenho.length)];
-  }
-  if (perguntaNormalizada.includes('escultura') || perguntaNormalizada.includes('estátua') || perguntaNormalizada.includes('esculpir')) {
-    return "🗿 " + curiosidadesEscultura[Math.floor(Math.random() * curiosidadesEscultura.length)];
-  }
-  if (perguntaNormalizada.includes('dança') || perguntaNormalizada.includes('danca') || perguntaNormalizada.includes('bailar')) {
-    return "💃 " + curiosidadesDanca[Math.floor(Math.random() * curiosidadesDanca.length)];
-  }
-  if (perguntaNormalizada.includes('teatro') || perguntaNormalizada.includes('peça') || perguntaNormalizada.includes('shakespeare')) {
-    return "🎭 " + curiosidadesTeatro[Math.floor(Math.random() * curiosidadesTeatro.length)];
-  }
-  
-  const todas =[
-    ...curiosidadesDesenho.map(c => "🎨 " + c),
-    ...curiosidadesEscultura.map(c => "🗿 " + c),
-    ...curiosidadesDanca.map(c => "💃 " + c),
-    ...curiosidadesTeatro.map(c => "🎭 " + c),
-    ...curiosidadesArteGeral.map(c => "✨ " + c),
-    "🎵 Música é som organizado com ritmo, melodia e emoção. Toda criança pode brincar, criar e aprender música com o corpo, a voz e a imaginação.",
-    "🎵 Ludwig van Beethoven continuou compondo mesmo depois de perder a audição.",
-    "🎵 Wolfgang Amadeus Mozart começou a compor ainda criança.",
-    "🎵 No samba, o ritmo é criado por instrumentos de percussão tocados em conjunto.",
-    "🎵 Heitor Villa-Lobos misturava sons da floresta brasileira com música clássica.",
-    "🎵 Instrumentos podem ser feitos com latas e garrafas, como mostram muitos projetos de música experimental."
-  ];
-  return todas[Math.floor(Math.random() * todas.length)];
-}
-
-function adicionarMensagem(tipo, texto) {
+function adicionarMensagem(tipo, texto, audioParaRepetir = null) {
   const chat = document.getElementById('chatArea');
   const div = document.createElement('div');
   div.className = `mensagem ${tipo}`;
   
   if (tipo === 'resposta') {
-    const textoEscapado = texto.replace(/'/g, "\\'");
+    // O botão de "Ouvir" agora toca o MP3 específico daquela resposta
     div.innerHTML = `
       <span>
         ${texto}
-        <button class="botao-audio" onclick="lerTexto('${textoEscapado}')">
+        <button class="botao-audio" onclick="tocarAudio('${audioParaRepetir}')">
           <i class="fas fa-volume-up"></i>
         </button>
       </span>`;
@@ -1475,119 +1335,75 @@ function adicionarMensagem(tipo, texto) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-
-// 🗣️ LEITURA DINÂMICA (ESSENCIAL)
-function lerTexto(texto) {
-  const synth = window.speechSynthesis;
-
-  const utterance = new SpeechSynthesisUtterance(texto);
-  utterance.lang = 'pt-BR';
-  utterance.rate = 0.9;
-  utterance.pitch = 1.1;
-
-  synth.cancel();
-  synth.speak(utterance);
-}
-
-
-function fazerPergunta(pergunta) {
-  document.getElementById('perguntaInput').value = pergunta;
-  enviarPergunta();
-}
-
 function enviarPergunta() {
   const input = document.getElementById('perguntaInput');
   const pergunta = input.value.trim();
   if (pergunta === '') return;
 
   const perguntaLower = pergunta.toLowerCase();
+  const perguntaNormalizada = removerAcentos(perguntaLower);
+
+  // Verificação de bloqueio
   for (let palavra of palavrasBloqueadas) {
     if (perguntaLower.includes(palavra)) {
       adicionarMensagem('pergunta', pergunta);
-      adicionarMensagem('resposta', 'Ops! Essa pergunta não posso responder. Que tal perguntar sobre arte, desenho ou música? 🖌️');
+      adicionarMensagem('resposta', 'Ops! Essa pergunta não posso responder. Vamos falar de arte?', 'bloqueado');
+      tocarAudio('bloqueado');
       input.value = '';
-      historicoPerguntas.push({ pergunta, resposta: 'bloqueada', data: new Date() });
       return;
     }
   }
 
   adicionarMensagem('pergunta', pergunta);
-  historicoPerguntas.push({ pergunta, data: new Date() });
-
   const pincelFala = document.getElementById('pincelFala');
   pincelFala.innerText = 'Deixa eu pensar... 🤔';
 
   setTimeout(() => {
-    const perguntaNormalizada = removerAcentos(perguntaLower);
-    let respostaEncontrada = null;
+    let itemEncontrado = null;
 
-    const palavrasCuriosidade = [
-      'curiosidade', 'curiosidades', 'me conte alguma coisa',
-      'me conta alguma novidade', 'fale sobre', 'conta algo',
-      'me diga algo', 'me fala uma'
-    ];
-
-    if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
-      respostaEncontrada = responderCuriosidade(perguntaNormalizada);
-    } else {
-      for (let item of conhecimento) {
+    // Busca nas palavras-chave
+    for (let item of conhecimento) {
+      if (item.palavras.length > 0) {
         for (let palavra of item.palavras) {
-          const palavraNormalizada = removerAcentos(palavra.toLowerCase());
-          if (perguntaNormalizada.includes(palavraNormalizada)) {
-            respostaEncontrada = item.resposta;
+          if (perguntaNormalizada.includes(removerAcentos(palavra))) {
+            itemEncontrado = item;
             break;
           }
         }
-        if (respostaEncontrada) break;
       }
+      if (itemEncontrado) break;
     }
 
-    if (!respostaEncontrada) {
-      respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
+    // Se não achar, usa a resposta padrão (último item do array sem palavras)
+    if (!itemEncontrado) {
+      itemEncontrado = conhecimento.find(item => item.palavras.length === 0);
     }
 
-    if (typeof respostaEncontrada === 'function') {
-      respostaEncontrada = respostaEncontrada();
-    }
-
-    pincelFala.innerText = respostaEncontrada;
-    adicionarMensagem('resposta', respostaEncontrada);
-
-    // 🗣️ AGORA FUNCIONA SEMPRE
-    lerTexto(respostaEncontrada);
-
-    historicoPerguntas[historicoPerguntas.length - 1].resposta = respostaEncontrada;
+    pincelFala.innerText = itemEncontrado.resposta;
+    adicionarMensagem('resposta', itemEncontrado.resposta, itemEncontrado.audio);
+    
+    // Toca o MP3 da resposta encontrada
+    tocarAudio(itemEncontrado.audio);
   }, 800);
 
   input.value = '';
 }
 
-
-function limparHistorico() {
-  document.getElementById('chatArea').innerHTML = '';
-  adicionarMensagem('resposta', 'Histórico limpo! Pode fazer novas perguntas.');
-  historicoPerguntas = [];
-}
-
-function bloquearPalavra() {
-  const palavra = prompt('Digite a palavra que deseja bloquear:');
-  if (palavra && palavra.trim() !== '') {
-    palavrasBloqueadas.push(palavra.trim().toLowerCase());
-    alert(`Palavra "${palavra}" bloqueada!`);
-  }
+// Funções auxiliares mantidas
+function removerAcentos(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 function iniciarPincel() {
   const chat = document.getElementById('chatArea');
-  if (chat.children.length === 0) {
+  if (chat && chat.children.length === 0) {
     const msg = 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre arte!';
-    adicionarMensagem('resposta', msg);
-
-    // 🔊 entrada com MP3 (fixo)
-    falarComoPersonagem(msg, "pincel-novo");
+    adicionarMensagem('resposta', msg, 'pincel-novo');
+    tocarAudio('pincel-novo');
   }
 }
 
+// Evento de Enter
 document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
