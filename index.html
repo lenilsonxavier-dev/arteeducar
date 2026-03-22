@@ -346,15 +346,17 @@
 </head>
 <body>
 
-  <div id="splash">
-  <video id="splash-video" playsinline webkit-playsinline preload="auto">
+ <div id="splash" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff9e6; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease;">
+  
+  <video id="splash-video" playsinline webkit-playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
     <source src="abertura.mp4" type="video/mp4">
   </video>
   
-  <div id="splash-fallback" style="display: flex; z-index: 20; flex-direction: column; align-items: center; gap: 20px;">
-    <div class="splash-icon" id="icone-paleta">🎨</div>
-    <div id="status-carregamento">Preparando as tintas...</div>
-    <button id="start-btn" style="padding: 15px 30px; font-size: 1.5rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 5px 0 #b38f00;">
+  <div id="splash-fallback" style="display: flex; z-index: 1001; flex-direction: column; align-items: center; gap: 20px; position: relative;">
+    <div class="splash-icon" id="icone-paleta" style="font-size: 5rem;">🎨</div>
+    <div id="status-carregamento" style="font-family: 'Comic Sans MS'; color: #001858; font-weight: bold;">Preparando as tintas...</div>
+    
+    <button id="start-btn" style="padding: 15px 40px; font-size: 1.8rem; background: #ffcc00; color: #001858; border: none; border-radius: 50px; cursor: pointer; font-family: 'Comic Sans MS'; box-shadow: 0 6px 0 #b38f00; font-weight: bold; transition: transform 0.2s;">
        Entrar no Ateliê! 🖌️
     </button>
   </div>
@@ -528,39 +530,42 @@
 </div>
 
 <script>
-// ========== LÓGICA DE ABERTURA COM FALLBACK ==========
+// ========== FUNÇÃO PARA TROCAR DE TELA ==========
 function show(id) {
-  // Esconde todas as seções que têm a classe 'screen' ou 'tela'
+  console.log("Tentando mostrar a tela: " + id);
   const telas = document.querySelectorAll('.screen, .tela');
   telas.forEach(t => t.style.display = 'none');
   
-  // Mostra apenas a tela desejada
   const destino = document.getElementById(id);
   if (destino) {
     destino.style.display = 'block';
   } else {
-    console.error("A tela com id '" + id + "' não foi encontrada!");
+    console.error("ERRO: A tela com id '" + id + "' não existe no seu HTML!");
   }
 }
-
-(function() {
+// ========== LÓGICA DE ENTRADA DO APP ==========
+window.addEventListener('load', function() {
   const startBtn = document.getElementById('start-btn');
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
+  const fallback = document.getElementById('splash-fallback');
 
   if (startBtn) {
     startBtn.onclick = function() {
-      console.log("Botão de entrada clicado!");
+      console.log("Clique no botão 'Entrar' detectado!");
       
-      // Tenta tocar o vídeo. Se falhar (ou não existir), abre o app direto.
-      if (video) {
+      // Esconde o ícone e o botão para o vídeo aparecer (se carregar)
+      if (fallback) fallback.style.display = 'none';
+
+      // Tenta rodar o vídeo
+      if (video && video.readyState >= 1) {
         video.play().then(() => {
-           console.log("Vídeo rodando...");
+          console.log("Vídeo de abertura rodando...");
+          video.onended = abrirApp;
         }).catch(err => {
-           console.warn("Vídeo falhou, pulando...");
-           abrirApp();
+          console.warn("Vídeo bloqueado ou não encontrado. Pulando...");
+          abrirApp();
         });
-        video.onended = abrirApp;
       } else {
         abrirApp();
       }
@@ -568,15 +573,17 @@ function show(id) {
   }
 
   function abrirApp() {
+    console.log("Abrindo o Ateliê principal...");
     if (splash) {
       splash.style.opacity = '0';
       setTimeout(() => {
         splash.style.display = 'none';
-        show('home'); // Isso precisa da função que te mandei acima!
+        show('home'); // Certifique-se de que sua tela principal tem id="home"
       }, 800);
     }
   }
-})();
+});
+</script>
 // ========== FUNÇÕES GLOBAIS ==========
 function show(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
