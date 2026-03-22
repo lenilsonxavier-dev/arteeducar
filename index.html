@@ -2856,17 +2856,29 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
 
-// ========== INICIALIZAÇÃO ==========
+// ========== INICIALIZAÇÃO UNIFICADA (Splash + Funções) ==========
 window.onload = function() {
-  criarPaletaCores();
-  configurarBotoesDesenho();
-  configurarCanvasEvents();
-  mostrarListaDesenhos();
-  setCor('#ff4d4d');
-  atualizarTamanhoExibido();
-  renderDesafios();
-};
+    // 1. Lógica do Botão Entrar (Splash)
+    const btn = document.getElementById('start-btn');
+    const splash = document.getElementById('splash');
+    
+    if (btn) {
+        btn.onclick = function() {
+            console.log("Botão clicado com sucesso!");
+            if (splash) splash.style.display = 'none';
+            show('home'); // Abre o menu principal
+        };
+    }
 
+    // 2. Carregamento das funções do Ateliê
+    if (typeof criarPaletaCores === "function") criarPaletaCores();
+    if (typeof configurarBotoesDesenho === "function") configurarBotoesDesenho();
+    if (typeof configurarCanvasEvents === "function") configurarCanvasEvents();
+    if (typeof mostrarListaDesenhos === "function") mostrarListaDesenhos();
+    if (typeof setCor === "function") setCor('#ff4d4d');
+    if (typeof atualizarTamanhoExibido === "function") atualizarTamanhoExibido();
+    if (typeof renderDesafios === "function") renderDesafios();
+};
 // Função para esconder tudo (inclusive a barra de status/relógio)
 function entrarEmModoImersivo() {
   const docElm = document.documentElement;
