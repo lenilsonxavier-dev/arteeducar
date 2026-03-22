@@ -461,7 +461,7 @@
             src="https://padlet.com/embed/lvlhw1rjc22sd338" 
             style="width:100%; height:100%; border:none;"
             allow="camera; microphone; geolocation; clipboard-write; fullscreen"
-            allowfullscreen>
+            allow="fullscreen"
         </iframe>
     </div>
 </div>
@@ -524,7 +524,6 @@
   <button onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
 </div>
 
-<script>
 <script>
 
 // ========== LÓGICA DE ABERTURA COM FALLBACK ==========
@@ -1073,7 +1072,6 @@ function renderDesafios() {
 
         </div>
     `).join('');
-}
 }
 
      if (filtrados.length === 0) {
