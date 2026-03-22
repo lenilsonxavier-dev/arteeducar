@@ -2855,82 +2855,67 @@ function iniciarPincel() {
 document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarPergunta();
 });
+// ========== FUNÇÃO DE NAVEGAÇÃO (OBRIGATÓRIA) ==========
+function show(id) {
+    console.log("Chamando tela: " + id);
+    const telas = document.querySelectorAll('.screen, .menu, .tela');
+    telas.forEach(t => t.style.display = 'none');
+    const destino = document.getElementById(id);
+    if (destino) {
+        destino.style.display = 'block';
+    } else {
+        alert("Erro: A tela '" + id + "' não foi encontrada no HTML!");
+    }
+}
 
-// ========== INICIALIZAÇÃO UNIFICADA (Splash + Funções) ==========
+// ========== INICIALIZAÇÃO TUDO-EM-UM ==========
 window.onload = function() {
-    // 1. Lógica do Botão Entrar (Splash)
+    console.log("App carregado. Pronto para entrar.");
+    
     const btn = document.getElementById('start-btn');
     const splash = document.getElementById('splash');
     
     if (btn) {
         btn.onclick = function() {
-            console.log("Botão clicado com sucesso!");
-            if (splash) splash.style.display = 'none';
-            show('home'); // Abre o menu principal
+            console.log("Clique detectado!");
+            // Esconde o Splash na força bruta
+            if (splash) {
+                splash.style.display = 'none';
+                splash.style.opacity = '0';
+            }
+            show('home'); // Tenta mostrar o menu
+            
+            // Tenta o modo imersivo mas não trava se falhar
+            try { entrarEmModoImersivo(); } catch(e) {}
         };
     }
 
-    // 2. Carregamento das funções do Ateliê
-    if (typeof criarPaletaCores === "function") criarPaletaCores();
-    if (typeof configurarBotoesDesenho === "function") configurarBotoesDesenho();
-    if (typeof configurarCanvasEvents === "function") configurarCanvasEvents();
-    if (typeof mostrarListaDesenhos === "function") mostrarListaDesenhos();
-    if (typeof setCor === "function") setCor('#ff4d4d');
-    if (typeof atualizarTamanhoExibido === "function") atualizarTamanhoExibido();
-    if (typeof renderDesafios === "function") renderDesafios();
+    // Carrega funções de arte se existirem
+    try {
+        if (typeof criarPaletaCores === "function") criarPaletaCores();
+        if (typeof configurarBotoesDesenho === "function") configurarBotoesDesenho();
+        if (typeof configurarCanvasEvents === "function") configurarCanvasEvents();
+        if (typeof mostrarListaDesenhos === "function") mostrarListaDesenhos();
+        if (typeof setCor === "function") setCor('#ff4d4d');
+    } catch(err) {
+        console.warn("Algumas funções de arte falharam ao carregar (provavelmente offline).");
+    }
 };
-// Função para esconder tudo (inclusive a barra de status/relógio)
-function entrarEmModoImersivo() {
-  const docElm = document.documentElement;
-  if (docElm.requestFullscreen) {
-    docElm.requestFullscreen();
-  } else if (docElm.webkitRequestFullscreen) { // Safari/Chrome Antigo
-    docElm.webkitRequestFullscreen();
-  }
-}
 
-// Quando o usuário tocar em "Entrar" ou clicar em qualquer lugar 
-// para fechar o Splash, o fullscreen ativa.
-document.addEventListener('click', function() {
-  entrarEmModoImersivo();
-}, { once: true }); // Executa apenas uma vez para não dar erro
+function entrarEmModoImersivo() {
+    const doc = document.documentElement;
+    if (doc.requestFullscreen) doc.requestFullscreen().catch(()=>{});
+}
 
 function fecharApp() {
-    Swal.fire({
-        title: 'Sair do Ateliê? 🎨',
-        text: "Espero que tenha se divertido! Até logo!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ff6b6b',
-        cancelButtonColor: '#ffcc00',
-        confirmButtonText: 'Sair agora',
-        cancelButtonText: 'Continuar pintando',
-        background: '#fff9e6',
-        borderRadius: '20px'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // 1. Tenta o comando padrão de APKs (Cordova/PhoneGap/Web2APK)
-            if (navigator.app && navigator.app.exitApp) {
-                navigator.app.exitApp();
-            } 
-            // 2. Tenta o comando para outros tipos de containers
-            else if (navigator.device && navigator.device.exitApp) {
-                navigator.device.exitApp();
-            } 
-            // 3. Tenta fechar a janela (comum em alguns WebViews)
-            else {
-                window.close();
-                // Se tudo falhar (porque o Android bloqueou), 
-                // ele volta para o Splash para não ficar travado.
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
-            }
-        }
-    });
+    if (typeof Swal !== "undefined") {
+        Swal.fire({ title: 'Sair?', text: "Deseja sair?", icon: 'warning', showCancelButton: true, confirmButtonText: 'Sair' })
+        .then(r => { if(r.isConfirmed) window.close(); });
+    } else {
+        if(confirm("Deseja sair?")) window.close();
+    }
 }
 </script>
-
 <!-- 🎧 PLAYER GLOBAL -->
 <audio id="player"></audio>
 
