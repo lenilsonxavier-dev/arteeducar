@@ -1,0 +1,62 @@
+const atividadesTriste = [
+  "Sinto muito que você esteja se sentindo triste. 💙 Vamos transformar essa tristeza em arte? Desenhe um coração e imagine o que ele gostaria de dizer. Depois, você pode fazer um teatrinho com esse coração! 💖",
+  "Que pena que você está triste. ☔ Que tal fazer a Dança da Chuva Leve? Faça movimentos bem lentos, como se seus braços fossem gotinhas caindo do céu. Coloque uma música suave e deixe a chuva levar a tristeza embora.",
+  "Entendo que às vezes a gente fica triste. 🦋 Vamos tentar a Respiração da Borboleta? Sente-se, coloque as mãos no peito, inspire abrindo os braços como asas e expire fechando. Isso ajuda o coração a ficar mais calminho.",
+  "Sinto muito, amiguinho. 🤗 Que tal cuidar de um boneco ou bichinho de pelúcia que está triste? Converse com ele, dê um abraço bem forte e invente uma história para ele ficar feliz de novo.",
+  "Tristeza é um sentimento que todo mundo tem às vezes. 🎵 Vamos ouvir uma música calminha e desenhar no chão o que a música faz a gente sentir? Pode ser com giz de cera ou lápis de cor.",
+  "Às vezes ficamos tristes e nosso corpo fica paradinho. 🗿 Que tal brincar de Estátua da Tristeza? Você congela numa pose triste e, aos pouquinhos, vai se transformando numa estátua alegre, cheia de sorrisos!",
+  "Sinto muito. 🎨 Pegue lápis de cor bem clarinhos, como azul bebê, rosa clarinho e lilás, e desenhe o seu sentimento. As cores macias ajudam a gente a se acalmar.",
+  "Que tal criar uma história bem baixinho, quase cochichando? 🎶 Você pode falar e cantarolar o final da história. É como um segredo que a gente conta pra música.",
+  "Vamos fazer a postura da criança? 🧘 Sente-se no chão, abrace os joelhos e incline a cabeça para frente. Respire bem devagar, sentindo a barriga encher e esvaziar. Isso ajuda a gente a se sentir protegido.",
+  "Que tal escrever ou desenhar uma cartinha para você mesmo? 💌 Escreva coisas boas que você gostaria de ouvir. Depois, leia em voz alta com carinho."
+];
+
+const atividadesTedio = [
+  "Ah, tédio! 🦄 Vamos inventar um animal que não existe e dançar como ele? Pode ser um 'elefante voador' ou um 'cachorro com asas'! Crie o seu e dance pela sala.",
+  "Tédio, tédio... 🙈 Que tal desenhar sem olhar para o papel? Coloque uma música e desenhe o que vier na cabeça, de olhos fechados. Depois você abre os olhos e vê a surpresa!",
+  "Sem nada pra fazer? 👏 Vamos criar uma orquestra com o corpo! Bata palmas, estale os dedos, bata os pés no chão, faça sons com a boca. Invente uma música só com o seu corpo!",
+  "Que tal dar vida aos objetos? 🎭 Pegue um lápis, uma borracha ou qualquer objeto da sala e invente um personagem para ele. Crie uma história e faça um teatrinho!",
+  "Vamos fazer yoga dos nomes estranhos? 🧘‍♂️ Invente nomes para as poses, como 'postura do flamingo dorminhoco' ou 'pose do macaco distraído'. Depois tente fazer essas poses!",
+  "Bora dançar? 🚶 Coloque uma música e ande pela sala. Quando a música for rápida, ande rápido; quando for devagar, ande bem devagarinho. Varia conforme o ritmo!",
+  "Que tal desenhar no chão? 📜 Pegue um papel bem grande (pode ser jornal ou papel de presente) e desenhe com um amigo uma cidade gigante, com casas, árvores e bichos.",
+  "Brincadeira do espelho: 🪞 Em dupla, um faz movimentos e o outro imita como se fosse um espelho. Depois trocam. Quanto mais exagerado, mais divertido!",
+  "Vamos criar uma história usando só três sons? 🔊 Escolha três sons (palma, estalo, assobio) e conte uma história usando só esses sons. O outro tem que adivinhar!",
+  "Dança do congelamento! ⏸️ Dance livremente e, quando alguém gritar 'congela!', você para na posição que estiver. Quem se mexer primeiro perde!"
+];
+
+const atividadesFeliz = [
+  "Que bom que você está feliz! 💃 Vamos espalhar essa alegria? Dance pela sala fazendo movimentos bem grandes, abrindo os braços e ocupando todo o espaço. A felicidade gosta de espaço!",
+  "Alegria combina com música animada! 🎨 Escute sua música preferida e desenhe o que ela te faz sentir. Use cores vibrantes como amarelo, laranja e vermelho!",
+  "Feliz, feliz, feliz! 🎬 Que tal encenar o dia mais feliz que você já teve ou um dia perfeito que você imagina? Pode ser sozinho ou com a família.",
+  "Yoga do guerreiro feliz! 🧘‍♀️ Faça a postura do guerreiro, com os braços abertos e o rosto bem sorridente. Guerreiro feliz é mais forte!",
+  "Vamos criar personagens felizes? 🎉 Desenhe um personagem bem alegre e depois desfile com ele pela sala, contando quem ele é e por que está tão feliz.",
+  "Roda de ritmos! 🥁 Cada pessoa cria um ritmo com palmas ou batidas, e o grupo repete. Depois todo mundo toca junto formando uma grande orquestra feliz!",
+  "Estátuas felizes! 🏆 Congele numa pose de vitória, como se tivesse ganhado um prêmio, ou numa pose de risada. Depois outra pessoa tenta adivinhar o que você está sentindo.",
+  "Dança com lenços coloridos! 🌈 Pegue um lenço ou pedaço de pano colorido e dance com ele, fazendo movimentos que imitam o vento, o fogo ou a água.",
+  "História coletiva cantada! 🎤 Cada pessoa fala uma parte da história, mas tem que ser cantando. Pode ser uma história de aventura, de amizade ou de bichos falantes.",
+  "Respiração do riso! 😂 Inspire fundo e, quando soltar o ar, solte também uma gargalhada bem gostosa. Repita várias vezes até todo mundo rir junto!"
+];
+
+const atividadesAnsioso = [
+  "A ansiedade pode ser difícil, mas você consegue superar! 🎈 Vamos fazer a Respiração do Balão? Inspire enchendo a barriga como se fosse um balão e expire esvaziando bem devagar.",
+  "Ansiedade pede calma. ⭕ Vamos desenhar uma mandala? Faça círculos e traços repetitivos, sem pressa. O movimento circular acalma a mente.",
+  "Que tal dançar em câmera lenta? 🐢 Coloque uma música calma e dance como se você estivesse dentro de um sonho, com movimentos bem lentos e suaves.",
+  "Brincadeira do semáforo: 🚦 Verde (pode se mexer livremente), amarelo (movimento bem lento) e vermelho (parado, respirando fundo). Alguém vai comandando as cores.",
+  "Vamos fazer a postura da árvore? 🌳 Fique em pé, apoie um pé na outra perna e equilibre-se. Olhe para um ponto fixo. Isso ajuda a concentrar e acalmar.",
+  "Sons que acalmam: 🕯️ Explore sons longos com a voz (como 'ômmmm') ou com objetos (como um sino ou um copo de vidro). Sons longos ajudam a relaxar.",
+  "Desenho da respiração: 〰️ Pegue um lápis e, enquanto inspira, faça um traço para cima. Enquanto expira, faça um traço para baixo. Repita fazendo montanhas e vales.",
+  "Caminhada silenciosa: 👣 Ande bem devagar pela sala, sentindo cada parte do pé tocar o chão. Preste atenção só nisso. É como uma meditação andando.",
+  "Crie seu lugar seguro: 🏡 Desenhe ou imagine um lugar onde você se sente protegido e calmo. Pode ser uma casa na árvore, uma praia ou o quarto dos sonhos.",
+  "Relaxamento do corpo que derrete: ☁️ Deite-se no chão e imagine que seu corpo está ficando pesado e derretendo, como sorvete no sol. Relaxe cada parte aos poucos."
+];
+
+const atividadesRaiva = [
+  "A raiva é forte, mas você é mais forte ainda! 😤 Vamos transformar essa raiva em arte. Primeiro, desenhe sua raiva: que cor ela tem? Que forma? Depois, rasgue o papel bem forte (pode fazer tirinhas!). Por fim, crie um novo desenho com os pedaços – você transformou a raiva em algo novo!",
+  "Teatro do Monstro da Raiva: 👹 Crie um monstro que só quer um abraço. Como ele é? O que ele fala? Depois, abrace esse monstro bem forte e veja ele se transformar num bichinho manso.",
+  "Dança dos Pés Firmes: 👣 Bata os pés no chão com força e ritmo. Sinta o chão vibrando. Isso ajuda a soltar a energia da raiva sem machucar ninguém.",
+  "Pintura com os dedos: 🖐️ Use tinta (pode ser guache ou até tinta caseira) e espalhe com energia sobre uma folha grande. A tinta escorre, mistura e a raiva vai embora.",
+  "Escultura de massinha: 🤲 Pegue massinha bem macia e amasse com força. Depois modele algo que te acalme, como um coração ou uma estrela.",
+  "Grito no Papel: 📢 Faça um desenho bem gritado, com rabiscos fortes e rápidos. É como se o papel ouvisse seu grito e ficasse mais leve.",
+  "Respiração do Dragão: 🐲 Inspire fundo e, ao soltar o ar, imagine que está soltando fogo como um dragão. Repita várias vezes até o fogo virar uma brisa suave.",
+  "Crie uma máscara da calma: 🎭 Desenhe ou monte uma máscara que represente a calma. Depois experimente usá-la e veja como você se sente."
+];
