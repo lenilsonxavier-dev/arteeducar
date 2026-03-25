@@ -1,0 +1,7 @@
+  // ===== RESPOSTA PADRÃO =====
+  { 
+    palavras: [], 
+    resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé), música ou teatro. Ou me conte como você está se sentindo! Vamos tentar de novo? 😊' 
+  }
+];
+
