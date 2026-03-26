@@ -495,7 +495,6 @@
       <div class="pincel-avatar">🖌️</div>
       <div class="pincel-fala" id="pincelFala">
         Olá! Eu sou o Pincel Mágico.
-        <button class="botao-audio" onclick="tocarAudio('pincel-novo')"><i class="fas fa-volume-up"></i></button>
       </div>
     </div>
     <div class="perguntas-sugeridas">
@@ -1854,7 +1853,7 @@ function iniciarPincel() {
   const chat = document.getElementById('chatArea');
   if (chat.children.length === 0) {
     const msg = 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!';
-    adicionarMensagem('resposta', msg, 'pincel-novo');
+    adicionarMensagem('resposta', msg);
     tocarAudio('pincel-novo');
   }
 }
