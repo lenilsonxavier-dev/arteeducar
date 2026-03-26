@@ -92,6 +92,21 @@
     }
     button:hover { background: #ff9cbb; }
     .menu button { width: 80%; max-width: 320px; font-size: 18px; }
+    .menu-color { color: #001858; font-weight: bold; border: 2px solid #ffffff; }
+    .menu-amarelo { background: #ffde59; }
+    .menu-azul { background: #72ddf7; }
+    .menu-roxo { background: #b28dff; }
+    .menu-laranja { background: #ffb347; }
+    .menu-verde { background: #7ee081; }
+    .menu-lilas { background: #e0aaff; }
+    .menu-color:hover { filter: brightness(0.96); }
+    #btnSomMuseu {
+      background: #72ddf7;
+      border: 2px solid #ffffff;
+      color: #001858;
+      font-weight: bold;
+    }
+    #btnSomMuseu:hover { background: #55cde9; }
 
     /* ========== CARDS E GALERIA ========== */
     .card {
@@ -345,12 +360,12 @@
 <!-- ========== MENU PRINCIPAL ========== -->
 <div id="home" class="screen menu">
   <h1>🎨 Pequenos Artistas do Quirino</h1>
-  <button onclick="show('desenho')">🖍 Desenho Livre / Colorir</button>
-  <button onclick="show('museu')">🏛 Museu Virtual</button>
-  <button onclick="show('galeria')">🏆 Galeria</button>
-  <button onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
-  <button onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
-  <button onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
+  <button class="menu-color menu-amarelo" onclick="show('desenho')">🖍 Desenho Livre / Colorir</button>
+  <button class="menu-color menu-azul" onclick="show('museu')">🏛 Museu Virtual</button>
+  <button class="menu-color menu-roxo" onclick="show('galeria')">🏆 Galeria</button>
+  <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
+  <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
+  <button class="menu-color menu-lilas" onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
   <button class="btn-sair" onclick="fecharApp()">
     <i class="fas fa-times-circle"></i> Sair do Ateliê
   </button>
@@ -406,6 +421,7 @@
       <button class="btn-voltar" onclick="show('home')">⬅️ Voltar</button>
       <div class="title-group">
         <h1>✨ As infâncias de <span>Cândido Portinari</span></h1>
+        <button id="btnSomMuseu" onclick="alternarSomMuseu()">🔊 Iniciar som do museu</button>
       </div>
     </div>
     <div style="display: flex; flex-direction: column; gap: 25px;">
@@ -506,6 +522,7 @@
 <script>
 // ========== GLOBAL ==========
 let audioAtual = null;
+let audioMuseu = null;
 
 function tocarAudio(nomeArquivo) {
   if (!nomeArquivo) return;
@@ -523,8 +540,40 @@ function tocarAudio(nomeArquivo) {
   audioAtual.play().catch(e => console.log("Erro ao tocar áudio:", e));
 }
 
+function atualizarBotaoSomMuseu() {
+  const btn = document.getElementById('btnSomMuseu');
+  if (!btn) return;
+  const ativo = audioMuseu && !audioMuseu.paused;
+  btn.textContent = ativo ? '🔇 Desligar som do museu' : '🔊 Iniciar som do museu';
+}
+
+function alternarSomMuseu() {
+  if (!audioMuseu) {
+    audioMuseu = new Audio('sons/museu.mp3');
+    audioMuseu.loop = true;
+    audioMuseu.addEventListener('ended', atualizarBotaoSomMuseu);
+    audioMuseu.addEventListener('pause', atualizarBotaoSomMuseu);
+    audioMuseu.addEventListener('play', atualizarBotaoSomMuseu);
+  }
+
+  if (audioMuseu.paused) {
+    audioMuseu.play().catch(e => console.log("Erro ao tocar som do museu:", e));
+  } else {
+    audioMuseu.pause();
+  }
+  atualizarBotaoSomMuseu();
+}
+
+function pararSomMuseu() {
+  if (!audioMuseu) return;
+  audioMuseu.pause();
+  audioMuseu.currentTime = 0;
+  atualizarBotaoSomMuseu();
+}
+
 // ========== FUNÇÃO ÚNICA DE NAVEGAÇÃO ==========
 function show(id) {
+  if (id !== 'museu') pararSomMuseu();
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => {
     s.style.display = 'none';
@@ -537,6 +586,7 @@ function show(id) {
   } else {
     console.error("Tela não encontrada:", id);
   }
+  atualizarBotaoSomMuseu();
 }
 
 // ========== LÓGICA DE ABERTURA ==========
@@ -1070,6 +1120,76 @@ const atividadesRaiva = [
   "Crie uma máscara da calma: 🎭 Desenhe ou monte uma máscara que represente a calma. Depois experimente usá-la e veja como você se sente."
 ];
 
+const audiosEmocionais = {
+  triste: ['triste-01', 'triste-02', 'triste-03', 'triste-04', 'triste-05', 'triste-06', 'triste-07', 'triste-08', 'triste-09', 'triste-10'],
+  tedio: ['tedio-01', 'tedio-02', 'tedio-03', 'tedio-04', 'tedio-05', 'tedio-06', 'tedio-07', 'tedio-08', 'tedio-09', 'tedio-10'],
+  raiva: ['raiva-01', 'raiva-02', 'raiva-03', 'raiva-04', 'raiva-05', 'raiva-06', 'raiva-07', 'raiva-08'],
+  feliz: ['feliz-01', 'feliz-02', 'feliz-03', 'feliz-04', 'feliz-05', 'feliz-06', 'feliz-07', 'feliz-08', 'feliz-09', 'feliz-10'],
+  ansioso: ['ansioso-01', 'ansioso-02', 'ansioso-03', 'ansioso-04', 'ansioso-05', 'ansioso-06', 'ansioso-07', 'ansioso-08', 'ansioso-09', 'ansioso-10']
+};
+
+const audiosCuriosidades = {
+  desenho: Array.from({ length: 29 }, (_, i) => `curiosidadedesenho-${String(i + 1).padStart(2, '0')}`),
+  escultura: ['curiosidadeescultura-01', 'curiosidadeescultura-02', 'curiosidadeescultura-03', 'curiosidadeescultura-04', 'curiosidadeescultura-05'],
+  danca: ['curiosidadebaledanca-01', 'curiosidadeanabotadanca-02', 'curiosidademodernadanca-03', 'curiosidadebrasileiradanca-04', 'curiosidadeespetaculodanca-05'],
+  teatro: ['curiosidadecomecouteatro-01', 'curiosidadegregosteatro-02', 'curiosidadeepidauroteatro-03', 'curiosidadepalcoteatro-04', 'curiosidadesombrasteatro-05'],
+  arteGeral: ['curiosidadegrafite-01', 'curiosidadebanksy-02', ...Array.from({ length: 18 }, (_, i) => `curiosidadearte-${String(i + 3).padStart(2, '0')}`)]
+};
+
+const mapaAudioPorPalavra = [
+  { palavras: ['arte africana'], audio: 'africanaarte-01' },
+  { palavras: ['almeida júnior', 'almeida junior', 'almeida jr'], audio: 'almeidajunior-01' },
+  { palavras: ['altura do som', 'som agudo', 'som grave'], audio: 'alturasom-01' },
+  { palavras: ['música é expressão'], audio: 'amusicapodeexpressar-01' },
+  { palavras: ['bia bedran'], audio: 'biabedran-01' },
+  { palavras: ['bispo do rosário', 'bispo'], audio: 'bisporosario-01' },
+  { palavras: ['romero britto', 'britto'], audio: 'britto-01' },
+  { palavras: ['caravaggio'], audio: 'caravaggio-01' },
+  { palavras: ['carybé', 'carybe'], audio: 'carybe-01' },
+  { palavras: ['círculo cromático', 'circulo cromatico', 'roda de cores'], audio: 'circulocromatico-01' },
+  { palavras: ['cor', 'o que é cor'], audio: 'corconceito-01' },
+  { palavras: ['cores complementares'], audio: 'corescomplemestares-04' },
+  { palavras: ['cores frias'], audio: 'coresfriasconceito' },
+  { palavras: ['cores neutras'], audio: 'coresneutras-01' },
+  { palavras: ['cores quentes'], audio: 'coresquentesconceito' },
+  { palavras: ['cores secundárias', 'cores secundarias'], audio: 'coressecundárias-02' },
+  { palavras: ['cores terciárias', 'cores terciarias'], audio: 'coresterciarias-03' },
+  { palavras: ['cores primárias', 'cores primarias'], audio: 'corprimaria-01' },
+  { palavras: ['pintura', 'técnicas de pintura', 'tecnicas de pintura'], audio: 'pinturaconceito-01' },
+  { palavras: ['ponto', 'o que é ponto'], audio: 'pontoconceito-01' },
+  { palavras: ['linha', 'o que é linha'], audio: 'linhaconceito' },
+  { palavras: ['harmonia de cores', 'harmonia cromática', 'harmonia cromatica'], audio: 'harmoniacores' },
+  { palavras: ['escala de cores', 'gradiente', 'degradê', 'degrade'], audio: 'escalacores' },
+  { palavras: ['som', 'o que é som'], audio: 'somconceito-01' },
+  { palavras: ['intensidade', 'som forte', 'som fraco'], audio: 'intensidadeconceito' },
+  { palavras: ['duração do som', 'duracao do som'], audio: 'duracaomusica' },
+  { palavras: ['ritmo', 'o que é ritmo'], audio: 'ritmoconceito-01' },
+  { palavras: ['melodia', 'o que é melodia'], audio: 'melodiaconceito' },
+  { palavras: ['instrumentos musicais', 'tipos de instrumentos'], audio: 'instrumentos' },
+  { palavras: ['o que é música', 'definição de música', 'definicao de musica'], audio: 'musicaesomorganizado' },
+  { palavras: ['idade média', 'musica medieval', 'hildegard'], audio: 'historiaidademedia-01' },
+  { palavras: ['renascimento', 'palestrina'], audio: 'historiarenascimento-01' },
+  { palavras: ['barroco', 'bach', 'vivaldi'], audio: 'historiabarroco-01' },
+  { palavras: ['clássico', 'classico', 'mozart', 'haydn'], audio: 'historiaclassico-01' },
+  { palavras: ['romantismo', 'beethoven', 'chopin'], audio: 'historiaromantico-01' },
+  { palavras: ['música moderna', 'musica moderna', 'debussy'], audio: 'historiamoderno-01' },
+  { palavras: ['resumo períodos musicais', 'resumo periodos musicais'], audio: 'historiaresumoperiodos-01' },
+  { palavras: ['palavra cantada'], audio: 'palavracantada-01' },
+  { palavras: ['toquinho'], audio: 'toquinho-01' }, { palavras: ['hélio ziskind', 'helio ziskind'], audio: 'helioziskind-01' },
+  { palavras: ['xuxa'], audio: 'xuxa-01' }, { palavras: ['tiquequê', 'tiqueque'], audio: 'tiqueque-01' }, { palavras: ['the wiggles', 'wiggles'], audio: 'wiggles-01' }, { palavras: ['raffi'], audio: 'raffi-01' }, { palavras: ['disney'], audio: 'disney-01' },
+  { palavras: ['mpb'], audio: 'generompb-01' }, { palavras: ['funk'], audio: 'generofunk-01' }, { palavras: ['pop'], audio: 'generopop-01' }, { palavras: ['rock'], audio: 'generorock-01' }, { palavras: ['samba'], audio: 'generosamba-01' }, { palavras: ['bossa nova'], audio: 'generobossanova-01' }, { palavras: ['axé', 'axe'], audio: 'generoaxe-01' }, { palavras: ['forró', 'forro'], audio: 'generoforro-01' }, { palavras: ['blues'], audio: 'generoblues-01' }, { palavras: ['jazz'], audio: 'generojazz-01' }, { palavras: ['reggae'], audio: 'generoreggae-01' }, { palavras: ['heavy metal'], audio: 'generoheavymetal-01' }, { palavras: ['house'], audio: 'generohouse-01' }, { palavras: ['techno'], audio: 'generotechno-01' }, { palavras: ['hip hop'], audio: 'generohiphop-01' }, { palavras: ['gospel'], audio: 'generogospel-01' }, { palavras: ['country'], audio: 'generocountry-01' }, { palavras: ['rap'], audio: 'generorap-01' },
+  { palavras: ['o que é dança', 'definição de dança', 'definicao de danca', 'dança é uma prática', 'danca e uma pratica'], audio: 'objetivosdança' }, { palavras: ['objetivos da dança', 'objetivos da danca'], audio: 'objetivosdança' }, { palavras: ['tipos de dança', 'tipos de danca'], audio: 'tiposdedança-01' }, { palavras: ['elementos da dança', 'elementos da danca'], audio: 'elementosdadança-01' },
+  { palavras: ['balé', 'ballet', 'dança clássica', 'danca classica'], audio: 'dancabale-01' }, { palavras: ['dança contemporânea', 'danca contemporanea'], audio: 'dancacontemporanea-01' }, { palavras: ['danças urbanas', 'dancas urbanas', 'street dance'], audio: 'dancaurbana-01' }, { palavras: ['jazz dança', 'jazz dance'], audio: 'dancajazz-01' }, { palavras: ['samba dança', 'dança samba', 'danca samba'], audio: 'dancasamba-01' }, { palavras: ['forró dança', 'forro dança', 'dança forró', 'danca forro'], audio: 'dancaforro-01' }, { palavras: ['sapateado'], audio: 'dancasapateado-01' }, { palavras: ['frevo'], audio: 'dancafrevo-01' }, { palavras: ['bumba meu boi', 'boi bumbá', 'boi bumba'], audio: 'dancabumbameuboi-01' }, { palavras: ['caboclinho'], audio: 'dancacaboclinho-01' }, { palavras: ['cavalo marinho'], audio: 'dancacavalomarinho-01' }, { palavras: ['coco', 'dança coco', 'danca coco'], audio: 'dancacoco-01' }, { palavras: ['samba de roda'], audio: 'dancasambaroda-01' }, { palavras: ['jongo'], audio: 'dancajongo-01' },
+  { palavras: ['teatro', 'o que é teatro'], audio: 'conceitoteatro-01' }, { palavras: ['origem do teatro', 'história do teatro', 'historia do teatro'], audio: 'historiateatro-01' }, { palavras: ['tipos de teatro', 'gêneros teatrais', 'generos teatrais'], audio: 'tiposdeteatro-01' }, { palavras: ['teatro dramático', 'teatro dramatico'], audio: 'teatrodramatico-01' }, { palavras: ['teatro de comédia', 'teatro de comedia'], audio: 'teatrocomedia-01' }, { palavras: ['teatro de fantoches', 'teatro de bonecos'], audio: 'teatrofantoches-01' }, { palavras: ['teatro infantil'], audio: 'teatroinfantil-01' }, { palavras: ['teatro musical'], audio: 'teatromusical-01' }, { palavras: ['teatro de sombras'], audio: 'teatrosombras-01' }, { palavras: ['teatro de rua'], audio: 'teatrorua-01' },
+  { palavras: ['arte indígena', 'arte indigena'], audio: 'indigenarte-01' }, { palavras: ['cultura indígena', 'cultura indigena'], audio: 'indigenacultura-01' }, { palavras: ['arte africana', 'arte africana é muito rica', 'arte africana e muito rica'], audio: 'africanaarte-01' }, { palavras: ['máscaras africanas', 'mascaras africanas'], audio: 'mascarasafricanas-01' }, { palavras: ['aquarela'], audio: 'tecnicaaquarela-01' }, { palavras: ['pintura a óleo', 'pintura a oleo'], audio: 'tecnicapinturaoleo-01' }, { palavras: ['colagem'], audio: 'tecnicacolagem-01' },
+  { palavras: ['van gogh'], audio: 'vangogh-01' }, { palavras: ['michelangelo'], audio: 'michelangelo-01' }, { palavras: ['rafael', 'raffaello'], audio: 'rafael-01' }, { palavras: ['leonardo da vinci', 'leonardo'], audio: 'leonardo-01' }, { palavras: ['djanira'], audio: 'djanira-01' }, { palavras: ['frida'], audio: 'fridakahlo-01' }, { palavras: ['dali', 'salvador dalí', 'salvador dali'], audio: 'dali-01' }, { palavras: ['tarsila'], audio: 'tarsila-01' }, { palavras: ['ivan cruz'], audio: 'ivancruz-01' }, { palavras: ['portinari'], audio: 'portinari-01' }, { palavras: ['matisse'], audio: 'matisse-01' }, { palavras: ['magritte'], audio: 'magritte-01' }, { palavras: ['monet'], audio: 'monet-01' }, { palavras: ['seurat'], audio: 'seurat-01' }, { palavras: ['degas'], audio: 'degas-01' }, { palavras: ['munch'], audio: 'munch-01' }, { palavras: ['rembrandt'], audio: 'rembrandt-01' }, { palavras: ['hélio oiticica', 'helio oiticica'], audio: 'oiticica-01' }, { palavras: ['di cavalcanti'], audio: 'dicavalcanti-01' }, { palavras: ['almeida júnior', 'almeida junior'], audio: 'almeidajunior-01' }, { palavras: ['georgina'], audio: 'georgina-01' }, { palavras: ['pedro américo', 'pedro americo'], audio: 'pedroamerico-01' }, { palavras: ['segall'], audio: 'segall-01' }, { palavras: ['volpi'], audio: 'volpi-01' }, { palavras: ['milhazes'], audio: 'milhazes-01' }, { palavras: ['picasso'], audio: 'picasso-01' }, { palavras: ['miró', 'miro'], audio: 'miro-01' }, { palavras: ['kandinsky'], audio: 'kandinsky-01' }, { palavras: ['klee'], audio: 'klee-01' }, { palavras: ['malfatti'], audio: 'malfatti-01' }, { palavras: ['vik muniz'], audio: 'vikmuniz-01' }, { palavras: ['heitor dos prazeres'], audio: 'heitorprazeres-01' }, { palavras: ['adriana varejão', 'adriana varejao'], audio: 'varejao-01' }, { palavras: ['resposta padrão', 'resposta padrao'], audio: 'padraoresposta-01' }
+];
+
+function sortearTextoEAudio(textos, audios) {
+  const indice = Math.floor(Math.random() * textos.length);
+  return { texto: textos[indice], audio: audios[indice] || audios[indice % audios.length] || 'padraoresposta-01' };
+}
+
 // ========== ARRAIS DE CURIOSIDADES DE ARTE (para sorteio geral) ==========
 const curiosidadesDesenho = [
   "Antes de existirem cadernos, as pessoas já pintavam nas cavernas, como nas pinturas de Caverna de Altamira, usando terra e carvão. 🎨",
@@ -1156,23 +1276,23 @@ const conhecimento = [
   // ===== RESPOSTAS EMOCIONAIS HUMANIZADAS =====
   { 
     palavras: ['estou triste', 'triste', 'me sinto triste', 'sentindo triste'], 
-    resposta: () => atividadesTriste[Math.floor(Math.random() * atividadesTriste.length)]
+    resposta: () => sortearTextoEAudio(atividadesTriste, audiosEmocionais.triste)
   },
   { 
     palavras: ['estou entediado', 'entediado', 'tédio', 'sem nada para fazer'], 
-    resposta: () => atividadesTedio[Math.floor(Math.random() * atividadesTedio.length)]
+    resposta: () => sortearTextoEAudio(atividadesTedio, audiosEmocionais.tedio)
   },
   { 
     palavras: ['estou com raiva', 'raiva', 'com raiva', 'zangado'], 
-    resposta: () => atividadesRaiva[Math.floor(Math.random() * atividadesRaiva.length)]
+    resposta: () => sortearTextoEAudio(atividadesRaiva, audiosEmocionais.raiva)
   },
   { 
     palavras: ['estou feliz', 'feliz', 'alegre', 'contente'], 
-    resposta: () => atividadesFeliz[Math.floor(Math.random() * atividadesFeliz.length)]
+    resposta: () => sortearTextoEAudio(atividadesFeliz, audiosEmocionais.feliz)
   },
   { 
     palavras: ['estou ansioso', 'ansioso', 'ansiedade', 'nervoso'], 
-    resposta: () => atividadesAnsioso[Math.floor(Math.random() * atividadesAnsioso.length)]
+    resposta: () => sortearTextoEAudio(atividadesAnsioso, audiosEmocionais.ansioso)
   },
 
   // ===== CONCEITOS GERAIS DE ARTE =====
@@ -1628,13 +1748,20 @@ function removerAcentos(str) {
 
 function responderCuriosidade(perguntaNormalizada) {
   const todas = [
-    ...curiosidadesDesenho.map(c => "🎨 " + c),
-    ...curiosidadesEscultura.map(c => "🗿 " + c),
-    ...curiosidadesDanca.map(c => "💃 " + c),
-    ...curiosidadesTeatro.map(c => "🎭 " + c),
-    ...curiosidadesArteGeral.map(c => "✨ " + c)
+    ...curiosidadesDesenho.map((c, i) => ({ texto: "🎨 " + c, audio: audiosCuriosidades.desenho[i] })),
+    ...curiosidadesEscultura.map((c, i) => ({ texto: "🗿 " + c, audio: audiosCuriosidades.escultura[i] })),
+    ...curiosidadesDanca.map((c, i) => ({ texto: "💃 " + c, audio: audiosCuriosidades.danca[i] })),
+    ...curiosidadesTeatro.map((c, i) => ({ texto: "🎭 " + c, audio: audiosCuriosidades.teatro[i] })),
+    ...curiosidadesArteGeral.map((c, i) => ({ texto: "✨ " + c, audio: audiosCuriosidades.arteGeral[i] }))
   ];
   return todas[Math.floor(Math.random() * todas.length)];
+}
+
+function obterAudioPorPergunta(perguntaNormalizada) {
+  for (const item of mapaAudioPorPalavra) {
+    if (item.palavras.some(p => perguntaNormalizada.includes(removerAcentos(p)))) return item.audio;
+  }
+  return 'padraoresposta-01';
 }
 
 function adicionarMensagem(tipo, texto, audio = null){
@@ -1677,6 +1804,7 @@ function enviarPergunta() {
   setTimeout(() => {
     const perguntaNormalizada = removerAcentos(perguntaLower);
     let respostaEncontrada = null;
+    let audioResposta = 'padraoresposta-01';
     const palavrasCuriosidade = ['curiosidade', 'curiosidades', 'me conte alguma coisa', 'me conta alguma novidade', 'fale sobre', 'conta algo', 'me diga algo', 'me fala uma'];
     if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
       respostaEncontrada = responderCuriosidade(perguntaNormalizada);
@@ -1695,8 +1823,14 @@ function enviarPergunta() {
     if (!respostaEncontrada) {
       respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
     }
+    if (typeof respostaEncontrada === 'object' && respostaEncontrada !== null) {
+      audioResposta = respostaEncontrada.audio || audioResposta;
+      respostaEncontrada = respostaEncontrada.texto || '';
+    } else {
+      audioResposta = obterAudioPorPergunta(perguntaNormalizada);
+    }
     pincelFala.innerText = respostaEncontrada;
-    adicionarMensagem('resposta', respostaEncontrada, 'resposta-padrao');
+    adicionarMensagem('resposta', respostaEncontrada, audioResposta);
     historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
   }, 800);
   input.value = '';
