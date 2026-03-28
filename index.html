@@ -404,7 +404,7 @@
   <button class="menu-color menu-roxo" onclick="show('galeria')">🏆 Galeria</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
-  <button class="menu-color menu-azul" onclick="show('noiteEstrelada'); iniciarNoiteEstrelada()">🎯 Passatempo: Noite Estrelada + Laboratório das Cores</button>
+  <button class="menu-color menu-azul" onclick="show('passatempos')">🎯 Passatempo</button>
   <button class="menu-color menu-lilas" onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
   <button class="btn-sair" onclick="fecharApp()">
     <i class="fas fa-times-circle"></i> Sair do Ateliê
@@ -528,6 +528,34 @@
 </div>
 
 
+
+<!-- ========== PASSATEMPOS ========== -->
+<div id="passatempos" class="screen">
+  <h2>🎯 Passatempos</h2>
+  <p>Escolha um jogo para se divertir e aprender.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:16px 0;">
+    <button class="menu-color menu-azul" style="max-width:360px;" onclick="show('noiteEstrelada'); iniciarNoiteEstrelada()">🌌 Jogo Noite Estrelada</button>
+    <button class="menu-color menu-amarelo" style="max-width:360px;" onclick="show('laboratorioCores')">🎨 Laboratório das Cores</button>
+  </div>
+  <button onclick="show('home')">⬅ Voltar ao Menu</button>
+</div>
+
+<!-- ========== PASSATEMPO: LABORATÓRIO DAS CORES ========== -->
+<div id="laboratorioCores" class="screen">
+  <h2>🎨 Laboratório das Cores</h2>
+  <p>Misture cores e descubra combinações no laboratório.</p>
+  <div style="background:#fff; border-radius:16px; padding:16px; max-width:780px; margin:0 auto;">
+    <p style="margin:0 0 10px;">Esse passatempo foi restaurado nesta pasta para ficar junto dos demais jogos.</p>
+    <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+      <div style="width:90px; height:90px; border-radius:50%; background:#ff4d4d;"></div>
+      <div style="width:90px; height:90px; border-radius:50%; background:#5dade2;"></div>
+      <div style="width:90px; height:90px; border-radius:50%; background:#f7dc6f;"></div>
+      <div style="width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,#ff4d4d,#5dade2,#f7dc6f);"></div>
+    </div>
+  </div>
+  <button onclick="show('passatempos')" style="margin-top:16px;">⬅ Voltar aos Passatempos</button>
+</div>
+
 <!-- ========== NOITE ESTRELADA ========== -->
 <div id="noiteEstrelada" class="screen">
   <h2>🌌 Jogo Noite Estrelada</h2>
@@ -542,7 +570,7 @@
       <button class="pa-vg-btn pa-vg-restart" id="pa-vg-reset">🔄 Recomeçar</button>
     </div>
   </div>
-  <button onclick="show('home')">⬅ Voltar</button>
+  <button onclick="show('passatempos')">⬅ Voltar aos Passatempos</button>
 </div>
 
 <!-- ========== PINCEL MÁGICO ========== -->
