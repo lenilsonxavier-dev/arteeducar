@@ -1004,6 +1004,34 @@ function iniciarNoiteEstrelada() {
     { total: 100, minSpeed: 3.2, maxSpeed: 5.3, label: 'Fase 2 · 100 estrelas rápidas' }
   ];
 
+  const playerSprite = new Image();
+  playerSprite.crossOrigin = 'anonymous';
+  const playerSpriteSources = [
+    'https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/imagens/vangoghroblox.png',
+    'imagens/vangoghroblox.png',
+    './imagens/vangoghroblox.png'
+  ];
+  let playerSpriteLoaded = false;
+
+  function tryLoadPlayerSprite(sourceIndex = 0) {
+    if (sourceIndex >= playerSpriteSources.length) {
+      playerSpriteLoaded = false;
+      return;
+    }
+
+    playerSprite.onload = () => {
+      playerSpriteLoaded = true;
+    };
+
+    playerSprite.onerror = () => {
+      tryLoadPlayerSprite(sourceIndex + 1);
+    };
+
+    playerSprite.src = playerSpriteSources[sourceIndex];
+  }
+
+  tryLoadPlayerSprite();
+
   if (paVGState && paVGState.running) return;
 
   const state = paVGState || {
@@ -1124,10 +1152,16 @@ function iniciarNoiteEstrelada() {
 
     for (const st of state.stars) drawStar(st.x, st.y, 5, st.r, st.r / 2);
 
-    ctx.fillStyle = '#72ddf7';
-    ctx.fillRect(state.player.x, state.player.y, state.player.w, state.player.h);
-    ctx.fillStyle = '#d6f7ff';
-    ctx.fillRect(state.player.x + 10, state.player.y - 6, state.player.w - 20, 6);
+    if (playerSpriteLoaded) {
+      const spriteHeight = state.player.h * 3.1;
+      const spriteY = state.player.y - (spriteHeight - state.player.h);
+      ctx.drawImage(playerSprite, state.player.x, spriteY, state.player.w, spriteHeight);
+    } else {
+      ctx.fillStyle = '#72ddf7';
+      ctx.fillRect(state.player.x, state.player.y, state.player.w, state.player.h);
+      ctx.fillStyle = '#d6f7ff';
+      ctx.fillRect(state.player.x + 10, state.player.y - 6, state.player.w - 20, 6);
+    }
 
     if (state.finished && state.showMessage) {
       ctx.fillStyle = 'rgba(8, 13, 45, 0.72)';
