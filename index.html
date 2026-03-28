@@ -425,6 +425,7 @@
     #laboratorioCores .result-area { background: linear-gradient(90deg,#292929,#333,#292929); border-radius: 999px; padding: 14px 18px; display: flex; align-items: center; justify-content: center; gap: 18px; margin: 8px 0 16px; }
     #laboratorioCores .result-swatch { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ffd700; }
     #laboratorioCores .result-text { display:none; }
+    #laboratorioCores .result-generated-name { color: #fff; font-size: 1.3rem; font-weight: 700; background:#161616; border-radius:999px; padding: 8px 18px; min-height: 20px; min-width: 120px; text-align: center; }
     #laboratorioCores .result-generated-name { color: #fff; font-size: 1.3rem; font-weight: 700; background:#161616; border-radius:999px; padding: 8px 18px; min-height: 20px; }
     #laboratorioCores .result-text { color: #fff; font-size: 2rem; font-weight: 700; background: #161616; border-radius: 999px; padding: 8px 20px; }
     #laboratorioCores .palette-title { text-align: center; font-size: 2rem; font-weight: 700; color: #214163; margin: 10px 0; }
@@ -1293,6 +1294,10 @@ function labMostrarResultadoMistura() {
   if (labCoresSelecionadas.length === 2) {
     const resultado = labObterMistura(labCoresSelecionadas[0], labCoresSelecionadas[1]);
     resultSwatch.style.background = resultado.hex;
+    if (resultName) resultName.textContent = resultado.nome;
+  } else {
+    resultSwatch.style.background = '#7f8c8d';
+    if (resultName) resultName.textContent = '';
     if (resultName) resultName.innerHTML = `🎨 ${resultado.nome} 🎨`;
   } else {
     resultSwatch.style.background = '#7f8c8d';
