@@ -434,6 +434,21 @@
       #laboratorioCores .palette-title { font-size: 1.5rem; }
     }
 
+
+    #pincelIA .perguntas-sugeridas button,
+    #pincelIA .input-area button,
+    #pincelIA .modo-pais button {
+      background: #b887e8;
+      color: #fff;
+      border: 2px solid #efd9ff;
+      box-shadow: 0 5px 0 #7d57a8;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    /* ========== MEDIA QUERY ========== */
+    @media (max-width: 700px) {
+      .title-group h1 { font-size: 1.6rem !important; }
     /* ========== MEDIA QUERY ========== */
     @media (max-width: 700px) {
       .title-group h1 { font-size: 1.6rem !important; }
@@ -558,6 +573,7 @@
 <div id="mural" class="screen" style="display: none; height: 100vh; flex-direction: column; background: #001858;">
   <div class="mural-header" style="height: 60px; background: #001858; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 2px solid #ffcc00;">
     <h2 style="color: white; margin: 0; font-size: 1.2rem;">🖼️ Mural Virtual: Artistas do Quirino</h2>
+    <button class="btn-voltar-menu btn-voltar-laranja" onclick="sairDoMural()"><span class="ico">⬅️</span> Voltar</button>
     <button onclick="sairDoMural()" style="background: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #001858;">
       ⬅ Sair do Mural
     </button>
@@ -645,6 +661,7 @@
     </div>
     <footer>🌈 misture cores: primária + secundária = terciária | complementares criam neutro | regras baseadas na roda RYB</footer>
   </div>
+  <button class="btn-voltar-menu btn-voltar-azul" onclick="show('passatempos')" style="margin-top:16px;"><span class="ico">⬅️</span> Voltar</button>
   <button onclick="show('passatempos')" style="margin-top:16px;">⬅ Voltar aos Passatempos</button>
 </div>
 
@@ -666,6 +683,7 @@
       <button class="pa-vg-btn pa-vg-restart" id="pa-vg-reset">🔄 Recomeçar</button>
     </div>
   </div>
+  <button class="btn-voltar-menu btn-voltar-azul" onclick="show('passatempos')"><span class="ico">⬅️</span> Voltar</button>
   <button onclick="show('passatempos')">⬅ Voltar aos Passatempos</button>
 </div>
 
