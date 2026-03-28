@@ -112,6 +112,7 @@
 
     /* ========== CARDS E GALERIA ========== */
     .card {
+      background: #fff; border-radius: 20px; padding: 22px; margin: 12px; 
       background: #fff; border-radius: 20px; padding: 14px; margin: 12px; 
       text-align: left; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
@@ -368,6 +369,7 @@
 
     /* ========== JOGO NOITE ESTRELADA ========== */
     .pa-vg-game-container {
+      max-width: 1320px;
       max-width: 1200px;
       max-width: 1000px;
       margin: 0 auto;
@@ -395,6 +397,8 @@
       padding: 8px 14px;
       font-weight: bold;
     }
+
+
     .pa-vg-controls { display: flex; justify-content: flex-end; margin-top: 10px; }
     .pa-vg-btn.pa-vg-restart {
       background: #72ddf7;
@@ -681,6 +685,11 @@
       <div class="pa-vg-phase-badge" id="pa-vg-phase">🌟 Fase 1: Noite Estrelada</div>
       <div class="pa-vg-score-badge">⭐ Desviadas: <span id="pa-vg-score">0</span> / 300</div>
     </div>
+    <div class="pa-vg-controls">
+      <button class="pa-vg-btn pa-vg-restart" id="pa-vg-reset">🔄 Reiniciar jogo</button>
+    </div>
+  </div>
+  <button class="btn-voltar-menu btn-voltar-azul" onclick="show('passatempos')"><span class="ico">⬅️</span> Voltar</button>
   </div>
   <button class="btn-voltar-menu btn-voltar-azul" onclick="show('passatempos')"><span class="ico">⬅️</span> Voltar</button>
     <div class="pa-vg-controls">
@@ -1391,6 +1400,9 @@ function iniciarNoiteEstrelada() {
 
   const resizeCanvas = () => {
     const container = document.getElementById('pa-vg-module');
+    const width = Math.min(1280, Math.max(420, container.clientWidth));
+    vgCanvas.width = width;
+    vgCanvas.height = Math.round(width * 0.68);
     const width = Math.min(1200, Math.max(360, container.clientWidth));
     vgCanvas.width = width;
     vgCanvas.height = Math.round(width * 0.62);
