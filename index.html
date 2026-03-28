@@ -374,6 +374,11 @@
       cursor: pointer;
     }
 
+
+    .pa-vg-mobile-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+    .pa-vg-dir-btn { min-width: 110px; padding: 12px 18px; border-radius: 999px; border: 2px solid #fff; background: #72ddf7; color: #001858; font-weight: bold; font-size: 1.1rem; }
+    
+
     /* ========== LABORATÓRIO DAS CORES ========== */
     #laboratorioCores .game-container { max-width: 1180px; margin: 0 auto; background: #e8e1cf; border-radius: 26px; padding: 22px; color: #1b3551; }
     #laboratorioCores h1 { text-align: center; margin: 0; color: #3d8f78; letter-spacing: .5px; }
@@ -614,6 +619,10 @@
   <p>Desvie das estrelas com Van Gogh! Fase 1 com 200 estrelas lentas/moderadas e fase 2 com 100 estrelas rápidas.</p>
   <div class="pa-vg-game-container" id="pa-vg-module">
     <canvas id="pa-vg-canvas" class="pa-vg-canvas" width="1000" height="560"></canvas>
+    <div class="pa-vg-mobile-controls">
+      <button id="pa-vg-left" class="pa-vg-dir-btn">⬅️ Esquerda</button>
+      <button id="pa-vg-right" class="pa-vg-dir-btn">Direita ➡️</button>
+    </div>
     <div class="pa-vg-ui-panel">
       <div class="pa-vg-phase-badge" id="pa-vg-phase">🌟 Fase 1: Noite Estrelada</div>
       <div class="pa-vg-score-badge">⭐ Desviadas: <span id="pa-vg-score">0</span> / 300</div>
@@ -1286,6 +1295,8 @@ function iniciarNoiteEstrelada() {
   const scoreEl = document.getElementById('pa-vg-score');
   const phaseEl = document.getElementById('pa-vg-phase');
   const resetBtn = document.getElementById('pa-vg-reset');
+  const leftBtn = document.getElementById('pa-vg-left');
+  const rightBtn = document.getElementById('pa-vg-right');
 
   const TOTAL_GOAL = 300;
   const PHASE_LIMITS = [200, 300];
@@ -1293,6 +1304,15 @@ function iniciarNoiteEstrelada() {
     phase1: { min: 1.6, max: 3.0 },
     phase2: { min: 3.3, max: 5.5 }
   };
+
+  function tentarFullscreenMobile() {
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    if (!isMobile || document.fullscreenElement) return;
+    const el = document.getElementById('noiteEstrelada') || document.documentElement;
+    if (el.requestFullscreen) {
+      el.requestFullscreen().catch(() => {});
+    }
+  }
 
   const playerSprite = new Image();
   playerSprite.crossOrigin = 'anonymous';
@@ -1574,6 +1594,21 @@ function iniciarNoiteEstrelada() {
     vgState.rightPressed = false;
   }, { passive: true });
 
+  const ligarEsquerda = (on) => { if (!vgState) return; vgState.leftPressed = on; if (on) vgState.rightPressed = false; };
+  const ligarDireita = (on) => { if (!vgState) return; vgState.rightPressed = on; if (on) vgState.leftPressed = false; };
+
+  leftBtn?.addEventListener('touchstart', () => ligarEsquerda(true), { passive: true });
+  leftBtn?.addEventListener('touchend', () => ligarEsquerda(false), { passive: true });
+  leftBtn?.addEventListener('mousedown', () => ligarEsquerda(true));
+  leftBtn?.addEventListener('mouseup', () => ligarEsquerda(false));
+  leftBtn?.addEventListener('mouseleave', () => ligarEsquerda(false));
+
+  rightBtn?.addEventListener('touchstart', () => ligarDireita(true), { passive: true });
+  rightBtn?.addEventListener('touchend', () => ligarDireita(false), { passive: true });
+  rightBtn?.addEventListener('mousedown', () => ligarDireita(true));
+  rightBtn?.addEventListener('mouseup', () => ligarDireita(false));
+  rightBtn?.addEventListener('mouseleave', () => ligarDireita(false));
+
   resetBtn?.addEventListener('click', () => {
     resetGame();
     vgState.gameActive = true;
@@ -1587,6 +1622,7 @@ function iniciarNoiteEstrelada() {
     vgState.playerX = playerFrac * (vgCanvas.width - vgState.playerW);
   });
 
+  tentarFullscreenMobile();
   resetGame();
   if (vgLoopId) cancelAnimationFrame(vgLoopId);
   gameLoop();
