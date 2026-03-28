@@ -87,6 +87,7 @@
     }
     /* ========== BOTÕES E INTERFACE ========== */
     button {
+      padding: 18px; margin: 6px; border-radius: 16px; border: none;
       padding: 14px; margin: 6px; border-radius: 16px; border: none;
       background: #f582ae; font-size: 16px; color: #001858; cursor: pointer;
       transition: 0.2s;
@@ -367,6 +368,7 @@
 
     /* ========== JOGO NOITE ESTRELADA ========== */
     .pa-vg-game-container {
+      max-width: 1200px;
       max-width: 1000px;
       margin: 0 auto;
       background: linear-gradient(180deg, #0a1f3b 0%, #1e3a5f 100%);
@@ -679,6 +681,8 @@
       <div class="pa-vg-phase-badge" id="pa-vg-phase">🌟 Fase 1: Noite Estrelada</div>
       <div class="pa-vg-score-badge">⭐ Desviadas: <span id="pa-vg-score">0</span> / 300</div>
     </div>
+  </div>
+  <button class="btn-voltar-menu btn-voltar-azul" onclick="show('passatempos')"><span class="ico">⬅️</span> Voltar</button>
     <div class="pa-vg-controls">
       <button class="pa-vg-btn pa-vg-restart" id="pa-vg-reset">🔄 Recomeçar</button>
     </div>
@@ -1387,6 +1391,9 @@ function iniciarNoiteEstrelada() {
 
   const resizeCanvas = () => {
     const container = document.getElementById('pa-vg-module');
+    const width = Math.min(1200, Math.max(360, container.clientWidth));
+    vgCanvas.width = width;
+    vgCanvas.height = Math.round(width * 0.62);
     const width = Math.min(1000, Math.max(320, container.clientWidth));
     vgCanvas.width = width;
     vgCanvas.height = Math.round(width * 0.56);
