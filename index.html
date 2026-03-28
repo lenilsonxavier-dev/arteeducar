@@ -333,6 +333,18 @@
     .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .tour-guide { background: #fee5b1; margin-top: 15px; padding: 15px 20px; border-radius: 40px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; border: 3px solid white; color: #154256; font-weight: bold; font-size: 1.3rem; justify-content: center; }
 
+
+    /* ========== JOGO NOITE ESTRELADA ========== */
+    .pa-vg-wrap { max-width: 980px; margin: 0 auto; background: linear-gradient(180deg, #1b1f5b 0%, #0b1030 100%); border: 4px solid #ffffff; border-radius: 28px; padding: 16px; box-shadow: 0 10px 28px rgba(0,0,0,.28); }
+    .pa-vg-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .pa-vg-title { color: #fff; font-size: 1.5rem; font-weight: bold; margin: 0; }
+    .pa-vg-panel { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .pa-vg-pill { background: #ffde59; color: #001858; padding: 8px 14px; border-radius: 999px; font-weight: bold; border: 2px solid #fff; }
+    .pa-vg-btn { background: #72ddf7; color: #001858; border: 2px solid #fff; border-radius: 999px; padding: 8px 14px; font-weight: bold; cursor: pointer; }
+    .pa-vg-btn:hover { filter: brightness(.96); }
+    #pa-vg-canvas { width: 100%; height: min(62vh, 520px); display: block; border-radius: 18px; border: 3px solid #ffffff; background: radial-gradient(circle at 20% 20%, #273688 0%, #0e143e 55%, #090d2d 100%); touch-action: none; }
+    .pa-vg-tip { color: #d9e6ff; margin: 10px 4px 0; font-size: .95rem; }
+
     /* ========== MEDIA QUERY ========== */
     @media (max-width: 700px) {
       .title-group h1 { font-size: 1.6rem !important; }
@@ -365,6 +377,7 @@
   <button class="menu-color menu-roxo" onclick="show('galeria')">🏆 Galeria</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
+  <button class="menu-color menu-azul" onclick="show('noiteEstrelada'); iniciarNoiteEstrelada()">🌌 Jogo Noite Estrelada</button>
   <button class="menu-color menu-lilas" onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
   <button class="btn-sair" onclick="fecharApp()">
     <i class="fas fa-times-circle"></i> Sair do Ateliê
@@ -485,6 +498,25 @@
     autocomplete="off"
   >
   <div id="desafiosGrid" class="desafios-grid"></div>
+</div>
+
+
+<!-- ========== NOITE ESTRELADA ========== -->
+<div id="noiteEstrelada" class="screen">
+  <h2>🌌 Noite Estrelada</h2>
+  <div class="pa-vg-wrap">
+    <div class="pa-vg-header">
+      <p class="pa-vg-title">Pegue as estrelas com o pincel! ✨</p>
+      <div class="pa-vg-panel">
+        <span id="pa-vg-phase" class="pa-vg-pill">Fase 1 · 200 estrelas</span>
+        <span id="pa-vg-score" class="pa-vg-pill">0 / 300</span>
+        <button id="pa-vg-reset" class="pa-vg-btn">🔄 Reiniciar</button>
+      </div>
+    </div>
+    <canvas id="pa-vg-canvas" width="900" height="500" aria-label="Jogo Noite Estrelada"></canvas>
+    <p class="pa-vg-tip">Use as setas ⬅️➡️ ou toque na lateral da tela para mover.</p>
+  </div>
+  <button class="big-back-btn" onclick="show('home')">⬅ Voltar ao Menu</button>
 </div>
 
 <!-- ========== PINCEL MÁGICO ========== -->
@@ -953,6 +985,228 @@ function carregarMural() {
 
 function sairDoMural() {
   show('home');
+}
+
+
+// ========== JOGO NOITE ESTRELADA ==========
+let paVGState = null;
+
+function iniciarNoiteEstrelada() {
+  const canvas = document.getElementById('pa-vg-canvas');
+  const phaseEl = document.getElementById('pa-vg-phase');
+  const scoreEl = document.getElementById('pa-vg-score');
+  const resetBtn = document.getElementById('pa-vg-reset');
+  if (!canvas || !phaseEl || !scoreEl || !resetBtn) return;
+  const ctx = canvas.getContext('2d');
+
+  const phases = [
+    { total: 200, minSpeed: 1.4, maxSpeed: 2.9, label: 'Fase 1 · 200 estrelas' },
+    { total: 100, minSpeed: 3.2, maxSpeed: 5.3, label: 'Fase 2 · 100 estrelas rápidas' }
+  ];
+
+  if (paVGState && paVGState.running) return;
+
+  const state = paVGState || {
+    running: true,
+    rafId: null,
+    stars: [],
+    keys: { left: false, right: false },
+    touchDir: 0,
+    player: { x: 0, y: 0, w: 84, h: 20, speed: 7.5 },
+    score: 0,
+    phaseIndex: 0,
+    spawnedInPhase: 0,
+    finished: false,
+    showMessage: ''
+  };
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+
+  function resize() {
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.max(280, Math.floor(rect.width));
+    const h = Math.max(320, Math.floor(rect.height));
+    canvas.width = Math.floor(w * ratio);
+    canvas.height = Math.floor(h * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    state.player.w = Math.max(66, w * 0.13);
+    state.player.h = Math.max(16, h * 0.038);
+    state.player.y = h - state.player.h - 16;
+    if (!state.player.x) state.player.x = (w - state.player.w) / 2;
+    state.player.x = Math.max(0, Math.min(w - state.player.w, state.player.x));
+
+    for (const st of state.stars) {
+      st.x = Math.max(st.r, Math.min(w - st.r, st.x));
+      st.y = Math.min(h + st.r, st.y);
+    }
+  }
+
+  function resetGame() {
+    state.stars = [];
+    state.score = 0;
+    state.phaseIndex = 0;
+    state.spawnedInPhase = 0;
+    state.finished = false;
+    state.showMessage = '';
+    updateHud();
+    resize();
+  }
+
+  function spawnStar() {
+    const phase = phases[state.phaseIndex];
+    if (!phase || state.spawnedInPhase >= phase.total) return;
+    const w = canvas.clientWidth;
+    const r = rand(3, 7);
+    state.stars.push({
+      x: rand(r, Math.max(r + 1, w - r)),
+      y: -14,
+      r,
+      speed: rand(phase.minSpeed, phase.maxSpeed)
+    });
+    state.spawnedInPhase += 1;
+  }
+
+  function maybeAdvancePhase() {
+    const phase = phases[state.phaseIndex];
+    if (!phase) return;
+    if (state.spawnedInPhase >= phase.total && state.stars.length === 0) {
+      state.phaseIndex += 1;
+      state.spawnedInPhase = 0;
+      if (state.phaseIndex >= phases.length) {
+        state.finished = true;
+        state.showMessage = state.score >= 300
+          ? 'Parabéns! Você concluiu as duas fases! 🌟'
+          : 'Fim de jogo! Tente pegar mais estrelas!';
+      }
+      updateHud();
+    }
+  }
+
+  function updateHud() {
+    if (state.finished) {
+      phaseEl.textContent = 'Concluído';
+    } else {
+      const p = phases[Math.min(state.phaseIndex, phases.length - 1)];
+      phaseEl.textContent = p ? p.label : 'Concluído';
+    }
+    scoreEl.textContent = `${state.score} / 300`;
+  }
+
+  function drawStar(x, y, spikes, outerRadius, innerRadius) {
+    let rot = Math.PI / 2 * 3;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(x, y - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+      ctx.lineTo(x + Math.cos(rot) * outerRadius, y + Math.sin(rot) * outerRadius);
+      rot += step;
+      ctx.lineTo(x + Math.cos(rot) * innerRadius, y + Math.sin(rot) * innerRadius);
+      rot += step;
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#ffde59';
+    ctx.fill();
+  }
+
+  function draw() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.fillStyle = '#fff';
+    for (let i = 0; i < 24; i++) {
+      ctx.globalAlpha = 0.18 + (i % 4) * 0.14;
+      ctx.fillRect((i * 103) % w, (i * 57) % h, 2, 2);
+    }
+    ctx.globalAlpha = 1;
+
+    for (const st of state.stars) drawStar(st.x, st.y, 5, st.r, st.r / 2);
+
+    ctx.fillStyle = '#72ddf7';
+    ctx.fillRect(state.player.x, state.player.y, state.player.w, state.player.h);
+    ctx.fillStyle = '#d6f7ff';
+    ctx.fillRect(state.player.x + 10, state.player.y - 6, state.player.w - 20, 6);
+
+    if (state.finished && state.showMessage) {
+      ctx.fillStyle = 'rgba(8, 13, 45, 0.72)';
+      ctx.fillRect(12, h / 2 - 44, w - 24, 88);
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 20px Comic Sans MS, sans-serif';
+      ctx.fillText(state.showMessage, w / 2, h / 2 + 6);
+      ctx.textAlign = 'start';
+    }
+  }
+
+  function tick() {
+    if (!state.running) return;
+
+    const movingLeft = state.keys.left || state.touchDir < 0;
+    const movingRight = state.keys.right || state.touchDir > 0;
+    if (movingLeft) state.player.x -= state.player.speed;
+    if (movingRight) state.player.x += state.player.speed;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    state.player.x = Math.max(0, Math.min(w - state.player.w, state.player.x));
+
+    const currentPhase = phases[state.phaseIndex];
+    if (!state.finished && currentPhase && Math.random() < 0.48) spawnStar();
+
+    for (let i = state.stars.length - 1; i >= 0; i--) {
+      const st = state.stars[i];
+      st.y += st.speed;
+      const hit = st.y + st.r >= state.player.y && st.y - st.r <= state.player.y + state.player.h && st.x >= state.player.x && st.x <= state.player.x + state.player.w;
+      if (hit) {
+        state.score += 1;
+        state.stars.splice(i, 1);
+        updateHud();
+        continue;
+      }
+      if (st.y - st.r > h + 8) state.stars.splice(i, 1);
+    }
+
+    maybeAdvancePhase();
+    draw();
+    state.rafId = requestAnimationFrame(tick);
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'ArrowLeft') state.keys.left = true;
+    if (e.key === 'ArrowRight') state.keys.right = true;
+  }
+  function onKeyUp(e) {
+    if (e.key === 'ArrowLeft') state.keys.left = false;
+    if (e.key === 'ArrowRight') state.keys.right = false;
+  }
+
+  function onTouchStart(e) {
+    const t = e.touches[0];
+    if (!t) return;
+    const rect = canvas.getBoundingClientRect();
+    const mid = rect.left + rect.width / 2;
+    state.touchDir = t.clientX < mid ? -1 : 1;
+  }
+  function onTouchEnd() {
+    state.touchDir = 0;
+  }
+
+  if (!state.bound) {
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: true });
+    canvas.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    window.addEventListener('resize', resize);
+    resetBtn.addEventListener('click', resetGame);
+    state.bound = true;
+  }
+
+  paVGState = state;
+  state.running = true;
+  resetGame();
+  state.rafId = requestAnimationFrame(tick);
 }
 
 // ========== DESAFIOS (30 itens, com objetivo) ==========
