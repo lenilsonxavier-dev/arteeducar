@@ -441,7 +441,7 @@
   </style>
 </head>
 <body>
-<!-- 🔐 TELA DE LOGIN -->
+<!-- 🔐 LOGIN MELHORADO -->
 <div id="login" style="
 position:fixed;
 top:0;
@@ -462,8 +462,19 @@ font-family:'Comic Sans MS';
   <h1 style="font-size:2rem;">🎨 Pequenos Artistas do Quirino</h1>
   <p style="font-size:1.2rem;">🔐 Acesso restrito</p>
 
-  <input type="password" id="senha" placeholder="Digite a senha"
-    style="padding:12px;font-size:18px;border-radius:10px;border:none;text-align:center;">
+  <div style="position:relative;">
+    <input type="password" id="senha" placeholder="Digite a senha"
+      style="padding:12px 40px 12px 12px;font-size:18px;border-radius:10px;border:none;text-align:center;">
+    
+    <!-- 👁️ botão mostrar senha -->
+    <span onclick="toggleSenha()" style="
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:18px;">👁️</span>
+  </div>
 
   <button onclick="entrar()" style="
     margin-top:15px;
@@ -483,16 +494,40 @@ font-family:'Comic Sans MS';
 </div>
 
 <script>
+// 🔐 VERIFICA SE JÁ ESTÁ LOGADO
+if (localStorage.getItem("logado") === "sim") {
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("login").style.display = "none";
+  });
+}
+
+// 👁️ MOSTRAR/OCULTAR SENHA
+function toggleSenha() {
+  const input = document.getElementById("senha");
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+// 🔑 ENTRAR
 function entrar() {
   var s = document.getElementById("senha").value;
 
   if (s === "246") {
+    localStorage.setItem("logado", "sim"); // 💾 salva login
     document.getElementById("login").style.display = "none";
   } else {
     document.getElementById("erro").innerText = "Senha incorreta!";
   }
 }
+
+// ⏎ ENTER PARA ENTRAR
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("senha");
+  input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") entrar();
+  });
+});
 </script>
+
 <div id="splash">
   <video id="splash-video" playsinline webkit-playsinline preload="auto">
     <source src="abertura.mp4" type="video/mp4">
