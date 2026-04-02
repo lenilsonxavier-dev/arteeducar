@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Van Gogh - Campo de Trigo</title>
+
+<style>
+* { box-sizing:border-box; margin:0; }
+body { overflow:hidden; background:#000; font-family:Georgia; }
+
+#jogo { width:100vw; height:100vh; position:relative; }
+
+#cenario{
+  width:200%;
+  height:100%;
+  position:absolute;
+  background:url('../assets/imagens/cenario.webp') repeat-x;
+  background-size:50% 100%;
+}
+
+#heroi{
+  width:100px;
+  height:140px;
+  position:absolute;
+  bottom:200px;
+  left:10%;
+  background:url('../assets/imagens/heroicorrendo.png') no-repeat center;
+  background-size:contain;
+}
+
+.corvo{
+  width:65px;
+  height:65px;
+  position:absolute;
+  background:url('../assets/imagens/corvo.png') no-repeat center;
+  background-size:contain;
+}
+
+#hud{
+  position:absolute;
+  width:100%;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  color:#f1c40f;
+  font-size:18px;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+button{
+  padding:15px 30px;
+  font-size:20px;
+  background:#f1c40f;
+  border:none;
+  border-radius:30px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="hud">
+  <div id="pts">0 / 200</div>
+  <div id="vidas">❤❤❤❤❤❤❤</div>
+</div>
+
+<div id="jogo">
+  <div id="cenario"></div>
+  <div id="heroi"></div>
+</div>
+
+<div id="inicio" class="overlay">
+  <h1>🌾 VAN GOGH</h1>
+  <p>Chegue a 200 pontos</p>
+  <button onclick="start()">JOGAR</button>
+</div>
+
+<div id="fim" class="overlay" style="display:none">
+  <h1 id="titulo"></h1>
+  <button onclick="location.reload()">RECOMEÇAR</button>
+</div>
+
+<script>
+
+let pontos=0;
+let vidas=7;
+let ativo=false;
+let bg=0;
+
+const heroi=document.getElementById('heroi');
+const cenario=document.getElementById('cenario');
+
+const somMusica=new Audio('../assets/sons/musica.mp3');
+somMusica.loop=true;
+
+function start(){
+  document.getElementById('inicio').style.display='none';
+  ativo=true;
+  somMusica.play().catch(()=>{});
+  loop();
+  spawn();
+}
+
+function loop(){
+  if(!ativo) return;
+
+  bg-=6;
+  cenario.style.transform=`translateX(${bg}px)`;
+
+  requestAnimationFrame(loop);
+}
+
+function spawn(){
+  if(!ativo) return;
+
+  let c=document.createElement('div');
+  c.className="corvo";
+  c.style.right="-70px";
+  c.style.bottom=Math.random()>0.5?"320px":"200px";
+
+  document.getElementById('jogo').appendChild(c);
+
+  let x=-70;
+
+  let m=setInterval(()=>{
+    x+=10;
+    c.style.right=x+"px";
+
+    // colisão
+    let h=heroi.getBoundingClientRect();
+    let cr=c.getBoundingClientRect();
+
+    if(h.right>cr.left && h.left<cr.right && h.bottom>cr.top){
+      vidas--;
+      document.getElementById('vidas').innerText="❤".repeat(vidas);
+      c.remove();
+      clearInterval(m);
+
+      if(vidas<=0) gameOver(false);
+    }
+
+    if(x>window.innerWidth){
+      pontos+=5;
+      document.getElementById('pts').innerText=pontos+" / 200";
+      c.remove();
+      clearInterval(m);
+
+      if(pontos>=200) gameOver(true);
+    }
+
+  },20);
+
+  setTimeout(spawn,1200);
+}
+
+// pulo
+window.onkeydown=(e)=>{
+  if(e.key==="ArrowUp"){
+    heroi.style.bottom="400px";
+    setTimeout(()=>heroi.style.bottom="200px",400);
+  }
+};
+
+function gameOver(win){
+  ativo=false;
+  somMusica.pause();
+
+  document.getElementById('fim').style.display='flex';
+  document.getElementById('titulo').innerText=win?"🏆 VITÓRIA":"💀 FIM DE JOGO";
+}
+
+</script>
+
+</body>
+</html>
