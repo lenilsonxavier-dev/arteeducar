@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quebra-Cabeça - Abaporu (Tarsila do Amaral)</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#0b2a1f, #1a4a2e);
+      color: #ffebcd;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin: 10px 0 5px;
+      font-size: 32px;
+      text-shadow: 0 0 15px #ffaa00;
+    }
+    .level-buttons {
+      margin: 15px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 18px;
+      background: #d4a017;
+      color: #1a3a2e;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover { background: #ffeb3b; }
+    button.active { background: #ffeb3b; font-weight: bold; }
+
+    .puzzle-container {
+      position: relative;
+      margin: 25px auto;
+      border: 8px solid #d4a017;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(212, 160, 23, 0.8);
+      background: #0a1f14;
+      width: 600px;
+      height: 480px;
+    }
+    .piece {
+      position: absolute;
+      background-size: cover;
+      cursor: grab;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    .piece:active {
+      cursor: grabbing;
+      transform: scale(1.08);
+      z-index: 100;
+    }
+
+    .final-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos/abaporu.jpeg') center/cover;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      pointer-events: none;
+    }
+
+    .congrats {
+      margin-top: 20px;
+      font-size: 28px;
+      color: #ffeb3b;
+      text-shadow: 0 0 10px #ffaa00;
+      opacity: 0;
+      transition: opacity 1s;
+      height: 50px;
+    }
+
+    .info {
+      font-size: 22px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🖼️ Quebra-Cabeça - Abaporu</h1>
+  <p style="margin:5px 0 15px;">Tarsila do Amaral</p>
+
+  <div class="level-buttons">
+    <button onclick="mudarNivel(0)" id="btn0">Fácil (6 peças)</button>
+    <button onclick="mudarNivel(1)" id="btn1" class="active">Médio (12 peças)</button>
+    <button onclick="mudarNivel(2)" id="btn2">Difícil (20 peças)</button>
+  </div>
+
+  <div class="info">
+    Tempo: <span id="timer">0</span>s
+  </div>
+
+  <div class="puzzle-container" id="puzzle">
+    <div class="final-image" id="final"></div>
+  </div>
+
+  <div class="congrats" id="congrats">
+    🎉 Parabéns! Você montou o Abaporu!
+  </div>
+
+  <button onclick="reiniciar()" style="margin-top:15px;">🔄 Reiniciar</button>
+
+  <script>
+    const imgSrc = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos/abaporu.jpeg";
+    let cols = 3, rows = 4;
+    let pieceWidth = 200, pieceHeight = 160;
+    let pieces = [];
+    let draggedPiece = null;
+    let offsetX, offsetY;
+    let tempo = 0;
+    let timerInterval;
+    let jogoCompleto = false;
+
+    const niveis = [
+      {cols: 2, rows: 3},   // Fácil
+      {cols: 3, rows: 4},   // Médio
+      {cols: 4, rows: 5}    // Difícil
+    ];
+
+    function iniciarTimer() {
+      clearInterval(timerInterval);
+      tempo = 0;
+      document.getElementById('timer').textContent = 0;
+      timerInterval = setInterval(() => {
+        tempo++;
+        document.getElementById('timer').textContent = tempo;
+      }, 1000);
+    }
+
+    function criarPecas() {
+      const container = document.getElementById('puzzle');
+      container.innerHTML = '<div class="final-image" id="final"></div>';
+      pieces = [];
+      jogoCompleto = false;
+
+      document.getElementById('congrats').style.opacity = '0';
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const piece = document.createElement('div');
+          piece.className = 'piece';
+          
+          const bgX = -x * pieceWidth;
+          const bgY = -y * pieceHeight;
+          piece.style.backgroundImage = `url(${imgSrc})`;
+          piece.style.backgroundPosition = `${bgX}px ${bgY}px`;
+          piece.style.backgroundSize = `${cols * pieceWidth}px ${rows * pieceHeight}px`;
+          piece.style.width = pieceWidth + "px";
+          piece.style.height = pieceHeight + "px";
+
+          piece.style.left = Math.random() * 350 + "px";
+          piece.style.top = Math.random() * 180 + 100 + "px";
+
+          piece.dataset.correctX = (x * pieceWidth) + "px";
+          piece.dataset.correctY = (y * pieceHeight) + "px";
+
+          piece.addEventListener('mousedown', iniciarArrastar);
+          container.appendChild(piece);
+          pieces.push(piece);
+        }
+      }
+      iniciarTimer();
+    }
+
+    function iniciarArrastar(e) {
+      if (jogoCompleto) return;
+      draggedPiece = e.target;
+      const rect = draggedPiece.getBoundingClientRect();
+      const contRect = document.getElementById('puzzle').getBoundingClientRect();
+
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+
+      document.addEventListener('mousemove', arrastar);
+      document.addEventListener('mouseup', soltar);
+    }
+
+    function arrastar(e) {
+      if (!draggedPiece || jogoCompleto) return;
+      const contRect = document.getElementById('puzzle').getBoundingClientRect();
+
+      let newX = e.clientX - contRect.left - offsetX;
+      let newY = e.clientY - contRect.top - offsetY;
+
+      newX = Math.max(0, Math.min(newX, contRect.width - pieceWidth));
+      newY = Math.max(0, Math.min(newY, contRect.height - pieceHeight));
+
+      draggedPiece.style.left = newX + "px";
+      draggedPiece.style.top = newY + "px";
+    }
+
+    function soltar() {
+      if (!draggedPiece || jogoCompleto) return;
+      document.removeEventListener('mousemove', arrastar);
+      document.removeEventListener('mouseup', soltar);
+
+      const correctX = parseFloat(draggedPiece.dataset.correctX);
+      const correctY = parseFloat(draggedPiece.dataset.correctY);
+      const currentX = parseFloat(draggedPiece.style.left);
+      const currentY = parseFloat(draggedPiece.style.top);
+
+      if (Math.abs(currentX - correctX) < 28 && Math.abs(currentY - correctY) < 28) {
+        draggedPiece.style.left = correctX + "px";
+        draggedPiece.style.top = correctY + "px";
+        draggedPiece.style.borderColor = "#00ff88";
+      }
+
+      draggedPiece = null;
+      verificarVitoria();
+    }
+
+    function verificarVitoria() {
+      const completou = pieces.every(piece => {
+        const cx = parseFloat(piece.dataset.correctX);
+        const cy = parseFloat(piece.dataset.correctY);
+        const px = parseFloat(piece.style.left);
+        const py = parseFloat(piece.style.top);
+        return Math.abs(px - cx) < 25 && Math.abs(py - cy) < 25;
+      });
+
+      if (completou && !jogoCompleto) {
+        jogoCompleto = true;
+        clearInterval(timerInterval);
+
+        // Mostra o quadro final limpo
+        document.getElementById('final').style.opacity = '1';
+
+        // Mostra mensagem discreta abaixo
+        const congrats = document.getElementById('congrats');
+        congrats.textContent = `🎉 Parabéns! Você montou o Abaporu em ${tempo} segundos!`;
+        congrats.style.opacity = '1';
+      }
+    }
+
+    function mudarNivel(nivel) {
+      const nivelAtual = niveis[nivel];
+      cols = nivelAtual.cols;
+      rows = nivelAtual.rows;
+      pieceWidth = 600 / cols;
+      pieceHeight = 480 / rows;
+
+      document.querySelectorAll('.level-buttons button').forEach((btn, i) => {
+        btn.classList.toggle('active', i === nivel);
+      });
+
+      criarPecas();
+    }
+
+    function reiniciar() {
+      criarPecas();
+    }
+
+    // Inicia no nível médio
+    window.onload = () => mudarNivel(1);
+  </script>
+</body>
+</html>
