@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dalí - Jogo</title>
+
+<style>
+body, html {
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:#000;
+}
+
+#jogo-container {
+  position:relative;
+  width:100vw;
+  height:100vh;
+  background: #000 url('../assets/imagens/salvador2.jpg') no-repeat center;
+  background-size: cover;
+}
+
+canvas {
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+
+#dali-player {
+  position:absolute;
+  bottom:15%;
+  width:120px;
+  height:160px;
+  background: url('../assets/imagens/salvador1.png') no-repeat center;
+  background-size:contain;
+}
+
+.overlay {
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  color:#fff;
+}
+
+button {
+  padding:15px 30px;
+  font-size:20px;
+  background:#f1c40f;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="jogo-container">
+  <canvas id="gameCanvas"></canvas>
+  <div id="dali-player"></div>
+
+  <div id="tela-start" class="overlay">
+    <h1>🎨 SALVADOR DALÍ</h1>
+    <button onclick="iniciar()">INICIAR</button>
+  </div>
+</div>
+
+<script>
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const dali = document.getElementById('dali-player');
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.onresize = resize;
+
+let ativo = false;
+let posX = window.innerWidth/2;
+let gotas = [];
+
+function iniciar(){
+  document.getElementById('tela-start').style.display='none';
+  ativo = true;
+  loop();
+  setInterval(spawn, 1200);
+}
+
+function spawn(){
+  gotas.push({
+    x: Math.random()*canvas.width,
+    y: 0,
+    vel: 4
+  });
+}
+
+function loop(){
+  if(!ativo) return;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  dali.style.left = (posX - 60) + "px";
+
+  for(let i=gotas.length-1;i>=0;i--){
+    let g = gotas[i];
+    g.y += g.vel;
+
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(g.x,g.y,10,0,Math.PI*2);
+    ctx.fill();
+
+    if(Math.abs(g.x - posX) < 40 && g.y > canvas.height-200){
+      gotas.splice(i,1);
+    }
+  }
+
+  requestAnimationFrame(loop);
+}
+
+window.onkeydown = (e)=>{
+  if(e.key==="ArrowLeft") posX-=10;
+  if(e.key==="ArrowRight") posX+=10;
+};
+
+</script>
+
+</body>
+</html>
