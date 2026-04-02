@@ -1,137 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dalí - Jogo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DALÍ - VITÓRIA SURREAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Cormorant Garamond', serif; }
+        
+        #jogo-container { 
+            position: relative; width: 100vw; height: 100vh; 
+            background: #000 url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/assets/imagens/salvador2.jpg') no-repeat center;
+            background-size: cover;
+        }
 
-<style>
-body, html {
-  margin:0;
-  padding:0;
-  overflow:hidden;
-  background:#000;
-}
+        canvas { display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 10; }
 
-#jogo-container {
-  position:relative;
-  width:100vw;
-  height:100vh;
-  background: #000 url('../assets/imagens/salvador2.jpg') no-repeat center;
-  background-size: cover;
-}
+        #hud-top { 
+            position: absolute; top: 0; width: 100%; background: rgba(0, 0, 0, 0.8); 
+            padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
+            color: #f1c40f; font-weight: 700; text-transform: uppercase; z-index: 150;
+            border-bottom: 2px solid #f1c40f; pointer-events: none;
+        }
 
-canvas {
-  position:absolute;
-  width:100%;
-  height:100%;
-}
+        #dali-player {
+            position: absolute; bottom: 15%; width: 120px; height: 160px;
+            background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/assets/imagens/salvador1.png') no-repeat center;
+            background-size: contain; z-index: 20; pointer-events: none;
+            filter: drop-shadow(0 0 10px white);
+            transition: filter 0.3s;
+        }
 
-#dali-player {
-  position:absolute;
-  bottom:15%;
-  width:120px;
-  height:160px;
-  background: url('../assets/imagens/salvador1.png') no-repeat center;
-  background-size:contain;
-}
+        .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2000; text-align: center; padding: 20px; }
+        
+        .img-resultado {
+            width: 280px; 
+            max-width: 80%;
+            border-radius: 20px; 
+            border: 4px solid #f1c40f; 
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(241, 196, 15, 0.5);
+        }
 
-.overlay {
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  color:#fff;
-}
-
-button {
-  padding:15px 30px;
-  font-size:20px;
-  background:#f1c40f;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-}
-</style>
+        button { padding: 18px 50px; font-size: 22px; background: #f1c40f; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; color: #000; text-transform: uppercase; font-family: 'Cormorant Garamond', serif; }
+        
+        #controles { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; z-index: 100; }
+        .btn { width: 85px; height: 85px; background: rgba(255,255,255,0.1); border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 35px; backdrop-filter: blur(5px); }
+    </style>
 </head>
-
 <body>
 
-<div id="jogo-container">
-  <canvas id="gameCanvas"></canvas>
-  <div id="dali-player"></div>
+    <div id="jogo-container">
+        <div id="hud-top">
+            <div style="font-size: 24px;">MISTURE: <span id="cor-alvo">...</span></div>
+            <div style="font-size: 20px;"><span id="pts">0</span>/12 | <span id="timer">05:00</span></div>
+        </div>
 
-  <div id="tela-start" class="overlay">
-    <h1>🎨 SALVADOR DALÍ</h1>
-    <button onclick="iniciar()">INICIAR</button>
-  </div>
-</div>
+        <div id="dali-player"></div>
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="controles">
+            <div class="btn" id="left">◀</div>
+            <div class="btn" id="right">▶</div>
+        </div>
+
+        <div id="tela-start" class="overlay">
+            <h1 style="font-size: 3.5em; margin: 0; letter-spacing: 5px;">SALVADOR DALÍ</h1>
+            <p style="font-size: 1.2em; margin-bottom: 30px;">A ARTE SURREALISTA</p>
+            <button onclick="iniciar()">INICIAR</button>
+        </div>
+
+        <div id="tela-fim" class="overlay" style="display:none">
+            <img id="img-fim" src="" class="img-resultado">
+            <h1 id="titulo-fim" style="font-size: 2.8em; margin-top: 0; text-transform: uppercase;"></h1>
+            <button onclick="location.reload()">RECOMEÇAR</button>
+        </div>
+    </div>
 
 <script>
-
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const dali = document.getElementById('dali-player');
-
-function resize(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.onresize = resize;
-
-let ativo = false;
-let posX = window.innerWidth/2;
-let gotas = [];
-
-function iniciar(){
-  document.getElementById('tela-start').style.display='none';
-  ativo = true;
-  loop();
-  setInterval(spawn, 1200);
-}
-
-function spawn(){
-  gotas.push({
-    x: Math.random()*canvas.width,
-    y: 0,
-    vel: 4
-  });
-}
-
-function loop(){
-  if(!ativo) return;
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  dali.style.left = (posX - 60) + "px";
-
-  for(let i=gotas.length-1;i>=0;i--){
-    let g = gotas[i];
-    g.y += g.vel;
-
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-    ctx.arc(g.x,g.y,10,0,Math.PI*2);
-    ctx.fill();
-
-    if(Math.abs(g.x - posX) < 40 && g.y > canvas.height-200){
-      gotas.splice(i,1);
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const dali = document.getElementById('dali-player');
+    
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
-  }
+    window.addEventListener('resize', resize);
+    resize();
 
-  requestAnimationFrame(loop);
-}
+    let ativo = false, pontuacao = 0, tempo = 300, posX = window.innerWidth / 2;
+    let gotas = [], corMistura = null, missaoAtual = {};
+    let movEsq = false, movDir = false;
 
-window.onkeydown = (e)=>{
-  if(e.key==="ArrowLeft") posX-=10;
-  if(e.key==="ArrowRight") posX+=10;
-};
+    // Assets
+    const IMG_VITORIA = 'https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalivitoria.png';
+    const IMG_DERROTA = 'https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalimorto.png';
+    
+    const musicaFundo = new Audio('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/Walen%20-%20Gameboy%20(freetouse.com).mp3');
+    musicaFundo.loop = true;
 
+    function tocarSom(url) {
+        let s = new Audio(url);
+        s.volume = 0.6;
+        s.play().catch(e => console.log("Erro ao tocar som"));
+    }
+
+    function novaMissao() {
+        const m = [
+            { n: 'VERDE', c: 'rgb(0,255,0)' },
+            { n: 'LARANJA', c: 'rgb(255,165,0)' },
+            { n: 'ROXO', c: 'rgb(128,0,128)' }
+        ];
+        missaoAtual = m[Math.floor(Math.random()*m.length)];
+        const el = document.getElementById('cor-alvo');
+        el.innerText = missaoAtual.n;
+        el.style.color = missaoAtual.c;
+    }
+
+    function iniciar() {
+        document.getElementById('tela-start').style.display = 'none';
+        ativo = true;
+        novaMissao();
+        musicaFundo.play().catch(() => {});
+        tocarSom('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalicome%C3%A7o.mp3');
+        requestAnimationFrame(loop);
+        setInterval(() => { if(ativo && tempo > 0) tempo--; }, 1000);
+        setInterval(() => { if(ativo) spawn(); }, 1300);
+    }
+
+    // Controles Touch/Mouse
+    const bEsq = document.getElementById('left');
+    const bDir = document.getElementById('right');
+    
+    bEsq.onpointerdown = (e) => { e.preventDefault(); movEsq = true; };
+    bEsq.onpointerup = bEsq.onpointerleave = () => movEsq = false;
+    
+    bDir.onpointerdown = (e) => { e.preventDefault(); movDir = true; };
+    bDir.onpointerup = bDir.onpointerleave = () => movDir = false;
+
+    window.onkeydown = (e) => { if(e.key=="ArrowLeft") movEsq=true; if(e.key=="ArrowRight") movDir=true; };
+    window.onkeyup = (e) => { if(e.key=="ArrowLeft") movEsq=false; if(e.key=="ArrowRight") movDir=false; };
+
+    function spawn() {
+        const cores = { vermelho: "rgb(255,0,0)", azul: "rgb(0,0,255)", amarelo: "rgb(255,255,0)" };
+        const keys = Object.keys(cores);
+        const n = keys[Math.floor(Math.random()*keys.length)];
+        gotas.push({ 
+            x: 50 + Math.random()*(canvas.width-100), 
+            y: -20, 
+            nome: n, 
+            cor: cores[n], 
+            vel: 4 + Math.random()*3 
+        });
+    }
+
+    function loop() {
+        if(!ativo) return;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        if(movEsq) posX -= 8; if(movDir) posX += 8;
+        posX = Math.max(60, Math.min(canvas.width - 60, posX));
+        dali.style.left = (posX - 60) + 'px';
+
+        for(let i = gotas.length - 1; i >= 0; i--) {
+            let g = gotas[i]; g.y += g.vel;
+            
+            // Desenho da Gota de Tinta
+            ctx.beginPath();
+            ctx.fillStyle = g.cor;
+            ctx.moveTo(g.x, g.y);
+            ctx.bezierCurveTo(g.x-15, g.y+15, g.x-15, g.y+30, g.x, g.y+30);
+            ctx.bezierCurveTo(g.x+15, g.y+30, g.x+15, g.y+15, g.x, g.y);
+            ctx.fill();
+
+            // Colisão (Ajustada para a posição visual do Dali)
+            let dRect = dali.getBoundingClientRect();
+            if(g.y + 30 > dRect.top && g.y < dRect.bottom && g.x > dRect.left && g.x < dRect.right) {
+                coletar(g.nome, g.cor); 
+                gotas.splice(i, 1);
+            } else if(g.y > canvas.height) {
+                gotas.splice(i, 1);
+            }
+        }
+
+        document.getElementById('pts').innerText = Math.floor(pontuacao/10);
+        let m = Math.floor(tempo/60), s = tempo%60;
+        document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
+
+        if(pontuacao >= 120) fim("VITÓRIA SURREAL!", IMG_VITORIA);
+        if(tempo <= 0) fim("O TEMPO ACABOU...", IMG_DERROTA);
+        requestAnimationFrame(loop);
+    }
+
+    function coletar(n, c) {
+        if(!corMistura) { 
+            corMistura = n; 
+            dali.style.filter = `drop-shadow(0 0 15px ${c}) brightness(1.2)`; 
+        } else {
+            let p = [corMistura, n].sort().join('+');
+            const receitas = { 'amarelo+azul': 'VERDE', 'amarelo+vermelho': 'LARANJA', 'azul+vermelho': 'ROXO' };
+            
+            if(receitas[p] === missaoAtual.n) {
+                pontuacao += 10;
+                tocarSom('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalieste.mp3');
+                dali.style.filter = `drop-shadow(0 0 25px ${missaoAtual.c}) brightness(1.5)`;
+                setTimeout(() => { if(ativo) dali.style.filter = 'drop-shadow(0 0 10px white)'; }, 500);
+                novaMissao(); 
+                corMistura = null;
+            } else { 
+                corMistura = null; 
+                dali.style.filter = `drop-shadow(0 0 10px white)`; 
+            }
+        }
+    }
+
+    function fim(txt, imagemUrl) {
+        ativo = false;
+        musicaFundo.pause();
+        document.getElementById('tela-fim').style.display = 'flex';
+        document.getElementById('titulo-fim').innerText = txt;
+        document.getElementById('img-fim').src = imagemUrl;
+        
+        if(txt.includes("VITÓRIA")) {
+            tocarSom('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalivictoria.mp3');
+        } else {
+            tocarSom('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/dalimorte.mp3');
+        }
+    }
 </script>
-
 </body>
 </html>
