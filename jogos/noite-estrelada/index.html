@@ -1,1 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noite Estrelada Final</title>
 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap');
+
+body{
+ margin:0;
+ overflow:hidden;
+ background:#000;
+ font-family:'Fredoka', sans-serif;
+}
+
+canvas{width:100%;height:100%;display:block;}
+
+#hud{
+ position:absolute;
+ top:10px;
+ left:140px;
+ right:10px;
+ display:flex;
+ justify-content:space-between;
+ color:#FFD700;
+ font-size:32px;
+}
+
+#controles{
+ position:absolute;
+ bottom:20px;
+ left:140px;
+ right:0;
+ display:flex;
+ justify-content:space-between;
+ padding:0 20px;
+}
+
+.btn{
+ width:80px;
+ height:80px;
+ border-radius:50%;
+ background:rgba(255,255,255,0.2);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:30px;
+ color:#fff;
+}
+
+.overlay{
+ position:absolute;
+ inset:0;
+ background:radial-gradient(#0b1a2f,#000);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:#FFD700;
+}
+
+.overlay img{
+ width:260px;
+ margin-bottom:20px;
+}
+
+button{
+ padding:15px 30px;
+ border-radius:30px;
+ background:#FFD700;
+ border:none;
+ font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="hud">
+<div>❤️ <span id="vidas">7</span></div>
+<div>⏱️ <span id="tempo">5:00</span></div>
+</div>
+
+<canvas id="c"></canvas>
+
+<div id="controles">
+<div class="btn" id="left">⬅</div>
+<div class="btn" id="right">➡</div>
+</div>
+
+<div id="start" class="overlay">
+<h1>🌌 A Noite Estrelada de Van Gogh</h1>
+<p>💙 Pegue as estrelas azuis</p>
+<p>🔴 Desvie das vermelhas</p>
+<button onclick="start()">INICIAR</button>
+</div>
+
+<div id="end" class="overlay" style="display:none">
+<img id="imgFinal">
+<h2 id="msg"></h2>
+<button onclick="location.reload()">REINICIAR</button>
+</div>
+
+<script>
+
+const canvas=document.getElementById("c");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+// imagens
+const bg=new Image();
+bg.src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladacenario.jpg";
+
+const hero=new Image();
+hero.src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghroblox.png";
+
+const starBlue=new Image();
+starBlue.src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanazul.png";
+
+const starRed=new Image();
+starRed.src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanverm.png";
+
+const starNormal=new Image();
+starNormal.src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacaindo3.png";
+
+// 🎬 finais
+const imgVitoria="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoggh%20vitoria.png";
+const imgDerrota="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangog%20derrota.png";
+
+// 🎵 música
+const music=new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladamusica.mp3");
+music.loop=true;
+
+// 🔊 sons finais
+const somWin="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladavitoria.mp3";
+const somLose="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladagameover.mp3";
+
+function play(src){ new Audio(src).play().catch(()=>{}); }
+
+// sons estrelas
+const somAzul="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
+const somNormal="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacomum.mp3";
+const somVermelho="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
+
+// player
+let x=canvas.width/2;
+let speed=0,left=false,right=false;
+
+// jogo
+let stars=[];
+let particulas=[];
+let vidas=7;
+let playing=false;
+let tempo=300;
+
+// start
+function start(){
+ document.getElementById("start").style.display="none";
+ playing=true;
+ music.play().catch(()=>{});
+ loop();
+ timer();
+}
+
+// timer
+function timer(){
+ setInterval(()=>{
+  if(!playing)return;
+  tempo--;
+
+  let m=Math.floor(tempo/60);
+  let s=tempo%60;
+
+  document.getElementById("tempo").innerText=
+  `${m}:${s.toString().padStart(2,'0')}`;
+
+  if(tempo<=0) end(true);
+
+ },1000);
+}
+
+// spawn
+function spawn(){
+ let r=Math.random();
+ let tipo=r<0.2?"azul":r<0.4?"vermelha":"normal";
+
+ let img=tipo==="azul"?starBlue:
+          tipo==="vermelha"?starRed:starNormal;
+
+ stars.push({x:220+Math.random()*(canvas.width-260),y:-50,speed:3,tipo,img});
+}
+
+// partículas
+function tinta(x,y,cor){
+ for(let i=0;i<10;i++){
+  particulas.push({x,y,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,vida:1,cor});
+ }
+}
+
+// loop
+function loop(){
+ if(!playing)return;
+
+ ctx.drawImage(bg,0,0,canvas.width,canvas.height);
+
+ if(left) speed-=0.6;
+ if(right) speed+=0.6;
+ speed*=0.9;
+ x+=speed;
+
+ x=Math.max(220,Math.min(canvas.width-80,x));
+
+ ctx.drawImage(hero,x-70,canvas.height-180,140,170);
+
+ if(Math.random()<0.03) spawn();
+
+ for(let i=stars.length-1;i>=0;i--){
+  let s=stars[i];
+  s.y+=s.speed;
+
+  ctx.drawImage(s.img,s.x-20,s.y-20,40,40);
+
+  let colidiu=
+   s.x+20 > x-60 &&
+   s.x-20 < x+60 &&
+   s.y+20 > canvas.height-180 &&
+   s.y-20 < canvas.height-20;
+
+  if(colidiu){
+
+    stars.splice(i,1);
+
+    if(s.tipo==="azul"){vidas++;play(somAzul);tinta(s.x,s.y,"cyan");}
+    else if(s.tipo==="vermelha"){vidas-=2;play(somVermelho);tinta(s.x,s.y,"red");}
+    else{vidas--;play(somNormal);tinta(s.x,s.y,"gold");}
+
+    vidas=Math.max(0,vidas);
+    document.getElementById("vidas").innerText=vidas;
+
+    if(vidas<=0) end(false);
+  }
+
+  if(s.y>canvas.height) stars.splice(i,1);
+ }
+
+ // partículas
+ for(let i=particulas.length-1;i>=0;i--){
+  let p=particulas[i];
+  p.x+=p.dx;
+  p.y+=p.dy;
+  p.vida-=0.03;
+
+  ctx.fillStyle=p.cor;
+  ctx.globalAlpha=p.vida;
+  ctx.fillRect(p.x,p.y,5,5);
+  ctx.globalAlpha=1;
+
+  if(p.vida<=0) particulas.splice(i,1);
+ }
+
+ requestAnimationFrame(loop);
+}
+
+// controles
+const leftBtn=document.getElementById("left");
+const rightBtn=document.getElementById("right");
+
+leftBtn.onpointerdown=()=>left=true;
+leftBtn.onpointerup=()=>left=false;
+leftBtn.onpointerleave=()=>left=false;
+
+rightBtn.onpointerdown=()=>right=true;
+rightBtn.onpointerup=()=>right=false;
+rightBtn.onpointerleave=()=>right=false;
+
+window.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft") left=true;
+ if(e.key==="ArrowRight") right=true;
+});
+
+window.addEventListener("keyup",e=>{
+ if(e.key==="ArrowLeft") left=false;
+ if(e.key==="ArrowRight") right=false;
+});
+
+// fim
+function end(win){
+ playing=false;
+ music.pause();
+
+ document.getElementById("end").style.display="flex";
+
+ if(win){
+  document.getElementById("msg").innerText="🏆 Você pintou a noite estrelada!";
+  document.getElementById("imgFinal").src=imgVitoria;
+  play(somWin);
+ }else{
+  document.getElementById("msg").innerText="💀 As tintas foram derramadas...";
+  document.getElementById("imgFinal").src=imgDerrota;
+  play(somLose);
+ }
+}
+
+</script>
+
+</body>
+</html>
