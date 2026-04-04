@@ -728,6 +728,8 @@ document.addEventListener("DOMContentLoaded", () => {
 let audioAtual = null;
 let audioMuseu = null;
 
+const base = 'https://pequenos-artistas-do-quirino.web.app/jogos/';
+
  const jogosOnlineLista = [
   { nome: '🌾 Corvos', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/corvos/index.html' },
   { nome: '🌌 Noite Estrelada', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/noite-estrelada/index.html' },
@@ -795,7 +797,10 @@ function montarListaJogosOnline() {
 }
 
 function carregarJogoOnline(url, nomeJogo = 'Jogo') {
-  window.open(url, '_blank');
+  const frame = document.getElementById('jogosOnlineFrame');
+  if (!frame) return;
+
+  frame.src = url;
 }
 
 function fecharJogoOnline() {
