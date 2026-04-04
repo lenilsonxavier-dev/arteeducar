@@ -100,7 +100,7 @@
     .menu-verde { background: #7ee081; }
     .menu-lilas { background: #e0aaff; }
     .menu-color:hover { filter: brightness(0.96); }
-     menu-jogos-online {
+     .menu-jogos-online {
       background: linear-gradient(135deg, #72ddf7, #3c8fe9);
       color: #ffffff;
       border: 2px solid #ffffff;
@@ -358,7 +358,7 @@
     .btn-voltar-verde { background: #56b870; box-shadow: 0 6px 0 #3e8652; }
     .btn-voltar-lilas { background: #b887e8; box-shadow: 0 6px 0 #7d57a8; }
      
-      ========== CENTRAL DE JOGOS ONLINE ========== */
+     /* ========== CENTRAL DE JOGOS ONLINE ========== */
     #jogosOnline {
       height: 100vh;
       box-sizing: border-box;
@@ -728,11 +728,11 @@ document.addEventListener("DOMContentLoaded", () => {
 let audioAtual = null;
 let audioMuseu = null;
 
-  const jogosOnlineLista = [
-  { nome: '🌾 Corvos', url: 'https://github.com/lenilsonxavier-dev/pequenosartistaspwa/blob/main/jogos/corvos/index.html' },
-  { nome: '🌌 Noite Estrelada', url: 'https://github.com/lenilsonxavier-dev/pequenosartistaspwa/blob/main/jogos/noite-estrelada/index.html' },
-  { nome: '🎨 Abaporu', url: 'https://github.com/lenilsonxavier-dev/pequenosartistaspwa/blob/main/jogos/abaporu/index.html' },
-  { nome: '🖼️ Dali', url: 'https://github.com/lenilsonxavier-dev/pequenosartistaspwa/blob/main/jogos/dali/index.html' }
+ const jogosOnlineLista = [
+  { nome: '🌾 Corvos', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/corvos/index.html' },
+  { nome: '🌌 Noite Estrelada', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/noite-estrelada/index.html' },
+  { nome: '🎨 Abaporu', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/abaporu/index.html' },
+  { nome: '🖼️ Dali', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/dali/index.html' }
 ];
 
 function tocarAudio(nomeArquivo) {
@@ -795,10 +795,7 @@ function montarListaJogosOnline() {
 }
 
 function carregarJogoOnline(url, nomeJogo = 'Jogo') {
-  const frame = document.getElementById('jogosOnlineFrame');
-  if (!frame) return;
-  frame.src = url;
-  frame.setAttribute('title', `WebView do jogo: ${nomeJogo}`);
+  window.open(url, '_blank');
 }
 
 function fecharJogoOnline() {
