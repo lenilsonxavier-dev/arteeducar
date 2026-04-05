@@ -794,7 +794,7 @@ color:#ffffff;'>
 let audioAtual = null;
 let audioMuseu = null;
 
-const base = 'https://pequenos-artistas-do-quirino.web.app/jogos/';
+const base = '/jogos/';
 
   const jogosOnlineLista = [
   {
@@ -887,12 +887,13 @@ function montarListaJogosOnline() {
 });
   }
 
-function carregarJogoOnline(url, nomeJogo = 'Jogo') {
+function carregarJogoOnline(url) {
   const frame = document.getElementById('jogosOnlineFrame');
   if (!frame) return;
 
+  frame.removeAttribute('srcdoc'); // 👈 ESSENCIAL
   frame.src = url;
-}
+} 
 
 function fecharJogoOnline() {
   const frame = document.getElementById('jogosOnlineFrame');
