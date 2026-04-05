@@ -433,22 +433,32 @@
 
  .grid-jogos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .card-jogo {
-  display: flex;
-  align-items: center;
   background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
+  border-radius: 12px;
+  padding: 8px;
+  text-align: center;
   border: 2px solid #ffde59;
-  padding: 6px;
-  transition: 0.2s;
+  cursor: pointer;
 }
 
+.card-jogo img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+.card-jogo span {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #001858;
+}
 .card-jogo:hover {
   transform: scale(1.03);
 }
@@ -800,12 +810,12 @@ const base = 'https://pequenos-artistas-do-quirino.web.app/jogos/';
   {
     nome: '🎨 Abaporu',
     url: base + 'abaporu/index.html',
-    imagem: 'https://i.imgur.com/xkZoQjb.png'
+    imagem:'https://i.imgur.com/GzxpQcA.png'                                        
   },
   {
     nome: '🖼️ Salvador Dalí',
     url: base + 'dali/index.html',
-    imagem: 'https://i.imgur.com/GzxpQcA.png'
+    imagem:'https://i.imgur.com/xkZoQjb.png'
   }
 ];
 
@@ -867,10 +877,10 @@ function montarListaJogosOnline() {
     card.className = 'card-jogo';
 
     card.innerHTML = `
-      <img src="${jogo.imagem}">
-      <span>${jogo.nome}</span>
-    `;
-
+  <img src="${jogo.imagem}">
+  <span>${jogo.nome}</span>
+`;
+  
     card.onclick = () => carregarJogoOnline(jogo.url, jogo.nome);
 
     lista.appendChild(card);
