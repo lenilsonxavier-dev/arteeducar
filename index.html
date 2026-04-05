@@ -1,3 +1,4 @@
+<h1>TESTE NOVO AGORA</h1>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -540,39 +541,100 @@ font-family:'Comic Sans MS';
 
 </div>
 
+
 <script>
+
 // 🔐 VERIFICA SE JÁ ESTÁ LOGADO
 if (localStorage.getItem("logado") === "sim") {
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("login").style.display = "none";
+    const login = document.getElementById("login");
+    if (login) login.style.display = "none";
   });
 }
 
 // 👁️ MOSTRAR/OCULTAR SENHA
 function toggleSenha() {
   const input = document.getElementById("senha");
-  input.type = input.type === "password" ? "text" : "password";
-}
-
-// 🔑 ENTRAR
-function entrar() {
-  var s = document.getElementById("senha").value;
-
-  if (s === "246") {
-    localStorage.setItem("logado", "sim"); // 💾 salva login
-    document.getElementById("login").style.display = "none";
-  } else {
-    document.getElementById("erro").innerText = "Senha incorreta!";
+  if (input) {
+    input.type = input.type === "password" ? "text" : "password";
   }
 }
 
-// ⏎ ENTER PARA ENTRAR
-document.addEventListener("DOMContentLoaded", () => {
+// 🔑 ENTRAR
+// 🔑 ENTRAR
+function entrar() {
   const input = document.getElementById("senha");
-  input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") entrar();
-  });
+  const login = document.getElementById("login");
+  const splash = document.getElementById("splash");
+  const home = document.getElementById("home");
+
+  if (!input) return;
+
+  const s = input.value;
+
+  if (s === "246") {
+    localStorage.setItem("logado", "sim");
+
+    if (login) login.style.display = "none";
+    if (splash) splash.style.display = "none";
+
+    if (home) {
+      home.classList.add("active");
+      home.style.display = "block";
+      home.innerHTML = "<h1>Bem-vindo ao Ateliê 🎨</h1>";
+    }
+
+  } else {
+    const erro = document.getElementById("erro");
+    if (erro) erro.innerText = "Senha incorreta!";
+  }
+}
+
+// 🔄 TUDO CENTRALIZADO AQUI
+document.addEventListener("DOMContentLoaded", function () {
+
+  // LOGIN
+  const btnLogin = document.querySelector('button[onclick="entrar()"]');
+  const input = document.getElementById("senha");
+
+  if (btnLogin) btnLogin.onclick = entrar;
+
+  if (input) {
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") entrar();
+    });
+  }
+
+  // SPLASH
+  const btn = document.getElementById("start-btn");
+  const splash = document.getElementById("splash");
+  const home = document.getElementById("home");
+
+  if (btn) {
+    btn.onclick = function () {
+      if (splash) splash.style.display = "none";
+      if (home) {
+        home.classList.add("active");
+        home.style.display = "block";
+      }
+    };
+  }
+
 });
+
+  const home = document.getElementById("home");
+
+  if (home) {
+    home.classList.add("active");
+
+    home.innerHTML = `
+      <h1>Pequenos Artistas 🎨</h1>
+      <p>App recuperado com sucesso!</p>
+    `;
+  }
+
+});
+
 </script>
 
 <div id="splash">
@@ -2239,20 +2301,24 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
 });
 
 // ========== INICIALIZAÇÃO ==========
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-  // suas funções originais
-  criarPaletaCores();
-  configurarBotoesDesenho();
-  configurarCanvasEvents();
-  mostrarListaDesenhos();
-  setCor('#ff4d4d');
-  renderDesafios();
+  console.log("🔥 APP INICIANDO");
 
-  // 👇 ESSA LINHA É A CHAVE
-  show("home");
+  try { criarPaletaCores(); } catch(e){ console.log("Erro paleta:", e); }
+  try { configurarBotoesDesenho(); } catch(e){ console.log("Erro botoes:", e); }
+  try { configurarCanvasEvents(); } catch(e){ console.log("Erro canvas:", e); }
+  try { mostrarListaDesenhos(); } catch(e){ console.log("Erro lista:", e); }
+  try { renderDesafios(); } catch(e){ console.log("Erro desafios:", e); }
 
-};
+  // 👇 FORÇA TELA PRINCIPAL
+  const home = document.getElementById("home");
+  if (home) {
+    home.classList.add("active");
+  }
+
+});
+
 
 function entrarEmModoImersivo() {
   const doc = document.documentElement;
