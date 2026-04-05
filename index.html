@@ -431,6 +431,44 @@
       .jogos-online-frame-wrap { min-height: 60vh; }
     }
 
+ .grid-jogos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.card-jogo {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #ffde59;
+  padding: 6px;
+  transition: 0.2s;
+}
+
+.card-jogo:hover {
+  transform: scale(1.03);
+}
+
+/* 🔥 AQUI ESTÁ A MÁGICA */
+.card-jogo img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain; /* 👈 NÃO CORTA MAIS */
+  background: #f5f5f5;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.card-jogo span {
+  font-weight: bold;
+  color: #001858;
+  font-size: 14px;
+}
+
     /* ========== MEDIA QUERY ========== */
     @media (max-width: 700px) {
       .title-group h1 { font-size: 1.6rem !important; }
@@ -567,15 +605,33 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="jogos-online-content">
     <aside class="jogos-online-sidebar">
       <p>Selecione um jogo para abrir no WebView interno.</p>
-      <div id="listaJogosOnline"></div>
+      <div id="listaJogosOnline" class="grid-jogos"></div>
       <div class="jogos-online-info">🚪 Segurança: o jogo abre dentro do app e você pode voltar a qualquer momento.</div>
     </aside>
     <div class="jogos-online-frame-wrap">
-      <iframe id="jogosOnlineFrame" title="Central de Jogos Online" sandbox="allow-scripts allow-same-origin allow-pointer-lock" srcdoc="<html><body style='margin:0;display:flex;align-items:center;justify-content:center;font-family:Comic Sans MS,Arial;background:#fef6e4;color:#001858;'><div style='text-align:center;padding:20px;'><h2 style='margin:0;'>🎮 Central pronta!</h2><p style='margin:8px 0 0;'>Toque em um jogo para começar.</p></div></body></html>"></iframe>
-    </div>
-  </div>
-</div>
+    <iframe id="jogosOnlineFrame" title="Central de Jogos Online" allowfullscreen 
+srcdoc="<html>
+<body style='margin:0;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Comic Sans MS,Arial;
+background:url(https://i.imgur.com/3AdWSKC.jpeg) center top/cover no-repeat;
+color:#ffffff;'>
 
+  <div style='background:rgba(0,0,0,0.45);
+              padding:25px;
+              border-radius:20px;
+              text-align:center;'>
+
+    <h2 style='margin:0;font-size:22px;'>🎮 Escolha um jogo</h2>
+    <p style='opacity:0.9;margin-top:8px;'>Selecione um dos cards ao lado</p>
+
+  </div>
+
+</body>
+</html>">
+</iframe>
 
 <!-- ========== DESENHO ========== -->
 <div id="desenho" class="screen">
@@ -730,11 +786,27 @@ let audioMuseu = null;
 
 const base = 'https://pequenos-artistas-do-quirino.web.app/jogos/';
 
- const jogosOnlineLista = [
-  { nome: '🌾 Corvos', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/corvos/index.html' },
-  { nome: '🌌 Noite Estrelada', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/noite-estrelada/index.html' },
-  { nome: '🎨 Abaporu', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/abaporu/index.html' },
-  { nome: '🖼️ Dali', url: 'https://lenilsonxavier-dev.github.io/pequenosartistaspwa/jogos/dali/index.html' }
+  const jogosOnlineLista = [
+  {
+    nome: '🌾 Corvos',
+    url: base + 'corvos/index.html',
+    imagem: 'https://i.imgur.com/oxbKJH4.png'
+  },
+  {
+    nome: '🌌 Noite Estrelada',
+    url: base + 'noite-estrelada/index.html',
+    imagem: 'https://i.imgur.com/DnYiA1I.png'
+  },
+  {
+    nome: '🎨 Abaporu',
+    url: base + 'abaporu/index.html',
+    imagem: 'https://i.imgur.com/xkZoQjb.png'
+  },
+  {
+    nome: '🖼️ Salvador Dalí',
+    url: base + 'dali/index.html',
+    imagem: 'https://i.imgur.com/GzxpQcA.png'
+  }
 ];
 
 function tocarAudio(nomeArquivo) {
@@ -787,14 +859,23 @@ function pararSomMuseu() {
 function montarListaJogosOnline() {
   const lista = document.getElementById('listaJogosOnline');
   if (!lista) return;
+
   lista.innerHTML = '';
-  jogosOnlineLista.forEach((jogo) => {
-    const btn = document.createElement('button');
-    btn.textContent = jogo.nome;
-    btn.onclick = () => carregarJogoOnline(jogo.url, jogo.nome);
-    lista.appendChild(btn);
-  });
-}
+
+  jogosOnlineLista.forEach(jogo => {
+    const card = document.createElement('div');
+    card.className = 'card-jogo';
+
+    card.innerHTML = `
+      <img src="${jogo.imagem}">
+      <span>${jogo.nome}</span>
+    `;
+
+    card.onclick = () => carregarJogoOnline(jogo.url, jogo.nome);
+
+    lista.appendChild(card);
+});
+  }
 
 function carregarJogoOnline(url, nomeJogo = 'Jogo') {
   const frame = document.getElementById('jogosOnlineFrame');
@@ -833,6 +914,7 @@ function reforcarNavegacaoInternaJogos() {
 
 function abrirCentralJogos() {
   show('jogosOnline');
+
   montarListaJogosOnline();
   carregarJogoOnline(jogosOnlineLista[0].url, jogosOnlineLista[0].nome);
 }
