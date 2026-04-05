@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quebra-Cabeça - Abaporu</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background: linear-gradient(#0b2a1f,#1a4a2e);
+  color:#ffebcd;
+  text-align:center;
+}
+
+h2 { margin-top:10px; }
+
+.puzzle-container {
+  position:relative;
+  margin:20px auto;
+  width:600px;
+  height:480px;
+  border:6px solid #d4a017;
+
+  /* imagem guia */
+  background:url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/abaporu.jpeg') center/cover;
+  opacity:0.9;
+}
+
+.piece {
+  position:absolute;
+  background-size:cover;
+  cursor:grab;
+  border:1px solid rgba(0,0,0,0.3);
+}
+
+button {
+  margin:5px;
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  background:#d4a017;
+  color:#000;
+  font-weight:bold;
+}
+
+#vitoria {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  color:white;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🖼️ Abaporu - Quebra-Cabeça</h2>
+
+<p>⏱️ Tempo: <span id="timer">0</span>s | ⭐ Pontos: <span id="score">0</span></p>
+
+<div>
+<button onclick="nivel(1)">Fácil</button>
+<button onclick="nivel(2)">Médio</button>
+<button onclick="nivel(3)">Difícil</button>
+</div>
+
+<div id="puzzle" class="puzzle-container"></div>
+
+<button onclick="reiniciar()">🔄 Reiniciar</button>
+
+<div id="vitoria">
+  <h1>🏆 Parabéns!</h1>
+  <p>Você completou o Abaporu!</p>
+  <button onclick="reiniciar()">Jogar novamente</button>
+</div>
+
+<script>
+
+// imagem
+const imgSrc = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/abaporu.jpeg";
+
+// som
+const somAcerto = new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
+
+let cols=3, rows=4;
+let pieceW=200, pieceH=160;
+let pieces=[];
+let tempo=0;
+let timerInterval;
+
+// tempo
+function iniciarTimer(){
+  tempo=0;
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    tempo++;
+    document.getElementById('timer').textContent=tempo;
+  },1000);
+}
+
+// níveis
+function nivel(n){
+  if(n==1){ cols=2; rows=2; }
+  if(n==2){ cols=3; rows=3; }
+  if(n==3){ cols=3; rows=4; }
+
+  pieceW = 600/cols;
+  pieceH = 480/rows;
+
+  criar();
+}
+
+// criar peças
+function criar(){
+  const cont=document.getElementById('puzzle');
+  cont.innerHTML="";
+  pieces=[];
+  document.getElementById("vitoria").style.display="none";
+
+  for(let y=0;y<rows;y++){
+    for(let x=0;x<cols;x++){
+
+      let p=document.createElement('div');
+      p.className="piece";
+
+      p.style.width=pieceW+"px";
+      p.style.height=pieceH+"px";
+
+      p.style.backgroundImage=`url(${imgSrc})`;
+      p.style.backgroundPosition=`-${x*pieceW}px -${y*pieceH}px`;
+      p.style.backgroundSize=`${cols*pieceW}px ${rows*pieceH}px`;
+
+      p.style.left=Math.random()*400+"px";
+      p.style.top=Math.random()*300+"px";
+
+      p.dataset.cx=x*pieceW;
+      p.dataset.cy=y*pieceH;
+
+      p.onpointerdown=dragStart;
+
+      cont.appendChild(p);
+      pieces.push(p);
+    }
+  }
+
+  iniciarTimer();
+}
+
+// drag
+let drag=null, offsetX, offsetY;
+
+function dragStart(e){
+  drag=e.target;
+  offsetX=e.offsetX;
+  offsetY=e.offsetY;
+
+  document.onpointermove=dragMove;
+  document.onpointerup=drop;
+}
+
+function dragMove(e){
+  if(!drag) return;
+
+  let cont=document.getElementById('puzzle').getBoundingClientRect();
+
+  drag.style.left=(e.clientX-cont.left-offsetX)+"px";
+  drag.style.top=(e.clientY-cont.top-offsetY)+"px";
+}
+
+// soltar
+function drop(){
+  if(!drag) return;
+
+  let x=parseFloat(drag.style.left);
+  let y=parseFloat(drag.style.top);
+
+  if(Math.abs(x-drag.dataset.cx)<30 && Math.abs(y-drag.dataset.cy)<30){
+    drag.style.left=drag.dataset.cx+"px";
+    drag.style.top=drag.dataset.cy+"px";
+
+    drag.style.boxShadow="0 0 15px gold";
+
+    somAcerto.play();
+  }
+
+  verificarVitoria();
+
+  drag=null;
+}
+
+// vitória
+function verificarVitoria(){
+  let certo = pieces.every(p =>
+    parseFloat(p.style.left)==p.dataset.cx &&
+    parseFloat(p.style.top)==p.dataset.cy
+  );
+
+  if(certo){
+    document.getElementById("vitoria").style.display="flex";
+
+    let score = Math.max(100 - tempo, 10);
+    document.getElementById("score").textContent=score;
+  }
+}
+
+// reiniciar
+function reiniciar(){
+  criar();
+}
+
+// iniciar
+window.onload=()=>{
+  criar();
+}
+
+</script>
+
+</body>
+</html>
