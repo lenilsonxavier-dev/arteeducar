@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -86,7 +87,7 @@
     }
     /* ========== BOTÕES E INTERFACE ========== */
     button {
-      padding: 18px; margin: 6px; border-radius: 16px; border: none;
+      padding: 14px; margin: 6px; border-radius: 16px; border: none;
       background: #f582ae; font-size: 16px; color: #001858; cursor: pointer;
       transition: 0.2s;
     }
@@ -100,13 +101,6 @@
     .menu-verde { background: #7ee081; }
     .menu-lilas { background: #e0aaff; }
     .menu-color:hover { filter: brightness(0.96); }
-     .menu-jogos-online {
-      background: linear-gradient(135deg, #72ddf7, #3c8fe9);
-      color: #ffffff;
-      border: 2px solid #ffffff;
-      font-weight: bold;
-    }
-
     #btnSomMuseu {
       background: #72ddf7;
       border: 2px solid #ffffff;
@@ -117,7 +111,7 @@
 
     /* ========== CARDS E GALERIA ========== */
     .card {
-      background: #fff; border-radius: 20px; padding: 22px; margin: 12px; 
+      background: #fff; border-radius: 20px; padding: 14px; margin: 12px; 
       text-align: left; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -210,6 +204,12 @@
       background: transparent;
     }
     .extra-tools { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0 0; }
+    .big-back-btn {
+      background: #b0d0ff; border: none; border-radius: 60px; padding: 16px 30px;
+      font-size: 1.9rem; color: #1f3a5f; box-shadow: 0 8px 0 #6b8cbb; cursor: pointer;
+      margin-top: 25px; width: 100%; font-weight: bold; border: 4px solid white;
+    }
+
     /* ========== DESAFIOS ========== */
     .desafios-container { 
       max-width: 800px; 
@@ -326,6 +326,7 @@
     /* ========== MUSEU ========== */
     .content { max-width: 1400px; margin: 0 auto; background: rgba(255,255,255,0.9); border-radius: 60px; padding: 25px; border: 4px solid white; }
     .header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; background: #7fc9ff; padding: 15px 25px; border-radius: 80px 80px 40px 40px; border: 3px solid #ffffff; }
+    .btn-voltar { background: #3399ff; color: white; border: none; font-size: 1.4rem; font-weight: bold; padding: 12px 25px; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 5px 0 #1a5c9e; border: 3px solid #c3e2ff; }
     .title-group h1 { font-size: 2.2rem; color: #ffffff; }
     .title-group span { background: #ffdd77; color: #2b5f8a; padding: 0 15px; border-radius: 50px; border: 2px solid white; display: inline-block; margin-top: 5px; }
     .exhibition-3d { background: #2b6c9e; border-radius: 50px; padding: 15px; border: 5px solid #ffffff; }
@@ -333,308 +334,16 @@
     .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .tour-guide { background: #fee5b1; margin-top: 15px; padding: 15px 20px; border-radius: 40px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; border: 3px solid white; color: #154256; font-weight: bold; font-size: 1.3rem; justify-content: center; }
 
-
-
-    /* ========== BOTÕES VOLTAR AO MENU ========== */
-    .btn-voltar-menu {
-      border: 2px solid #b8dcff;
-      color: #fff;
-      font-size: 1.55rem;
-      font-weight: 700;
-      border-radius: 999px;
-      padding: 9px 22px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 6px 0 rgba(0,0,0,.25);
-      text-decoration: none;
-    }
-    .btn-voltar-menu .ico { background: rgba(255,255,255,.18); border-radius: 10px; padding: 2px 8px; }
-    .btn-voltar-amarelo { background: #ffde59; color: #003057; box-shadow: 0 6px 0 #c5a92c; border-color: #fff7d1; }
-    .btn-voltar-azul { background: #3c8fe9; box-shadow: 0 6px 0 #2a63a4; }
-    .btn-voltar-roxo { background: #8a63d2; box-shadow: 0 6px 0 #5f4396; }
-    .btn-voltar-laranja { background: #ff9e48; box-shadow: 0 6px 0 #bf6d26; }
-    .btn-voltar-verde { background: #56b870; box-shadow: 0 6px 0 #3e8652; }
-    .btn-voltar-lilas { background: #b887e8; box-shadow: 0 6px 0 #7d57a8; }
-     
-     /* ========== CENTRAL DE JOGOS ONLINE ========== */
-    #jogosOnline {
-      height: 100vh;
-      box-sizing: border-box;
-      background: #001858;
-      color: #ffffff;
-      padding: 14px;
-    }
-    .jogos-online-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .jogos-online-header h2 {
-      margin: 0;
-      color: #ffffff;
-      font-size: 1.2rem;
-    }
-    .jogos-online-content {
-      display: grid;
-      grid-template-columns: minmax(230px, 300px) 1fr;
-      gap: 12px;
-      height: calc(100vh - 100px);
-    }
-    .jogos-online-sidebar {
-      background: #0d2b7e;
-      border-radius: 18px;
-      padding: 12px;
-      overflow-y: auto;
-    }
-    .jogos-online-sidebar p {
-      margin-top: 0;
-      color: #e6f0ff;
-      text-align: left;
-      font-size: .95rem;
-    }
-    .jogos-online-sidebar button {
-      width: 100%;
-      margin: 6px 0;
-      border-radius: 12px;
-      background: #ffde59;
-      color: #001858;
-      font-weight: bold;
-      border: 2px solid #fff;
-    }
-    .jogos-online-frame-wrap {
-      border-radius: 18px;
-      overflow: hidden;
-      border: 3px solid #ffde59;
-      background: #000;
-      min-height: 380px;
-    }
-    #jogosOnlineFrame {
-      width: 100%;
-      height: 100%;
-      min-height: 380px;
-      border: none;
-      background: #ffffff;
-    }
-    .jogos-online-info {
-      text-align: left;
-      margin-top: 8px;
-      color: #d8e7ff;
-      font-size: .92rem;
-    }
-    @media (max-width: 900px) {
-      .jogos-online-content { grid-template-columns: 1fr; height: auto; }
-      .jogos-online-frame-wrap { min-height: 60vh; }
-    }
-
- .grid-jogos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.card-jogo {
-  background: white;
-  border-radius: 12px;
-  padding: 8px;
-  text-align: center;
-  border: 2px solid #ffde59;
-  cursor: pointer;
-}
-
-.card-jogo img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  margin-bottom: 5px;
-}
-
-.card-jogo span {
-  display: block;
-  font-size: 13px;
-  font-weight: bold;
-  color: #001858;
-}
-.card-jogo:hover {
-  transform: scale(1.03);
-}
-
-/* 🔥 AQUI ESTÁ A MÁGICA */
-.card-jogo img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain; /* 👈 NÃO CORTA MAIS */
-  background: #f5f5f5;
-  border-radius: 10px;
-  margin-right: 10px;
-}
-
-.card-jogo span {
-  font-weight: bold;
-  color: #001858;
-  font-size: 14px;
-}
-
     /* ========== MEDIA QUERY ========== */
     @media (max-width: 700px) {
       .title-group h1 { font-size: 1.6rem !important; }
+      .btn-voltar { font-size: 1.2rem !important; padding: 10px 18px !important; }
       .tour-guide { font-size: 1.1rem !important; }
       .iframe-container { height: 55vh !important; }
     }
   </style>
 </head>
 <body>
-<!-- 🔐 LOGIN MELHORADO -->
-<div id="login" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:linear-gradient(135deg,#00ca85,#0099cc);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:99999;
-color:white;
-text-align:center;
-font-family:'Comic Sans MS';
-">
-
-  <h1 style="font-size:2rem;">🎨 Pequenos Artistas do Quirino</h1>
-  <p style="font-size:1.2rem;">🔐 Acesso restrito</p>
-
-  <div style="position:relative;">
-    <input type="password" id="senha" placeholder="Digite a senha"
-      style="padding:12px 40px 12px 12px;font-size:18px;border-radius:10px;border:none;text-align:center;">
-    
-    <!-- 👁️ botão mostrar senha -->
-    <span onclick="toggleSenha()" style="
-      position:absolute;
-      right:10px;
-      top:50%;
-      transform:translateY(-50%);
-      cursor:pointer;
-      font-size:18px;">👁️</span>
-  </div>
-
-  <button onclick="entrar()" style="
-    margin-top:15px;
-    padding:12px 25px;
-    font-size:18px;
-    border:none;
-    border-radius:20px;
-    background:#ffcc00;
-    color:#001858;
-    font-weight:bold;
-    cursor:pointer;">
-    Entrar 🎨
-  </button>
-
-  <p id="erro" style="color:#ffdddd;margin-top:10px;"></p>
-
-</div>
-
-
-<script>
-
-// 🔐 VERIFICA SE JÁ ESTÁ LOGADO
-if (localStorage.getItem("logado") === "sim") {
-  document.addEventListener("DOMContentLoaded", () => {
-    const login = document.getElementById("login");
-    if (login) login.style.display = "none";
-  });
-}
-
-// 👁️ MOSTRAR/OCULTAR SENHA
-function toggleSenha() {
-  const input = document.getElementById("senha");
-  if (input) {
-    input.type = input.type === "password" ? "text" : "password";
-  }
-}
-
-// 🔑 ENTRAR
-// 🔑 ENTRAR
-function entrar() {
-  const input = document.getElementById("senha");
-  const login = document.getElementById("login");
-  const splash = document.getElementById("splash");
-  const home = document.getElementById("home");
-
-  if (!input) return;
-
-  const s = input.value;
-
-  if (s === "246") {
-    localStorage.setItem("logado", "sim");
-
-    if (login) login.style.display = "none";
-    if (splash) splash.style.display = "none";
-
-    if (home) {
-      home.classList.add("active");
-      home.style.display = "block";
-      home.innerHTML = "<h1>Bem-vindo ao Ateliê 🎨</h1>";
-    }
-
-  } else {
-    const erro = document.getElementById("erro");
-    if (erro) erro.innerText = "Senha incorreta!";
-  }
-}
-
-// 🔄 TUDO CENTRALIZADO AQUI
-document.addEventListener("DOMContentLoaded", function () {
-
-  // LOGIN
-  const btnLogin = document.querySelector('button[onclick="entrar()"]');
-  const input = document.getElementById("senha");
-
-  if (btnLogin) btnLogin.onclick = entrar;
-
-  if (input) {
-    input.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") entrar();
-    });
-  }
-
-  // SPLASH
-  const btn = document.getElementById("start-btn");
-  const splash = document.getElementById("splash");
-  const home = document.getElementById("home");
-
-  if (btn) {
-    btn.onclick = function () {
-      if (splash) splash.style.display = "none";
-      if (home) {
-        home.classList.add("active");
-        home.style.display = "block";
-      }
-    };
-  }
-
-});
-
-  const home = document.getElementById("home");
-
-  if (home) {
-    home.classList.add("active");
-
-    home.innerHTML = `
-      <h1>Pequenos Artistas 🎨</h1>
-      <p>App recuperado com sucesso!</p>
-    `;
-  }
-
-});
-
-</script>
 
 <div id="splash">
   <video id="splash-video" playsinline webkit-playsinline preload="auto">
@@ -657,39 +366,11 @@ document.addEventListener("DOMContentLoaded", function () {
   <button class="menu-color menu-roxo" onclick="show('galeria')">🏆 Galeria</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
-   <button class="menu-color menu-jogos-online" onclick="abrirCentralJogos()">🎮 Jogos Online</button>  
   <button class="menu-color menu-lilas" onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
   <button class="btn-sair" onclick="fecharApp()">
     <i class="fas fa-times-circle"></i> Sair do Ateliê
   </button>
 </div>
-
-<!-- ========== CENTRAL DE JOGOS ONLINE ========== -->
-<div id="jogosOnline" class="screen">
-
-  <div class="jogos-online-header">
-    <button class="btn-voltar-menu btn-voltar-azul" onclick="voltarDoJogoOnline()">
-      <span class="ico">⬅️</span> Voltar
-    </button>
-    <h2>🎮 Central de Jogos</h2>
-  </div>
-
-  <div class="jogos-online-content">
-
-    <div class="jogos-online-sidebar">
-      <p>Escolha um jogo:</p>
-      <div id="listaJogosOnline" class="grid-jogos"></div>
-    </div>
-
-    <div class="jogos-online-frame-wrap">
-      <iframe id="jogosOnlineFrame"></iframe>
-    </div>
-
-  </div>
-
-</div>
-<!-- ========== DESENHO ========== -->
-<div id="desenho" class="screen">
 
 <!-- ========== DESENHO ========== -->
 <div id="desenho" class="screen">
@@ -731,14 +412,14 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </div>
   </div>
-  <button class="btn-voltar-menu btn-voltar-amarelo" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
+  <button class="big-back-btn" onclick="show('home')">⬅ Voltar ao Menu</button>
 </div>
 
 <!-- ========== MUSEU ========== -->
 <div id="museu" class="screen">
   <div class="content">
     <div class="header">
-      <button class="btn-voltar-menu btn-voltar-azul" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
+      <button class="btn-voltar" onclick="show('home')">⬅️ Voltar</button>
       <div class="title-group">
         <h1>✨ As infâncias de <span>Cândido Portinari</span></h1>
         <button id="btnSomMuseu" onclick="alternarSomMuseu()">🔊 Iniciar som do museu</button>
@@ -766,14 +447,16 @@ document.addEventListener("DOMContentLoaded", function () {
     <button class="clear-gallery-btn" onclick="limparGaleria()">🗑️ Limpar Galeria</button>
   </div>
   <div id="gallery" class="gallery"></div>
-  <button class="btn-voltar-menu btn-voltar-roxo" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
+  <button onclick="show('home')">⬅ Voltar</button>
 </div>
 
 <!-- ========== MURAL ========== -->
 <div id="mural" class="screen" style="display: none; height: 100vh; flex-direction: column; background: #001858;">
   <div class="mural-header" style="height: 60px; background: #001858; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 2px solid #ffcc00;">
     <h2 style="color: white; margin: 0; font-size: 1.2rem;">🖼️ Mural Virtual: Artistas do Quirino</h2>
-    <button class="btn-voltar-menu btn-voltar-laranja" onclick="sairDoMural()"><span class="ico">⬅️</span> Voltar</button>
+    <button onclick="sairDoMural()" style="background: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #001858;">
+      ⬅ Sair do Mural
+    </button>
   </div>
   <div style="flex-grow: 1; overflow: hidden;">
     <iframe 
@@ -788,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- ========== DESAFIOS ========== -->
 <div id="desafiosArte" class="screen">
   <div style="display: flex; justify-content: flex-start; padding: 10px;">
-    <button class="btn-voltar-menu btn-voltar-verde" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
+    <button onclick="show('home')" style="background: #8bd3dd; border-radius: 10px; border: none; padding: 8px 15px;">⬅ Voltar</button>
   </div>
   <h2 style="text-align: center;">🎲 Desafios de Arte</h2>
   <button onclick="desafioAleatorio()" class="btn-sorte" style="width: 100%; padding: 15px; margin: 10px 0; background: #ffcc00; border: none; border-radius: 20px; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -804,7 +487,6 @@ document.addEventListener("DOMContentLoaded", function () {
   >
   <div id="desafiosGrid" class="desafios-grid"></div>
 </div>
-
 
 <!-- ========== PINCEL MÁGICO ========== -->
 <div id="pincelIA" class="screen">
@@ -834,38 +516,13 @@ document.addEventListener("DOMContentLoaded", function () {
       <button onclick="bloquearPalavra()">🚫 Bloquear palavra</button>
     </div>
   </div>
-  <button class="btn-voltar-menu btn-voltar-lilas" onclick="show('home')" style="margin-top:20px;"><span class="ico">⬅️</span> Voltar</button>
+  <button onclick="show('home')" style="margin-top:20px;">⬅ Voltar</button>
 </div>
 
 <script>
 // ========== GLOBAL ==========
 let audioAtual = null;
 let audioMuseu = null;
-
-const base = '/jogos/';
-
-  const jogosOnlineLista = [
-  {
-    nome: '🌾 Corvos',
-    url: base + 'corvos/index.html',
-    imagem: 'https://i.imgur.com/oxbKJH4.png'
-  },
-  {
-    nome: '🌌 Noite Estrelada',
-    url: base + 'noite-estrelada/index.html',
-    imagem: 'https://i.imgur.com/DnYiA1I.png'
-  },
-  {
-    nome: '🎨 Abaporu',
-    url: base + 'abaporu/index.html',
-    imagem:'https://i.imgur.com/GzxpQcA.png'                                        
-  },
-  {
-    nome: '🖼️ Salvador Dalí',
-    url: base + 'dali/index.html',
-    imagem:'https://i.imgur.com/xkZoQjb.png'
-  }
-];
 
 function tocarAudio(nomeArquivo) {
   if (!nomeArquivo) return;
@@ -914,93 +571,9 @@ function pararSomMuseu() {
   atualizarBotaoSomMuseu();
 }
 
-function montarListaJogosOnline() {
-  const lista = document.getElementById('listaJogosOnline');
-  if (!lista) return;
-
-  lista.innerHTML = '';
-
-  jogosOnlineLista.forEach(jogo => {
-    const card = document.createElement('div');
-    card.className = 'card-jogo';
-
-    card.innerHTML = `
-  <img src="${jogo.imagem}">
-  <span>${jogo.nome}</span>
-`;
-  
-    card.onclick = () => carregarJogoOnline(jogo.url, jogo.nome);
-
-    lista.appendChild(card);
-});
-  }
-
-function carregarJogoOnline(url) {
-  const frame = document.getElementById('jogosOnlineFrame');
-  if (!frame) return;
-
-  frame.removeAttribute('srcdoc'); // 👈 ESSENCIAL
-  frame.src = url;
-} 
-
-function fecharJogoOnline() {
-  const frame = document.getElementById('jogosOnlineFrame');
-  if (!frame) return;
-  frame.src = 'about:blank';
-}
-
-function reforcarNavegacaoInternaJogos() {
-  const frame = document.getElementById('jogosOnlineFrame');
-  if (!frame || !frame.contentWindow) return;
-  let doc = null;
-  try {
-    doc = frame.contentWindow.document;
-  } catch (e) {
-    return;
-  }
-  if (!doc) return;
-  const links = doc.querySelectorAll('a[target], a[href]');
-  links.forEach((link) => {
-    link.setAttribute('target', '_self');
-    link.setAttribute('rel', 'noopener noreferrer');
-  });
-  frame.contentWindow.open = (url) => {
-    if (!url) return null;
-    frame.contentWindow.location.href = url;
-    return null;
-  };
-}
-
-function abrirCentralJogos() {
-  show('jogosOnline');
-
-  montarListaJogosOnline();
-  carregarJogoOnline(jogosOnlineLista[0].url, jogosOnlineLista[0].nome);
-}
-
-function voltarDoJogoOnline() {
-  const frame = document.getElementById('jogosOnlineFrame');
-  if (frame) frame.src = 'about:blank';
-  show('home');
-}
-
-
 // ========== FUNÇÃO ÚNICA DE NAVEGAÇÃO ==========
 function show(id) {
   if (id !== 'museu') pararSomMuseu();
-  if (id !== 'jogosOnline') {
-    const frame = document.getElementById('jogosOnlineFrame');
-    if (frame && frame.src && !frame.src.endsWith('about:blank')) frame.src = 'about:blank';
-  }
-
- const frameJogos = document.getElementById('jogosOnlineFrame');
-
-  if (frameJogos) {
-    frameJogos.addEventListener('load', () => {
-      reforcarNavegacaoInternaJogos();
-    });
-  }
-
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => {
     s.style.display = 'none';
@@ -1022,13 +595,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
   const fallback = document.getElementById('splash-fallback');
-    const frameJogos = document.getElementById('jogosOnlineFrame');
-
-  if (frameJogos) {
-    frameJogos.addEventListener('load', () => {
-      reforcarNavegacaoInternaJogos();
-    });
-  } 
 
   if (startBtn) {
     startBtn.onclick = function() {
@@ -1049,7 +615,6 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         splash.style.display = 'none';
         show('home');
-       montarListaJogosOnline();
       }, 800);
     }
   }
@@ -1390,7 +955,6 @@ function carregarMural() {
 function sairDoMural() {
   show('home');
 }
-
 
 // ========== DESAFIOS (30 itens, com objetivo) ==========
 const desafios = [
@@ -2300,24 +1864,14 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
 });
 
 // ========== INICIALIZAÇÃO ==========
-document.addEventListener("DOMContentLoaded", function () {
-
-  console.log("🔥 APP INICIANDO");
-
-  try { criarPaletaCores(); } catch(e){ console.log("Erro paleta:", e); }
-  try { configurarBotoesDesenho(); } catch(e){ console.log("Erro botoes:", e); }
-  try { configurarCanvasEvents(); } catch(e){ console.log("Erro canvas:", e); }
-  try { mostrarListaDesenhos(); } catch(e){ console.log("Erro lista:", e); }
-  try { renderDesafios(); } catch(e){ console.log("Erro desafios:", e); }
-
-  // 👇 FORÇA TELA PRINCIPAL
-  const home = document.getElementById("home");
-  if (home) {
-    home.classList.add("active");
-  }
-
-});
-
+window.onload = function() {
+  criarPaletaCores();
+  configurarBotoesDesenho();
+  configurarCanvasEvents();
+  mostrarListaDesenhos();
+  setCor('#ff4d4d');
+  renderDesafios();
+};
 
 function entrarEmModoImersivo() {
   const doc = document.documentElement;
@@ -2353,4 +1907,3 @@ function fecharApp() {
 
 </body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_4mPzYL2HXpaFUsiTbCo53eUGhZYX" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
