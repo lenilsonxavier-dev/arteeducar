@@ -605,43 +605,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- ========== CENTRAL DE JOGOS ONLINE ========== -->
 <div id="jogosOnline" class="screen">
+
   <div class="jogos-online-header">
-    <h2>🎮 Central de Jogos Online</h2>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="btn-voltar-menu btn-voltar-laranja" onclick="fecharJogoOnline()"><span class="ico">⛔</span> Fechar jogo</button>
-      <button class="btn-voltar-menu btn-voltar-azul" onclick="voltarDoJogoOnline()"><span class="ico">⬅️</span> Voltar ao app</button>
-    </div>
+    <button class="btn-voltar-menu btn-voltar-azul" onclick="voltarDoJogoOnline()">
+      <span class="ico">⬅️</span> Voltar
+    </button>
+    <h2>🎮 Central de Jogos</h2>
   </div>
+
   <div class="jogos-online-content">
-    <aside class="jogos-online-sidebar">
-      <p>Selecione um jogo para abrir no WebView interno.</p>
+
+    <div class="jogos-online-sidebar">
+      <p>Escolha um jogo:</p>
       <div id="listaJogosOnline" class="grid-jogos"></div>
-      <div class="jogos-online-info">🚪 Segurança: o jogo abre dentro do app e você pode voltar a qualquer momento.</div>
-    </aside>
+    </div>
+
     <div class="jogos-online-frame-wrap">
-    <iframe id="jogosOnlineFrame" title="Central de Jogos Online" allowfullscreen 
-srcdoc="<html>
-<body style='margin:0;
-display:flex;
-align-items:center;
-justify-content:center;
-font-family:Comic Sans MS,Arial;
-background:url(https://i.imgur.com/3AdWSKC.jpeg) center top/cover no-repeat;
-color:#ffffff;'>
-
-  <div style='background:rgba(0,0,0,0.45);
-              padding:25px;
-              border-radius:20px;
-              text-align:center;'>
-
-    <h2 style='margin:0;font-size:22px;'>🎮 Escolha um jogo</h2>
-    <p style='opacity:0.9;margin-top:8px;'>Selecione um dos cards ao lado</p>
+      <iframe id="jogosOnlineFrame"></iframe>
+    </div>
 
   </div>
 
-</body>
-</html>">
-</iframe>
+</div>
+<!-- ========== DESENHO ========== -->
+<div id="desenho" class="screen">
 
 <!-- ========== DESENHO ========== -->
 <div id="desenho" class="screen">
@@ -2253,12 +2240,18 @@ document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
 
 // ========== INICIALIZAÇÃO ==========
 window.onload = function() {
+
+  // suas funções originais
   criarPaletaCores();
   configurarBotoesDesenho();
   configurarCanvasEvents();
   mostrarListaDesenhos();
   setCor('#ff4d4d');
   renderDesafios();
+
+  // 👇 ESSA LINHA É A CHAVE
+  show("home");
+
 };
 
 function entrarEmModoImersivo() {
