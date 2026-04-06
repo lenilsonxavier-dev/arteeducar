@@ -102,6 +102,7 @@ body {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     animation: fadeInUp 0.6s ease;
+    margin: auto;
 }
 
 @keyframes fadeInUp {
@@ -173,6 +174,7 @@ body {
     cursor: pointer;
     transition: 0.2s;
     box-shadow: 0 6px 0 #5a3a1a;
+    margin-bottom: 15px;
 }
 
 .enter-btn:active {
@@ -624,6 +626,7 @@ body {
             <input type="text" id="childName" class="name-input" placeholder="Digite seu nome..." maxlength="20" autocomplete="off">
             <br>
             <button class="enter-btn" id="goToStoryBtn">🌾 ENTRAR NO CAMPO 🌾</button>
+            <div style="height: 10px;"></div>
         </div>
     </div>
 </div>
@@ -770,7 +773,6 @@ function mostrarMensagem() {
     if (mensagemVanGogh.style.display === 'none' || mensagemVanGogh.style.display === '') {
         mensagemVanGogh.style.display = 'block';
         btnMostrarMensagem.textContent = '🔒 FECHAR MENSAGEM';
-        // Rola a mensagem para a visualização
         setTimeout(() => {
             mensagemVanGogh.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
@@ -873,6 +875,11 @@ function spawn() {
     let x = -70;
     let colidiu = false;
     
+    // VELOCIDADE REDUZIDA PELA METADE para crianças de 10 anos!
+    // Velocidade normal: 5, com correndo: 8 (antes era 11 e 16)
+    let velocidadeNormal = 5;
+    let velocidadeCorrendo = 8;
+    
     let movimento = setInterval(() => {
         if (!ativo || colidiu) {
             if (!colidiu && corvoDiv.parentNode) corvoDiv.remove();
@@ -880,7 +887,7 @@ function spawn() {
             return;
         }
         
-        x += correndo ? 16 : 11;
+        x += correndo ? velocidadeCorrendo : velocidadeNormal;
         corvoDiv.style.right = x + "px";
         
         let h = heroi.getBoundingClientRect();
@@ -923,7 +930,8 @@ function spawn() {
         
     }, 20);
     
-    let tempoSpawn = correndo ? 800 : 1000;
+    // Spawn também um pouco mais lento para dar mais tempo de reação
+    let tempoSpawn = correndo ? 1300 : 1600; // antes era 800 e 1000
     spawnTimeoutId = setTimeout(spawn, tempoSpawn);
 }
 
@@ -934,7 +942,8 @@ function startSpawning() {
 
 function loop() {
     if (!ativo) return;
-    let velocidade = correndo ? 14 : 8;
+    // Velocidade do cenário também reduzida para ficar mais suave
+    let velocidade = correndo ? 7 : 4; // antes era 14 e 8
     bg -= velocidade;
     cenario.style.transform = `translateX(${bg % window.innerWidth}px)`;
     animationId = requestAnimationFrame(loop);
