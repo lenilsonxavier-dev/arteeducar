@@ -236,11 +236,6 @@ canvas {
     flex-shrink: 0;
 }
 
-.enter-game-area:hover {
-    transform: scale(1.02);
-    background: linear-gradient(135deg, #FFEFC0 0%, #FFE0A3 100%);
-}
-
 .palette-container {
     display: inline-block;
     background: #FFE0A3;
@@ -286,7 +281,7 @@ canvas {
     align-self: flex-start;
 }
 
-/* HUD do jogo - CORRIGIDA */
+/* HUD do jogo */
 #hud {
     position: absolute;
     top: 15px;
@@ -308,40 +303,54 @@ canvas {
     backdrop-filter: blur(4px);
 }
 
-/* CONTROLES - CORRIGIDOS PARA NÃO APARECER MENU DO GOOGLE */
+/* CONTROLES - BOTÕES NAS LATERAIS, UM DE CADA LADO */
 #controles {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 0;
     right: 0;
+    width: 100%;
     display: flex;
-    justify-content: center;
-    gap: 40px;
+    justify-content: space-between;
     z-index: 50;
     padding: 0 20px;
+    pointer-events: none;
 }
 
 .btn {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.65);
     backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 38px;
+    font-weight: bold;
     color: #FFD700;
     cursor: pointer;
     border: 2px solid #FFD700;
     transition: 0.05s linear;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .btn:active {
     transform: scale(0.92);
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
+}
+
+/* Botão esquerdo na margem esquerda */
+#leftBtn {
+    margin-right: auto;
+}
+
+/* Botão direito na margem direita */
+#rightBtn {
+    margin-left: auto;
 }
 
 /* Tela de fim de jogo */
@@ -531,11 +540,11 @@ canvas {
     .btn {
         width: 60px;
         height: 60px;
-        font-size: 28px;
+        font-size: 32px;
     }
     #controles {
-        gap: 30px;
-        bottom: 15px;
+        padding: 0 15px;
+        bottom: 25px;
     }
     #hud {
         font-size: 18px;
@@ -552,10 +561,11 @@ canvas {
     .btn {
         width: 55px;
         height: 55px;
-        font-size: 24px;
+        font-size: 28px;
     }
     #controles {
-        gap: 25px;
+        padding: 0 12px;
+        bottom: 20px;
     }
 }
 </style>
@@ -602,7 +612,7 @@ canvas {
 
 <canvas id="c"></canvas>
 
-<!-- CONTROLES CORRIGIDOS - SEM MENU DO GOOGLE -->
+<!-- CONTROLES - BOTÕES SEPARADOS NAS LATERAIS -->
 <div id="controles">
     <div class="btn" id="leftBtn">◀</div>
     <div class="btn" id="rightBtn">▶</div>
@@ -785,19 +795,19 @@ function play(src) {
     new Audio(src).play().catch(()=>{}); 
 }
 
-// player - ÁREA DE MOVIMENTO CORRIGIDA (mais espaço)
+// player - ÁREA DE MOVIMENTO LIVRE
 let x = canvas.width / 2;
 let speed = 0;
 let leftPressed = false;
 let rightPressed = false;
 
-// limites do herói - agora com muito mais espaço!
-let minX = 80;
+// limites do herói - espaço máximo para deslizar
+let minX = 60;
 let maxX = 0;
 
 function updateBounds() {
-    maxX = canvas.width - 80;
-    // Garantir que x esteja dentro dos limites
+    maxX = canvas.width - 100;
+    minX = 60;
     x = Math.max(minX, Math.min(maxX, x));
 }
 
@@ -815,7 +825,7 @@ function spawn() {
     let tipo = r < 0.2 ? "azul" : r < 0.4 ? "vermelha" : "normal";
     let img = tipo === "azul" ? starBlue : tipo === "vermelha" ? starRed : starNormal;
     stars.push({ 
-        x: 60 + Math.random() * (canvas.width - 120), 
+        x: 50 + Math.random() * (canvas.width - 100), 
         y: -50, 
         speed: 2.5 + Math.random() * 2,
         tipo, 
@@ -841,9 +851,9 @@ function gameLoop() {
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
     
     // Movimento do herói
-    if(leftPressed) speed -= 0.5;
-    if(rightPressed) speed += 0.5;
-    speed *= 0.92;
+    if(leftPressed) speed -= 0.55;
+    if(rightPressed) speed += 0.55;
+    speed *= 0.94;
     x += speed;
     
     updateBounds();
@@ -852,7 +862,7 @@ function gameLoop() {
     ctx.drawImage(hero, x - 50, canvas.height - 150, 100, 130);
     
     // Spawn aleatório
-    if(Math.random() < 0.025) spawn();
+    if(Math.random() < 0.028) spawn();
     
     // Atualiza estrelas
     for(let i = stars.length - 1; i >= 0; i--) {
@@ -980,7 +990,7 @@ childNameInput.addEventListener('keypress', function(e) {
     }
 });
 
-// Controles touch - SEM MENU DO GOOGLE
+// Controles touch - BOTÕES NAS LATERAIS
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 
@@ -994,6 +1004,10 @@ leftBtn.addEventListener('touchstart', (e) => {
     leftPressed = true;
 });
 leftBtn.addEventListener('touchend', (e) => {
+    preventEvent(e);
+    leftPressed = false;
+});
+leftBtn.addEventListener('touchcancel', (e) => {
     preventEvent(e);
     leftPressed = false;
 });
@@ -1011,6 +1025,10 @@ rightBtn.addEventListener('touchstart', (e) => {
     rightPressed = true;
 });
 rightBtn.addEventListener('touchend', (e) => {
+    preventEvent(e);
+    rightPressed = false;
+});
+rightBtn.addEventListener('touchcancel', (e) => {
     preventEvent(e);
     rightPressed = false;
 });
