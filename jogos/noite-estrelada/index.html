@@ -89,7 +89,7 @@ body {
     font-family: 'Georgia', cursive;
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto;  /* CORRIGIDO: Permite rolagem quando o conteúdo ultrapassa */
+    overflow-y: auto;
 }
 
 .intro-card {
@@ -102,7 +102,6 @@ body {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     animation: fadeInUp 0.6s ease;
-    margin: auto;      /* CORRIGIDO: Centraliza e garante espaçamento */
 }
 
 @keyframes fadeInUp {
@@ -174,7 +173,6 @@ body {
     cursor: pointer;
     transition: 0.2s;
     box-shadow: 0 6px 0 #5a3a1a;
-    margin-bottom: 15px;  /* CORRIGIDO: Adiciona espaçamento inferior */
 }
 
 .enter-btn:active {
@@ -595,15 +593,6 @@ body {
     .win-btn { padding: 8px 18px; font-size: 0.9rem; }
     .btn { width: 60px; height: 60px; }
     #hud { font-size: 14px; padding: 10px 15px; }
-    
-    /* CORRIGIDO: Ajuste extra para o card em telas muito pequenas */
-    .intro-card {
-        margin: auto;
-    }
-    
-    .intro-welcome {
-        padding: 20px 15px;
-    }
 }
 </style>
 </head>
@@ -635,8 +624,6 @@ body {
             <input type="text" id="childName" class="name-input" placeholder="Digite seu nome..." maxlength="20" autocomplete="off">
             <br>
             <button class="enter-btn" id="goToStoryBtn">🌾 ENTRAR NO CAMPO 🌾</button>
-            <!-- Adicionado um pequeno espaço extra para garantir que o botão não fique colado na borda -->
-            <div style="height: 10px;"></div>
         </div>
     </div>
 </div>
@@ -783,6 +770,7 @@ function mostrarMensagem() {
     if (mensagemVanGogh.style.display === 'none' || mensagemVanGogh.style.display === '') {
         mensagemVanGogh.style.display = 'block';
         btnMostrarMensagem.textContent = '🔒 FECHAR MENSAGEM';
+        // Rola a mensagem para a visualização
         setTimeout(() => {
             mensagemVanGogh.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
