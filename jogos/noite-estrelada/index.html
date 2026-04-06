@@ -3,105 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Van Gogh - Campo de Trigo</title>
+<title>Van Gogh - A Noite Estrelada</title>
 
 <style>
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    user-select: none;
-}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap');
 
-body { 
-    overflow: hidden; 
-    background: #000; 
-    font-family: 'Georgia', cursive, sans-serif; 
-}
-
-#jogo { 
-    width: 100vw; 
-    height: 100vh; 
-    position: relative; 
-    overflow: hidden;
-}
-
-#cenario {
-    width: 200%;
-    height: 100%;
-    position: absolute;
-    background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/cenario.webp') repeat-x;
-    background-size: 50% 100%;
-    background-position: bottom;
-}
-
-#heroi {
-    width: 110px;
-    height: 200px;
-    position: absolute;
-    bottom: 200px;
-    left: 10%;
-    background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/heroicorrendo.png') no-repeat center;
-    background-size: contain;
-    transition: 0.05s;
-    z-index: 10;
-}
-
-.corvo {
-    width: 65px;
-    height: 65px;
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 5;
-}
-
-#hud {
-    position: absolute;
-    width: 100%;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    color: #f1c40f;
-    font-size: 18px;
-    z-index: 999;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-#hud div {
-    background: rgba(0,0,0,0.5);
-    padding: 5px 15px;
-    border-radius: 30px;
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Fredoka', sans-serif;
 }
 
-/* ========== TELA DE INTRODUÇÃO PERSONALIZADA ========== */
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Tela de introdução */
 .intro-container {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 50%, #0a1f0a 100%);
-    z-index: 1000;
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);
+    z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', cursive;
+    font-family: 'Fredoka', sans-serif;
+    transition: opacity 0.5s ease;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
 }
 
 .intro-card {
-    max-width: 500px;
+    max-width: 550px;
     width: 100%;
     background: #FFF8E7;
     background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
     background-size: 30px 30px;
     border-radius: 48px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.5);
     overflow: hidden;
     animation: fadeInUp 0.6s ease;
+    margin: auto;
 }
 
 @keyframes fadeInUp {
@@ -116,25 +67,25 @@ body {
 }
 
 .intro-welcome {
-    padding: 30px 25px;
+    padding: 40px 35px;
     text-align: center;
 }
 
 .intro-title {
-    font-size: 2rem;
-    color: #4A6A2A;
+    font-size: 2.5rem;
+    color: #D2691E;
     text-shadow: 3px 3px 0 #FFD700;
     letter-spacing: 3px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-weight: bold;
 }
 
 .intro-question {
-    font-size: 1.5rem;
-    color: #2a4a1a;
+    font-size: 1.8rem;
+    color: #4A2A1A;
     background: #FFEFC0;
     display: inline-block;
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 60px;
     margin-bottom: 25px;
     box-shadow: 0 6px 0 #C29B4A;
@@ -142,10 +93,10 @@ body {
 
 .name-input {
     width: 85%;
-    padding: 14px 18px;
-    font-size: 1.2rem;
+    padding: 16px 20px;
+    font-size: 1.3rem;
     font-family: inherit;
-    border: 3px solid #8B5A2B;
+    border: 3px solid #FFB347;
     border-radius: 60px;
     outline: none;
     text-align: center;
@@ -156,104 +107,161 @@ body {
 }
 
 .name-input:focus {
-    border-color: #FFD700;
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+    border-color: #FF8C00;
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.2);
     transform: scale(1.02);
 }
 
-.enter-btn {
-    background: #8B5A2B;
-    color: white;
-    font-size: 1.2rem;
+.start-btn {
+    background: #FFB347;
+    color: #4A2A1A;
+    font-size: 1.3rem;
     font-weight: bold;
     font-family: inherit;
-    padding: 12px 30px;
+    padding: 14px 35px;
     border: none;
     border-radius: 60px;
     cursor: pointer;
     transition: 0.2s;
-    box-shadow: 0 6px 0 #5a3a1a;
+    box-shadow: 0 6px 0 #C27E1A;
 }
 
-.enter-btn:active {
+.start-btn:active {
     transform: translateY(3px);
-    box-shadow: 0 3px 0 #5a3a1a;
+    box-shadow: 0 3px 0 #C27E1A;
 }
 
-/* ========== TELA DA APRESENTAÇÃO (BIOGRAFIA) ========== */
-.story-container {
+/* TELA DA BIOGRAFIA - CORRIGIDA PARA MOSTRAR TODO O CONTEÚDO E O BOTÃO */
+.bio-container {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', cursive;
+    font-family: 'Fredoka', sans-serif;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
 }
 
-.story-card {
-    max-width: 700px;
+.bio-card {
+    max-width: 800px;
     width: 100%;
-    max-height: 90vh;
     background: #FFF8E7;
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
+    background-size: 30px 30px;
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
+    overflow: hidden;
     animation: fadeInUp 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    max-height: 95vh;
 }
 
-.story-text {
-    padding: 25px;
+.bio-flex {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.bio-text {
+    flex: 2;
+    padding: 25px 20px 20px 25px;
     font-size: 0.95rem;
     line-height: 1.5;
     color: #3E2723;
+    overflow-y: auto;
+    max-height: 55vh;
 }
 
-.story-text p {
+.bio-image {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 25px 25px 0 0;
+}
+
+.bio-image img {
+    width: 100%;
+    max-width: 180px;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border: 3px solid #FFD700;
+    object-fit: cover;
+}
+
+.bio-text p {
     margin-bottom: 12px;
 }
 
-.story-text .highlight {
-    color: #D2691E;
+.bio-text .highlight {
+    background: #FFECB3;
+    display: inline-block;
+    padding: 0 6px;
+    border-radius: 15px;
     font-weight: bold;
-    font-size: 1.05rem;
+    color: #D2691E;
 }
 
-.signature-story {
+.signature {
+    margin-top: 20px;
     text-align: right;
     font-style: italic;
-    margin-top: 20px;
-    padding-top: 12px;
     border-top: 2px dashed #FFB347;
+    padding-top: 15px;
 }
 
-.start-game-area {
+/* PALETA COM "ENTRE!" - CORRIGIDA PARA FICAR VISÍVEL */
+.enter-game-area {
     text-align: center;
-    padding: 15px 25px 25px;
+    padding: 20px 30px 25px;
+    cursor: pointer;
+    transition: all 0.2s;
     background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
     border-top: 3px solid #FFD700;
+    flex-shrink: 0;
 }
 
-.start-button {
+.enter-game-area:hover {
+    transform: scale(1.02);
+    background: linear-gradient(135deg, #FFEFC0 0%, #FFE0A3 100%);
+}
+
+.palette-container {
     display: inline-block;
-    background: #8B5A2B;
-    padding: 15px 40px;
-    border-radius: 60px;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    box-shadow: 0 8px 0 #5a3a1a;
+    background: #FFE0A3;
+    padding: 15px 30px;
+    border-radius: 80px;
+    box-shadow: 0 12px 0 #C29B4A;
     transition: 0.05s linear;
     cursor: pointer;
 }
 
-.start-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 4px 0 #5a3a1a;
+.palette-container:active {
+    transform: translateY(5px);
+    box-shadow: 0 7px 0 #C29B4A;
+}
+
+.palette-icon {
+    font-size: 3.5rem;
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+.enter-text {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #D2691E;
+    letter-spacing: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    text-shadow: 2px 2px 0 #FFD700;
 }
 
 .back-btn {
@@ -262,117 +270,197 @@ body {
     font-size: 0.9rem;
     color: #B97F44;
     cursor: pointer;
-    margin: 12px 0 0 18px;
+    margin: 12px 0 0 20px;
     text-decoration: underline;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    align-self: flex-start;
+}
+
+.back-btn:hover {
+    color: #D2691E;
 }
 
 /* Scrollbar */
-.story-text::-webkit-scrollbar,
-.story-card::-webkit-scrollbar {
-    width: 5px;
+.bio-text::-webkit-scrollbar {
+    width: 6px;
 }
 
-.story-text::-webkit-scrollbar-track,
-.story-card::-webkit-scrollbar-track {
+.bio-text::-webkit-scrollbar-track {
     background: #FFE0B5;
     border-radius: 10px;
 }
 
-.story-text::-webkit-scrollbar-thumb,
-.story-card::-webkit-scrollbar-thumb {
-    background: #8B5A2B;
+.bio-text::-webkit-scrollbar-thumb {
+    background: #FFB347;
     border-radius: 10px;
 }
 
-/* ========== TELA DE VITÓRIA - LIVRO DOS CAMINHOS ========== */
-.win-container {
+/* HUD do jogo */
+#hud {
+    position: absolute;
+    top: 10px;
+    left: 140px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #FFD700;
+    font-size: 32px;
+    z-index: 50;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#controles {
+    position: absolute;
+    bottom: 20px;
+    left: 140px;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 50;
+}
+
+.btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Tela de fim de jogo - VITÓRIA com Livro de Visitas e imagem */
+.overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 50%, #0a1f0a 100%);
-    z-index: 1000;
+    background: radial-gradient(#0b1a2f, #000);
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #FFD700;
+    z-index: 200;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.overlay img {
+    width: 180px;
+    margin-bottom: 15px;
+    border-radius: 20px;
+}
+
+.overlay button {
+    padding: 15px 30px;
+    border-radius: 30px;
+    background: #FFD700;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Fredoka', sans-serif;
+    margin-top: 20px;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.overlay button:hover {
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Mensagem de agradecimento do Van Gogh COM IMAGEM LATERAL */
+.thankyou-container {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', cursive;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto;
+    gap: 20px;
+    background: rgba(255, 248, 231, 0.95);
+    border-radius: 40px;
+    padding: 25px 30px;
+    margin: 20px auto;
+    max-width: 700px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 3px solid #FFD700;
 }
 
-.win-card {
-    max-width: 600px;
-    width: 100%;
-    max-height: 95vh;
-    background: #FFF8E7;
-    background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
-    background-size: 30px 30px;
-    border-radius: 48px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-    animation: fadeInUp 0.5s ease;
+.thankyou-message {
+    flex: 2;
+    text-align: left;
+    color: #4A2A1A;
 }
 
-.win-message {
-    padding: 25px;
+.thankyou-message p {
+    margin: 10px 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.thankyou-message .signature-vincent {
+    margin-top: 12px;
+    font-style: italic;
+    font-weight: bold;
+    color: #D2691E;
+}
+
+.thankyou-image {
+    flex: 1;
     text-align: center;
 }
 
-.win-message p {
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #3E2723;
-}
-
-/* Livro dos Caminhos */
-.livro-caminhos {
-    background: #8B5A2B;
-    border-radius: 30px;
-    padding: 20px;
-    margin: 10px 20px 20px;
+.thankyou-image img {
+    width: 100%;
+    max-width: 150px;
+    border-radius: 20px;
     border: 3px solid #FFD700;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.corvo-left, .corvo-right {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.5rem;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+/* Livro de Visitas */
+.visitors-book {
+    background: #8B4513;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+    border: 2px solid #FFD700;
 }
 
-.corvo-left {
-    left: -40px;
-}
-
-.corvo-right {
-    right: -40px;
-}
-
-@media (max-width: 550px) {
-    .corvo-left, .corvo-right {
-        display: none;
-    }
+.book-title {
+    background: #FFD700;
+    color: #8B4513;
+    padding: 8px 20px;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: inline-block;
 }
 
 .book-pages {
     background: #FFF8DC;
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 20px;
-    text-align: center;
+    min-height: 120px;
 }
 
-.book-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #8B5A2B;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-}
-
-.assinatura-nome {
+.visitor-name {
     font-size: 1.8rem;
     font-weight: bold;
     color: #D2691E;
@@ -382,674 +470,534 @@ body {
     border-radius: 50px;
     margin: 10px 0;
     border: 2px solid #FFB347;
-    font-family: 'Georgia', cursive;
 }
 
-.stamp-corvos {
+.stamp {
     font-size: 1.8rem;
     margin-top: 10px;
-    letter-spacing: 6px;
+    letter-spacing: 5px;
 }
 
-.data-assinatura {
-    font-size: 0.8rem;
+.stamp-date {
+    font-size: 0.9rem;
     color: #666;
     margin-top: 8px;
 }
 
-/* MENSAGEM DE VAN GOGH - CORRIGIDA */
-.mensagem-van-gogh {
-    background: #FFF8E7;
-    border-radius: 20px;
-    padding: 20px;
-    margin-top: 20px;
-    text-align: left;
-    border-left: 5px solid #FFD700;
-    display: none;
+/* Instruções do jogo */
+.game-instructions {
+    margin: 20px 0;
+    font-size: 1.2rem;
+    line-height: 1.8;
 }
 
-.mensagem-van-gogh p {
-    margin: 10px 0;
-    color: #3E2723;
-    font-size: 0.9rem;
+.game-instructions p {
+    margin: 8px 0;
 }
 
-.mensagem-van-gogh .ass-mensagem {
-    text-align: right;
-    margin-top: 12px;
-    font-style: italic;
-    color: #D2691E;
+/* Responsividade - CORREÇÃO PARA CELULAR */
+@media (max-width: 650px) {
+    .bio-flex {
+        flex-direction: column;
+    }
+    .bio-image {
+        padding: 0 20px 10px;
+        order: -1;
+        justify-content: center;
+    }
+    .bio-image img {
+        max-width: 120px;
+    }
+    .thankyou-container {
+        flex-direction: column;
+    }
+    .thankyou-message {
+        text-align: center;
+    }
+    .enter-text {
+        font-size: 1.6rem;
+    }
+    .palette-icon {
+        font-size: 2.5rem;
+    }
+    
+    /* Garantir que o card de biografia não ultrapasse a tela */
+    .bio-card {
+        max-height: 98vh;
+    }
+    
+    .bio-text {
+        max-height: 45vh;
+        padding: 20px 15px;
+    }
+    
+    .enter-game-area {
+        padding: 15px 20px;
+    }
+    
+    .palette-container {
+        padding: 12px 25px;
+    }
 }
 
-.win-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 15px 25px 25px;
-    background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
-    border-top: 3px solid #FFD700;
-    flex-wrap: wrap;
-}
-
-.win-btn {
-    padding: 10px 25px;
-    border-radius: 60px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-    font-family: 'Georgia', cursive;
-}
-
-.win-btn-voltar {
-    background: #8B5A2B;
-    color: white;
-    box-shadow: 0 4px 0 #5a3a1a;
-}
-
-.win-btn-sair {
-    background: #4a6a2a;
-    color: white;
-    box-shadow: 0 4px 0 #2a4a1a;
-}
-
-.win-btn-mensagem {
-    background: #D2691E;
-    color: white;
-    box-shadow: 0 4px 0 #8B4513;
-    margin-bottom: 10px;
-    width: auto;
-    min-width: 220px;
-}
-
-.win-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0;
-}
-
-/* ========== TELA DE DERROTA ========== */
-.overlay {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(#1a0a0a, #000);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #fff;
-    z-index: 1000;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.overlay img { 
-    width: 180px; 
-    max-width: 60%;
-    margin-bottom: 20px; 
-    border-radius: 20px;
-    border: 3px solid #FFD700;
-}
-
-.overlay button {
-    padding: 12px 25px;
-    font-size: 1.1rem;
-    background: #f1c40f;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-family: 'Georgia', cursive;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-#controles {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    z-index: 999;
-    padding: 0 10px;
-    box-sizing: border-box;
-}
-
-.btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #FFD700;
-    font-size: 12px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    border: 2px solid #FFD700;
-    font-weight: bold;
-}
-
-.btn span:first-child {
-    font-size: 22px;
-}
-
-.btn span:last-child {
-    font-size: 11px;
-    margin-top: 3px;
-}
-
-.btn:active {
-    transform: scale(0.95);
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Efeitos visuais */
-@keyframes brilho {
-    0% { filter: brightness(1) drop-shadow(0 0 0px white); }
-    50% { filter: brightness(1.3) drop-shadow(0 0 8px white); }
-    100% { filter: brightness(1) drop-shadow(0 0 0px white); }
-}
-
-.corvo-branco {
-    animation: brilho 0.5s ease-in-out infinite;
-}
-
-@keyframes dano {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(0.5) drop-shadow(0 0 5px red); }
-    100% { filter: brightness(1); }
-}
-
-.dano {
-    animation: dano 0.3s ease-in-out;
-}
-
-.tecla {
-    display: inline-block;
-    background: #333;
-    color: #FFD700;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-family: monospace;
-    font-size: 0.9rem;
-    margin: 0 2px;
-    border: 1px solid #FFD700;
-}
-
-/* Responsividade */
-@media (max-width: 600px) {
-    .intro-title { font-size: 1.6rem; }
-    .intro-question { font-size: 1.2rem; }
-    .start-button { font-size: 1.2rem; padding: 12px 30px; }
-    .book-title { font-size: 1.1rem; }
-    .assinatura-nome { font-size: 1.4rem; }
-    .win-btn { padding: 8px 18px; font-size: 0.9rem; }
-    .btn { width: 60px; height: 60px; }
-    #hud { font-size: 14px; padding: 10px 15px; }
+@media (max-width: 480px) {
+    .bio-text {
+        max-height: 40vh;
+        font-size: 0.85rem;
+    }
+    
+    .enter-text {
+        font-size: 1.4rem;
+        letter-spacing: 2px;
+    }
+    
+    .palette-icon {
+        font-size: 2rem;
+        margin-right: 10px;
+    }
+    
+    .palette-container {
+        padding: 10px 20px;
+    }
 }
 </style>
 </head>
 <body>
 
-<div id="hud">
-    <div>⏱️ <span id="timer">3:00</span></div>
-    <div>❤️ <span id="vidas">7</span></div>
-    <div>🤍 <span id="corvosDesviados">0</span></div>
-</div>
-
-<div id="jogo">
-    <div id="cenario"></div>
-    <div id="heroi"></div>
-</div>
-
-<div id="controles">
-    <div class="btn" id="pula"><span>⬆️</span><span>L</span></div>
-    <div class="btn" id="abaixa"><span>⬇️</span><span>A</span></div>
-    <div class="btn" id="corre"><span>⚡</span><span>F</span></div>
-</div>
-
-<!-- TELA 1: QUAL É O SEU NOME? -->
+<!-- TELA DE INTRODUÇÃO - QUEM É VOCÊ? -->
 <div id="introScreen" class="intro-container">
     <div class="intro-card">
         <div class="intro-welcome">
-            <div class="intro-title">🌾 VAN GOGH 🌾</div>
-            <div class="intro-question">✨ QUAL É O SEU NOME? ✨</div>
+            <div class="intro-title">🎨 VAN GOGH 🎨</div>
+            <div class="intro-question">✨ QUEM É VOCÊ? ✨</div>
             <input type="text" id="childName" class="name-input" placeholder="Digite seu nome..." maxlength="20" autocomplete="off">
             <br>
-            <button class="enter-btn" id="goToStoryBtn">🌾 ENTRAR NO CAMPO 🌾</button>
+            <button class="start-btn" id="goToBioBtn">🎨 VIAJAR PARA A HISTÓRIA 🌟</button>
         </div>
     </div>
 </div>
 
-<!-- TELA 2: APRESENTAÇÃO DO VAN GOGH -->
-<div id="storyScreen" class="story-container hidden">
-    <div class="story-card">
+<!-- TELA DA BIOGRAFIA PERSONALIZADA COM IMAGEM DO VAN GOGH - CORRIGIDA -->
+<div id="bioScreen" class="bio-container hidden">
+    <div class="bio-card">
         <button class="back-btn" id="backToIntroBtn">← Voltar</button>
-        <div class="story-text" id="storyContent"></div>
-        <div class="start-game-area" id="startGameBtn">
-            <div class="start-button">🐦‍⬛ INICIAR JOGO 🐦‍⬛</div>
-        </div>
-    </div>
-</div>
-
-<!-- TELA DE VITÓRIA - LIVRO DOS CAMINHOS -->
-<div id="winScreen" class="win-container hidden">
-    <div class="win-card">
-        <div class="win-message">
-            <p><strong>🌟 PARABÉNS! VOCÊ VENCEU OS CORVOS! 🌟</strong></p>
-            <p>Você desviou de todos os corvos pretos e encontrou os corvos brancos que restauraram suas energias.</p>
-            <p>Sua coragem e habilidade foram mais fortes que o voo dos corvos!</p>
-            <button class="win-btn win-btn-mensagem" id="btnMostrarMensagem">📖 LER MENSAGEM DE VAN GOGH</button>
-        </div>
-
-        <div class="livro-caminhos">
-            <div class="corvo-left">🐦‍⬛</div>
-            <div class="corvo-right">🐦‍⬛</div>
-            <div class="book-pages">
-                <div class="book-title">📖 ASSINATURA NO LIVRO DOS CAMINHOS 📖</div>
-                <div class="assinatura-nome" id="assinaturaNome">---</div>
-                <div class="stamp-corvos">🐦‍⬛ 🌾 🎨 🐦‍⬛</div>
-                <div class="data-assinatura" id="dataAssinatura"></div>
-                
-                <!-- Mensagem de Van Gogh -->
-                <div id="mensagemVanGogh" class="mensagem-van-gogh">
-                    <p><strong>💛 Querido(a) <span id="msgNome"></span>,</strong></p>
-                    <p>Você não apenas venceu os corvos... você dançou com eles sob o céu pintado por nós dois.</p>
-                    <p>Quando pinto um campo de trigo, sinto a mesma coragem que você teve hoje: a de continuar mesmo quando o vento sopra contra.</p>
-                    <p>Os corvos partiram, mas as cores que você espalhou pelo caminho ficaram. Elas brilham agora no meu céu estrelado.</p>
-                    <p>Lembre-se: a vida é como este jogo. Às vezes é preciso pular, abaixar ou correr. Mas nunca, nunca parar de criar.</p>
-                    <p>Continue colorindo o mundo com sua luz única. Você é uma obra-prima em construção.</p>
-                    <div class="ass-mensagem">
-                        Com todo o amarelo do meu coração,<br>
-                        🎨 Vincent van Gogh
-                    </div>
-                </div>
+        <div class="bio-flex">
+            <div class="bio-text" id="bioContent"></div>
+            <div class="bio-image">
+                <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/AUTORRE.jpg" alt="Van Gogh">
             </div>
         </div>
-
-        <div class="win-buttons">
-            <button class="win-btn win-btn-voltar" id="btnVoltarJogo">🔄 JOGAR NOVAMENTE</button>
-            <button class="win-btn win-btn-sair" id="btnSair">🚪 SAIR</button>
+        <div class="enter-game-area" id="enterGameBtn">
+            <div class="palette-container">
+                <span class="palette-icon">🎨</span>
+                <span class="enter-text">ENTRE!</span>
+            </div>
         </div>
     </div>
+</div>
+
+<!-- HUD DO JOGO -->
+<div id="hud">
+    <div>❤️ <span id="vidas">7</span></div>
+    <div>⏱️ <span id="tempo">5:00</span></div>
+</div>
+
+<canvas id="c"></canvas>
+
+<div id="controles">
+    <div class="btn" id="left">⬅</div>
+    <div class="btn" id="right">➡</div>
+</div>
+
+<div id="start" class="overlay hidden">
+    <h1>🌌 A Noite Estrelada de Van Gogh</h1>
+    <div class="game-instructions">
+        <p>💙 <span style="color:#87CEEB">ESTRELAS AZUIS</span> → Ganhe +1 vida ❤️</p>
+        <p>🔴 <span style="color:#FF6B6B">ESTRELAS VERMELHAS</span> → Perde -2 vidas 💔</p>
+        <p>⭐ <span style="color:#FFD700">ESTRELAS NORMAIS</span> → Perde -1 vida</p>
+        <p>🎮 Use as SETAS do teclado ou os BOTÕES da tela</p>
+    </div>
+    <button id="gameStartBtn">🎨 COMEÇAR A PINTAR O CÉU! 🌟</button>
+</div>
+
+<!-- TELA DE VITÓRIA com Livro de Visitas e imagem de despedida -->
+<div id="winOverlay" class="overlay hidden">
+    <img id="winImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoggh%20vitoria.png">
+    
+    <div class="thankyou-container">
+        <div class="thankyou-message">
+            <p>🌟 <strong>Pequeno visitante… 💫</strong></p>
+            <p>Fico muito feliz por você ter passado um tempinho comigo.</p>
+            <p>Sua visita iluminou meu dia, como um céu cheio de estrelas brilhantes ✨</p>
+            <p>Quero te agradecer por algo muito importante: <strong>você também está ajudando a espalhar cores pelo mundo!</strong> 🌈</p>
+            <p>Cada desenho, cada rabisco, cada ideia que nasce na sua imaginação é como uma sementinha de alegria que cresce e colore tudo ao redor.</p>
+            <p>Nunca se esqueça: <strong>o mundo precisa das suas cores, do seu jeito de ver as coisas e da sua criatividade</strong> 🎨💛</p>
+            <div class="signature-vincent">
+                Com carinho e muitas cores,<br>
+                🎨 Vincent 🌟
+            </div>
+        </div>
+        <div class="thankyou-image">
+            <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/autorre1.jpg" alt="Van Gogh sorrindo">
+        </div>
+    </div>
+
+    <div class="visitors-book">
+        <div class="book-title">📖 LIVRO DE VISITAS 📖</div>
+        <div class="book-pages">
+            <div>✨ Hoje visitou meu mundo das cores:</div>
+            <div class="visitor-name" id="visitorName">---</div>
+            <div class="stamp">🎨 🌟 🎨</div>
+            <div class="stamp-date" id="visitDate"></div>
+        </div>
+    </div>
+    
+    <button onclick="location.reload()">🔄 JOGAR NOVAMENTE</button>
 </div>
 
 <!-- TELA DE DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
-    <img id="loseImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png">
-    <h1 id="loseMsg"></h1>
+    <img id="loseImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangog%20derrota.png">
+    <h2 id="loseMsg"></h2>
     <button onclick="location.reload()">🔄 TENTAR NOVAMENTE</button>
 </div>
 
 <script>
 
-// ==================== TEXTO DA APRESENTAÇÃO ====================
-function getStoryText(name) {
-    return `
-        <p><span class="highlight">🌟 Olá, ${name}!</span></p>
-        <p>Eu sou Vincent van Gogh. Nasci na Holanda em 1853 e sempre vi o mundo de um jeito diferente. As cores pareciam dançar, o céu respirava e os campos sussurravam segredos que só meu coração podia ouvir. 🎨</p>
-        <p>Pintei o amarelo com força, como quem ainda acredita na luz. Pintei o azul profundo para mostrar as emoções que não cabiam em palavras. 💛💙</p>
-        <p>Neste campo de trigo, os corvos voam livres. Você precisa desviar deles! Use os comandos abaixo para se movimentar:</p>
-        
-        <p><strong>🎮 CONTROLES:</strong><br>
-        • <span class="tecla">L</span> ou Botão <span class="tecla">PULA</span> → Saltar ⬆️<br>
-        • <span class="tecla">A</span> ou Botão <span class="tecla">ABAIXA</span> → Agachar ⬇️<br>
-        • <span class="tecla">F</span> ou Botão <span class="tecla">CORRE</span> → Correr ⚡</p>
-        
-        <p><strong>🐦‍⬛ REGRAS DO JOGO:</strong><br>
-        • 🐦‍⬛ <strong>Corvo Preto</strong> → Se colidir, perde 1 vida ❤️<br>
-        • 🤍 <strong style="color:#fff; background:#333; padding:2px 8px; border-radius:20px;">CORVO BRANCO</strong> → Colete para GANHAR 2 VIDAS! ❤️❤️ (Aparece a cada 20 corvos desviados)<br>
-        • ⏱️ Sobreviva por 3 minutos para vencer!<br>
-        • Quanto mais corvos você desviar, mais chances terá de aparecer um corvo branco!</p>
-        
-        <p><em>"Não desanime se os dias forem escuros. Sua arte é sua luz. Continue criando, continue colorindo o mundo."</em></p>
-        <div class="signature-story">
-            💛 Com carinho,<br>
-            🎨 Vincent van Gogh
-        </div>
-    `;
-}
+// ==================== BIOGRAFIA TEMPLATE ====================
+const biographyTemplate = `
+    <p>🌟 <strong>Olá, <span class="highlight">{NOME}</span>!</strong><br>
+    Posso te contar minha história? 🌟</p>
 
-// ==================== ELEMENTOS ====================
+    <p>Meu nome é Vincent, e eu nasci há muito tempo, em um lugar chamado Holanda.</p>
+
+    <p>Desde pequeno, eu sentia o mundo de um jeito diferente. As cores pareciam mais fortes, o céu mais profundo, e as emoções… bem, elas moravam dentro de mim como um mar agitado 🌊</p>
+
+    <p>🌻 <strong>Minha vida não foi fácil...</strong><br>
+    Eu tentei muitas coisas: fui vendedor, professor e até quis ser religioso. Mas nada parecia encaixar no meu coração. Às vezes eu me sentia sozinho, como se ninguém conseguisse me entender.<br>
+    Eu não tinha muito dinheiro, nem muitos amigos… mas eu tinha algo muito especial: um irmão chamado Theo, que acreditava em mim quando ninguém mais acreditava 🤝</p>
+
+    <p>🎨 <strong>Foi então que encontrei a pintura</strong><br>
+    Quando comecei a pintar, senti como se finalmente pudesse falar — não com palavras, mas com cores! 💛💙</p>
+
+    <p>Eu pintava o que sentia:<br>
+    • O brilho das estrelas ✨<br>
+    • O calor do sol ☀️<br>
+    • A alegria das flores 🌻<br>
+    • E até a tristeza do meu coração…</p>
+
+    <p>🌌 <strong>Meus sonhos</strong><br>
+    Eu sonhava que, um dia, as pessoas olhariam para minhas pinturas e sentiriam algo especial… como um abraço invisível.<br>
+    Mas, durante a minha vida, quase ninguém percebeu meu trabalho. Isso me deixava triste… muito triste.</p>
+
+    <p>💫 <strong>O que aprendi</strong><br>
+    Mesmo com dificuldades, eu nunca parei de pintar. Porque a arte era minha forma de existir, de continuar, de sonhar.<br>
+    Hoje, muitas pessoas conhecem minhas pinturas e sentem alegria ao vê-las. Isso me faz pensar que… talvez eu nunca tenha pintado em vão 💛</p>
+
+    <p>🎂 Eu, Vincent van Gogh, nasci no ano de 1853<br>
+    🌙 E parti deste mundo no ano de 1890</p>
+
+    <p>🌟 <strong>Uma mensagem para você, <span class="highlight">{NOME}</span></strong><br>
+    Se você gosta de desenhar, pintar ou criar… <strong>nunca pare!</strong><br>
+    Mesmo que pareça difícil, sua arte é importante. Ela conta quem você é.</p>
+
+    <div class="signature">
+        💛 Com carinho,<br>
+        🎨 Vincent van Gogh 💫
+    </div>
+`;
+
+// ==================== ELEMENTOS DOM ====================
 const introScreen = document.getElementById('introScreen');
-const storyScreen = document.getElementById('storyScreen');
+const bioScreen = document.getElementById('bioScreen');
 const childNameInput = document.getElementById('childName');
-const goToStoryBtn = document.getElementById('goToStoryBtn');
+const goToBioBtn = document.getElementById('goToBioBtn');
 const backToIntroBtn = document.getElementById('backToIntroBtn');
-const startGameBtn = document.getElementById('startGameBtn');
-const storyContent = document.getElementById('storyContent');
-const winScreen = document.getElementById('winScreen');
+const enterGameBtn = document.getElementById('enterGameBtn');
+const bioContent = document.getElementById('bioContent');
+const startOverlay = document.getElementById('start');
+const gameStartBtn = document.getElementById('gameStartBtn');
+const winOverlay = document.getElementById('winOverlay');
 const loseOverlay = document.getElementById('loseOverlay');
-const assinaturaNome = document.getElementById('assinaturaNome');
-const dataAssinatura = document.getElementById('dataAssinatura');
+const visitorNameSpan = document.getElementById('visitorName');
+const visitDateSpan = document.getElementById('visitDate');
 const loseMsg = document.getElementById('loseMsg');
-const btnMostrarMensagem = document.getElementById('btnMostrarMensagem');
-const mensagemVanGogh = document.getElementById('mensagemVanGogh');
-const msgNomeSpan = document.getElementById('msgNome');
 
 let globalPlayerName = "";
-let gameEnded = false;
-let ativo = false;
 
-function showStory() {
-    let name = childNameInput.value.trim();
-    if (name === "") name = "visitante";
-    globalPlayerName = name;
-    storyContent.innerHTML = getStoryText(name);
-    introScreen.classList.add('hidden');
-    storyScreen.classList.remove('hidden');
+// Função para personalizar biografia
+function personalizeBio(name) {
+    if (!name || name.trim() === "") {
+        name = "amiguinho(a)";
+    }
+    return biographyTemplate.replace(/{NOME}/g, name);
 }
 
+// Mostrar biografia
+function showBiography() {
+    let name = childNameInput.value.trim();
+    if (name === "") {
+        name = "amiguinho(a)";
+    }
+    globalPlayerName = name;
+    bioContent.innerHTML = personalizeBio(name);
+    introScreen.classList.add('hidden');
+    bioScreen.classList.remove('hidden');
+}
+
+// Voltar para introdução
 function backToIntro() {
-    storyScreen.classList.add('hidden');
+    bioScreen.classList.add('hidden');
     introScreen.classList.remove('hidden');
 }
 
-function showWinScreen() {
-    assinaturaNome.textContent = globalPlayerName;
-    msgNomeSpan.textContent = globalPlayerName;
-    
-    mensagemVanGogh.style.display = 'none';
-    btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
-    
-    const now = new Date();
-    const dataFormatada = now.toLocaleDateString('pt-BR');
-    const hora = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    dataAssinatura.innerHTML = `✨ Assinado em ${dataFormatada} às ${hora} ✨`;
-    winScreen.classList.remove('hidden');
+// ==================== JOGO ====================
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+// imagens
+const bg = new Image();
+bg.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladacenario.jpg";
+
+const hero = new Image();
+hero.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghroblox.png";
+
+const starBlue = new Image();
+starBlue.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanazul.png";
+
+const starRed = new Image();
+starRed.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanverm.png";
+
+const starNormal = new Image();
+starNormal.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacaindo3.png";
+
+// música
+const music = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladamusica.mp3");
+music.loop = true;
+
+// sons
+const somWin = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladavitoria.mp3";
+const somLose = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladagameover.mp3";
+const somAzul = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
+const somNormal = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacomum.mp3";
+const somVermelho = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
+
+function play(src) { 
+    new Audio(src).play().catch(()=>{}); 
 }
 
-function mostrarMensagem() {
-    if (mensagemVanGogh.style.display === 'none' || mensagemVanGogh.style.display === '') {
-        mensagemVanGogh.style.display = 'block';
-        btnMostrarMensagem.textContent = '🔒 FECHAR MENSAGEM';
-        // Rola a mensagem para a visualização
-        setTimeout(() => {
-            mensagemVanGogh.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    } else {
-        mensagemVanGogh.style.display = 'none';
-        btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
-    }
-}
+// player
+let x = canvas.width/2;
+let speed = 0, leftPressed = false, rightPressed = false;
 
-btnMostrarMensagem.addEventListener('click', mostrarMensagem);
-
-// ==================== JOGO PRINCIPAL ====================
+// jogo
+let stars = [];
+let particulas = [];
 let vidas = 7;
-let bg = 0;
-let correndo = false;
-let abaixado = false;
-let spawnTimeoutId = null;
+let playing = false;
+let tempo = 300;
 let animationId = null;
 let timerInterval = null;
-let tempoRestante = 180;
 
-let corvosDesviados = 0;
-let ultimoMultiploBranco = 0;
-
-const heroi = document.getElementById('heroi');
-const cenario = document.getElementById('cenario');
-
-const corvoPretoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/corvo.png";
-const corvoBrancoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/CORVOBRANCO%20(1).png";
-
-const musica = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/519_full_circus-hungaria_0153_preview.mp3");
-musica.loop = true;
-
-const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
-const somWin = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghvitoria.mp3";
-const somLose = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/mortevangoh.mp3";
-const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
-const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
-
-function tocar(url) { 
-    try {
-        let audio = new Audio(url);
-        audio.volume = 0.4;
-        audio.play().catch(()=>{}); 
-    } catch(e) {}
-}
-
-function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
-function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
-function atualizarTimer() {
-    let minutos = Math.floor(tempoRestante / 60);
-    let segundos = tempoRestante % 60;
-    document.getElementById('timer').innerText = `${minutos}:${segundos.toString().padStart(2,'0')}`;
-}
-
-function adicionarVidas(quantidade) {
-    if (!ativo) return;
-    vidas += quantidade;
-    if (vidas > 20) vidas = 20;
-    atualizarVidas();
-    const hudVidas = document.getElementById('vidas');
-    hudVidas.style.transform = 'scale(1.2)';
-    setTimeout(() => { hudVidas.style.transform = 'scale(1)'; }, 200);
-}
-
-function aplicarDano() {
-    if (!ativo) return;
-    vidas--;
-    atualizarVidas();
-    heroi.classList.add('dano');
-    setTimeout(() => heroi.classList.remove('dano'), 300);
-    tocar(somDano);
-    if (vidas <= 0) gameOver(false);
-}
-
+// spawn
 function spawn() {
-    if (!ativo) return;
+    let r = Math.random();
+    let tipo = r < 0.2 ? "azul" : r < 0.4 ? "vermelha" : "normal";
+    let img = tipo === "azul" ? starBlue : tipo === "vermelha" ? starRed : starNormal;
+    stars.push({ 
+        x: 220 + Math.random() * (canvas.width - 260), 
+        y: -50, 
+        speed: 3, 
+        tipo, 
+        img 
+    });
+}
+
+// partículas
+function tinta(x, y, cor) {
+    for(let i = 0; i < 10; i++) {
+        particulas.push({ 
+            x, y, 
+            dx: (Math.random() - 0.5) * 6, 
+            dy: (Math.random() - 0.5) * 6, 
+            vida: 1, 
+            cor 
+        });
+    }
+}
+
+// loop do jogo
+function gameLoop() {
+    if(!playing) return;
     
-    let tipo = "preto";
-    let imgUrl = corvoPretoImg;
+    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
     
-    let podeAparecerBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
-    const random = Math.random();
+    if(leftPressed) speed -= 0.6;
+    if(rightPressed) speed += 0.6;
+    speed *= 0.9;
+    x += speed;
+    x = Math.max(220, Math.min(canvas.width - 80, x));
     
-    if (podeAparecerBranco && random < 0.5) {
-        tipo = "branco";
-        imgUrl = corvoBrancoImg;
-        ultimoMultiploBranco = corvosDesviados;
+    ctx.drawImage(hero, x - 70, canvas.height - 180, 140, 170);
+    
+    if(Math.random() < 0.03) spawn();
+    
+    for(let i = stars.length - 1; i >= 0; i--) {
+        let s = stars[i];
+        s.y += s.speed;
+        ctx.drawImage(s.img, s.x - 20, s.y - 20, 40, 40);
+        
+        let colidiu = s.x + 20 > x - 60 && s.x - 20 < x + 60 && 
+                      s.y + 20 > canvas.height - 180 && s.y - 20 < canvas.height - 20;
+        
+        if(colidiu) {
+            stars.splice(i, 1);
+            if(s.tipo === "azul") { 
+                vidas++; 
+                play(somAzul); 
+                tinta(s.x, s.y, "cyan"); 
+            } else if(s.tipo === "vermelha") { 
+                vidas -= 2; 
+                play(somVermelho); 
+                tinta(s.x, s.y, "red"); 
+            } else { 
+                vidas--; 
+                play(somNormal); 
+                tinta(s.x, s.y, "gold"); 
+            }
+            vidas = Math.max(0, vidas);
+            document.getElementById("vidas").innerText = vidas;
+            if(vidas <= 0) endGame(false);
+        }
+        if(s.y > canvas.height) stars.splice(i, 1);
     }
     
-    let corvoDiv = document.createElement('div');
-    corvoDiv.className = "corvo";
-    if (tipo === "branco") corvoDiv.classList.add("corvo-branco");
-    corvoDiv.style.backgroundImage = `url('${imgUrl}')`;
-    corvoDiv.style.right = "-70px";
-    corvoDiv.style.bottom = Math.random() > 0.5 ? "360px" : "200px";
+    for(let i = particulas.length - 1; i >= 0; i--) {
+        let p = particulas[i];
+        p.x += p.dx;
+        p.y += p.dy;
+        p.vida -= 0.03;
+        ctx.fillStyle = p.cor;
+        ctx.globalAlpha = p.vida;
+        ctx.fillRect(p.x, p.y, 5, 5);
+        ctx.globalAlpha = 1;
+        if(p.vida <= 0) particulas.splice(i, 1);
+    }
     
-    document.getElementById('jogo').appendChild(corvoDiv);
-    
-    let x = -70;
-    let colidiu = false;
-    
-    let movimento = setInterval(() => {
-        if (!ativo || colidiu) {
-            if (!colidiu && corvoDiv.parentNode) corvoDiv.remove();
-            clearInterval(movimento);
-            return;
-        }
-        
-        x += correndo ? 16 : 11;
-        corvoDiv.style.right = x + "px";
-        
-        let h = heroi.getBoundingClientRect();
-        let cr = corvoDiv.getBoundingClientRect();
-        
-        if (h.right > cr.left + 15 && h.left < cr.right - 15 && 
-            h.bottom > cr.top + 10 && h.top < cr.bottom - 10) {
-            
-            colidiu = true;
-            
-            if (tipo === "branco") {
-                adicionarVidas(2);
-                tocar(somVida);
-                const msgVida = document.createElement('div');
-                msgVida.textContent = "+2 ❤️";
-                msgVida.style.position = "absolute";
-                msgVida.style.left = cr.left + "px";
-                msgVida.style.top = cr.top + "px";
-                msgVida.style.color = "#FFD700";
-                msgVida.style.fontSize = "22px";
-                msgVida.style.fontWeight = "bold";
-                msgVida.style.textShadow = "2px 2px 4px black";
-                msgVida.style.zIndex = "1000";
-                document.body.appendChild(msgVida);
-                setTimeout(() => msgVida.remove(), 800);
-            } else {
-                aplicarDano();
-            }
-            
-            corvoDiv.remove();
-            clearInterval(movimento);
-        }
-        
-        if (x > window.innerWidth && !colidiu) {
-            corvosDesviados++;
-            atualizarCorvosDesviados();
-            corvoDiv.remove();
-            clearInterval(movimento);
-        }
-        
-    }, 20);
-    
-    let tempoSpawn = correndo ? 800 : 1000;
-    spawnTimeoutId = setTimeout(spawn, tempoSpawn);
+    animationId = requestAnimationFrame(gameLoop);
 }
 
-function startSpawning() {
-    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
-    spawn();
-}
-
-function loop() {
-    if (!ativo) return;
-    let velocidade = correndo ? 14 : 8;
-    bg -= velocidade;
-    cenario.style.transform = `translateX(${bg % window.innerWidth}px)`;
-    animationId = requestAnimationFrame(loop);
-}
-
+// timer
 function startTimer() {
-    if (timerInterval) clearInterval(timerInterval);
+    if(timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-        if (!ativo) return;
-        if (tempoRestante <= 0) {
-            gameOver(true);
-            return;
-        }
-        tempoRestante--;
-        atualizarTimer();
+        if(!playing) return;
+        tempo--;
+        let m = Math.floor(tempo / 60);
+        let s = tempo % 60;
+        document.getElementById("tempo").innerText = `${m}:${s.toString().padStart(2,'0')}`;
+        if(tempo <= 0) endGame(true);
     }, 1000);
 }
 
-function startGame() {
-    storyScreen.classList.add('hidden');
-    introScreen.classList.add('hidden');
-    winScreen.classList.add('hidden');
-    loseOverlay.classList.add('hidden');
+// fim de jogo
+function endGame(win) {
+    playing = false;
+    music.pause();
+    if(animationId) cancelAnimationFrame(animationId);
+    if(timerInterval) clearInterval(timerInterval);
     
-    gameEnded = false;
-    ativo = true;
-    vidas = 7;
-    corvosDesviados = 0;
-    tempoRestante = 180;
-    correndo = false;
-    abaixado = false;
-    ultimoMultiploBranco = 0;
-    bg = 0;
-    
-    heroi.style.bottom = "200px";
-    heroi.style.height = "200px";
-    
-    atualizarVidas();
-    atualizarCorvosDesviados();
-    atualizarTimer();
-    
-    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
-    if (animationId) cancelAnimationFrame(animationId);
-    if (timerInterval) clearInterval(timerInterval);
-    
-    document.querySelectorAll('.corvo').forEach(c => c.remove());
-    
-    tocar(somStart);
-    musica.currentTime = 0;
-    musica.play().catch(()=>{});
-    
-    loop();
-    startSpawning();
-    startTimer();
-}
-
-function gameOver(win) {
-    if (gameEnded) return;
-    gameEnded = true;
-    ativo = false;
-    
-    if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
-    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-    
-    musica.pause();
-    document.querySelectorAll('.corvo').forEach(c => c.remove());
-    
-    if (win) {
-        showWinScreen();
-        tocar(somWin);
+    if(win) {
+        visitorNameSpan.textContent = globalPlayerName;
+        const now = new Date();
+        const dataFormatada = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        visitDateSpan.textContent = `✨ ${dataFormatada} ✨`;
+        winOverlay.classList.remove('hidden');
+        play(somWin);
     } else {
-        loseMsg.innerHTML = `💀 ${globalPlayerName}, os corvos pretos venceram... 💀`;
+        loseMsg.innerHTML = `💀 ${globalPlayerName}, as tintas foram derramadas... 💀`;
         loseOverlay.classList.remove('hidden');
-        tocar(somLose);
+        play(somLose);
     }
 }
 
-// Ações
-function pular() { if (!ativo) return; heroi.style.bottom = "400px"; setTimeout(() => heroi.style.bottom = "200px", 400); }
-function abaixar() { if (!ativo) return; heroi.style.height = "100px"; heroi.style.bottom = "160px"; }
-function levantar() { heroi.style.height = "200px"; heroi.style.bottom = "200px"; }
-function correr() { if (!ativo) return; correndo = true; }
-function pararCorrer() { correndo = false; }
+// iniciar jogo
+function startGame() {
+    startOverlay.classList.add('hidden');
+    bioScreen.classList.add('hidden');
+    introScreen.classList.add('hidden');
+    winOverlay.classList.add('hidden');
+    loseOverlay.classList.add('hidden');
+    
+    x = canvas.width / 2;
+    speed = 0;
+    stars = [];
+    particulas = [];
+    vidas = 7;
+    tempo = 300;
+    playing = true;
+    
+    document.getElementById("vidas").innerText = vidas;
+    document.getElementById("tempo").innerText = "5:00";
+    
+    music.currentTime = 0;
+    music.play().catch(() => {});
+    
+    startTimer();
+    gameLoop();
+}
 
-document.getElementById("pula").onpointerdown = pular;
-document.getElementById("abaixa").onpointerdown = abaixar;
-document.getElementById("abaixa").onpointerup = levantar;
-document.getElementById("abaixa").onpointerleave = levantar;
-document.getElementById("corre").onpointerdown = correr;
-document.getElementById("corre").onpointerup = pararCorrer;
-document.getElementById("corre").onpointerleave = pararCorrer;
+// mostrar tela de start do jogo
+function showGameStart() {
+    startOverlay.classList.remove('hidden');
+}
 
-window.onkeydown = (e) => {
-    const key = e.key.toLowerCase();
-    if (key === "l") pular();
-    if (key === "a") abaixar();
-    if (key === "f") correr();
-};
-window.onkeyup = (e) => {
-    const key = e.key.toLowerCase();
-    if (key === "a") levantar();
-    if (key === "f") pararCorrer();
-};
-
-document.getElementById('btnVoltarJogo').addEventListener('click', () => {
-    winScreen.classList.add('hidden');
-    startGame();
-});
-document.getElementById('btnSair').addEventListener('click', () => location.reload());
-
-goToStoryBtn.addEventListener('click', showStory);
+// ==================== EVENTOS ====================
+goToBioBtn.addEventListener('click', showBiography);
 backToIntroBtn.addEventListener('click', backToIntro);
-startGameBtn.addEventListener('click', startGame);
-childNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); showStory(); } });
+enterGameBtn.addEventListener('click', showGameStart);
+gameStartBtn.addEventListener('click', startGame);
+
+// Tecla Enter no campo de nome
+childNameInput.addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+        e.preventDefault();
+        showBiography();
+    }
+});
+
+// Controles do jogo
+const leftBtn = document.getElementById("left");
+const rightBtn = document.getElementById("right");
+
+leftBtn.onpointerdown = () => leftPressed = true;
+leftBtn.onpointerup = () => leftPressed = false;
+leftBtn.onpointerleave = () => leftPressed = false;
+
+rightBtn.onpointerdown = () => rightPressed = true;
+rightBtn.onpointerup = () => rightPressed = false;
+rightBtn.onpointerleave = () => rightPressed = false;
+
+window.addEventListener("keydown", e => {
+    if(e.key === "ArrowLeft") leftPressed = true;
+    if(e.key === "ArrowRight") rightPressed = true;
+});
+
+window.addEventListener("keyup", e => {
+    if(e.key === "ArrowLeft") leftPressed = false;
+    if(e.key === "ArrowRight") rightPressed = false;
+});
+
+window.addEventListener('resize', () => {
+    resizeCanvas();
+});
 
 </script>
 </body>
