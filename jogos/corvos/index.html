@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Van Gogh - Campo de Trigo</title>
 
 <style>
@@ -22,6 +22,7 @@ body {
     width: 100vw; 
     height: 100vh; 
     position: relative; 
+    overflow: hidden;
 }
 
 #cenario {
@@ -30,6 +31,7 @@ body {
     position: absolute;
     background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/cenario.webp') repeat-x;
     background-size: 50% 100%;
+    background-position: bottom;
 }
 
 #heroi {
@@ -41,6 +43,7 @@ body {
     background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/heroicorrendo.png') no-repeat center;
     background-size: contain;
     transition: 0.05s;
+    z-index: 10;
 }
 
 .corvo {
@@ -50,20 +53,28 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 5;
 }
 
 #hud {
     position: absolute;
     width: 100%;
-    padding: 20px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     color: #f1c40f;
-    font-size: 20px;
+    font-size: 18px;
     z-index: 999;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.4);
     backdrop-filter: blur(5px);
+    box-sizing: border-box;
+}
+
+#hud div {
+    background: rgba(0,0,0,0.5);
+    padding: 5px 15px;
+    border-radius: 30px;
 }
 
 /* ========== TELA DE INTRODUÇÃO PERSONALIZADA ========== */
@@ -76,11 +87,14 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Georgia', cursive;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .intro-card {
     max-width: 500px;
-    width: 90%;
+    width: 100%;
     background: #FFF8E7;
     background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
     background-size: 30px 30px;
@@ -102,12 +116,12 @@ body {
 }
 
 .intro-welcome {
-    padding: 40px 35px;
+    padding: 30px 25px;
     text-align: center;
 }
 
 .intro-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #4A6A2A;
     text-shadow: 3px 3px 0 #FFD700;
     letter-spacing: 3px;
@@ -116,11 +130,11 @@ body {
 }
 
 .intro-question {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: #2a4a1a;
     background: #FFEFC0;
     display: inline-block;
-    padding: 12px 25px;
+    padding: 10px 20px;
     border-radius: 60px;
     margin-bottom: 25px;
     box-shadow: 0 6px 0 #C29B4A;
@@ -128,8 +142,8 @@ body {
 
 .name-input {
     width: 85%;
-    padding: 16px 20px;
-    font-size: 1.3rem;
+    padding: 14px 18px;
+    font-size: 1.2rem;
     font-family: inherit;
     border: 3px solid #8B5A2B;
     border-radius: 60px;
@@ -150,10 +164,10 @@ body {
 .enter-btn {
     background: #8B5A2B;
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     font-family: inherit;
-    padding: 14px 35px;
+    padding: 12px 30px;
     border: none;
     border-radius: 60px;
     cursor: pointer;
@@ -170,55 +184,56 @@ body {
 .story-container {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Georgia', cursive;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .story-card {
     max-width: 700px;
-    width: 90%;
-    max-height: 85vh;
+    width: 100%;
+    max-height: 90vh;
     background: #FFF8E7;
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
+    overflow-y: auto;
     animation: fadeInUp 0.5s ease;
 }
 
 .story-text {
-    padding: 30px;
-    font-size: 1rem;
+    padding: 25px;
+    font-size: 0.95rem;
     line-height: 1.5;
     color: #3E2723;
-    max-height: 60vh;
-    overflow-y: auto;
 }
 
 .story-text p {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .story-text .highlight {
     color: #D2691E;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
 .signature-story {
     text-align: right;
     font-style: italic;
     margin-top: 20px;
-    padding-top: 15px;
+    padding-top: 12px;
     border-top: 2px dashed #FFB347;
 }
 
 .start-game-area {
     text-align: center;
-    padding: 20px 30px 30px;
+    padding: 15px 25px 25px;
     background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
     border-top: 3px solid #FFD700;
 }
@@ -226,19 +241,19 @@ body {
 .start-button {
     display: inline-block;
     background: #8B5A2B;
-    padding: 18px 50px;
+    padding: 15px 40px;
     border-radius: 60px;
     color: white;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 0 10px 0 #5a3a1a;
+    box-shadow: 0 8px 0 #5a3a1a;
     transition: 0.05s linear;
     cursor: pointer;
 }
 
 .start-button:active {
-    transform: translateY(5px);
-    box-shadow: 0 5px 0 #5a3a1a;
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #5a3a1a;
 }
 
 .back-btn {
@@ -247,21 +262,24 @@ body {
     font-size: 0.9rem;
     color: #B97F44;
     cursor: pointer;
-    margin: 12px 0 0 20px;
+    margin: 12px 0 0 18px;
     text-decoration: underline;
 }
 
 /* Scrollbar */
-.story-text::-webkit-scrollbar {
-    width: 6px;
+.story-text::-webkit-scrollbar,
+.story-card::-webkit-scrollbar {
+    width: 5px;
 }
 
-.story-text::-webkit-scrollbar-track {
+.story-text::-webkit-scrollbar-track,
+.story-card::-webkit-scrollbar-track {
     background: #FFE0B5;
     border-radius: 10px;
 }
 
-.story-text::-webkit-scrollbar-thumb {
+.story-text::-webkit-scrollbar-thumb,
+.story-card::-webkit-scrollbar-thumb {
     background: #8B5A2B;
     border-radius: 10px;
 }
@@ -276,71 +294,64 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Georgia', cursive;
-    overflow-y: auto;
     padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .win-card {
-    max-width: 650px;
-    width: 90%;
-    max-height: 90vh;
+    max-width: 600px;
+    width: 100%;
+    max-height: 95vh;
     background: #FFF8E7;
     background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
     background-size: 30px 30px;
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
+    overflow-y: auto;
     animation: fadeInUp 0.5s ease;
 }
 
 .win-message {
-    padding: 30px;
+    padding: 25px;
     text-align: center;
 }
 
 .win-message p {
-    margin-bottom: 15px;
-    font-size: 1rem;
-    line-height: 1.5;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
     color: #3E2723;
-}
-
-.win-message .vincent-signature {
-    margin-top: 20px;
-    font-style: italic;
-    color: #D2691E;
-    font-weight: bold;
 }
 
 /* Livro dos Caminhos */
 .livro-caminhos {
     background: #8B5A2B;
     border-radius: 30px;
-    padding: 25px;
-    margin: 20px;
+    padding: 20px;
+    margin: 10px 20px 20px;
     border: 3px solid #FFD700;
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
 }
 
 .corvo-left, .corvo-right {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 3rem;
+    font-size: 2.5rem;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
 }
 
 .corvo-left {
-    left: -50px;
+    left: -40px;
 }
 
 .corvo-right {
-    right: -50px;
+    right: -40px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     .corvo-left, .corvo-right {
         display: none;
     }
@@ -349,43 +360,44 @@ body {
 .book-pages {
     background: #FFF8DC;
     border-radius: 20px;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
 }
 
 .book-title {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: #8B5A2B;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     letter-spacing: 2px;
 }
 
 .assinatura-nome {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #D2691E;
     background: #FFEFC0;
     display: inline-block;
-    padding: 12px 30px;
-    border-radius: 60px;
-    margin: 15px 0;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin: 10px 0;
     border: 2px solid #FFB347;
     font-family: 'Georgia', cursive;
 }
 
 .stamp-corvos {
-    font-size: 2rem;
-    margin-top: 15px;
-    letter-spacing: 8px;
+    font-size: 1.8rem;
+    margin-top: 10px;
+    letter-spacing: 6px;
 }
 
 .data-assinatura {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #666;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
+/* MENSAGEM DE VAN GOGH - CORRIGIDA */
 .mensagem-van-gogh {
     background: #FFF8E7;
     border-radius: 20px;
@@ -399,28 +411,30 @@ body {
 .mensagem-van-gogh p {
     margin: 10px 0;
     color: #3E2723;
+    font-size: 0.9rem;
 }
 
 .mensagem-van-gogh .ass-mensagem {
     text-align: right;
-    margin-top: 15px;
+    margin-top: 12px;
     font-style: italic;
     color: #D2691E;
 }
 
 .win-buttons {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     justify-content: center;
-    padding: 20px 30px 30px;
+    padding: 15px 25px 25px;
     background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
     border-top: 3px solid #FFD700;
+    flex-wrap: wrap;
 }
 
 .win-btn {
-    padding: 12px 30px;
+    padding: 10px 25px;
     border-radius: 60px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -444,9 +458,9 @@ body {
     background: #D2691E;
     color: white;
     box-shadow: 0 4px 0 #8B4513;
-    margin-bottom: 15px;
-    width: 100%;
-    max-width: 300px;
+    margin-bottom: 10px;
+    width: auto;
+    min-width: 220px;
 }
 
 .win-btn:active {
@@ -454,56 +468,64 @@ body {
     box-shadow: 0 2px 0;
 }
 
-/* ========== TELAS DO JOGO ========== */
+/* ========== TELA DE DERROTA ========== */
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: radial-gradient(#1a0a0a, #000);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     color: #fff;
     z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.img { 
-    width: 250px; 
+.overlay img { 
+    width: 180px; 
+    max-width: 60%;
     margin-bottom: 20px; 
     border-radius: 20px;
+    border: 3px solid #FFD700;
 }
 
-button {
-    padding: 15px 30px;
-    font-size: 20px;
+.overlay button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
     background: #f1c40f;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     font-family: 'Georgia', cursive;
     font-weight: bold;
+    margin-top: 20px;
 }
 
 #controles {
     position: absolute;
-    bottom: 20px;
+    bottom: 15px;
     width: 100%;
     display: flex;
     justify-content: space-around;
     z-index: 999;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .btn {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #FFD700;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     backdrop-filter: blur(5px);
     border: 2px solid #FFD700;
@@ -511,12 +533,12 @@ button {
 }
 
 .btn span:first-child {
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .btn span:last-child {
-    font-size: 12px;
-    margin-top: 4px;
+    font-size: 11px;
+    margin-top: 3px;
 }
 
 .btn:active {
@@ -527,7 +549,7 @@ button {
     display: none !important;
 }
 
-/* Efeito visual para corvo branco */
+/* Efeitos visuais */
 @keyframes brilho {
     0% { filter: brightness(1) drop-shadow(0 0 0px white); }
     50% { filter: brightness(1.3) drop-shadow(0 0 8px white); }
@@ -538,7 +560,6 @@ button {
     animation: brilho 0.5s ease-in-out infinite;
 }
 
-/* Efeito de dano */
 @keyframes dano {
     0% { filter: brightness(1); }
     50% { filter: brightness(0.5) drop-shadow(0 0 5px red); }
@@ -549,18 +570,29 @@ button {
     animation: dano 0.3s ease-in-out;
 }
 
-/* Tecla destacada nas regras */
 .tecla {
     display: inline-block;
     background: #333;
     color: #FFD700;
-    padding: 4px 12px;
+    padding: 3px 10px;
     border-radius: 12px;
     font-weight: bold;
     font-family: monospace;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin: 0 2px;
     border: 1px solid #FFD700;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .intro-title { font-size: 1.6rem; }
+    .intro-question { font-size: 1.2rem; }
+    .start-button { font-size: 1.2rem; padding: 12px 30px; }
+    .book-title { font-size: 1.1rem; }
+    .assinatura-nome { font-size: 1.4rem; }
+    .win-btn { padding: 8px 18px; font-size: 0.9rem; }
+    .btn { width: 60px; height: 60px; }
+    #hud { font-size: 14px; padding: 10px 15px; }
 }
 </style>
 </head>
@@ -626,7 +658,7 @@ button {
                 <div class="stamp-corvos">🐦‍⬛ 🌾 🎨 🐦‍⬛</div>
                 <div class="data-assinatura" id="dataAssinatura"></div>
                 
-                <!-- Mensagem de Van Gogh que aparece ao clicar no botão -->
+                <!-- Mensagem de Van Gogh -->
                 <div id="mensagemVanGogh" class="mensagem-van-gogh">
                     <p><strong>💛 Querido(a) <span id="msgNome"></span>,</strong></p>
                     <p>Você não apenas venceu os corvos... você dançou com eles sob o céu pintado por nós dois.</p>
@@ -651,14 +683,14 @@ button {
 
 <!-- TELA DE DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
-    <img id="loseImg" class="img" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png">
+    <img id="loseImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png">
     <h1 id="loseMsg"></h1>
     <button onclick="location.reload()">🔄 TENTAR NOVAMENTE</button>
 </div>
 
 <script>
 
-// ==================== TEXTO DA APRESENTAÇÃO COM AS TECLAS ====================
+// ==================== TEXTO DA APRESENTAÇÃO ====================
 function getStoryText(name) {
     return `
         <p><span class="highlight">🌟 Olá, ${name}!</span></p>
@@ -703,8 +735,8 @@ const mensagemVanGogh = document.getElementById('mensagemVanGogh');
 const msgNomeSpan = document.getElementById('msgNome');
 
 let globalPlayerName = "";
-let gameEnded = false; // Evita múltiplos finais
-let ativo = false; // Controla se o jogo está rodando
+let gameEnded = false;
+let ativo = false;
 
 function showStory() {
     let name = childNameInput.value.trim();
@@ -728,7 +760,7 @@ function showWinScreen() {
     btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
     
     const now = new Date();
-    const dataFormatada = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const dataFormatada = now.toLocaleDateString('pt-BR');
     const hora = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     dataAssinatura.innerHTML = `✨ Assinado em ${dataFormatada} às ${hora} ✨`;
     winScreen.classList.remove('hidden');
@@ -738,6 +770,10 @@ function mostrarMensagem() {
     if (mensagemVanGogh.style.display === 'none' || mensagemVanGogh.style.display === '') {
         mensagemVanGogh.style.display = 'block';
         btnMostrarMensagem.textContent = '🔒 FECHAR MENSAGEM';
+        // Rola a mensagem para a visualização
+        setTimeout(() => {
+            mensagemVanGogh.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
     } else {
         mensagemVanGogh.style.display = 'none';
         btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
@@ -754,7 +790,7 @@ let abaixado = false;
 let spawnTimeoutId = null;
 let animationId = null;
 let timerInterval = null;
-let tempoRestante = 180; // 3 minutos
+let tempoRestante = 180;
 
 let corvosDesviados = 0;
 let ultimoMultiploBranco = 0;
@@ -762,11 +798,9 @@ let ultimoMultiploBranco = 0;
 const heroi = document.getElementById('heroi');
 const cenario = document.getElementById('cenario');
 
-// Imagens dos corvos
 const corvoPretoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/corvo.png";
 const corvoBrancoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/CORVOBRANCO%20(1).png";
 
-// Sons
 const musica = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/519_full_circus-hungaria_0153_preview.mp3");
 musica.loop = true;
 
@@ -779,19 +813,13 @@ const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosar
 function tocar(url) { 
     try {
         let audio = new Audio(url);
-        audio.volume = 0.5;
+        audio.volume = 0.4;
         audio.play().catch(()=>{}); 
     } catch(e) {}
 }
 
-function atualizarVidas() {
-    document.getElementById('vidas').innerText = vidas;
-}
-
-function atualizarCorvosDesviados() {
-    document.getElementById('corvosDesviados').innerText = corvosDesviados;
-}
-
+function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
+function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
 function atualizarTimer() {
     let minutos = Math.floor(tempoRestante / 60);
     let segundos = tempoRestante % 60;
@@ -803,7 +831,6 @@ function adicionarVidas(quantidade) {
     vidas += quantidade;
     if (vidas > 20) vidas = 20;
     atualizarVidas();
-    
     const hudVidas = document.getElementById('vidas');
     hudVidas.style.transform = 'scale(1.2)';
     setTimeout(() => { hudVidas.style.transform = 'scale(1)'; }, 200);
@@ -813,39 +840,25 @@ function aplicarDano() {
     if (!ativo) return;
     vidas--;
     atualizarVidas();
-    
     heroi.classList.add('dano');
     setTimeout(() => heroi.classList.remove('dano'), 300);
-    
     tocar(somDano);
-    
-    // VERIFICA SE VIDAS ACABARAM
-    if (vidas <= 0) {
-        gameOver(false);
-    }
+    if (vidas <= 0) gameOver(false);
 }
 
-// Spawn de corvos
 function spawn() {
     if (!ativo) return;
     
     let tipo = "preto";
     let imgUrl = corvoPretoImg;
     
-    let podeAparecerBranco = false;
-    if (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados) {
-        podeAparecerBranco = true;
-    }
-    
+    let podeAparecerBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
     const random = Math.random();
     
     if (podeAparecerBranco && random < 0.5) {
         tipo = "branco";
         imgUrl = corvoBrancoImg;
         ultimoMultiploBranco = corvosDesviados;
-    } else {
-        tipo = "preto";
-        imgUrl = corvoPretoImg;
     }
     
     let corvoDiv = document.createElement('div');
@@ -887,7 +900,7 @@ function spawn() {
                 msgVida.style.left = cr.left + "px";
                 msgVida.style.top = cr.top + "px";
                 msgVida.style.color = "#FFD700";
-                msgVida.style.fontSize = "24px";
+                msgVida.style.fontSize = "22px";
                 msgVida.style.fontWeight = "bold";
                 msgVida.style.textShadow = "2px 2px 4px black";
                 msgVida.style.zIndex = "1000";
@@ -919,20 +932,11 @@ function startSpawning() {
     spawn();
 }
 
-function stopSpawning() {
-    if (spawnTimeoutId) {
-        clearTimeout(spawnTimeoutId);
-        spawnTimeoutId = null;
-    }
-}
-
 function loop() {
     if (!ativo) return;
-    
     let velocidade = correndo ? 14 : 8;
     bg -= velocidade;
     cenario.style.transform = `translateX(${bg % window.innerWidth}px)`;
-    
     animationId = requestAnimationFrame(loop);
 }
 
@@ -940,27 +944,21 @@ function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         if (!ativo) return;
-        
         if (tempoRestante <= 0) {
-            // Tempo acabou - VITÓRIA!
             gameOver(true);
             return;
         }
-        
         tempoRestante--;
         atualizarTimer();
-        
     }, 1000);
 }
 
 function startGame() {
-    // Esconde todas as telas
     storyScreen.classList.add('hidden');
     introScreen.classList.add('hidden');
     winScreen.classList.add('hidden');
     loseOverlay.classList.add('hidden');
     
-    // Reseta variáveis
     gameEnded = false;
     ativo = true;
     vidas = 7;
@@ -971,7 +969,6 @@ function startGame() {
     ultimoMultiploBranco = 0;
     bg = 0;
     
-    // Reseta posição do herói
     heroi.style.bottom = "200px";
     heroi.style.height = "200px";
     
@@ -979,20 +976,16 @@ function startGame() {
     atualizarCorvosDesviados();
     atualizarTimer();
     
-    // Para loops anteriores
     if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
     if (animationId) cancelAnimationFrame(animationId);
     if (timerInterval) clearInterval(timerInterval);
     
-    // Remove corvos existentes
     document.querySelectorAll('.corvo').forEach(c => c.remove());
     
-    // Inicia som e música
     tocar(somStart);
     musica.currentTime = 0;
     musica.play().catch(()=>{});
     
-    // Inicia loops do jogo
     loop();
     startSpawning();
     startTimer();
@@ -1003,24 +996,11 @@ function gameOver(win) {
     gameEnded = true;
     ativo = false;
     
-    // Para todos os loops
-    if (spawnTimeoutId) {
-        clearTimeout(spawnTimeoutId);
-        spawnTimeoutId = null;
-    }
-    if (animationId) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
-    }
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+    if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
+    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
     
-    // Para a música
     musica.pause();
-    
-    // Remove todos os corvos
     document.querySelectorAll('.corvo').forEach(c => c.remove());
     
     if (win) {
@@ -1033,91 +1013,43 @@ function gameOver(win) {
     }
 }
 
-// PULAR (tecla L)
-function pular() {
-    if (!ativo) return;
-    heroi.style.bottom = "400px";
-    setTimeout(() => heroi.style.bottom = "200px", 400);
-}
+// Ações
+function pular() { if (!ativo) return; heroi.style.bottom = "400px"; setTimeout(() => heroi.style.bottom = "200px", 400); }
+function abaixar() { if (!ativo) return; heroi.style.height = "100px"; heroi.style.bottom = "160px"; }
+function levantar() { heroi.style.height = "200px"; heroi.style.bottom = "200px"; }
+function correr() { if (!ativo) return; correndo = true; }
+function pararCorrer() { correndo = false; }
 
 document.getElementById("pula").onpointerdown = pular;
-
-// ABAIXAR (tecla A)
-function abaixar() {
-    if (!ativo) return;
-    abaixado = true;
-    heroi.style.height = "100px";
-    heroi.style.bottom = "160px";
-}
-
-function levantar() {
-    abaixado = false;
-    heroi.style.height = "200px";
-    heroi.style.bottom = "200px";
-}
-
 document.getElementById("abaixa").onpointerdown = abaixar;
 document.getElementById("abaixa").onpointerup = levantar;
 document.getElementById("abaixa").onpointerleave = levantar;
-
-// CORRER (tecla F)
-function correr() {
-    if (!ativo) return;
-    correndo = true;
-}
-function pararCorrer() {
-    correndo = false;
-}
-
 document.getElementById("corre").onpointerdown = correr;
 document.getElementById("corre").onpointerup = pararCorrer;
 document.getElementById("corre").onpointerleave = pararCorrer;
 
-// TECLADO
 window.onkeydown = (e) => {
     const key = e.key.toLowerCase();
-    if (key === "l") {
-        pular();
-    }
-    if (key === "a") {
-        abaixar();
-    }
-    if (key === "f") {
-        correr();
-    }
+    if (key === "l") pular();
+    if (key === "a") abaixar();
+    if (key === "f") correr();
 };
-
 window.onkeyup = (e) => {
     const key = e.key.toLowerCase();
-    if (key === "a") {
-        levantar();
-    }
-    if (key === "f") {
-        pararCorrer();
-    }
+    if (key === "a") levantar();
+    if (key === "f") pararCorrer();
 };
 
-// Botões da vitória
 document.getElementById('btnVoltarJogo').addEventListener('click', () => {
     winScreen.classList.add('hidden');
     startGame();
 });
+document.getElementById('btnSair').addEventListener('click', () => location.reload());
 
-document.getElementById('btnSair').addEventListener('click', () => {
-    location.reload();
-});
-
-// Eventos principais
 goToStoryBtn.addEventListener('click', showStory);
 backToIntroBtn.addEventListener('click', backToIntro);
 startGameBtn.addEventListener('click', startGame);
-
-childNameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        showStory();
-    }
-});
+childNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); showStory(); } });
 
 </script>
 </body>
