@@ -12,6 +12,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
 }
 
 body {
@@ -19,12 +22,18 @@ body {
     overflow: hidden;
     background: #000;
     font-family: 'Fredoka', sans-serif;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
     width: 100%;
     height: 100%;
     display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /* Tela de introdução */
@@ -37,7 +46,6 @@ canvas {
     justify-content: center;
     align-items: center;
     font-family: 'Fredoka', sans-serif;
-    transition: opacity 0.5s ease;
     padding: 20px;
     overflow-y: auto;
 }
@@ -104,6 +112,8 @@ canvas {
     color: #4A2A1A;
     margin-bottom: 25px;
     transition: all 0.3s;
+    user-select: text;
+    -webkit-user-select: text;
 }
 
 .name-input:focus {
@@ -131,7 +141,7 @@ canvas {
     box-shadow: 0 3px 0 #C27E1A;
 }
 
-/* TELA DA BIOGRAFIA - CORRIGIDA PARA MOSTRAR TODO O CONTEÚDO E O BOTÃO */
+/* TELA DA BIOGRAFIA */
 .bio-container {
     position: absolute;
     inset: 0;
@@ -216,7 +226,6 @@ canvas {
     padding-top: 15px;
 }
 
-/* PALETA COM "ENTRE!" - CORRIGIDA PARA FICAR VISÍVEL */
 .enter-game-area {
     text-align: center;
     padding: 20px 30px 25px;
@@ -277,70 +286,65 @@ canvas {
     align-self: flex-start;
 }
 
-.back-btn:hover {
-    color: #D2691E;
-}
-
-/* Scrollbar */
-.bio-text::-webkit-scrollbar {
-    width: 6px;
-}
-
-.bio-text::-webkit-scrollbar-track {
-    background: #FFE0B5;
-    border-radius: 10px;
-}
-
-.bio-text::-webkit-scrollbar-thumb {
-    background: #FFB347;
-    border-radius: 10px;
-}
-
-/* HUD do jogo */
+/* HUD do jogo - CORRIGIDA */
 #hud {
     position: absolute;
-    top: 10px;
-    left: 140px;
-    right: 10px;
+    top: 15px;
+    left: 15px;
+    right: 15px;
     display: flex;
     justify-content: space-between;
     color: #FFD700;
-    font-size: 32px;
+    font-size: 24px;
     z-index: 50;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    pointer-events: none;
 }
 
+#hud div {
+    background: rgba(0,0,0,0.5);
+    padding: 8px 16px;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+}
+
+/* CONTROLES - CORRIGIDOS PARA NÃO APARECER MENU DO GOOGLE */
 #controles {
     position: absolute;
     bottom: 20px;
-    left: 140px;
+    left: 0;
     right: 0;
     display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
+    justify-content: center;
+    gap: 40px;
     z-index: 50;
+    padding: 0 20px;
 }
 
 .btn {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
-    color: #fff;
+    font-size: 32px;
+    color: #FFD700;
     cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: 0.1s;
+    border: 2px solid #FFD700;
+    transition: 0.05s linear;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .btn:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
+    background: rgba(0,0,0,0.8);
 }
 
-/* Tela de fim de jogo - VITÓRIA com Livro de Visitas e imagem */
+/* Tela de fim de jogo */
 .overlay {
     position: absolute;
     inset: 0;
@@ -375,15 +379,14 @@ canvas {
     transition: transform 0.2s;
 }
 
-.overlay button:hover {
-    transform: scale(1.05);
+.overlay button:active {
+    transform: scale(0.95);
 }
 
 .hidden {
     display: none !important;
 }
 
-/* Mensagem de agradecimento do Van Gogh COM IMAGEM LATERAL */
 .thankyou-container {
     display: flex;
     flex-wrap: wrap;
@@ -431,7 +434,6 @@ canvas {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Livro de Visitas */
 .visitors-book {
     background: #8B4513;
     border-radius: 20px;
@@ -484,18 +486,20 @@ canvas {
     margin-top: 8px;
 }
 
-/* Instruções do jogo */
 .game-instructions {
     margin: 20px 0;
     font-size: 1.2rem;
     line-height: 1.8;
+    background: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 30px;
 }
 
 .game-instructions p {
     margin: 8px 0;
 }
 
-/* Responsividade - CORREÇÃO PARA CELULAR */
+/* Responsividade */
 @media (max-width: 650px) {
     .bio-flex {
         flex-direction: column;
@@ -520,51 +524,45 @@ canvas {
     .palette-icon {
         font-size: 2.5rem;
     }
-    
-    /* Garantir que o card de biografia não ultrapasse a tela */
-    .bio-card {
-        max-height: 98vh;
-    }
-    
     .bio-text {
         max-height: 45vh;
         padding: 20px 15px;
     }
-    
-    .enter-game-area {
-        padding: 15px 20px;
+    .btn {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
     }
-    
-    .palette-container {
-        padding: 12px 25px;
+    #controles {
+        gap: 30px;
+        bottom: 15px;
+    }
+    #hud {
+        font-size: 18px;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+    }
+    #hud div {
+        padding: 5px 12px;
     }
 }
 
 @media (max-width: 480px) {
-    .bio-text {
-        max-height: 40vh;
-        font-size: 0.85rem;
+    .btn {
+        width: 55px;
+        height: 55px;
+        font-size: 24px;
     }
-    
-    .enter-text {
-        font-size: 1.4rem;
-        letter-spacing: 2px;
-    }
-    
-    .palette-icon {
-        font-size: 2rem;
-        margin-right: 10px;
-    }
-    
-    .palette-container {
-        padding: 10px 20px;
+    #controles {
+        gap: 25px;
     }
 }
 </style>
 </head>
 <body>
 
-<!-- TELA DE INTRODUÇÃO - QUEM É VOCÊ? -->
+<!-- TELA DE INTRODUÇÃO -->
 <div id="introScreen" class="intro-container">
     <div class="intro-card">
         <div class="intro-welcome">
@@ -577,7 +575,7 @@ canvas {
     </div>
 </div>
 
-<!-- TELA DA BIOGRAFIA PERSONALIZADA COM IMAGEM DO VAN GOGH - CORRIGIDA -->
+<!-- TELA DA BIOGRAFIA -->
 <div id="bioScreen" class="bio-container hidden">
     <div class="bio-card">
         <button class="back-btn" id="backToIntroBtn">← Voltar</button>
@@ -604,9 +602,10 @@ canvas {
 
 <canvas id="c"></canvas>
 
+<!-- CONTROLES CORRIGIDOS - SEM MENU DO GOOGLE -->
 <div id="controles">
-    <div class="btn" id="left">⬅</div>
-    <div class="btn" id="right">➡</div>
+    <div class="btn" id="leftBtn">◀</div>
+    <div class="btn" id="rightBtn">▶</div>
 </div>
 
 <div id="start" class="overlay hidden">
@@ -615,14 +614,14 @@ canvas {
         <p>💙 <span style="color:#87CEEB">ESTRELAS AZUIS</span> → Ganhe +1 vida ❤️</p>
         <p>🔴 <span style="color:#FF6B6B">ESTRELAS VERMELHAS</span> → Perde -2 vidas 💔</p>
         <p>⭐ <span style="color:#FFD700">ESTRELAS NORMAIS</span> → Perde -1 vida</p>
-        <p>🎮 Use as SETAS do teclado ou os BOTÕES da tela</p>
+        <p>🎮 Toque nos botões ◀ ▶ ou use as SETAS do teclado</p>
     </div>
     <button id="gameStartBtn">🎨 COMEÇAR A PINTAR O CÉU! 🌟</button>
 </div>
 
-<!-- TELA DE VITÓRIA com Livro de Visitas e imagem de despedida -->
+<!-- TELA DE VITÓRIA -->
 <div id="winOverlay" class="overlay hidden">
-    <img id="winImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoggh%20vitoria.png">
+    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoggh%20vitoria.png">
     
     <div class="thankyou-container">
         <div class="thankyou-message">
@@ -657,7 +656,7 @@ canvas {
 
 <!-- TELA DE DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
-    <img id="loseImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangog%20derrota.png">
+    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangog%20derrota.png">
     <h2 id="loseMsg"></h2>
     <button onclick="location.reload()">🔄 TENTAR NOVAMENTE</button>
 </div>
@@ -725,27 +724,20 @@ const loseMsg = document.getElementById('loseMsg');
 
 let globalPlayerName = "";
 
-// Função para personalizar biografia
 function personalizeBio(name) {
-    if (!name || name.trim() === "") {
-        name = "amiguinho(a)";
-    }
+    if (!name || name.trim() === "") name = "amiguinho(a)";
     return biographyTemplate.replace(/{NOME}/g, name);
 }
 
-// Mostrar biografia
 function showBiography() {
     let name = childNameInput.value.trim();
-    if (name === "") {
-        name = "amiguinho(a)";
-    }
+    if (name === "") name = "amiguinho(a)";
     globalPlayerName = name;
     bioContent.innerHTML = personalizeBio(name);
     introScreen.classList.add('hidden');
     bioScreen.classList.remove('hidden');
 }
 
-// Voltar para introdução
 function backToIntro() {
     bioScreen.classList.add('hidden');
     introScreen.classList.remove('hidden');
@@ -756,8 +748,8 @@ const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
@@ -793,9 +785,21 @@ function play(src) {
     new Audio(src).play().catch(()=>{}); 
 }
 
-// player
-let x = canvas.width/2;
-let speed = 0, leftPressed = false, rightPressed = false;
+// player - ÁREA DE MOVIMENTO CORRIGIDA (mais espaço)
+let x = canvas.width / 2;
+let speed = 0;
+let leftPressed = false;
+let rightPressed = false;
+
+// limites do herói - agora com muito mais espaço!
+let minX = 80;
+let maxX = 0;
+
+function updateBounds() {
+    maxX = canvas.width - 80;
+    // Garantir que x esteja dentro dos limites
+    x = Math.max(minX, Math.min(maxX, x));
+}
 
 // jogo
 let stars = [];
@@ -806,87 +810,91 @@ let tempo = 300;
 let animationId = null;
 let timerInterval = null;
 
-// spawn
 function spawn() {
     let r = Math.random();
     let tipo = r < 0.2 ? "azul" : r < 0.4 ? "vermelha" : "normal";
     let img = tipo === "azul" ? starBlue : tipo === "vermelha" ? starRed : starNormal;
     stars.push({ 
-        x: 220 + Math.random() * (canvas.width - 260), 
+        x: 60 + Math.random() * (canvas.width - 120), 
         y: -50, 
-        speed: 3, 
+        speed: 2.5 + Math.random() * 2,
         tipo, 
         img 
     });
 }
 
-// partículas
 function tinta(x, y, cor) {
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 8; i++) {
         particulas.push({ 
             x, y, 
-            dx: (Math.random() - 0.5) * 6, 
-            dy: (Math.random() - 0.5) * 6, 
+            dx: (Math.random() - 0.5) * 5, 
+            dy: (Math.random() - 0.5) * 5, 
             vida: 1, 
             cor 
         });
     }
 }
 
-// loop do jogo
 function gameLoop() {
     if(!playing) return;
     
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
     
-    if(leftPressed) speed -= 0.6;
-    if(rightPressed) speed += 0.6;
-    speed *= 0.9;
+    // Movimento do herói
+    if(leftPressed) speed -= 0.5;
+    if(rightPressed) speed += 0.5;
+    speed *= 0.92;
     x += speed;
-    x = Math.max(220, Math.min(canvas.width - 80, x));
     
-    ctx.drawImage(hero, x - 70, canvas.height - 180, 140, 170);
+    updateBounds();
     
-    if(Math.random() < 0.03) spawn();
+    // Desenha herói
+    ctx.drawImage(hero, x - 50, canvas.height - 150, 100, 130);
     
+    // Spawn aleatório
+    if(Math.random() < 0.025) spawn();
+    
+    // Atualiza estrelas
     for(let i = stars.length - 1; i >= 0; i--) {
         let s = stars[i];
         s.y += s.speed;
         ctx.drawImage(s.img, s.x - 20, s.y - 20, 40, 40);
         
-        let colidiu = s.x + 20 > x - 60 && s.x - 20 < x + 60 && 
-                      s.y + 20 > canvas.height - 180 && s.y - 20 < canvas.height - 20;
+        // Colisão com herói
+        let colidiu = s.x + 20 > x - 50 && s.x - 20 < x + 50 && 
+                      s.y + 20 > canvas.height - 150 && s.y - 20 < canvas.height - 20;
         
         if(colidiu) {
             stars.splice(i, 1);
             if(s.tipo === "azul") { 
                 vidas++; 
                 play(somAzul); 
-                tinta(s.x, s.y, "cyan"); 
+                tinta(s.x, s.y, "#87CEEB"); 
             } else if(s.tipo === "vermelha") { 
                 vidas -= 2; 
                 play(somVermelho); 
-                tinta(s.x, s.y, "red"); 
+                tinta(s.x, s.y, "#FF6B6B"); 
             } else { 
                 vidas--; 
                 play(somNormal); 
-                tinta(s.x, s.y, "gold"); 
+                tinta(s.x, s.y, "#FFD700"); 
             }
             vidas = Math.max(0, vidas);
             document.getElementById("vidas").innerText = vidas;
             if(vidas <= 0) endGame(false);
         }
-        if(s.y > canvas.height) stars.splice(i, 1);
+        if(s.y > canvas.height + 50) stars.splice(i, 1);
     }
     
+    // Partículas
     for(let i = particulas.length - 1; i >= 0; i--) {
         let p = particulas[i];
         p.x += p.dx;
         p.y += p.dy;
-        p.vida -= 0.03;
+        p.vida -= 0.04;
         ctx.fillStyle = p.cor;
         ctx.globalAlpha = p.vida;
-        ctx.fillRect(p.x, p.y, 5, 5);
+        ctx.fillRect(p.x, p.y, 6, 6);
         ctx.globalAlpha = 1;
         if(p.vida <= 0) particulas.splice(i, 1);
     }
@@ -894,7 +902,6 @@ function gameLoop() {
     animationId = requestAnimationFrame(gameLoop);
 }
 
-// timer
 function startTimer() {
     if(timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -907,7 +914,6 @@ function startTimer() {
     }, 1000);
 }
 
-// fim de jogo
 function endGame(win) {
     playing = false;
     music.pause();
@@ -917,7 +923,7 @@ function endGame(win) {
     if(win) {
         visitorNameSpan.textContent = globalPlayerName;
         const now = new Date();
-        const dataFormatada = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const dataFormatada = now.toLocaleDateString('pt-BR');
         visitDateSpan.textContent = `✨ ${dataFormatada} ✨`;
         winOverlay.classList.remove('hidden');
         play(somWin);
@@ -928,7 +934,6 @@ function endGame(win) {
     }
 }
 
-// iniciar jogo
 function startGame() {
     startOverlay.classList.add('hidden');
     bioScreen.classList.add('hidden');
@@ -943,6 +948,10 @@ function startGame() {
     vidas = 7;
     tempo = 300;
     playing = true;
+    leftPressed = false;
+    rightPressed = false;
+    
+    updateBounds();
     
     document.getElementById("vidas").innerText = vidas;
     document.getElementById("tempo").innerText = "5:00";
@@ -954,18 +963,16 @@ function startGame() {
     gameLoop();
 }
 
-// mostrar tela de start do jogo
 function showGameStart() {
     startOverlay.classList.remove('hidden');
 }
 
-// ==================== EVENTOS ====================
+// ==================== EVENTOS CORRIGIDOS ====================
 goToBioBtn.addEventListener('click', showBiography);
 backToIntroBtn.addEventListener('click', backToIntro);
 enterGameBtn.addEventListener('click', showGameStart);
 gameStartBtn.addEventListener('click', startGame);
 
-// Tecla Enter no campo de nome
 childNameInput.addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault();
@@ -973,31 +980,73 @@ childNameInput.addEventListener('keypress', function(e) {
     }
 });
 
-// Controles do jogo
-const leftBtn = document.getElementById("left");
-const rightBtn = document.getElementById("right");
+// Controles touch - SEM MENU DO GOOGLE
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
 
-leftBtn.onpointerdown = () => leftPressed = true;
-leftBtn.onpointerup = () => leftPressed = false;
-leftBtn.onpointerleave = () => leftPressed = false;
+function preventEvent(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
 
-rightBtn.onpointerdown = () => rightPressed = true;
-rightBtn.onpointerup = () => rightPressed = false;
-rightBtn.onpointerleave = () => rightPressed = false;
-
-window.addEventListener("keydown", e => {
-    if(e.key === "ArrowLeft") leftPressed = true;
-    if(e.key === "ArrowRight") rightPressed = true;
+leftBtn.addEventListener('touchstart', (e) => {
+    preventEvent(e);
+    leftPressed = true;
+});
+leftBtn.addEventListener('touchend', (e) => {
+    preventEvent(e);
+    leftPressed = false;
+});
+leftBtn.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    leftPressed = true;
+});
+leftBtn.addEventListener('mouseup', (e) => {
+    e.preventDefault();
+    leftPressed = false;
 });
 
+rightBtn.addEventListener('touchstart', (e) => {
+    preventEvent(e);
+    rightPressed = true;
+});
+rightBtn.addEventListener('touchend', (e) => {
+    preventEvent(e);
+    rightPressed = false;
+});
+rightBtn.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    rightPressed = true;
+});
+rightBtn.addEventListener('mouseup', (e) => {
+    e.preventDefault();
+    rightPressed = false;
+});
+
+// Prevenir menu de contexto em todos os botões
+document.querySelectorAll('.btn, .start-btn, .enter-game-area, .palette-container, .back-btn, .overlay button').forEach(el => {
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+    el.addEventListener('dragstart', (e) => e.preventDefault());
+});
+
+// Teclado
+window.addEventListener("keydown", e => {
+    if(e.key === "ArrowLeft") { leftPressed = true; e.preventDefault(); }
+    if(e.key === "ArrowRight") { rightPressed = true; e.preventDefault(); }
+});
 window.addEventListener("keyup", e => {
     if(e.key === "ArrowLeft") leftPressed = false;
     if(e.key === "ArrowRight") rightPressed = false;
 });
 
+// Redimensionamento
 window.addEventListener('resize', () => {
     resizeCanvas();
+    updateBounds();
 });
+
+// Inicializar limites
+updateBounds();
 
 </script>
 </body>
