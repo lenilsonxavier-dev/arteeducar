@@ -3,24 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Van Gogh - Campo de Trigo</title>
+<title>Van Gogh - Campo de Trigo | Salto Prolongado</title>
 
 <style>
 * { 
     box-sizing: border-box; 
     margin: 0; 
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body { 
     overflow: hidden; 
     background: #000; 
     font-family: 'Georgia', cursive, sans-serif; 
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+#game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 #jogo { 
-    width: 100vw; 
-    height: 100vh; 
+    width: 100%; 
+    height: 100%; 
     position: relative; 
     overflow: hidden;
 }
@@ -32,191 +45,179 @@ body {
     background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/cenario.webp') repeat-x;
     background-size: 50% 100%;
     background-position: bottom;
+    bottom: 0;
 }
 
 #heroi {
-    width: 110px;
-    height: 200px;
+    width: min(110px, 18vw);
+    height: auto;
+    aspect-ratio: 110 / 200;
     position: absolute;
-    bottom: 200px;
-    left: 10%;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
     background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/heroicorrendo.png') no-repeat center;
     background-size: contain;
-    transition: 0.05s;
     z-index: 10;
+    pointer-events: none;
 }
 
 .corvo {
-    width: 65px;
-    height: 65px;
+    width: min(65px, 12vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     z-index: 5;
+    pointer-events: none;
 }
 
 #hud {
-    position: absolute;
+    position: fixed;
     width: 100%;
-    padding: 15px 20px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     color: #f1c40f;
-    font-size: 18px;
+    font-size: clamp(14px, 4vw, 20px);
     z-index: 999;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
     box-sizing: border-box;
+    top: 0;
+    left: 0;
 }
 
 #hud div {
-    background: rgba(0,0,0,0.5);
-    padding: 5px 15px;
-    border-radius: 30px;
+    background: rgba(0,0,0,0.7);
+    padding: 6px 14px;
+    border-radius: 40px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-/* ========== TELA DE INTRODUÇÃO PERSONALIZADA ========== */
+/* ========== TELAS ========== */
 .intro-container {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 50%, #0a1f0a 100%);
-    z-index: 1000;
+    z-index: 1100;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Georgia', cursive;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .intro-card {
-    max-width: 500px;
-    width: 100%;
+    max-width: 550px;
+    width: 95%;
     background: #FFF8E7;
     background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
     background-size: 30px 30px;
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    animation: fadeInUp 0.6s ease;
-    margin: auto;
+    animation: fadeInUp 0.4s ease;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .intro-welcome {
-    padding: 30px 25px;
+    padding: 30px 22px;
     text-align: center;
 }
 
 .intro-title {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
     color: #4A6A2A;
     text-shadow: 3px 3px 0 #FFD700;
-    letter-spacing: 3px;
     margin-bottom: 20px;
     font-weight: bold;
 }
 
 .intro-question {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 5vw, 1.4rem);
     color: #2a4a1a;
     background: #FFEFC0;
     display: inline-block;
-    padding: 10px 20px;
+    padding: 8px 20px;
     border-radius: 60px;
     margin-bottom: 25px;
-    box-shadow: 0 6px 0 #C29B4A;
 }
 
 .name-input {
     width: 85%;
     padding: 14px 18px;
-    font-size: 1.2rem;
+    font-size: clamp(14px, 4vw, 1.2rem);
     font-family: inherit;
     border: 3px solid #8B5A2B;
     border-radius: 60px;
     outline: none;
     text-align: center;
     background: white;
-    color: #4A2A1A;
     margin-bottom: 25px;
-    transition: all 0.3s;
-}
-
-.name-input:focus {
-    border-color: #FFD700;
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
-    transform: scale(1.02);
 }
 
 .enter-btn {
     background: #8B5A2B;
     color: white;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
     font-weight: bold;
-    font-family: inherit;
     padding: 12px 30px;
     border: none;
     border-radius: 60px;
     cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 6px 0 #5a3a1a;
-    margin-bottom: 15px;
+    transition: 0.05s linear;
+    box-shadow: 0 5px 0 #5a3a1a;
+    touch-action: manipulation;
 }
 
 .enter-btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 3px 0 #5a3a1a;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #5a3a1a;
 }
 
-/* ========== TELA DA APRESENTAÇÃO (BIOGRAFIA) ========== */
+/* TELA BIOGRAFIA */
 .story-container {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1100;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', cursive;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
 }
 
 .story-card {
-    max-width: 700px;
-    width: 100%;
-    max-height: 90vh;
+    max-width: 650px;
+    width: 95%;
+    max-height: 85vh;
     background: #FFF8E7;
     border-radius: 48px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    animation: fadeInUp 0.5s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
 .story-text {
     padding: 25px;
-    font-size: 0.95rem;
+    font-size: clamp(13px, 3.8vw, 0.95rem);
     line-height: 1.5;
     color: #3E2723;
 }
 
 .story-text p {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .story-text .highlight {
@@ -233,29 +234,37 @@ body {
     border-top: 2px dashed #FFB347;
 }
 
-.start-game-area {
-    text-align: center;
-    padding: 15px 25px 25px;
-    background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
-    border-top: 3px solid #FFD700;
+.tecla {
+    display: inline-block;
+    background: #2c2c2c;
+    color: #FFD700;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin: 0 3px;
+    border: 1px solid #FFD700;
+    box-shadow: 0 2px 0 #5a3a1a;
 }
 
 .start-button {
     display: inline-block;
     background: #8B5A2B;
-    padding: 15px 40px;
+    padding: 14px 35px;
     border-radius: 60px;
     color: white;
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
     font-weight: bold;
-    box-shadow: 0 8px 0 #5a3a1a;
+    box-shadow: 0 5px 0 #5a3a1a;
     transition: 0.05s linear;
     cursor: pointer;
+    touch-action: manipulation;
 }
 
 .start-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 4px 0 #5a3a1a;
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #5a3a1a;
 }
 
 .back-btn {
@@ -264,215 +273,102 @@ body {
     font-size: 0.9rem;
     color: #B97F44;
     cursor: pointer;
-    margin: 12px 0 0 18px;
+    margin: 15px 0 0 18px;
     text-decoration: underline;
+    touch-action: manipulation;
 }
 
-/* Scrollbar */
-.story-text::-webkit-scrollbar,
-.story-card::-webkit-scrollbar {
-    width: 5px;
-}
-
-.story-text::-webkit-scrollbar-track,
-.story-card::-webkit-scrollbar-track {
-    background: #FFE0B5;
-    border-radius: 10px;
-}
-
-.story-text::-webkit-scrollbar-thumb,
-.story-card::-webkit-scrollbar-thumb {
-    background: #8B5A2B;
-    border-radius: 10px;
-}
-
-/* ========== TELA DE VITÓRIA - LIVRO DOS CAMINHOS ========== */
+/* VITÓRIA */
 .win-container {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 50%, #0a1f0a 100%);
-    z-index: 1000;
+    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 100%);
+    z-index: 1100;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', cursive;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
 }
 
 .win-card {
     max-width: 600px;
-    width: 100%;
-    max-height: 95vh;
+    width: 95%;
+    max-height: 90vh;
     background: #FFF8E7;
-    background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
-    background-size: 30px 30px;
     border-radius: 48px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    animation: fadeInUp 0.5s ease;
 }
 
 .win-message {
-    padding: 25px;
+    padding: 20px;
     text-align: center;
 }
 
-.win-message p {
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #3E2723;
-}
-
-/* Livro dos Caminhos */
 .livro-caminhos {
     background: #8B5A2B;
     border-radius: 30px;
-    padding: 20px;
-    margin: 10px 20px 20px;
+    padding: 15px;
+    margin: 10px;
     border: 3px solid #FFD700;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.corvo-left, .corvo-right {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.5rem;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-}
-
-.corvo-left {
-    left: -40px;
-}
-
-.corvo-right {
-    right: -40px;
-}
-
-@media (max-width: 550px) {
-    .corvo-left, .corvo-right {
-        display: none;
-    }
 }
 
 .book-pages {
     background: #FFF8DC;
     border-radius: 20px;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
 }
 
-.book-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #8B5A2B;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-}
-
 .assinatura-nome {
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 6vw, 1.8rem);
     font-weight: bold;
     color: #D2691E;
     background: #FFEFC0;
     display: inline-block;
-    padding: 8px 20px;
+    padding: 6px 20px;
     border-radius: 50px;
     margin: 10px 0;
-    border: 2px solid #FFB347;
-    font-family: 'Georgia', cursive;
 }
 
-.stamp-corvos {
-    font-size: 1.8rem;
-    margin-top: 10px;
-    letter-spacing: 6px;
-}
-
-.data-assinatura {
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 8px;
-}
-
-/* MENSAGEM DE VAN GOGH - CORRIGIDA */
 .mensagem-van-gogh {
     background: #FFF8E7;
     border-radius: 20px;
-    padding: 20px;
-    margin-top: 20px;
+    padding: 15px;
+    margin-top: 15px;
     text-align: left;
     border-left: 5px solid #FFD700;
     display: none;
 }
 
-.mensagem-van-gogh p {
-    margin: 10px 0;
-    color: #3E2723;
-    font-size: 0.9rem;
-}
-
-.mensagem-van-gogh .ass-mensagem {
-    text-align: right;
-    margin-top: 12px;
-    font-style: italic;
-    color: #D2691E;
-}
-
 .win-buttons {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
-    padding: 15px 25px 25px;
-    background: linear-gradient(135deg, #FFF8E7 0%, #FFEFC0 100%);
-    border-top: 3px solid #FFD700;
+    padding: 15px;
     flex-wrap: wrap;
 }
 
 .win-btn {
-    padding: 10px 25px;
+    padding: 10px 20px;
     border-radius: 60px;
-    font-size: 1rem;
+    font-size: clamp(12px, 3.5vw, 0.9rem);
     font-weight: bold;
     border: none;
     cursor: pointer;
-    transition: 0.2s;
     font-family: 'Georgia', cursive;
-}
-
-.win-btn-voltar {
-    background: #8B5A2B;
-    color: white;
-    box-shadow: 0 4px 0 #5a3a1a;
-}
-
-.win-btn-sair {
-    background: #4a6a2a;
-    color: white;
-    box-shadow: 0 4px 0 #2a4a1a;
+    touch-action: manipulation;
 }
 
 .win-btn-mensagem {
     background: #D2691E;
     color: white;
-    box-shadow: 0 4px 0 #8B4513;
-    margin-bottom: 10px;
-    width: auto;
-    min-width: 220px;
+    box-shadow: 0 3px 0 #8B4513;
 }
 
-.win-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0;
-}
-
-/* ========== TELA DE DERROTA ========== */
+/* DERROTA */
 .overlay {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: radial-gradient(#1a0a0a, #000);
     display: flex;
@@ -481,202 +377,196 @@ body {
     align-items: center;
     text-align: center;
     color: #fff;
-    z-index: 1000;
+    z-index: 1100;
     padding: 20px;
-    box-sizing: border-box;
-}
-
-.overlay img { 
-    width: 180px; 
-    max-width: 60%;
-    margin-bottom: 20px; 
-    border-radius: 20px;
-    border: 3px solid #FFD700;
 }
 
 .overlay button {
     padding: 12px 25px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     background: #f1c40f;
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    font-family: 'Georgia', cursive;
-    font-weight: bold;
     margin-top: 20px;
+    font-weight: bold;
 }
 
+/* ========== BOTÕES LATERAIS ========== */
 #controles {
-    position: absolute;
-    bottom: 15px;
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    right: 0;
     width: 100%;
     display: flex;
-    justify-content: space-around;
-    z-index: 999;
-    padding: 0 10px;
+    justify-content: space-between;
+    z-index: 1000;
+    padding: 0 20px;
     box-sizing: border-box;
+    pointer-events: none;
 }
 
 .btn {
-    width: 70px;
-    height: 70px;
+    pointer-events: auto;
+    width: min(85px, 22vw);
+    height: min(85px, 22vw);
     border-radius: 50%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.85);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #FFD700;
-    font-size: 12px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    border: 2px solid #FFD700;
+    backdrop-filter: blur(8px);
+    border: 3px solid #FFD700;
     font-weight: bold;
-}
-
-.btn span:first-child {
-    font-size: 22px;
-}
-
-.btn span:last-child {
-    font-size: 11px;
-    margin-top: 3px;
+    touch-action: manipulation;
+    transition: 0.02s linear;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
 .btn:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
+    background: rgba(0,0,0,0.95);
+    border-color: #FFA500;
+}
+
+.btn .btn-icon {
+    font-size: clamp(26px, 7vw, 38px);
+    line-height: 1;
+}
+
+.btn .btn-key {
+    font-size: clamp(13px, 4vw, 18px);
+    background: rgba(255,215,0,0.25);
+    padding: 2px 10px;
+    border-radius: 25px;
+    margin-top: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #FFD700;
+    text-align: center;
+}
+
+.btn .btn-label {
+    font-size: clamp(8px, 2.8vw, 11px);
+    margin-top: 3px;
+    color: #FFD700;
+}
+
+#abaixa {
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+#pula {
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+    .btn {
+        width: min(110px, 10vw);
+        height: min(110px, 10vw);
+    }
 }
 
 .hidden {
     display: none !important;
 }
 
-/* Efeitos visuais */
 @keyframes brilho {
-    0% { filter: brightness(1) drop-shadow(0 0 0px white); }
-    50% { filter: brightness(1.3) drop-shadow(0 0 8px white); }
-    100% { filter: brightness(1) drop-shadow(0 0 0px white); }
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.4) drop-shadow(0 0 6px white); }
+    100% { filter: brightness(1); }
 }
+.corvo-branco { animation: brilho 0.5s ease-in-out infinite; }
 
-.corvo-branco {
-    animation: brilho 0.5s ease-in-out infinite;
-}
-
+.dano { animation: dano 0.2s ease-in-out; }
 @keyframes dano {
     0% { filter: brightness(1); }
-    50% { filter: brightness(0.5) drop-shadow(0 0 5px red); }
+    50% { filter: brightness(0.3) drop-shadow(0 0 8px red); }
     100% { filter: brightness(1); }
 }
 
-.dano {
-    animation: dano 0.3s ease-in-out;
-}
-
-.tecla {
-    display: inline-block;
-    background: #333;
-    color: #FFD700;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-family: monospace;
-    font-size: 0.9rem;
-    margin: 0 2px;
-    border: 1px solid #FFD700;
-}
-
-/* Responsividade */
-@media (max-width: 600px) {
-    .intro-title { font-size: 1.6rem; }
-    .intro-question { font-size: 1.2rem; }
-    .start-button { font-size: 1.2rem; padding: 12px 30px; }
-    .book-title { font-size: 1.1rem; }
-    .assinatura-nome { font-size: 1.4rem; }
-    .win-btn { padding: 8px 18px; font-size: 0.9rem; }
-    .btn { width: 60px; height: 60px; }
-    #hud { font-size: 14px; padding: 10px 15px; }
+body, html, #game-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 </style>
 </head>
 <body>
 
-<div id="hud">
-    <div>⏱️ <span id="timer">3:00</span></div>
-    <div>❤️ <span id="vidas">7</span></div>
-    <div>🤍 <span id="corvosDesviados">0</span></div>
+<div id="game-container">
+    <div id="hud">
+        <div>⏱️ <span id="timer">3:00</span></div>
+        <div>❤️ <span id="vidas">7</span></div>
+        <div>🤍 <span id="corvosDesviados">0</span></div>
+    </div>
+
+    <div id="jogo">
+        <div id="cenario"></div>
+        <div id="heroi"></div>
+    </div>
+
+    <div id="controles">
+        <div class="btn" id="abaixa">
+            <div class="btn-icon">⬇️</div>
+            <div class="btn-key">A</div>
+            <div class="btn-label">ABAIXAR</div>
+        </div>
+        <div class="btn" id="pula">
+            <div class="btn-icon">⬆️</div>
+            <div class="btn-key">L</div>
+            <div class="btn-label">SALTAR</div>
+        </div>
+    </div>
 </div>
 
-<div id="jogo">
-    <div id="cenario"></div>
-    <div id="heroi"></div>
-</div>
-
-<div id="controles">
-    <div class="btn" id="pula"><span>⬆️</span><span>L</span></div>
-    <div class="btn" id="abaixa"><span>⬇️</span><span>A</span></div>
-    <div class="btn" id="corre"><span>⚡</span><span>F</span></div>
-</div>
-
-<!-- TELA 1: QUAL É O SEU NOME? -->
+<!-- TELAS -->
 <div id="introScreen" class="intro-container">
     <div class="intro-card">
         <div class="intro-welcome">
             <div class="intro-title">🌾 VAN GOGH 🌾</div>
             <div class="intro-question">✨ QUAL É O SEU NOME? ✨</div>
             <input type="text" id="childName" class="name-input" placeholder="Digite seu nome..." maxlength="20" autocomplete="off">
-            <br>
             <button class="enter-btn" id="goToStoryBtn">🌾 ENTRAR NO CAMPO 🌾</button>
-            <div style="height: 10px;"></div>
         </div>
     </div>
 </div>
 
-<!-- TELA 2: APRESENTAÇÃO DO VAN GOGH -->
 <div id="storyScreen" class="story-container hidden">
     <div class="story-card">
         <button class="back-btn" id="backToIntroBtn">← Voltar</button>
         <div class="story-text" id="storyContent"></div>
-        <div class="start-game-area" id="startGameBtn">
+        <div style="text-align:center; padding:10px 20px 25px;" id="startGameBtn">
             <div class="start-button">🐦‍⬛ INICIAR JOGO 🐦‍⬛</div>
         </div>
     </div>
 </div>
 
-<!-- TELA DE VITÓRIA - LIVRO DOS CAMINHOS -->
 <div id="winScreen" class="win-container hidden">
     <div class="win-card">
         <div class="win-message">
             <p><strong>🌟 PARABÉNS! VOCÊ VENCEU OS CORVOS! 🌟</strong></p>
-            <p>Você desviou de todos os corvos pretos e encontrou os corvos brancos que restauraram suas energias.</p>
-            <p>Sua coragem e habilidade foram mais fortes que o voo dos corvos!</p>
-            <button class="win-btn win-btn-mensagem" id="btnMostrarMensagem">📖 LER MENSAGEM DE VAN GOGH</button>
+            <p>Você desviou de todos os corvos e restaurou a paz no campo de trigo!</p>
+            <button class="win-btn win-btn-mensagem" id="btnMostrarMensagem">📖 LER MENSAGEM</button>
         </div>
-
         <div class="livro-caminhos">
-            <div class="corvo-left">🐦‍⬛</div>
-            <div class="corvo-right">🐦‍⬛</div>
             <div class="book-pages">
                 <div class="book-title">📖 ASSINATURA NO LIVRO DOS CAMINHOS 📖</div>
                 <div class="assinatura-nome" id="assinaturaNome">---</div>
                 <div class="stamp-corvos">🐦‍⬛ 🌾 🎨 🐦‍⬛</div>
                 <div class="data-assinatura" id="dataAssinatura"></div>
-                
-                <!-- Mensagem de Van Gogh -->
                 <div id="mensagemVanGogh" class="mensagem-van-gogh">
                     <p><strong>💛 Querido(a) <span id="msgNome"></span>,</strong></p>
-                    <p>Você não apenas venceu os corvos... você dançou com eles sob o céu pintado por nós dois.</p>
-                    <p>Quando pinto um campo de trigo, sinto a mesma coragem que você teve hoje: a de continuar mesmo quando o vento sopra contra.</p>
-                    <p>Os corvos partiram, mas as cores que você espalhou pelo caminho ficaram. Elas brilham agora no meu céu estrelado.</p>
-                    <p>Lembre-se: a vida é como este jogo. Às vezes é preciso pular, abaixar ou correr. Mas nunca, nunca parar de criar.</p>
-                    <p>Continue colorindo o mundo com sua luz única. Você é uma obra-prima em construção.</p>
-                    <div class="ass-mensagem">
-                        Com todo o amarelo do meu coração,<br>
-                        🎨 Vincent van Gogh
-                    </div>
+                    <p>Você dançou com os corvos sob o céu pintado por nós dois!</p>
+                    <div class="ass-mensagem">🎨 Vincent van Gogh</div>
                 </div>
             </div>
         </div>
-
         <div class="win-buttons">
             <button class="win-btn win-btn-voltar" id="btnVoltarJogo">🔄 JOGAR NOVAMENTE</button>
             <button class="win-btn win-btn-sair" id="btnSair">🚪 SAIR</button>
@@ -684,43 +574,45 @@ body {
     </div>
 </div>
 
-<!-- TELA DE DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
-    <img id="loseImg" src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png">
-    <h1 id="loseMsg"></h1>
-    <button onclick="location.reload()">🔄 TENTAR NOVAMENTE</button>
+    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png" style="width:140px; border-radius:20px;">
+    <h2 id="loseMsg"></h2>
+    <button onclick="reiniciarCompleto()">🔄 TENTAR NOVAMENTE</button>
 </div>
 
 <script>
+function ativarFullscreenProtecao() {
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('keydown', (e) => {
+        const active = document.activeElement?.tagName?.toLowerCase();
+        if (active === 'input') return;
+        const key = e.key.toLowerCase();
+        if (key === 'f5' || (e.ctrlKey && key === 'r') || key === 'f12') e.preventDefault();
+    });
+    window.requestGameFullscreen = () => document.documentElement.requestFullscreen?.().catch(()=>{});
+}
+ativarFullscreenProtecao();
+function reiniciarCompleto() { location.reload(); }
 
-// ==================== TEXTO DA APRESENTAÇÃO ====================
 function getStoryText(name) {
     return `
         <p><span class="highlight">🌟 Olá, ${name}!</span></p>
-        <p>Eu sou Vincent van Gogh. Nasci na Holanda em 1853 e sempre vi o mundo de um jeito diferente. As cores pareciam dançar, o céu respirava e os campos sussurravam segredos que só meu coração podia ouvir. 🎨</p>
-        <p>Pintei o amarelo com força, como quem ainda acredita na luz. Pintei o azul profundo para mostrar as emoções que não cabiam em palavras. 💛💙</p>
-        <p>Neste campo de trigo, os corvos voam livres. Você precisa desviar deles! Use os comandos abaixo para se movimentar:</p>
-        
+        <p>Sou Vincent van Gogh. Neste campo de trigo, os corvos voam livres!</p>
         <p><strong>🎮 CONTROLES:</strong><br>
-        • <span class="tecla">L</span> ou Botão <span class="tecla">PULA</span> → Saltar ⬆️<br>
-        • <span class="tecla">A</span> ou Botão <span class="tecla">ABAIXA</span> → Agachar ⬇️<br>
-        • <span class="tecla">F</span> ou Botão <span class="tecla">CORRE</span> → Correr ⚡</p>
-        
-        <p><strong>🐦‍⬛ REGRAS DO JOGO:</strong><br>
-        • 🐦‍⬛ <strong>Corvo Preto</strong> → Se colidir, perde 1 vida ❤️<br>
-        • 🤍 <strong style="color:#fff; background:#333; padding:2px 8px; border-radius:20px;">CORVO BRANCO</strong> → Colete para GANHAR 2 VIDAS! ❤️❤️ (Aparece a cada 20 corvos desviados)<br>
-        • ⏱️ Sobreviva por 3 minutos para vencer!<br>
-        • Quanto mais corvos você desviar, mais chances terá de aparecer um corvo branco!</p>
-        
-        <p><em>"Não desanime se os dias forem escuros. Sua arte é sua luz. Continue criando, continue colorindo o mundo."</em></p>
-        <div class="signature-story">
-            💛 Com carinho,<br>
-            🎨 Vincent van Gogh
-        </div>
+        • <span class="tecla">A</span> (botão ESQUERDO) → ABAIXAR ⬇️<br>
+        • <span class="tecla">L</span> (botão DIREITO) → SALTAR ⬆️ <strong>(segure para ficar mais tempo no ar!)</strong></p>
+        <p><strong>🐦‍⬛ REGRAS:</strong><br>
+        • Corvo Preto → perde 1 vida<br>
+        • 🤍 CORVO BRANCO → ganha +2 vidas<br>
+        • Corvos BAIXOS (rente ao chão): PULE e SEGURE o botão!<br>
+        • Corvos ALTOS (no alto): ABAIXE-SE!<br>
+        • ⏱️ Sobreviva 3 minutos para vencer!</p>
+        <p><strong>💡 DICA IMPORTANTE:</strong> Segure o botão de SALTAR para prolongar o tempo no ar e desviar dos corvos baixos!</p>
+        <div class="signature-story">💛 Van Gogh</div>
     `;
 }
 
-// ==================== ELEMENTOS ====================
+// ELEMENTOS
 const introScreen = document.getElementById('introScreen');
 const storyScreen = document.getElementById('storyScreen');
 const childNameInput = document.getElementById('childName');
@@ -728,7 +620,7 @@ const goToStoryBtn = document.getElementById('goToStoryBtn');
 const backToIntroBtn = document.getElementById('backToIntroBtn');
 const startGameBtn = document.getElementById('startGameBtn');
 const storyContent = document.getElementById('storyContent');
-const winScreen = document.getElementById('winScreen');
+const winScreenDiv = document.getElementById('winScreen');
 const loseOverlay = document.getElementById('loseOverlay');
 const assinaturaNome = document.getElementById('assinaturaNome');
 const dataAssinatura = document.getElementById('dataAssinatura');
@@ -741,61 +633,19 @@ let globalPlayerName = "";
 let gameEnded = false;
 let ativo = false;
 
-function showStory() {
-    let name = childNameInput.value.trim();
-    if (name === "") name = "visitante";
-    globalPlayerName = name;
-    storyContent.innerHTML = getStoryText(name);
-    introScreen.classList.add('hidden');
-    storyScreen.classList.remove('hidden');
-}
-
-function backToIntro() {
-    storyScreen.classList.add('hidden');
-    introScreen.classList.remove('hidden');
-}
-
-function showWinScreen() {
-    assinaturaNome.textContent = globalPlayerName;
-    msgNomeSpan.textContent = globalPlayerName;
-    
-    mensagemVanGogh.style.display = 'none';
-    btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
-    
-    const now = new Date();
-    const dataFormatada = now.toLocaleDateString('pt-BR');
-    const hora = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    dataAssinatura.innerHTML = `✨ Assinado em ${dataFormatada} às ${hora} ✨`;
-    winScreen.classList.remove('hidden');
-}
-
-function mostrarMensagem() {
-    if (mensagemVanGogh.style.display === 'none' || mensagemVanGogh.style.display === '') {
-        mensagemVanGogh.style.display = 'block';
-        btnMostrarMensagem.textContent = '🔒 FECHAR MENSAGEM';
-        setTimeout(() => {
-            mensagemVanGogh.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    } else {
-        mensagemVanGogh.style.display = 'none';
-        btnMostrarMensagem.textContent = '📖 LER MENSAGEM DE VAN GOGH';
-    }
-}
-
-btnMostrarMensagem.addEventListener('click', mostrarMensagem);
-
-// ==================== JOGO PRINCIPAL ====================
+// JOGO
 let vidas = 7;
 let bg = 0;
-let correndo = false;
-let abaixado = false;
 let spawnTimeoutId = null;
 let animationId = null;
 let timerInterval = null;
 let tempoRestante = 180;
-
 let corvosDesviados = 0;
 let ultimoMultiploBranco = 0;
+let estaSaltando = false;
+let alturaOriginal = 15;
+let temporizadorSalto = null;
+let segurandoSalto = false;
 
 const heroi = document.getElementById('heroi');
 const cenario = document.getElementById('cenario');
@@ -805,37 +655,29 @@ const corvoBrancoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/peq
 
 const musica = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/519_full_circus-hungaria_0153_preview.mp3");
 musica.loop = true;
-
 const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
 const somWin = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghvitoria.mp3";
 const somLose = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/mortevangoh.mp3";
 const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
 const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
+const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
 
-function tocar(url) { 
-    try {
-        let audio = new Audio(url);
-        audio.volume = 0.4;
-        audio.play().catch(()=>{}); 
-    } catch(e) {}
-}
+function tocar(url, vol = 0.4) { try { let a = new Audio(url); a.volume = vol; a.play().catch(()=>{}); } catch(e) {} }
 
 function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
 function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
 function atualizarTimer() {
-    let minutos = Math.floor(tempoRestante / 60);
-    let segundos = tempoRestante % 60;
-    document.getElementById('timer').innerText = `${minutos}:${segundos.toString().padStart(2,'0')}`;
+    let m = Math.floor(tempoRestante / 60);
+    let s = tempoRestante % 60;
+    document.getElementById('timer').innerText = `${m}:${s.toString().padStart(2,'0')}`;
 }
 
-function adicionarVidas(quantidade) {
+function adicionarVidas(q) {
     if (!ativo) return;
-    vidas += quantidade;
-    if (vidas > 20) vidas = 20;
+    vidas = Math.min(vidas + q, 20);
     atualizarVidas();
-    const hudVidas = document.getElementById('vidas');
-    hudVidas.style.transform = 'scale(1.2)';
-    setTimeout(() => { hudVidas.style.transform = 'scale(1)'; }, 200);
+    document.getElementById('vidas').style.transform = 'scale(1.2)';
+    setTimeout(() => document.getElementById('vidas').style.transform = 'scale(1)', 200);
 }
 
 function aplicarDano() {
@@ -843,9 +685,70 @@ function aplicarDano() {
     vidas--;
     atualizarVidas();
     heroi.classList.add('dano');
-    setTimeout(() => heroi.classList.remove('dano'), 300);
-    tocar(somDano);
+    setTimeout(() => heroi.classList.remove('dano'), 250);
+    tocar(somDano, 0.5);
     if (vidas <= 0) gameOver(false);
+}
+
+// SALTO PROLONGADO - segurar o botão mantém o herói no ar
+function iniciarSalto() {
+    if (!ativo || estaSaltando) return;
+    estaSaltando = true;
+    segurandoSalto = true;
+    tocar(somPulo, 0.4);
+    
+    // Sobe rapidamente
+    heroi.style.transition = "bottom 0.1s cubic-bezier(0.2, 0.95, 0.3, 1.1)";
+    heroi.style.bottom = "210px";
+    
+    // Se segurar, fica no ar por mais tempo
+    function manterNoAr() {
+        if (segurandoSalto && ativo && estaSaltando) {
+            heroi.style.bottom = "210px";
+            temporizadorSalto = setTimeout(manterNoAr, 50);
+        }
+    }
+    temporizadorSalto = setTimeout(manterNoAr, 50);
+}
+
+function finalizarSalto() {
+    segurandoSalto = false;
+    if (temporizadorSalto) {
+        clearTimeout(temporizadorSalto);
+        temporizadorSalto = null;
+    }
+    if (estaSaltando && ativo) {
+        heroi.style.transition = "bottom 0.2s cubic-bezier(0.4, 0.1, 0.3, 1)";
+        heroi.style.bottom = alturaOriginal + "px";
+        setTimeout(() => { 
+            estaSaltando = false;
+            heroi.style.transition = "bottom 0.12s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+        }, 220);
+    }
+}
+
+function acaoAbaixar() { 
+    if (!ativo || estaSaltando) return; 
+    heroi.style.transition = "bottom 0.04s linear";
+    heroi.style.aspectRatio = "110 / 90";
+    heroi.style.bottom = "5px";
+}
+function levantar() { 
+    heroi.style.aspectRatio = "110 / 200";
+    heroi.style.bottom = alturaOriginal + "px";
+}
+
+// ========== ALTURAS DOS CORVOS: APENAS BAIXO E ALTO ==========
+// BAIXO: 5px a 40px (bem rente ao chão)
+// ALTO: 120px a 170px (altura reduzida)
+function getAlturaCorvo() {
+    if (Math.random() < 0.5) {
+        // CORVO BAIXO - bem rente ao chão (5-40px)
+        return 5 + Math.random() * 38;
+    } else {
+        // CORVO ALTO - mais baixo que antes (120-170px)
+        return 120 + Math.random() * 55;
+    }
 }
 
 function spawn() {
@@ -853,11 +756,9 @@ function spawn() {
     
     let tipo = "preto";
     let imgUrl = corvoPretoImg;
+    let podeBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
     
-    let podeAparecerBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
-    const random = Math.random();
-    
-    if (podeAparecerBranco && random < 0.5) {
+    if (podeBranco && Math.random() < 0.5) {
         tipo = "branco";
         imgUrl = corvoBrancoImg;
         ultimoMultiploBranco = corvosDesviados;
@@ -867,18 +768,14 @@ function spawn() {
     corvoDiv.className = "corvo";
     if (tipo === "branco") corvoDiv.classList.add("corvo-branco");
     corvoDiv.style.backgroundImage = `url('${imgUrl}')`;
-    corvoDiv.style.right = "-70px";
-    corvoDiv.style.bottom = Math.random() > 0.5 ? "360px" : "200px";
+    corvoDiv.style.right = "-80px";
+    corvoDiv.style.bottom = getAlturaCorvo() + "px";
     
     document.getElementById('jogo').appendChild(corvoDiv);
     
-    let x = -70;
+    let x = -80;
     let colidiu = false;
-    
-    // VELOCIDADE REDUZIDA PELA METADE para crianças de 10 anos!
-    // Velocidade normal: 5, com correndo: 8 (antes era 11 e 16)
-    let velocidadeNormal = 5;
-    let velocidadeCorrendo = 8;
+    let velocidade = 5.2;
     
     let movimento = setInterval(() => {
         if (!ativo || colidiu) {
@@ -886,86 +783,71 @@ function spawn() {
             clearInterval(movimento);
             return;
         }
-        
-        x += correndo ? velocidadeCorrendo : velocidadeNormal;
+        x += velocidade;
         corvoDiv.style.right = x + "px";
         
         let h = heroi.getBoundingClientRect();
         let cr = corvoDiv.getBoundingClientRect();
         
-        if (h.right > cr.left + 15 && h.left < cr.right - 15 && 
-            h.bottom > cr.top + 10 && h.top < cr.bottom - 10) {
-            
+        let colidiuX = (h.right > cr.left + 4 && h.left < cr.right - 4);
+        let colidiuY = (h.bottom > cr.top + 5 && h.top < cr.bottom - 5);
+        
+        if (colidiuX && colidiuY) {
             colidiu = true;
-            
             if (tipo === "branco") {
                 adicionarVidas(2);
-                tocar(somVida);
-                const msgVida = document.createElement('div');
-                msgVida.textContent = "+2 ❤️";
-                msgVida.style.position = "absolute";
-                msgVida.style.left = cr.left + "px";
-                msgVida.style.top = cr.top + "px";
-                msgVida.style.color = "#FFD700";
-                msgVida.style.fontSize = "22px";
-                msgVida.style.fontWeight = "bold";
-                msgVida.style.textShadow = "2px 2px 4px black";
-                msgVida.style.zIndex = "1000";
-                document.body.appendChild(msgVida);
-                setTimeout(() => msgVida.remove(), 800);
+                tocar(somVida, 0.5);
+                const msg = document.createElement('div');
+                msg.textContent = "+2 ❤️";
+                msg.style.position = "fixed";
+                msg.style.left = cr.left + "px";
+                msg.style.top = cr.top - 20 + "px";
+                msg.style.color = "#FFD700";
+                msg.style.fontSize = "22px";
+                msg.style.fontWeight = "bold";
+                msg.style.textShadow = "2px 2px 4px black";
+                msg.style.zIndex = "2000";
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 600);
             } else {
                 aplicarDano();
             }
-            
             corvoDiv.remove();
             clearInterval(movimento);
         }
         
-        if (x > window.innerWidth && !colidiu) {
+        if (x > window.innerWidth + 100 && !colidiu) {
             corvosDesviados++;
             atualizarCorvosDesviados();
             corvoDiv.remove();
             clearInterval(movimento);
         }
-        
     }, 20);
     
-    // Spawn também um pouco mais lento para dar mais tempo de reação
-    let tempoSpawn = correndo ? 1300 : 1600; // antes era 800 e 1000
-    spawnTimeoutId = setTimeout(spawn, tempoSpawn);
+    spawnTimeoutId = setTimeout(spawn, 1250);
 }
 
-function startSpawning() {
-    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
-    spawn();
-}
-
+function startSpawning() { if (spawnTimeoutId) clearTimeout(spawnTimeoutId); spawn(); }
 function loop() {
     if (!ativo) return;
-    // Velocidade do cenário também reduzida para ficar mais suave
-    let velocidade = correndo ? 7 : 4; // antes era 14 e 8
-    bg -= velocidade;
+    bg -= 4.5;
     cenario.style.transform = `translateX(${bg % window.innerWidth}px)`;
     animationId = requestAnimationFrame(loop);
 }
-
 function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         if (!ativo) return;
-        if (tempoRestante <= 0) {
-            gameOver(true);
-            return;
-        }
-        tempoRestante--;
-        atualizarTimer();
+        if (tempoRestante <= 0) gameOver(true);
+        else { tempoRestante--; atualizarTimer(); }
     }, 1000);
 }
 
 function startGame() {
+    window.requestGameFullscreen?.();
     storyScreen.classList.add('hidden');
     introScreen.classList.add('hidden');
-    winScreen.classList.add('hidden');
+    winScreenDiv.classList.add('hidden');
     loseOverlay.classList.add('hidden');
     
     gameEnded = false;
@@ -973,13 +855,17 @@ function startGame() {
     vidas = 7;
     corvosDesviados = 0;
     tempoRestante = 180;
-    correndo = false;
-    abaixado = false;
     ultimoMultiploBranco = 0;
     bg = 0;
+    estaSaltando = false;
+    segurandoSalto = false;
+    if (temporizadorSalto) clearTimeout(temporizadorSalto);
     
-    heroi.style.bottom = "200px";
-    heroi.style.height = "200px";
+    heroi.style.bottom = "15px";
+    heroi.style.left = "50%";
+    heroi.style.transform = "translateX(-50%)";
+    heroi.style.aspectRatio = "110 / 200";
+    heroi.style.transition = "bottom 0.12s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
     
     atualizarVidas();
     atualizarCorvosDesviados();
@@ -988,7 +874,6 @@ function startGame() {
     if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
     if (animationId) cancelAnimationFrame(animationId);
     if (timerInterval) clearInterval(timerInterval);
-    
     document.querySelectorAll('.corvo').forEach(c => c.remove());
     
     tocar(somStart);
@@ -1004,62 +889,77 @@ function gameOver(win) {
     if (gameEnded) return;
     gameEnded = true;
     ativo = false;
-    
     if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
     if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
     if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-    
+    if (temporizadorSalto) { clearTimeout(temporizadorSalto); temporizadorSalto = null; }
     musica.pause();
     document.querySelectorAll('.corvo').forEach(c => c.remove());
     
     if (win) {
-        showWinScreen();
+        assinaturaNome.textContent = globalPlayerName;
+        msgNomeSpan.textContent = globalPlayerName;
+        const now = new Date();
+        dataAssinatura.innerHTML = `✨ ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} ✨`;
+        mensagemVanGogh.style.display = 'none';
+        winScreenDiv.classList.remove('hidden');
         tocar(somWin);
     } else {
-        loseMsg.innerHTML = `💀 ${globalPlayerName}, os corvos pretos venceram... 💀`;
+        loseMsg.innerHTML = `💀 ${globalPlayerName}, os corvos venceram... 💀`;
         loseOverlay.classList.remove('hidden');
         tocar(somLose);
     }
 }
 
-// Ações
-function pular() { if (!ativo) return; heroi.style.bottom = "400px"; setTimeout(() => heroi.style.bottom = "200px", 400); }
-function abaixar() { if (!ativo) return; heroi.style.height = "100px"; heroi.style.bottom = "160px"; }
-function levantar() { heroi.style.height = "200px"; heroi.style.bottom = "200px"; }
-function correr() { if (!ativo) return; correndo = true; }
-function pararCorrer() { correndo = false; }
-
-document.getElementById("pula").onpointerdown = pular;
-document.getElementById("abaixa").onpointerdown = abaixar;
-document.getElementById("abaixa").onpointerup = levantar;
-document.getElementById("abaixa").onpointerleave = levantar;
-document.getElementById("corre").onpointerdown = correr;
-document.getElementById("corre").onpointerup = pararCorrer;
-document.getElementById("corre").onpointerleave = pararCorrer;
+// EVENTOS
+document.getElementById("abaixa").addEventListener("pointerdown", (e) => { e.preventDefault(); acaoAbaixar(); });
+document.getElementById("abaixa").addEventListener("pointerup", (e) => { e.preventDefault(); levantar(); });
+document.getElementById("abaixa").addEventListener("pointerleave", () => levantar());
+document.getElementById("pula").addEventListener("pointerdown", (e) => { e.preventDefault(); iniciarSalto(); });
+document.getElementById("pula").addEventListener("pointerup", (e) => { e.preventDefault(); finalizarSalto(); });
+document.getElementById("pula").addEventListener("pointerleave", () => finalizarSalto());
 
 window.onkeydown = (e) => {
+    const active = document.activeElement?.tagName?.toLowerCase();
+    if (active === 'input') return;
     const key = e.key.toLowerCase();
-    if (key === "l") pular();
-    if (key === "a") abaixar();
-    if (key === "f") correr();
+    if (key === "a") { e.preventDefault(); acaoAbaixar(); }
+    if (key === "l") { e.preventDefault(); iniciarSalto(); }
 };
 window.onkeyup = (e) => {
+    const active = document.activeElement?.tagName?.toLowerCase();
+    if (active === 'input') return;
     const key = e.key.toLowerCase();
-    if (key === "a") levantar();
-    if (key === "f") pararCorrer();
+    if (key === "a") { e.preventDefault(); levantar(); }
+    if (key === "l") { e.preventDefault(); finalizarSalto(); }
 };
 
-document.getElementById('btnVoltarJogo').addEventListener('click', () => {
-    winScreen.classList.add('hidden');
-    startGame();
-});
-document.getElementById('btnSair').addEventListener('click', () => location.reload());
+// FLUXO
+function showStory() {
+    let name = childNameInput.value.trim();
+    if (name === "") name = "Artista";
+    globalPlayerName = name;
+    storyContent.innerHTML = getStoryText(name);
+    introScreen.classList.add('hidden');
+    storyScreen.classList.remove('hidden');
+}
+function backToIntro() { storyScreen.classList.add('hidden'); introScreen.classList.remove('hidden'); }
 
+btnMostrarMensagem.addEventListener('click', () => {
+    if (mensagemVanGogh.style.display === 'none' || !mensagemVanGogh.style.display) {
+        mensagemVanGogh.style.display = 'block';
+        btnMostrarMensagem.textContent = '🔒 FECHAR';
+    } else {
+        mensagemVanGogh.style.display = 'none';
+        btnMostrarMensagem.textContent = '📖 LER MENSAGEM';
+    }
+});
+document.getElementById('btnVoltarJogo').addEventListener('click', () => { winScreenDiv.classList.add('hidden'); startGame(); });
+document.getElementById('btnSair').addEventListener('click', () => location.reload());
 goToStoryBtn.addEventListener('click', showStory);
 backToIntroBtn.addEventListener('click', backToIntro);
 startGameBtn.addEventListener('click', startGame);
 childNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); showStory(); } });
-
 </script>
 </body>
 </html>
