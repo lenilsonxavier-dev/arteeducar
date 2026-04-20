@@ -701,21 +701,26 @@ musica.loop = true;
 
 const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
 
-// ✅ nome corrigido + pasta correta
-const somWin = "som/vitória-vangogh.mp3";
+const somWin = "som/vitoria-vangogh.mp3"; // ✅ sem acento
 
-// ✅ pasta correta
 const somLose = "som/mortevangoh.mp3";
 
 const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
 const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
 const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
-function tocar(url, vol = 0.4) { 
-    try { 
-        let a = new Audio(url); 
-        a.volume = vol; 
-        a.play().catch(e => console.warn("Erro ao tocar som:", e)); 
-    } catch(e) {} 
+const sons = {};
+
+function tocar(url, vol = 0.4) {
+    try {
+        if (!sons[url]) {
+            sons[url] = new Audio(url);
+        }
+
+        let a = sons[url];
+        a.currentTime = 0;
+        a.volume = vol;
+        a.play().catch(e => console.warn("Erro ao tocar som:", e));
+    } catch(e) {}
 }
 
 function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
