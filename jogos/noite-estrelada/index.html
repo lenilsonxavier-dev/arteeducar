@@ -170,60 +170,45 @@ canvas {
     max-height: 95vh;
 }
 
+/* Área flexível: agora apenas o texto, sem imagens laterais */
 .bio-flex {
-    display: flex;
-    flex-wrap: wrap;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto;  /* rolagem geral do card, se necessário */
     min-height: 0;
 }
 
+/* Texto ocupando 100% da largura, sem scroll interno, fonte grande */
 .bio-text {
-    flex: 2;
-    padding: 25px 20px 20px 25px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #3E2723;
-    overflow-y: auto;
-    max-height: 55vh;
-}
-
-.bio-image {
-    flex: 1;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 25px 25px 0 0;
-}
-
-.bio-image img {
     width: 100%;
-    max-width: 180px;
-    border-radius: 24px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    border: 3px solid #FFD700;
-    object-fit: cover;
+    padding: 30px 35px;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #3E2723;
+    overflow-y: visible;
+    max-height: none;
+    text-align: justify;
 }
 
 .bio-text p {
-    margin-bottom: 12px;
+    margin-bottom: 18px;
 }
 
 .bio-text .highlight {
     background: #FFECB3;
     display: inline-block;
-    padding: 0 6px;
-    border-radius: 15px;
+    padding: 0 8px;
+    border-radius: 20px;
     font-weight: bold;
     color: #D2691E;
+    font-size: 1.25rem;
 }
 
 .signature {
-    margin-top: 20px;
+    margin-top: 25px;
     text-align: right;
     font-style: italic;
     border-top: 2px dashed #FFB347;
-    padding-top: 15px;
+    padding-top: 18px;
 }
 
 .enter-game-area {
@@ -271,7 +256,7 @@ canvas {
 .back-btn {
     background: none;
     border: none;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #B97F44;
     cursor: pointer;
     margin: 12px 0 0 20px;
@@ -303,7 +288,7 @@ canvas {
     backdrop-filter: blur(4px);
 }
 
-/* CONTROLES - BOTÕES NAS LATERAIS, UM DE CADA LADO */
+/* CONTROLES - BOTÕES NAS LATERAIS */
 #controles {
     position: absolute;
     bottom: 30px;
@@ -343,17 +328,10 @@ canvas {
     background: rgba(0,0,0,0.85);
 }
 
-/* Botão esquerdo na margem esquerda */
-#leftBtn {
-    margin-right: auto;
-}
+#leftBtn { margin-right: auto; }
+#rightBtn { margin-left: auto; }
 
-/* Botão direito na margem direita */
-#rightBtn {
-    margin-left: auto;
-}
-
-/* Tela de fim de jogo */
+/* Telas de fim de jogo */
 .overlay {
     position: absolute;
     inset: 0;
@@ -370,9 +348,11 @@ canvas {
 }
 
 .overlay img {
-    width: 180px;
-    margin-bottom: 15px;
-    border-radius: 20px;
+    width: 220px;
+    margin-bottom: 20px;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 3px solid #FFD700;
 }
 
 .overlay button {
@@ -388,13 +368,9 @@ canvas {
     transition: transform 0.2s;
 }
 
-.overlay button:active {
-    transform: scale(0.95);
-}
+.overlay button:active { transform: scale(0.95); }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
 .thankyou-container {
     display: flex;
@@ -416,25 +392,21 @@ canvas {
     text-align: left;
     color: #4A2A1A;
 }
-
 .thankyou-message p {
     margin: 10px 0;
     font-size: 1rem;
     line-height: 1.4;
 }
-
 .thankyou-message .signature-vincent {
     margin-top: 12px;
     font-style: italic;
     font-weight: bold;
     color: #D2691E;
 }
-
 .thankyou-image {
     flex: 1;
     text-align: center;
 }
-
 .thankyou-image img {
     width: 100%;
     max-width: 150px;
@@ -442,7 +414,6 @@ canvas {
     border: 3px solid #FFD700;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-
 .visitors-book {
     background: #8B4513;
     border-radius: 20px;
@@ -452,7 +423,6 @@ canvas {
     box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
     border: 2px solid #FFD700;
 }
-
 .book-title {
     background: #FFD700;
     color: #8B4513;
@@ -463,14 +433,12 @@ canvas {
     margin-bottom: 15px;
     display: inline-block;
 }
-
 .book-pages {
     background: #FFF8DC;
     border-radius: 15px;
     padding: 20px;
     min-height: 120px;
 }
-
 .visitor-name {
     font-size: 1.8rem;
     font-weight: bold;
@@ -482,18 +450,8 @@ canvas {
     margin: 10px 0;
     border: 2px solid #FFB347;
 }
-
-.stamp {
-    font-size: 1.8rem;
-    margin-top: 10px;
-    letter-spacing: 5px;
-}
-
-.stamp-date {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 8px;
-}
+.stamp { font-size: 1.8rem; margin-top: 10px; letter-spacing: 5px; }
+.stamp-date { font-size: 0.9rem; color: #666; margin-top: 8px; }
 
 .game-instructions {
     margin: 20px 0;
@@ -503,76 +461,36 @@ canvas {
     padding: 20px;
     border-radius: 30px;
 }
+.game-instructions p { margin: 8px 0; }
 
-.game-instructions p {
-    margin: 8px 0;
-}
-
-/* Responsividade */
 @media (max-width: 650px) {
-    .bio-flex {
-        flex-direction: column;
-    }
-    .bio-image {
-        padding: 0 20px 10px;
-        order: -1;
-        justify-content: center;
-    }
-    .bio-image img {
-        max-width: 120px;
-    }
-    .thankyou-container {
-        flex-direction: column;
-    }
-    .thankyou-message {
-        text-align: center;
-    }
-    .enter-text {
-        font-size: 1.6rem;
-    }
-    .palette-icon {
-        font-size: 2.5rem;
-    }
     .bio-text {
-        max-height: 45vh;
-        padding: 20px 15px;
+        padding: 20px 25px;
+        font-size: 1.1rem;
     }
-    .btn {
-        width: 60px;
-        height: 60px;
-        font-size: 32px;
-    }
-    #controles {
-        padding: 0 15px;
-        bottom: 25px;
-    }
-    #hud {
-        font-size: 18px;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-    }
-    #hud div {
-        padding: 5px 12px;
-    }
+    .btn { width: 60px; height: 60px; font-size: 32px; }
+    #controles { padding: 0 15px; bottom: 25px; }
+    #hud { font-size: 18px; top: 10px; left: 10px; right: 10px; }
+    #hud div { padding: 5px 12px; }
 }
-
 @media (max-width: 480px) {
-    .btn {
-        width: 55px;
-        height: 55px;
-        font-size: 28px;
-    }
-    #controles {
-        padding: 0 12px;
-        bottom: 20px;
-    }
+    .btn { width: 55px; height: 55px; font-size: 28px; }
+    #controles { padding: 0 12px; bottom: 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- TELA DE INTRODUÇÃO -->
+<!-- ÁUDIOS (escondidos) -->
+<div id="audio-container" style="display:none;">
+    <audio id="som-azul" src="audio/estrelaazul.mp3"></audio>
+    <audio id="som-vermelho" src="audio/estrelavermelha.mp3"></audio>
+    <audio id="musica-fundo" src="audio/noiteestreladamusica.mp3" loop></audio>
+    <audio id="som-vitoria" src="audio/noiteestreladavitoria.mp3"></audio>
+    <audio id="som-gameover" src="audio/noitestreladagameover.mp3"></audio>
+</div>
+
+<!-- INTRO -->
 <div id="introScreen" class="intro-container">
     <div class="intro-card">
         <div class="intro-welcome">
@@ -585,15 +503,12 @@ canvas {
     </div>
 </div>
 
-<!-- TELA DA BIOGRAFIA -->
+<!-- BIOGRAFIA -->
 <div id="bioScreen" class="bio-container hidden">
     <div class="bio-card">
         <button class="back-btn" id="backToIntroBtn">← Voltar</button>
         <div class="bio-flex">
             <div class="bio-text" id="bioContent"></div>
-            <div class="bio-image">
-                <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/AUTORRE.jpg" alt="Van Gogh">
-            </div>
         </div>
         <div class="enter-game-area" id="enterGameBtn">
             <div class="palette-container">
@@ -604,20 +519,21 @@ canvas {
     </div>
 </div>
 
-<!-- HUD DO JOGO -->
+<!-- HUD -->
 <div id="hud">
     <div>❤️ <span id="vidas">7</span></div>
-    <div>⏱️ <span id="tempo">5:00</span></div>
+    <div>⏱️ <span id="tempo">3:00</span></div>
 </div>
 
 <canvas id="c"></canvas>
 
-<!-- CONTROLES - BOTÕES SEPARADOS NAS LATERAIS -->
+<!-- CONTROLES -->
 <div id="controles">
     <div class="btn" id="leftBtn">◀</div>
     <div class="btn" id="rightBtn">▶</div>
 </div>
 
+<!-- TELA INSTRUÇÕES / START -->
 <div id="start" class="overlay hidden">
     <h1>🌌 A Noite Estrelada de Van Gogh</h1>
     <div class="game-instructions">
@@ -629,10 +545,9 @@ canvas {
     <button id="gameStartBtn">🎨 COMEÇAR A PINTAR O CÉU! 🌟</button>
 </div>
 
-<!-- TELA DE VITÓRIA -->
+<!-- VITÓRIA -->
 <div id="winOverlay" class="overlay hidden">
-    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoggh%20vitoria.png">
-    
+    <img src="https://i.imgur.com/BrW9Gcg.png" alt="Vitória">
     <div class="thankyou-container">
         <div class="thankyou-message">
             <p>🌟 <strong>Pequeno visitante… 💫</strong></p>
@@ -641,16 +556,12 @@ canvas {
             <p>Quero te agradecer por algo muito importante: <strong>você também está ajudando a espalhar cores pelo mundo!</strong> 🌈</p>
             <p>Cada desenho, cada rabisco, cada ideia que nasce na sua imaginação é como uma sementinha de alegria que cresce e colore tudo ao redor.</p>
             <p>Nunca se esqueça: <strong>o mundo precisa das suas cores, do seu jeito de ver as coisas e da sua criatividade</strong> 🎨💛</p>
-            <div class="signature-vincent">
-                Com carinho e muitas cores,<br>
-                🎨 Vincent 🌟
-            </div>
+            <div class="signature-vincent">Com carinho e muitas cores,<br>🎨 Vincent 🌟</div>
         </div>
         <div class="thankyou-image">
-            <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/autorre1.jpg" alt="Van Gogh sorrindo">
+            <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/autorre1.jpg" alt="Van Gogh">
         </div>
     </div>
-
     <div class="visitors-book">
         <div class="book-title">📖 LIVRO DE VISITAS 📖</div>
         <div class="book-pages">
@@ -660,63 +571,32 @@ canvas {
             <div class="stamp-date" id="visitDate"></div>
         </div>
     </div>
-    
     <button onclick="location.reload()">🔄 JOGAR NOVAMENTE</button>
 </div>
 
-<!-- TELA DE DERROTA -->
+<!-- DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
-    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangog%20derrota.png">
+    <img src="https://i.imgur.com/DIiyYIv.png" alt="Derrota">
     <h2 id="loseMsg"></h2>
     <button onclick="location.reload()">🔄 TENTAR NOVAMENTE</button>
 </div>
 
 <script>
-
-// ==================== BIOGRAFIA TEMPLATE ====================
+// ========== BIOGRAFIA SEM IMAGENS, TEXTO OCUPA TODO ESPAÇO ==========
 const biographyTemplate = `
-    <p>🌟 <strong>Olá, <span class="highlight">{NOME}</span>!</strong><br>
-    Posso te contar minha história? 🌟</p>
-
+    <p><strong>Olá, <span class="highlight">{NOME}</span>!</strong><br>Posso te contar minha história? 🌟</p>
     <p>Meu nome é Vincent, e eu nasci há muito tempo, em um lugar chamado Holanda.</p>
-
     <p>Desde pequeno, eu sentia o mundo de um jeito diferente. As cores pareciam mais fortes, o céu mais profundo, e as emoções… bem, elas moravam dentro de mim como um mar agitado 🌊</p>
-
-    <p>🌻 <strong>Minha vida não foi fácil...</strong><br>
-    Eu tentei muitas coisas: fui vendedor, professor e até quis ser religioso. Mas nada parecia encaixar no meu coração. Às vezes eu me sentia sozinho, como se ninguém conseguisse me entender.<br>
-    Eu não tinha muito dinheiro, nem muitos amigos… mas eu tinha algo muito especial: um irmão chamado Theo, que acreditava em mim quando ninguém mais acreditava 🤝</p>
-
-    <p>🎨 <strong>Foi então que encontrei a pintura</strong><br>
-    Quando comecei a pintar, senti como se finalmente pudesse falar — não com palavras, mas com cores! 💛💙</p>
-
-    <p>Eu pintava o que sentia:<br>
-    • O brilho das estrelas ✨<br>
-    • O calor do sol ☀️<br>
-    • A alegria das flores 🌻<br>
-    • E até a tristeza do meu coração…</p>
-
-    <p>🌌 <strong>Meus sonhos</strong><br>
-    Eu sonhava que, um dia, as pessoas olhariam para minhas pinturas e sentiriam algo especial… como um abraço invisível.<br>
-    Mas, durante a minha vida, quase ninguém percebeu meu trabalho. Isso me deixava triste… muito triste.</p>
-
-    <p>💫 <strong>O que aprendi</strong><br>
-    Mesmo com dificuldades, eu nunca parei de pintar. Porque a arte era minha forma de existir, de continuar, de sonhar.<br>
-    Hoje, muitas pessoas conhecem minhas pinturas e sentem alegria ao vê-las. Isso me faz pensar que… talvez eu nunca tenha pintado em vão 💛</p>
-
-    <p>🎂 Eu, Vincent van Gogh, nasci no ano de 1853<br>
-    🌙 E parti deste mundo no ano de 1890</p>
-
-    <p>🌟 <strong>Uma mensagem para você, <span class="highlight">{NOME}</span></strong><br>
-    Se você gosta de desenhar, pintar ou criar… <strong>nunca pare!</strong><br>
-    Mesmo que pareça difícil, sua arte é importante. Ela conta quem você é.</p>
-
-    <div class="signature">
-        💛 Com carinho,<br>
-        🎨 Vincent van Gogh 💫
-    </div>
+    <p>🌻 <strong>Minha vida não foi fácil...</strong><br>Eu tentei muitas coisas: fui vendedor, professor e até quis ser religioso. Mas nada parecia encaixar no meu coração. Às vezes eu me sentia sozinho, como se ninguém conseguisse me entender.<br>Eu não tinha muito dinheiro, nem muitos amigos… mas eu tinha algo muito especial: um irmão chamado Theo, que acreditava em mim quando ninguém mais acreditava 🤝</p>
+    <p>🎨 <strong>Foi então que encontrei a pintura</strong><br>Quando comecei a pintar, senti como se finalmente pudesse falar — não com palavras, mas com cores! 💛💙</p>
+    <p>Eu pintava o que sentia:<br>• O brilho das estrelas ✨<br>• O calor do sol ☀️<br>• A alegria das flores 🌻<br>• E até a tristeza do meu coração…</p>
+    <p>🌌 <strong>Meus sonhos</strong><br>Eu sonhava que, um dia, as pessoas olhariam para minhas pinturas e sentiriam algo especial… como um abraço invisível.<br>Mas, durante a minha vida, quase ninguém percebeu meu trabalho. Isso me deixava triste… muito triste.</p>
+    <p>💫 <strong>O que aprendi</strong><br>Mesmo com dificuldades, eu nunca parei de pintar. Porque a arte era minha forma de existir, de continuar, de sonhar.<br>Hoje, muitas pessoas conhecem minhas pinturas e sentem alegria ao vê-las. Isso me faz pensar que… talvez eu nunca tenha pintado em vão 💛</p>
+    <p>🎂 Eu, Vincent van Gogh, nasci no ano de 1853<br>🌙 E parti deste mundo no ano de 1890</p>
+    <p>🌟 <strong>Uma mensagem para você, <span class="highlight">{NOME}</span></strong><br>Se você gosta de desenhar, pintar ou criar… <strong>nunca pare!</strong><br>Mesmo que pareça difícil, sua arte é importante. Ela conta quem você é.</p>
+    <div class="signature">💛 Com carinho,<br>🎨 Vincent van Gogh 💫</div>
 `;
 
-// ==================== ELEMENTOS DOM ====================
 const introScreen = document.getElementById('introScreen');
 const bioScreen = document.getElementById('bioScreen');
 const childNameInput = document.getElementById('childName');
@@ -738,7 +618,6 @@ function personalizeBio(name) {
     if (!name || name.trim() === "") name = "amiguinho(a)";
     return biographyTemplate.replace(/{NOME}/g, name);
 }
-
 function showBiography() {
     let name = childNameInput.value.trim();
     if (name === "") name = "amiguinho(a)";
@@ -747,16 +626,23 @@ function showBiography() {
     introScreen.classList.add('hidden');
     bioScreen.classList.remove('hidden');
 }
-
 function backToIntro() {
     bioScreen.classList.add('hidden');
     introScreen.classList.remove('hidden');
 }
 
-// ==================== JOGO ====================
+// ========== FUNÇÃO PARA TOCAR SOM ==========
+function tocarSom(id) {
+    const audio = document.getElementById(id);
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log("Erro ao tocar som:", e));
+    }
+}
+
+// ========== JOGO COM TEMPO DE 3 MINUTOS ==========
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
-
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -764,151 +650,114 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-// imagens
+// Cenário e herói (Imgur)
 const bg = new Image();
-bg.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladacenario.jpg";
-
+bg.src = "https://i.imgur.com/xOxsaYz.jpeg";
 const hero = new Image();
-hero.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghroblox.png";
+hero.src = "https://i.imgur.com/CWGEKMR.png";
 
+// Estrelas (Imgur)
 const starBlue = new Image();
-starBlue.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanazul.png";
-
+starBlue.src = "https://i.imgur.com/9VFEOkF.png";
 const starRed = new Image();
-starRed.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vanverm.png";
+starRed.src = "https://i.imgur.com/TNy8OYX.png";
 
-const starNormal = new Image();
-starNormal.src = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacaindo3.png";
+// Estrela comum com fundo transparente
+const starCommon = new Image();
+starCommon.src = "https://i.imgur.com/qMt26u4.png";
+const normalStarsArray = [starCommon, starCommon];
 
-// música
-const music = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladamusica.mp3");
-music.loop = true;
-
-// sons
-const somWin = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noiteestreladavitoria.mp3";
-const somLose = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/noitestreladagameover.mp3";
-const somAzul = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
-const somNormal = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelacomum.mp3";
-const somVermelho = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
-
-function play(src) { 
-    new Audio(src).play().catch(()=>{}); 
-}
-
-// player - ÁREA DE MOVIMENTO LIVRE
+// Variáveis do jogo
 let x = canvas.width / 2;
 let speed = 0;
-let leftPressed = false;
-let rightPressed = false;
-
-// limites do herói - espaço máximo para deslizar
-let minX = 60;
-let maxX = 0;
-
+let leftPressed = false, rightPressed = false;
+let minX = 60, maxX = 0;
 function updateBounds() {
     maxX = canvas.width - 100;
     minX = 60;
     x = Math.max(minX, Math.min(maxX, x));
 }
 
-// jogo
 let stars = [];
 let particulas = [];
 let vidas = 7;
 let playing = false;
-let tempo = 300;
+let tempo = 180; // 3 minutos
 let animationId = null;
 let timerInterval = null;
+let musicaFundo = document.getElementById("musica-fundo");
 
 function spawn() {
     let r = Math.random();
-    let tipo = r < 0.2 ? "azul" : r < 0.4 ? "vermelha" : "normal";
-    let img = tipo === "azul" ? starBlue : tipo === "vermelha" ? starRed : starNormal;
-    stars.push({ 
-        x: 50 + Math.random() * (canvas.width - 100), 
-        y: -50, 
-        speed: 2.5 + Math.random() * 2,
-        tipo, 
-        img 
-    });
+    let tipo = "";
+    let img = null;
+    if (r < 0.2) { tipo = "azul"; img = starBlue; }
+    else if (r < 0.4) { tipo = "vermelha"; img = starRed; }
+    else {
+        tipo = "normal";
+        img = normalStarsArray[Math.floor(Math.random() * normalStarsArray.length)];
+    }
+    stars.push({ x: 50 + Math.random() * (canvas.width - 100), y: -50, speed: 2.5 + Math.random() * 2, tipo, img });
 }
 
 function tinta(x, y, cor) {
     for(let i = 0; i < 8; i++) {
-        particulas.push({ 
-            x, y, 
-            dx: (Math.random() - 0.5) * 5, 
-            dy: (Math.random() - 0.5) * 5, 
-            vida: 1, 
-            cor 
-        });
+        particulas.push({ x, y, dx: (Math.random() - 0.5) * 5, dy: (Math.random() - 0.5) * 5, vida: 1, cor });
     }
 }
 
 function gameLoop() {
     if(!playing) return;
-    
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-    
-    // Movimento do herói
     if(leftPressed) speed -= 0.55;
     if(rightPressed) speed += 0.55;
     speed *= 0.94;
     x += speed;
-    
     updateBounds();
-    
-    // Desenha herói
     ctx.drawImage(hero, x - 50, canvas.height - 150, 100, 130);
-    
-    // Spawn aleatório
     if(Math.random() < 0.028) spawn();
-    
-    // Atualiza estrelas
     for(let i = stars.length - 1; i >= 0; i--) {
         let s = stars[i];
         s.y += s.speed;
-        ctx.drawImage(s.img, s.x - 20, s.y - 20, 40, 40);
-        
-        // Colisão com herói
-        let colidiu = s.x + 20 > x - 50 && s.x - 20 < x + 50 && 
-                      s.y + 20 > canvas.height - 150 && s.y - 20 < canvas.height - 20;
-        
+        if(s.img && s.img.complete && s.img.naturalWidth > 0) {
+            ctx.drawImage(s.img, s.x - 20, s.y - 20, 40, 40);
+        } else {
+            ctx.fillStyle = "#FFD700";
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, 15, 0, Math.PI*2);
+            ctx.fill();
+        }
+        let colidiu = (s.x + 20 > x - 50 && s.x - 20 < x + 50 && s.y + 20 > canvas.height - 150 && s.y - 20 < canvas.height - 20);
         if(colidiu) {
-            stars.splice(i, 1);
-            if(s.tipo === "azul") { 
-                vidas++; 
-                play(somAzul); 
-                tinta(s.x, s.y, "#87CEEB"); 
-            } else if(s.tipo === "vermelha") { 
-                vidas -= 2; 
-                play(somVermelho); 
-                tinta(s.x, s.y, "#FF6B6B"); 
-            } else { 
-                vidas--; 
-                play(somNormal); 
-                tinta(s.x, s.y, "#FFD700"); 
+            stars.splice(i,1);
+            if(s.tipo === "azul") {
+                vidas++;
+                tocarSom('som-azul');
+                tinta(s.x, s.y, "#87CEEB");
+            } else if(s.tipo === "vermelha") {
+                vidas -= 2;
+                tocarSom('som-vermelho');
+                tinta(s.x, s.y, "#FF6B6B");
+            } else {
+                vidas--;
+                tinta(s.x, s.y, "#FFD700");
             }
             vidas = Math.max(0, vidas);
             document.getElementById("vidas").innerText = vidas;
             if(vidas <= 0) endGame(false);
         }
-        if(s.y > canvas.height + 50) stars.splice(i, 1);
+        if(s.y > canvas.height + 50) stars.splice(i,1);
     }
-    
-    // Partículas
-    for(let i = particulas.length - 1; i >= 0; i--) {
+    for(let i=particulas.length-1; i>=0; i--) {
         let p = particulas[i];
-        p.x += p.dx;
-        p.y += p.dy;
+        p.x += p.dx; p.y += p.dy;
         p.vida -= 0.04;
         ctx.fillStyle = p.cor;
         ctx.globalAlpha = p.vida;
         ctx.fillRect(p.x, p.y, 6, 6);
         ctx.globalAlpha = 1;
-        if(p.vida <= 0) particulas.splice(i, 1);
+        if(p.vida <= 0) particulas.splice(i,1);
     }
-    
     animationId = requestAnimationFrame(gameLoop);
 }
 
@@ -926,21 +775,21 @@ function startTimer() {
 
 function endGame(win) {
     playing = false;
-    music.pause();
+    if(musicaFundo) {
+        musicaFundo.pause();
+        musicaFundo.currentTime = 0;
+    }
     if(animationId) cancelAnimationFrame(animationId);
     if(timerInterval) clearInterval(timerInterval);
-    
     if(win) {
         visitorNameSpan.textContent = globalPlayerName;
-        const now = new Date();
-        const dataFormatada = now.toLocaleDateString('pt-BR');
-        visitDateSpan.textContent = `✨ ${dataFormatada} ✨`;
+        visitDateSpan.textContent = `✨ ${new Date().toLocaleDateString('pt-BR')} ✨`;
         winOverlay.classList.remove('hidden');
-        play(somWin);
+        tocarSom('som-vitoria');
     } else {
         loseMsg.innerHTML = `💀 ${globalPlayerName}, as tintas foram derramadas... 💀`;
         loseOverlay.classList.remove('hidden');
-        play(somLose);
+        tocarSom('som-gameover');
     }
 }
 
@@ -950,104 +799,52 @@ function startGame() {
     introScreen.classList.add('hidden');
     winOverlay.classList.add('hidden');
     loseOverlay.classList.add('hidden');
-    
     x = canvas.width / 2;
     speed = 0;
     stars = [];
     particulas = [];
     vidas = 7;
-    tempo = 300;
+    tempo = 180;
     playing = true;
     leftPressed = false;
     rightPressed = false;
-    
     updateBounds();
-    
     document.getElementById("vidas").innerText = vidas;
-    document.getElementById("tempo").innerText = "5:00";
-    
-    music.currentTime = 0;
-    music.play().catch(() => {});
-    
+    document.getElementById("tempo").innerText = "3:00";
+    if(musicaFundo) {
+        musicaFundo.currentTime = 0;
+        musicaFundo.play().catch(e => console.log("Erro ao tocar música:", e));
+    }
     startTimer();
     gameLoop();
 }
+function showGameStart() { startOverlay.classList.remove('hidden'); }
 
-function showGameStart() {
-    startOverlay.classList.remove('hidden');
-}
-
-// ==================== EVENTOS CORRIGIDOS ====================
+// Eventos
 goToBioBtn.addEventListener('click', showBiography);
 backToIntroBtn.addEventListener('click', backToIntro);
 enterGameBtn.addEventListener('click', showGameStart);
 gameStartBtn.addEventListener('click', startGame);
+childNameInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') { e.preventDefault(); showBiography(); } });
 
-childNameInput.addEventListener('keypress', function(e) {
-    if(e.key === 'Enter') {
-        e.preventDefault();
-        showBiography();
-    }
-});
-
-// Controles touch - BOTÕES NAS LATERAIS
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
+function prevent(e) { e.preventDefault(); e.stopPropagation(); }
+leftBtn.addEventListener('touchstart', (e) => { prevent(e); leftPressed = true; });
+leftBtn.addEventListener('touchend', (e) => { prevent(e); leftPressed = false; });
+leftBtn.addEventListener('touchcancel', (e) => { prevent(e); leftPressed = false; });
+leftBtn.addEventListener('mousedown', (e) => { e.preventDefault(); leftPressed = true; });
+leftBtn.addEventListener('mouseup', (e) => { e.preventDefault(); leftPressed = false; });
+rightBtn.addEventListener('touchstart', (e) => { prevent(e); rightPressed = true; });
+rightBtn.addEventListener('touchend', (e) => { prevent(e); rightPressed = false; });
+rightBtn.addEventListener('touchcancel', (e) => { prevent(e); rightPressed = false; });
+rightBtn.addEventListener('mousedown', (e) => { e.preventDefault(); rightPressed = true; });
+rightBtn.addEventListener('mouseup', (e) => { e.preventDefault(); rightPressed = false; });
 
-function preventEvent(e) {
-    e.preventDefault();
-    e.stopPropagation();
-}
-
-leftBtn.addEventListener('touchstart', (e) => {
-    preventEvent(e);
-    leftPressed = true;
-});
-leftBtn.addEventListener('touchend', (e) => {
-    preventEvent(e);
-    leftPressed = false;
-});
-leftBtn.addEventListener('touchcancel', (e) => {
-    preventEvent(e);
-    leftPressed = false;
-});
-leftBtn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    leftPressed = true;
-});
-leftBtn.addEventListener('mouseup', (e) => {
-    e.preventDefault();
-    leftPressed = false;
-});
-
-rightBtn.addEventListener('touchstart', (e) => {
-    preventEvent(e);
-    rightPressed = true;
-});
-rightBtn.addEventListener('touchend', (e) => {
-    preventEvent(e);
-    rightPressed = false;
-});
-rightBtn.addEventListener('touchcancel', (e) => {
-    preventEvent(e);
-    rightPressed = false;
-});
-rightBtn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    rightPressed = true;
-});
-rightBtn.addEventListener('mouseup', (e) => {
-    e.preventDefault();
-    rightPressed = false;
-});
-
-// Prevenir menu de contexto em todos os botões
 document.querySelectorAll('.btn, .start-btn, .enter-game-area, .palette-container, .back-btn, .overlay button').forEach(el => {
     el.addEventListener('contextmenu', (e) => e.preventDefault());
     el.addEventListener('dragstart', (e) => e.preventDefault());
 });
-
-// Teclado
 window.addEventListener("keydown", e => {
     if(e.key === "ArrowLeft") { leftPressed = true; e.preventDefault(); }
     if(e.key === "ArrowRight") { rightPressed = true; e.preventDefault(); }
@@ -1056,16 +853,8 @@ window.addEventListener("keyup", e => {
     if(e.key === "ArrowLeft") leftPressed = false;
     if(e.key === "ArrowRight") rightPressed = false;
 });
-
-// Redimensionamento
-window.addEventListener('resize', () => {
-    resizeCanvas();
-    updateBounds();
-});
-
-// Inicializar limites
+window.addEventListener('resize', () => { resizeCanvas(); updateBounds(); });
 updateBounds();
-
 </script>
 </body>
 </html>
