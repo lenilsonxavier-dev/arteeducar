@@ -696,15 +696,20 @@ const corvoPretoImg = "https://i.imgur.com/ZCGFEjz.png";
 const corvoBrancoImg = "https://i.imgur.com/EZaSAB1.png";
 
 // ========== SONS (ARQUIVOS LOCAIS) ==========
-const musica = new Audio("musicadocorvo.mp3");
+const musica = new Audio("sons/musicadocorvo.mp3");
 musica.loop = true;
+
 const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
-const somWin = "vitóriavangogh.mp3";
-const somLose = "mortevangoh.mp3";
+
+// ⚠️ CORRIGIDO COM ESPAÇO NO NOME
+const somWin = "sons/vitória vangogh.mp3";
+
+// ⚠️ CAMINHO CORRETO
+const somLose = "sons/mortevangoh.mp3";
+
 const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
 const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
 const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
-
 function tocar(url, vol = 0.4) { 
     try { 
         let a = new Audio(url); 
