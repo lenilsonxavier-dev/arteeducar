@@ -38,14 +38,16 @@ body {
     overflow: hidden;
 }
 
+/* CENÁRIO CONTÍNUO - SEM DIVISÕES, SEM MOVIMENTO */
 #cenario {
-    width: 200%;
+    width: 100%;
     height: 100%;
     position: absolute;
-    background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/cenario.webp') repeat-x;
-    background-size: 50% 100%;
-    background-position: bottom;
+    background: url('https://i.imgur.com/R1kWXXb.jpeg') no-repeat center center;
+    background-size: cover;
     bottom: 0;
+    left: 0;
+    /* Sem movimento, imagem única e contínua */
 }
 
 #heroi {
@@ -56,7 +58,7 @@ body {
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    background: url('https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/heroicorrendo.png') no-repeat center;
+    background: url('https://i.imgur.com/PhLXp1j.png') no-repeat center;
     background-size: contain;
     z-index: 10;
     pointer-events: none;
@@ -226,6 +228,19 @@ body {
     font-size: 1.05rem;
 }
 
+/* TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR */
+.story-text .van-gogh-quote {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    background: #FFF0D0;
+    padding: 16px;
+    border-radius: 28px;
+    margin: 16px 0;
+    border-left: 6px solid #D2691E;
+    font-style: italic;
+    color: #2c3e2f;
+}
+
 .signature-story {
     text-align: right;
     font-style: italic;
@@ -305,6 +320,15 @@ body {
     text-align: center;
 }
 
+.win-message img {
+    max-width: 85%;
+    border-radius: 30px;
+    margin: 10px auto;
+    display: block;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border: 3px solid #FFD700;
+}
+
 .livro-caminhos {
     background: #8B5A2B;
     border-radius: 30px;
@@ -379,6 +403,14 @@ body {
     color: #fff;
     z-index: 1100;
     padding: 20px;
+}
+
+.overlay img {
+    max-width: 180px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 .overlay button {
@@ -550,6 +582,7 @@ body, html, #game-container {
 <div id="winScreen" class="win-container hidden">
     <div class="win-card">
         <div class="win-message">
+            <img src="https://i.imgur.com/HoIGGSV.png" alt="Vitória">
             <p><strong>🌟 PARABÉNS! VOCÊ VENCEU OS CORVOS! 🌟</strong></p>
             <p>Você desviou de todos os corvos e restaurou a paz no campo de trigo!</p>
             <button class="win-btn win-btn-mensagem" id="btnMostrarMensagem">📖 LER MENSAGEM</button>
@@ -575,7 +608,7 @@ body, html, #game-container {
 </div>
 
 <div id="loseOverlay" class="overlay hidden">
-    <img src="https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/tristevangogh.png" style="width:140px; border-radius:20px;">
+    <img src="https://i.imgur.com/ThWOOzD.png" alt="Game Over">
     <h2 id="loseMsg"></h2>
     <button onclick="reiniciarCompleto()">🔄 TENTAR NOVAMENTE</button>
 </div>
@@ -597,7 +630,16 @@ function reiniciarCompleto() { location.reload(); }
 function getStoryText(name) {
     return `
         <p><span class="highlight">🌟 Olá, ${name}!</span></p>
-        <p>Sou Vincent van Gogh. Neste campo de trigo, os corvos voam livres!</p>
+        
+        <!-- TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR -->
+        <div class="van-gogh-quote">
+            🎨 <strong>Vincent van Gogh sobre "Campo de Trigo":</strong><br>
+            "Eu pintei a obra Campo de Trigo em 1890, no final da vida.<br>
+            Utilizei pinceladas fortes e cores intensas para representar a energia da natureza.<br>
+            O céu dramático e o trigo ondulante transmitem emoções profundas, como inquietação e esperança.<br>
+            Essa pintura mostra como eu transformava paisagens simples em expressões de sentimento."
+        </div>
+        
         <p><strong>🎮 CONTROLES:</strong><br>
         • <span class="tecla">A</span> (botão ESQUERDO) → ABAIXAR ⬇️<br>
         • <span class="tecla">L</span> (botão DIREITO) → SALTAR ⬆️ <strong>(segure para ficar mais tempo no ar!)</strong></p>
@@ -635,7 +677,6 @@ let ativo = false;
 
 // JOGO
 let vidas = 7;
-let bg = 0;
 let spawnTimeoutId = null;
 let animationId = null;
 let timerInterval = null;
@@ -650,19 +691,27 @@ let segurandoSalto = false;
 const heroi = document.getElementById('heroi');
 const cenario = document.getElementById('cenario');
 
-const corvoPretoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/corvo.png";
-const corvoBrancoImg = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/CORVOBRANCO%20(1).png";
+// NOVAS IMAGENS DOS CORVOS
+const corvoPretoImg = "https://i.imgur.com/ZCGFEjz.png";
+const corvoBrancoImg = "https://i.imgur.com/EZaSAB1.png";
 
-const musica = new Audio("https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/519_full_circus-hungaria_0153_preview.mp3");
+// ========== SONS (ARQUIVOS LOCAIS) ==========
+const musica = new Audio("musicadocorvo.mp3");
 musica.loop = true;
 const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
-const somWin = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangoghvitoria.mp3";
-const somLose = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/mortevangoh.mp3";
+const somWin = "vitóriavangogh.mp3";
+const somLose = "mortevangoh.mp3";
 const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
 const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
 const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
 
-function tocar(url, vol = 0.4) { try { let a = new Audio(url); a.volume = vol; a.play().catch(()=>{}); } catch(e) {} }
+function tocar(url, vol = 0.4) { 
+    try { 
+        let a = new Audio(url); 
+        a.volume = vol; 
+        a.play().catch(e => console.warn("Erro ao tocar som:", e)); 
+    } catch(e) {} 
+}
 
 function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
 function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
@@ -690,18 +739,16 @@ function aplicarDano() {
     if (vidas <= 0) gameOver(false);
 }
 
-// SALTO PROLONGADO - segurar o botão mantém o herói no ar
+// SALTO PROLONGADO
 function iniciarSalto() {
     if (!ativo || estaSaltando) return;
     estaSaltando = true;
     segurandoSalto = true;
     tocar(somPulo, 0.4);
     
-    // Sobe rapidamente
     heroi.style.transition = "bottom 0.1s cubic-bezier(0.2, 0.95, 0.3, 1.1)";
     heroi.style.bottom = "210px";
     
-    // Se segurar, fica no ar por mais tempo
     function manterNoAr() {
         if (segurandoSalto && ativo && estaSaltando) {
             heroi.style.bottom = "210px";
@@ -738,16 +785,11 @@ function levantar() {
     heroi.style.bottom = alturaOriginal + "px";
 }
 
-// ========== ALTURAS DOS CORVOS: APENAS BAIXO E ALTO ==========
-// BAIXO: 5px a 40px (bem rente ao chão)
-// ALTO: 120px a 170px (altura reduzida)
 function getAlturaCorvo() {
     if (Math.random() < 0.5) {
-        // CORVO BAIXO - bem rente ao chão (5-40px)
-        return 5 + Math.random() * 38;
+        return 5 + Math.random() * 38;   // baixo
     } else {
-        // CORVO ALTO - mais baixo que antes (120-170px)
-        return 120 + Math.random() * 55;
+        return 120 + Math.random() * 55; // alto
     }
 }
 
@@ -828,12 +870,10 @@ function spawn() {
 }
 
 function startSpawning() { if (spawnTimeoutId) clearTimeout(spawnTimeoutId); spawn(); }
-function loop() {
-    if (!ativo) return;
-    bg -= 4.5;
-    cenario.style.transform = `translateX(${bg % window.innerWidth}px)`;
-    animationId = requestAnimationFrame(loop);
-}
+
+// NÃO HÁ MAIS MOVIMENTO DE CENÁRIO - CENÁRIO ESTÁTICO E CONTÍNUO
+// A função loop foi removida. Nada para animar além dos corvos.
+
 function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -856,7 +896,6 @@ function startGame() {
     corvosDesviados = 0;
     tempoRestante = 180;
     ultimoMultiploBranco = 0;
-    bg = 0;
     estaSaltando = false;
     segurandoSalto = false;
     if (temporizadorSalto) clearTimeout(temporizadorSalto);
@@ -878,9 +917,9 @@ function startGame() {
     
     tocar(somStart);
     musica.currentTime = 0;
-    musica.play().catch(()=>{});
+    musica.play().catch(e => console.warn("Música não pôde ser reproduzida:", e));
     
-    loop();
+    // Não há mais animação de cenário
     startSpawning();
     startTimer();
 }
