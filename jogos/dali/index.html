@@ -90,11 +90,6 @@ const ctx = canvas.getContext('2d');
 const dali = document.getElementById('dali-player');
 
 const musica = document.getElementById("musica-fundo");
-
-function iniciar() {
-    musica.currentTime = 0;
-    musica.play().catch(()=>{});
-}
     
 function tocarSom(id) {
     const audio = document.getElementById(id);
@@ -135,8 +130,8 @@ function iniciar() {
     ativo = true;
     novaMissao();
 
-    musicaFundo.currentTime = 0;
-    musicaFundo.play().catch(()=>{});
+    musica.currentTime = 0;
+    musica.play().catch(()=>{});
 
     requestAnimationFrame(loop);
     setInterval(() => { if(ativo && tempo > 0) tempo--; }, 1000);
