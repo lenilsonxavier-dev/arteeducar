@@ -481,16 +481,7 @@ canvas {
 </head>
 <body>
 
-<!-- ÁUDIOS (corrigidos) -->
-<div id="audio-container" style="display:none;">
-    <audio id="som-azul" src="sons/estrelaazul.mp3"></audio>
-    <audio id="som-vermelho" src="sons/estrelavermelha.mp3"></audio>
-    <audio id="musica-fundo" src="sons/noiteestreladamusica.mp3" loop></audio>
-    <audio id="som-vitoria" src="sons/noiteestreladavitoria.mp3"></audio>
-    <audio id="som-gameover" src="sons/noiteestreladagameover.mp3"></audio>
-</div>
-
-<!-- INTRO -->
+<!-- TELAS -->
 <div id="introScreen" class="intro-container">
     <div class="intro-card">
         <div class="intro-welcome">
@@ -503,7 +494,6 @@ canvas {
     </div>
 </div>
 
-<!-- BIOGRAFIA -->
 <div id="bioScreen" class="bio-container hidden">
     <div class="bio-card">
         <button class="back-btn" id="backToIntroBtn">← Voltar</button>
@@ -519,7 +509,6 @@ canvas {
     </div>
 </div>
 
-<!-- HUD -->
 <div id="hud">
     <div>❤️ <span id="vidas">7</span></div>
     <div>⏱️ <span id="tempo">3:00</span></div>
@@ -527,13 +516,11 @@ canvas {
 
 <canvas id="c"></canvas>
 
-<!-- CONTROLES -->
 <div id="controles">
     <div class="btn" id="leftBtn">◀</div>
     <div class="btn" id="rightBtn">▶</div>
 </div>
 
-<!-- TELA INSTRUÇÕES / START -->
 <div id="start" class="overlay hidden">
     <h1>🌌 A Noite Estrelada de Van Gogh</h1>
     <div class="game-instructions">
@@ -545,7 +532,6 @@ canvas {
     <button id="gameStartBtn">🎨 COMEÇAR A PINTAR O CÉU! 🌟</button>
 </div>
 
-<!-- VITÓRIA -->
 <div id="winOverlay" class="overlay hidden">
     <img src="https://i.imgur.com/BrW9Gcg.png" alt="Vitória">
     <div class="thankyou-container">
@@ -574,7 +560,6 @@ canvas {
     <button onclick="location.reload()">🔄 JOGAR NOVAMENTE</button>
 </div>
 
-<!-- DERROTA -->
 <div id="loseOverlay" class="overlay hidden">
     <img src="https://i.imgur.com/DIiyYIv.png" alt="Derrota">
     <h2 id="loseMsg"></h2>
@@ -582,6 +567,87 @@ canvas {
 </div>
 
 <script>
+// ==================== SONS COM WEB AUDIO API (100% FUNCIONAIS) ====================
+let audioCtx = null;
+let musicaFundo = null;  // para a música de fundo externa
+
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    audioCtx.resume();
+}
+
+function tocarBeep(freq, duracao, volume = 0.3, tipo = 'sine') {
+    if (!audioCtx) {
+        initAudio();
+        if (!audioCtx) return;
+    }
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = freq;
+    osc.type = tipo;
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duracao);
+    osc.start();
+    osc.stop(now + duracao);
+}
+
+// Efeitos específicos do jogo
+function somEstrelaAzul() {
+    // Ganha vida: som alegre ascendente
+    tocarBeep(880, 0.1, 0.25);
+    setTimeout(() => tocarBeep(1046.5, 0.15, 0.25), 80);
+}
+function somEstrelaVermelha() {
+    // Perde vida: som grave descendente
+    tocarBeep(220, 0.12, 0.35, 'sawtooth');
+    setTimeout(() => tocarBeep(174.61, 0.15, 0.3, 'sawtooth'), 60);
+}
+function somEstrelaNormal() {
+    // Perde 1 vida: som curto e seco
+    tocarBeep(440, 0.08, 0.2, 'triangle');
+}
+function somVitoria() {
+    // Fanfarra triunfante
+    const notas = [523.25, 659.25, 783.99, 1046.5, 1318.52];
+    notas.forEach((f, i) => {
+        setTimeout(() => tocarBeep(f, 0.35, 0.3, 'sine'), i * 180);
+    });
+}
+function somGameOver() {
+    // Sequência descendente melancólica
+    const notas = [440, 349.23, 293.66, 220];
+    notas.forEach((f, i) => {
+        setTimeout(() => tocarBeep(f, 0.4, 0.3, 'sawtooth'), i * 250);
+    });
+}
+function somStartJogo() {
+    tocarBeep(523.25, 0.15);
+    setTimeout(() => tocarBeep(659.25, 0.15), 100);
+    setTimeout(() => tocarBeep(783.99, 0.2), 200);
+}
+
+// Música de fundo (opcional, URL externa confiável)
+function tocarMusicaFundo() {
+    if (musicaFundo) {
+        musicaFundo.pause();
+        musicaFundo = null;
+    }
+    musicaFundo = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+    musicaFundo.loop = true;
+    musicaFundo.volume = 0.2;
+    musicaFundo.play().catch(e => console.warn("Música opcional não carregou"));
+}
+function pararMusicaFundo() {
+    if (musicaFundo) {
+        musicaFundo.pause();
+        musicaFundo.currentTime = 0;
+    }
+}
+
 // ========== BIOGRAFIA SEM IMAGENS, TEXTO OCUPA TODO ESPAÇO ==========
 const biographyTemplate = `
     <p><strong>Olá, <span class="highlight">{NOME}</span>!</strong><br>Posso te contar minha história? 🌟</p>
@@ -631,15 +697,6 @@ function backToIntro() {
     introScreen.classList.remove('hidden');
 }
 
-// ========== FUNÇÃO PARA TOCAR SOM ==========
-function tocarSom(id) {
-    const audio = document.getElementById(id);
-    if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(e => console.log("Erro ao tocar som:", e));
-    }
-}
-
 // ========== JOGO COM TEMPO DE 3 MINUTOS ==========
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
@@ -661,8 +718,6 @@ const starBlue = new Image();
 starBlue.src = "https://i.imgur.com/9VFEOkF.png";
 const starRed = new Image();
 starRed.src = "https://i.imgur.com/TNy8OYX.png";
-
-// Estrela comum com fundo transparente
 const starCommon = new Image();
 starCommon.src = "https://i.imgur.com/qMt26u4.png";
 const normalStarsArray = [starCommon, starCommon];
@@ -685,7 +740,6 @@ let playing = false;
 let tempo = 180; // 3 minutos
 let animationId = null;
 let timerInterval = null;
-let musicaFundo = document.getElementById("musica-fundo");
 
 function spawn() {
     let r = Math.random();
@@ -732,14 +786,15 @@ function gameLoop() {
             stars.splice(i,1);
             if(s.tipo === "azul") {
                 vidas++;
-                tocarSom('som-azul');
+                somEstrelaAzul();
                 tinta(s.x, s.y, "#87CEEB");
             } else if(s.tipo === "vermelha") {
                 vidas -= 2;
-                tocarSom('som-vermelho');
+                somEstrelaVermelha();
                 tinta(s.x, s.y, "#FF6B6B");
             } else {
                 vidas--;
+                somEstrelaNormal();
                 tinta(s.x, s.y, "#FFD700");
             }
             vidas = Math.max(0, vidas);
@@ -775,21 +830,18 @@ function startTimer() {
 
 function endGame(win) {
     playing = false;
-    if(musicaFundo) {
-        musicaFundo.pause();
-        musicaFundo.currentTime = 0;
-    }
+    pararMusicaFundo();
     if(animationId) cancelAnimationFrame(animationId);
     if(timerInterval) clearInterval(timerInterval);
     if(win) {
         visitorNameSpan.textContent = globalPlayerName;
         visitDateSpan.textContent = `✨ ${new Date().toLocaleDateString('pt-BR')} ✨`;
         winOverlay.classList.remove('hidden');
-        tocarSom('som-vitoria');
+        somVitoria();
     } else {
         loseMsg.innerHTML = `💀 ${globalPlayerName}, as tintas foram derramadas... 💀`;
         loseOverlay.classList.remove('hidden');
-        tocarSom('som-gameover');
+        somGameOver();
     }
 }
 
@@ -811,10 +863,14 @@ function startGame() {
     updateBounds();
     document.getElementById("vidas").innerText = vidas;
     document.getElementById("tempo").innerText = "3:00";
-    if(musicaFundo) {
-        musicaFundo.currentTime = 0;
-        musicaFundo.play().catch(e => console.log("Erro ao tocar música:", e));
-    }
+    
+    // Inicia áudio e sons
+    initAudio();
+    audioCtx?.resume();
+    somStartJogo();
+    pararMusicaFundo();
+    tocarMusicaFundo();
+    
     startTimer();
     gameLoop();
 }
@@ -855,6 +911,16 @@ window.addEventListener("keyup", e => {
 });
 window.addEventListener('resize', () => { resizeCanvas(); updateBounds(); });
 updateBounds();
+
+// Desbloqueia áudio no primeiro toque/clique
+function unlockAudio() {
+    initAudio();
+    if (audioCtx) audioCtx.resume();
+    document.body.removeEventListener('touchstart', unlockAudio);
+    document.body.removeEventListener('click', unlockAudio);
+}
+document.body.addEventListener('touchstart', unlockAudio);
+document.body.addEventListener('click', unlockAudio);
 </script>
 </body>
 </html>
