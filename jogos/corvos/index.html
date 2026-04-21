@@ -38,7 +38,6 @@ body {
     overflow: hidden;
 }
 
-/* CENÁRIO CONTÍNUO - SEM DIVISÕES, SEM MOVIMENTO */
 #cenario {
     width: 100%;
     height: 100%;
@@ -47,7 +46,6 @@ body {
     background-size: cover;
     bottom: 0;
     left: 0;
-    /* Sem movimento, imagem única e contínua */
 }
 
 #heroi {
@@ -228,7 +226,6 @@ body {
     font-size: 1.05rem;
 }
 
-/* TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR */
 .story-text .van-gogh-quote {
     font-size: 1.2rem;
     line-height: 1.4;
@@ -614,47 +611,93 @@ body, html, #game-container {
 </div>
 
 <script>
-function ativarFullscreenProtecao() {
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
-    document.addEventListener('keydown', (e) => {
-        const active = document.activeElement?.tagName?.toLowerCase();
-        if (active === 'input') return;
-        const key = e.key.toLowerCase();
-        if (key === 'f5' || (e.ctrlKey && key === 'r') || key === 'f12') e.preventDefault();
+// ==================== SONS COM WEB AUDIO API (100% FUNCIONAIS) ====================
+let audioCtx = null;
+let musicaAtual = null;  // para a música de fundo opcional
+
+// Inicializa o contexto de áudio após a primeira interação do usuário
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Pequeno som de "click" para desbloquear? Não necessário, mas ativamos o contexto.
+    audioCtx.resume();
+}
+
+// Função genérica para tocar um beep sintético
+function tocarBeep(frequencia, duracao, volume = 0.3, tipo = 'sine') {
+    if (!audioCtx) {
+        initAudio();
+        if (!audioCtx) return;
+    }
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = frequencia;
+    osc.type = tipo;
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duracao);
+    osc.start();
+    osc.stop(now + duracao);
+}
+
+// Sons específicos do jogo
+function somPulo() {
+    tocarBeep(523.25, 0.15, 0.2, 'sine');  // Dó5
+}
+function somDano() {
+    tocarBeep(150, 0.25, 0.35, 'sawtooth');
+    setTimeout(() => tocarBeep(120, 0.2, 0.3, 'sawtooth'), 50);
+}
+function somVida() {
+    tocarBeep(880, 0.1, 0.25, 'sine');
+    setTimeout(() => tocarBeep(1046.5, 0.15, 0.25, 'sine'), 100);
+}
+function somStart() {
+    tocarBeep(659.25, 0.2, 0.3, 'sine');  // Mi
+    setTimeout(() => tocarBeep(783.99, 0.2, 0.3, 'sine'), 150);
+    setTimeout(() => tocarBeep(1046.5, 0.4, 0.3, 'sine'), 300);
+}
+function somWin() {
+    const notas = [523.25, 659.25, 783.99, 1046.5];
+    notas.forEach((f, i) => {
+        setTimeout(() => tocarBeep(f, 0.3, 0.25, 'sine'), i * 200);
     });
-    window.requestGameFullscreen = () => document.documentElement.requestFullscreen?.().catch(()=>{});
 }
-ativarFullscreenProtecao();
-function reiniciarCompleto() { location.reload(); }
-
-function getStoryText(name) {
-    return `
-        <p><span class="highlight">🌟 Olá, ${name}!</span></p>
-        
-        <!-- TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR -->
-        <div class="van-gogh-quote">
-            🎨 <strong>Vincent van Gogh sobre "Campo de Trigo":</strong><br>
-            "Eu pintei a obra Campo de Trigo em 1890, no final da vida.<br>
-            Utilizei pinceladas fortes e cores intensas para representar a energia da natureza.<br>
-            O céu dramático e o trigo ondulante transmitem emoções profundas, como inquietação e esperança.<br>
-            Essa pintura mostra como eu transformava paisagens simples em expressões de sentimento."
-        </div>
-        
-        <p><strong>🎮 CONTROLES:</strong><br>
-        • <span class="tecla">A</span> (botão ESQUERDO) → ABAIXAR ⬇️<br>
-        • <span class="tecla">L</span> (botão DIREITO) → SALTAR ⬆️ <strong>(segure para ficar mais tempo no ar!)</strong></p>
-        <p><strong>🐦‍⬛ REGRAS:</strong><br>
-        • Corvo Preto → perde 1 vida<br>
-        • 🤍 CORVO BRANCO → ganha +2 vidas<br>
-        • Corvos BAIXOS (rente ao chão): PULE e SEGURE o botão!<br>
-        • Corvos ALTOS (no alto): ABAIXE-SE!<br>
-        • ⏱️ Sobreviva 3 minutos para vencer!</p>
-        <p><strong>💡 DICA IMPORTANTE:</strong> Segure o botão de SALTAR para prolongar o tempo no ar e desviar dos corvos baixos!</p>
-        <div class="signature-story">💛 Van Gogh</div>
-    `;
+function somLose() {
+    const notas = [440, 349.23, 293.66, 220];
+    notas.forEach((f, i) => {
+        setTimeout(() => tocarBeep(f, 0.4, 0.3, 'sawtooth'), i * 250);
+    });
 }
 
-// ELEMENTOS
+// Música de fundo opcional (usando arquivo externo - se falhar, apenas não toca)
+function tocarMusicaFundo() {
+    if (musicaAtual) {
+        musicaAtual.pause();
+        musicaAtual = null;
+    }
+    // Usamos uma URL pública confiável (SoundHelix). Se não carregar, o jogo continua sem música.
+    musicaAtual = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+    musicaAtual.loop = true;
+    musicaAtual.volume = 0.2;
+    musicaAtual.play().catch(e => console.warn("Música não disponível (opcional)"));
+}
+function pararMusicaFundo() {
+    if (musicaAtual) {
+        musicaAtual.pause();
+        musicaAtual.currentTime = 0;
+    }
+}
+
+// ==================== JOGO ====================
+let globalPlayerName = "";
+let gameEnded = false;
+let ativo = false;
+
+// Elementos DOM
+const heroi = document.getElementById('heroi');
 const introScreen = document.getElementById('introScreen');
 const storyScreen = document.getElementById('storyScreen');
 const childNameInput = document.getElementById('childName');
@@ -671,57 +714,23 @@ const btnMostrarMensagem = document.getElementById('btnMostrarMensagem');
 const mensagemVanGogh = document.getElementById('mensagemVanGogh');
 const msgNomeSpan = document.getElementById('msgNome');
 
-let globalPlayerName = "";
-let gameEnded = false;
-let ativo = false;
-
-// JOGO
+// Estado do jogo
 let vidas = 7;
 let spawnTimeoutId = null;
-let animationId = null;
 let timerInterval = null;
 let tempoRestante = 180;
-let corvosDesviados = 0;
+let corvosDesviados = 0;        // total de corvos desviados (inclui brancos)
+let corvosPretosDesviados = 0;  // contador específico para spawn do branco a cada 15
 let ultimoMultiploBranco = 0;
 let estaSaltando = false;
 let alturaOriginal = 15;
 let temporizadorSalto = null;
 let segurandoSalto = false;
+let spawnAtivo = false;
+let intervalosMovimento = [];
 
-const heroi = document.getElementById('heroi');
-const cenario = document.getElementById('cenario');
-
-// NOVAS IMAGENS DOS CORVOS
 const corvoPretoImg = "https://i.imgur.com/ZCGFEjz.png";
 const corvoBrancoImg = "https://i.imgur.com/EZaSAB1.png";
-
-// ========== SONS (ARQUIVOS LOCAIS) ==========
-const musica = new Audio("som/musicadocorvo.mp3");
-musica.loop = true;
-
-const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
-
-const somWin = "som/vitoria-vangogh.mp3";
-const somLose = "som/mortevangoh.mp3";
-
-const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
-const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
-const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
-
-const sons = {};
-
-function tocar(url, vol = 0.4) {
-    try {
-        if (!sons[url]) {
-            sons[url] = new Audio(url);
-        }
-
-        let a = sons[url];
-        a.currentTime = 0;
-        a.volume = vol;
-        a.play().catch(e => console.warn("Erro ao tocar som:", e));
-    } catch(e) {}
-}
 
 function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
 function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
@@ -745,17 +754,16 @@ function aplicarDano() {
     atualizarVidas();
     heroi.classList.add('dano');
     setTimeout(() => heroi.classList.remove('dano'), 250);
-    tocar(somDano, 0.5);
+    somDano();
     if (vidas <= 0) gameOver(false);
 }
 
-// SALTO PROLONGADO
+// Salto prolongado
 function iniciarSalto() {
     if (!ativo || estaSaltando) return;
     estaSaltando = true;
     segurandoSalto = true;
-    tocar(somPulo, 0.4);
-    
+    somPulo();
     heroi.style.transition = "bottom 0.1s cubic-bezier(0.2, 0.95, 0.3, 1.1)";
     heroi.style.bottom = "210px";
     
@@ -765,6 +773,7 @@ function iniciarSalto() {
             temporizadorSalto = setTimeout(manterNoAr, 50);
         }
     }
+    if (temporizadorSalto) clearTimeout(temporizadorSalto);
     temporizadorSalto = setTimeout(manterNoAr, 50);
 }
 
@@ -796,24 +805,25 @@ function levantar() {
 }
 
 function getAlturaCorvo() {
-    if (Math.random() < 0.5) {
-        return 5 + Math.random() * 38;   // baixo
-    } else {
-        return 120 + Math.random() * 55; // alto
-    }
+    return Math.random() < 0.5 ? (5 + Math.random() * 38) : (120 + Math.random() * 55);
 }
 
+// SPAWN com regra: a cada 15 corvos pretos desviados, aparece um branco
 function spawn() {
-    if (!ativo) return;
+    if (!ativo || gameEnded) return;
+    if (spawnAtivo) return;
+    spawnAtivo = true;
     
     let tipo = "preto";
     let imgUrl = corvoPretoImg;
-    let podeBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
     
-    if (podeBranco && Math.random() < 0.5) {
+    // Verifica se é hora de spawnar branco (baseado em corvosPretosDesviados)
+    let deveSpawnarBranco = (corvosPretosDesviados > 0 && corvosPretosDesviados % 15 === 0 && ultimoMultiploBranco !== corvosPretosDesviados);
+    
+    if (deveSpawnarBranco && Math.random() < 0.8) { // chance alta para garantir
         tipo = "branco";
         imgUrl = corvoBrancoImg;
-        ultimoMultiploBranco = corvosDesviados;
+        ultimoMultiploBranco = corvosPretosDesviados;
     }
     
     let corvoDiv = document.createElement('div');
@@ -822,7 +832,6 @@ function spawn() {
     corvoDiv.style.backgroundImage = `url('${imgUrl}')`;
     corvoDiv.style.right = "-80px";
     corvoDiv.style.bottom = getAlturaCorvo() + "px";
-    
     document.getElementById('jogo').appendChild(corvoDiv);
     
     let x = -80;
@@ -830,9 +839,11 @@ function spawn() {
     let velocidade = 5.2;
     
     let movimento = setInterval(() => {
-        if (!ativo || colidiu) {
-            if (!colidiu && corvoDiv.parentNode) corvoDiv.remove();
+        if (!ativo || colidiu || gameEnded) {
+            if (corvoDiv.parentNode) corvoDiv.remove();
             clearInterval(movimento);
+            const idx = intervalosMovimento.indexOf(movimento);
+            if (idx !== -1) intervalosMovimento.splice(idx, 1);
             return;
         }
         x += velocidade;
@@ -848,7 +859,7 @@ function spawn() {
             colidiu = true;
             if (tipo === "branco") {
                 adicionarVidas(2);
-                tocar(somVida, 0.5);
+                somVida();
                 const msg = document.createElement('div');
                 msg.textContent = "+2 ❤️";
                 msg.style.position = "fixed";
@@ -866,23 +877,37 @@ function spawn() {
             }
             corvoDiv.remove();
             clearInterval(movimento);
+            const idx = intervalosMovimento.indexOf(movimento);
+            if (idx !== -1) intervalosMovimento.splice(idx, 1);
         }
         
         if (x > window.innerWidth + 100 && !colidiu) {
+            // Desviou: incrementa contadores
             corvosDesviados++;
+            if (tipo === "preto") {
+                corvosPretosDesviados++;
+            }
             atualizarCorvosDesviados();
             corvoDiv.remove();
             clearInterval(movimento);
+            const idx = intervalosMovimento.indexOf(movimento);
+            if (idx !== -1) intervalosMovimento.splice(idx, 1);
         }
     }, 20);
+    intervalosMovimento.push(movimento);
     
-    spawnTimeoutId = setTimeout(spawn, 1250);
+    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
+    spawnTimeoutId = setTimeout(() => {
+        spawnAtivo = false;
+        if (ativo && !gameEnded) spawn();
+    }, 1250);
 }
 
-function startSpawning() { if (spawnTimeoutId) clearTimeout(spawnTimeoutId); spawn(); }
-
-// NÃO HÁ MAIS MOVIMENTO DE CENÁRIO - CENÁRIO ESTÁTICO E CONTÍNUO
-// A função loop foi removida. Nada para animar além dos corvos.
+function startSpawning() {
+    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
+    spawnAtivo = false;
+    spawn();
+}
 
 function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
@@ -893,22 +918,42 @@ function startTimer() {
     }, 1000);
 }
 
+function limparTudo() {
+    if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    if (temporizadorSalto) { clearTimeout(temporizadorSalto); temporizadorSalto = null; }
+    for (let id of intervalosMovimento) clearInterval(id);
+    intervalosMovimento = [];
+    document.querySelectorAll('.corvo').forEach(c => c.remove());
+    spawnAtivo = false;
+    estaSaltando = false;
+    segurandoSalto = false;
+    gameEnded = false;
+}
+
 function startGame() {
-    window.requestGameFullscreen?.();
+    // Ativa o áudio no primeiro clique
+    initAudio();
+    audioCtx?.resume();
+    
+    document.documentElement.requestFullscreen?.().catch(()=>{});
+    
     storyScreen.classList.add('hidden');
     introScreen.classList.add('hidden');
     winScreenDiv.classList.add('hidden');
     loseOverlay.classList.add('hidden');
     
-    gameEnded = false;
+    limparTudo();
+    
     ativo = true;
+    gameEnded = false;
     vidas = 7;
     corvosDesviados = 0;
+    corvosPretosDesviados = 0;
     tempoRestante = 180;
     ultimoMultiploBranco = 0;
     estaSaltando = false;
     segurandoSalto = false;
-    if (temporizadorSalto) clearTimeout(temporizadorSalto);
     
     heroi.style.bottom = "15px";
     heroi.style.left = "50%";
@@ -920,16 +965,10 @@ function startGame() {
     atualizarCorvosDesviados();
     atualizarTimer();
     
-    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
-    if (animationId) cancelAnimationFrame(animationId);
-    if (timerInterval) clearInterval(timerInterval);
-    document.querySelectorAll('.corvo').forEach(c => c.remove());
+    somStart();
+    pararMusicaFundo();
+    tocarMusicaFundo();  // opcional, não interfere nos efeitos
     
-    tocar(somStart);
-    musica.currentTime = 0;
-    musica.play().catch(e => console.warn("Música não pôde ser reproduzida:", e));
-    
-    // Não há mais animação de cenário
     startSpawning();
     startTimer();
 }
@@ -938,12 +977,9 @@ function gameOver(win) {
     if (gameEnded) return;
     gameEnded = true;
     ativo = false;
-    if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
-    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-    if (temporizadorSalto) { clearTimeout(temporizadorSalto); temporizadorSalto = null; }
-    musica.pause();
-    document.querySelectorAll('.corvo').forEach(c => c.remove());
+    
+    limparTudo();
+    pararMusicaFundo();
     
     if (win) {
         assinaturaNome.textContent = globalPlayerName;
@@ -952,15 +988,17 @@ function gameOver(win) {
         dataAssinatura.innerHTML = `✨ ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} ✨`;
         mensagemVanGogh.style.display = 'none';
         winScreenDiv.classList.remove('hidden');
-        tocar(somWin);
+        somWin();
     } else {
         loseMsg.innerHTML = `💀 ${globalPlayerName}, os corvos venceram... 💀`;
         loseOverlay.classList.remove('hidden');
-        tocar(somLose);
+        somLose();
     }
 }
 
-// EVENTOS
+function reiniciarCompleto() { location.reload(); }
+
+// Eventos de controle
 document.getElementById("abaixa").addEventListener("pointerdown", (e) => { e.preventDefault(); acaoAbaixar(); });
 document.getElementById("abaixa").addEventListener("pointerup", (e) => { e.preventDefault(); levantar(); });
 document.getElementById("abaixa").addEventListener("pointerleave", () => levantar());
@@ -983,12 +1021,32 @@ window.onkeyup = (e) => {
     if (key === "l") { e.preventDefault(); finalizarSalto(); }
 };
 
-// FLUXO
+// Fluxo telas
 function showStory() {
     let name = childNameInput.value.trim();
     if (name === "") name = "Artista";
     globalPlayerName = name;
-    storyContent.innerHTML = getStoryText(name);
+    storyContent.innerHTML = `
+        <p><span class="highlight">🌟 Olá, ${name}!</span></p>
+        <div class="van-gogh-quote">
+            🎨 <strong>Vincent van Gogh sobre "Campo de Trigo":</strong><br>
+            "Eu pintei a obra Campo de Trigo em 1890, no final da vida.<br>
+            Utilizei pinceladas fortes e cores intensas para representar a energia da natureza.<br>
+            O céu dramático e o trigo ondulante transmitem emoções profundas, como inquietação e esperança.<br>
+            Essa pintura mostra como eu transformava paisagens simples em expressões de sentimento."
+        </div>
+        <p><strong>🎮 CONTROLES:</strong><br>
+        • <span class="tecla">A</span> (botão ESQUERDO) → ABAIXAR ⬇️<br>
+        • <span class="tecla">L</span> (botão DIREITO) → SALTAR ⬆️ <strong>(segure para ficar mais tempo no ar!)</strong></p>
+        <p><strong>🐦‍⬛ REGRAS:</strong><br>
+        • Corvo Preto → perde 1 vida<br>
+        • 🤍 CORVO BRANCO → ganha +2 vidas (aparece a cada 15 corvos pretos desviados)<br>
+        • Corvos BAIXOS (rente ao chão): PULE e SEGURE o botão!<br>
+        • Corvos ALTOS (no alto): ABAIXE-SE!<br>
+        • ⏱️ Sobreviva 3 minutos para vencer!</p>
+        <p><strong>💡 DICA IMPORTANTE:</strong> Segure o botão de SALTAR para prolongar o tempo no ar e desviar dos corvos baixos!</p>
+        <div class="signature-story">💛 Van Gogh</div>
+    `;
     introScreen.classList.add('hidden');
     storyScreen.classList.remove('hidden');
 }
@@ -1009,6 +1067,19 @@ goToStoryBtn.addEventListener('click', showStory);
 backToIntroBtn.addEventListener('click', backToIntro);
 startGameBtn.addEventListener('click', startGame);
 childNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); showStory(); } });
+
+// Previne arrastar imagens
+document.querySelectorAll('img, .corvo, #heroi').forEach(el => el.addEventListener('dragstart', e => e.preventDefault()));
+
+// Inicializa o áudio ao primeiro toque em qualquer lugar
+function unlockAudio() {
+    initAudio();
+    if (audioCtx) audioCtx.resume();
+    document.body.removeEventListener('touchstart', unlockAudio);
+    document.body.removeEventListener('click', unlockAudio);
+}
+document.body.addEventListener('touchstart', unlockAudio);
+document.body.addEventListener('click', unlockAudio);
 </script>
 </body>
 </html>
