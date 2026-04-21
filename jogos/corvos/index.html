@@ -6,52 +6,1009 @@
 <title>Van Gogh - Campo de Trigo | Salto Prolongado</title>
 
 <style>
-/* (SEU CSS ORIGINAL — NÃO ALTERADO) */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body { 
+    overflow: hidden; 
+    background: #000; 
+    font-family: 'Georgia', cursive, sans-serif; 
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+#game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#jogo { 
+    width: 100%; 
+    height: 100%; 
+    position: relative; 
+    overflow: hidden;
+}
+
+/* CENÁRIO CONTÍNUO - SEM DIVISÕES, SEM MOVIMENTO */
+#cenario {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: url('https://i.imgur.com/R1kWXXb.jpeg') no-repeat center center;
+    background-size: cover;
+    bottom: 0;
+    left: 0;
+    /* Sem movimento, imagem única e contínua */
+}
+
+#heroi {
+    width: min(110px, 18vw);
+    height: auto;
+    aspect-ratio: 110 / 200;
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: url('https://i.imgur.com/PhLXp1j.png') no-repeat center;
+    background-size: contain;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.corvo {
+    width: min(65px, 12vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 5;
+    pointer-events: none;
+}
+
+#hud {
+    position: fixed;
+    width: 100%;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    color: #f1c40f;
+    font-size: clamp(14px, 4vw, 20px);
+    z-index: 999;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+}
+
+#hud div {
+    background: rgba(0,0,0,0.7);
+    padding: 6px 14px;
+    border-radius: 40px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* ========== TELAS ========== */
+.intro-container {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 50%, #0a1f0a 100%);
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Georgia', cursive;
+    padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.intro-card {
+    max-width: 550px;
+    width: 95%;
+    background: #FFF8E7;
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 235, 190, 0.3) 2%, transparent 2.5%);
+    background-size: 30px 30px;
+    border-radius: 48px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-welcome {
+    padding: 30px 22px;
+    text-align: center;
+}
+
+.intro-title {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    color: #4A6A2A;
+    text-shadow: 3px 3px 0 #FFD700;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.intro-question {
+    font-size: clamp(1rem, 5vw, 1.4rem);
+    color: #2a4a1a;
+    background: #FFEFC0;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 60px;
+    margin-bottom: 25px;
+}
+
+.name-input {
+    width: 85%;
+    padding: 14px 18px;
+    font-size: clamp(14px, 4vw, 1.2rem);
+    font-family: inherit;
+    border: 3px solid #8B5A2B;
+    border-radius: 60px;
+    outline: none;
+    text-align: center;
+    background: white;
+    margin-bottom: 25px;
+}
+
+.enter-btn {
+    background: #8B5A2B;
+    color: white;
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
+    font-weight: bold;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: 0.05s linear;
+    box-shadow: 0 5px 0 #5a3a1a;
+    touch-action: manipulation;
+}
+
+.enter-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #5a3a1a;
+}
+
+/* TELA BIOGRAFIA */
+.story-container {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.story-card {
+    max-width: 650px;
+    width: 95%;
+    max-height: 85vh;
+    background: #FFF8E7;
+    border-radius: 48px;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.story-text {
+    padding: 25px;
+    font-size: clamp(13px, 3.8vw, 0.95rem);
+    line-height: 1.5;
+    color: #3E2723;
+}
+
+.story-text p {
+    margin-bottom: 14px;
+}
+
+.story-text .highlight {
+    color: #D2691E;
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+/* TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR */
+.story-text .van-gogh-quote {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    background: #FFF0D0;
+    padding: 16px;
+    border-radius: 28px;
+    margin: 16px 0;
+    border-left: 6px solid #D2691E;
+    font-style: italic;
+    color: #2c3e2f;
+}
+
+.signature-story {
+    text-align: right;
+    font-style: italic;
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 2px dashed #FFB347;
+}
+
+.tecla {
+    display: inline-block;
+    background: #2c2c2c;
+    color: #FFD700;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin: 0 3px;
+    border: 1px solid #FFD700;
+    box-shadow: 0 2px 0 #5a3a1a;
+}
+
+.start-button {
+    display: inline-block;
+    background: #8B5A2B;
+    padding: 14px 35px;
+    border-radius: 60px;
+    color: white;
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    font-weight: bold;
+    box-shadow: 0 5px 0 #5a3a1a;
+    transition: 0.05s linear;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.start-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #5a3a1a;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    color: #B97F44;
+    cursor: pointer;
+    margin: 15px 0 0 18px;
+    text-decoration: underline;
+    touch-action: manipulation;
+}
+
+/* VITÓRIA */
+.win-container {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 100%);
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.win-card {
+    max-width: 600px;
+    width: 95%;
+    max-height: 90vh;
+    background: #FFF8E7;
+    border-radius: 48px;
+    overflow-y: auto;
+}
+
+.win-message {
+    padding: 20px;
+    text-align: center;
+}
+
+.win-message img {
+    max-width: 85%;
+    border-radius: 30px;
+    margin: 10px auto;
+    display: block;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border: 3px solid #FFD700;
+}
+
+.livro-caminhos {
+    background: #8B5A2B;
+    border-radius: 30px;
+    padding: 15px;
+    margin: 10px;
+    border: 3px solid #FFD700;
+}
+
+.book-pages {
+    background: #FFF8DC;
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+}
+
+.assinatura-nome {
+    font-size: clamp(1.2rem, 6vw, 1.8rem);
+    font-weight: bold;
+    color: #D2691E;
+    background: #FFEFC0;
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 50px;
+    margin: 10px 0;
+}
+
+.mensagem-van-gogh {
+    background: #FFF8E7;
+    border-radius: 20px;
+    padding: 15px;
+    margin-top: 15px;
+    text-align: left;
+    border-left: 5px solid #FFD700;
+    display: none;
+}
+
+.win-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+.win-btn {
+    padding: 10px 20px;
+    border-radius: 60px;
+    font-size: clamp(12px, 3.5vw, 0.9rem);
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-family: 'Georgia', cursive;
+    touch-action: manipulation;
+}
+
+.win-btn-mensagem {
+    background: #D2691E;
+    color: white;
+    box-shadow: 0 3px 0 #8B4513;
+}
+
+/* DERROTA */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(#1a0a0a, #000);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    z-index: 1100;
+    padding: 20px;
+}
+
+.overlay img {
+    max-width: 180px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.overlay button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    background: #f1c40f;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* ========== BOTÕES LATERAIS ========== */
+#controles {
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 1000;
+    padding: 0 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.btn {
+    pointer-events: auto;
+    width: min(85px, 22vw);
+    height: min(85px, 22vw);
+    border-radius: 50%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    border: 3px solid #FFD700;
+    font-weight: bold;
+    touch-action: manipulation;
+    transition: 0.02s linear;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.btn:active {
+    transform: scale(0.94);
+    background: rgba(0,0,0,0.95);
+    border-color: #FFA500;
+}
+
+.btn .btn-icon {
+    font-size: clamp(26px, 7vw, 38px);
+    line-height: 1;
+}
+
+.btn .btn-key {
+    font-size: clamp(13px, 4vw, 18px);
+    background: rgba(255,215,0,0.25);
+    padding: 2px 10px;
+    border-radius: 25px;
+    margin-top: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #FFD700;
+    text-align: center;
+}
+
+.btn .btn-label {
+    font-size: clamp(8px, 2.8vw, 11px);
+    margin-top: 3px;
+    color: #FFD700;
+}
+
+#abaixa {
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+#pula {
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+    .btn {
+        width: min(110px, 10vw);
+        height: min(110px, 10vw);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes brilho {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.4) drop-shadow(0 0 6px white); }
+    100% { filter: brightness(1); }
+}
+.corvo-branco { animation: brilho 0.5s ease-in-out infinite; }
+
+.dano { animation: dano 0.2s ease-in-out; }
+@keyframes dano {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(0.3) drop-shadow(0 0 8px red); }
+    100% { filter: brightness(1); }
+}
+
+body, html, #game-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 </style>
 </head>
-
 <body>
 
-<!-- 🔊 ÁUDIOS -->
-<div style="display:none;">
-    <audio id="musica-fundo" src="sons/musicadocorvo.mp3" loop></audio>
-    <audio id="som-win" src="sons/vitoria-vangogh.mp3"></audio>
-    <audio id="som-lose" src="sons/mortevangoh.mp3"></audio>
+<div id="game-container">
+    <div id="hud">
+        <div>⏱️ <span id="timer">3:00</span></div>
+        <div>❤️ <span id="vidas">7</span></div>
+        <div>🤍 <span id="corvosDesviados">0</span></div>
+    </div>
+
+    <div id="jogo">
+        <div id="cenario"></div>
+        <div id="heroi"></div>
+    </div>
+
+    <div id="controles">
+        <div class="btn" id="abaixa">
+            <div class="btn-icon">⬇️</div>
+            <div class="btn-key">A</div>
+            <div class="btn-label">ABAIXAR</div>
+        </div>
+        <div class="btn" id="pula">
+            <div class="btn-icon">⬆️</div>
+            <div class="btn-key">L</div>
+            <div class="btn-label">SALTAR</div>
+        </div>
+    </div>
+</div>
+
+<!-- TELAS -->
+<div id="introScreen" class="intro-container">
+    <div class="intro-card">
+        <div class="intro-welcome">
+            <div class="intro-title">🌾 VAN GOGH 🌾</div>
+            <div class="intro-question">✨ QUAL É O SEU NOME? ✨</div>
+            <input type="text" id="childName" class="name-input" placeholder="Digite seu nome..." maxlength="20" autocomplete="off">
+            <button class="enter-btn" id="goToStoryBtn">🌾 ENTRAR NO CAMPO 🌾</button>
+        </div>
+    </div>
+</div>
+
+<div id="storyScreen" class="story-container hidden">
+    <div class="story-card">
+        <button class="back-btn" id="backToIntroBtn">← Voltar</button>
+        <div class="story-text" id="storyContent"></div>
+        <div style="text-align:center; padding:10px 20px 25px;" id="startGameBtn">
+            <div class="start-button">🐦‍⬛ INICIAR JOGO 🐦‍⬛</div>
+        </div>
+    </div>
+</div>
+
+<div id="winScreen" class="win-container hidden">
+    <div class="win-card">
+        <div class="win-message">
+            <img src="https://i.imgur.com/HoIGGSV.png" alt="Vitória">
+            <p><strong>🌟 PARABÉNS! VOCÊ VENCEU OS CORVOS! 🌟</strong></p>
+            <p>Você desviou de todos os corvos e restaurou a paz no campo de trigo!</p>
+            <button class="win-btn win-btn-mensagem" id="btnMostrarMensagem">📖 LER MENSAGEM</button>
+        </div>
+        <div class="livro-caminhos">
+            <div class="book-pages">
+                <div class="book-title">📖 ASSINATURA NO LIVRO DOS CAMINHOS 📖</div>
+                <div class="assinatura-nome" id="assinaturaNome">---</div>
+                <div class="stamp-corvos">🐦‍⬛ 🌾 🎨 🐦‍⬛</div>
+                <div class="data-assinatura" id="dataAssinatura"></div>
+                <div id="mensagemVanGogh" class="mensagem-van-gogh">
+                    <p><strong>💛 Querido(a) <span id="msgNome"></span>,</strong></p>
+                    <p>Você dançou com os corvos sob o céu pintado por nós dois!</p>
+                    <div class="ass-mensagem">🎨 Vincent van Gogh</div>
+                </div>
+            </div>
+        </div>
+        <div class="win-buttons">
+            <button class="win-btn win-btn-voltar" id="btnVoltarJogo">🔄 JOGAR NOVAMENTE</button>
+            <button class="win-btn win-btn-sair" id="btnSair">🚪 SAIR</button>
+        </div>
+    </div>
+</div>
+
+<div id="loseOverlay" class="overlay hidden">
+    <img src="https://i.imgur.com/ThWOOzD.png" alt="Game Over">
+    <h2 id="loseMsg"></h2>
+    <button onclick="reiniciarCompleto()">🔄 TENTAR NOVAMENTE</button>
 </div>
 
 <script>
+function ativarFullscreenProtecao() {
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('keydown', (e) => {
+        const active = document.activeElement?.tagName?.toLowerCase();
+        if (active === 'input') return;
+        const key = e.key.toLowerCase();
+        if (key === 'f5' || (e.ctrlKey && key === 'r') || key === 'f12') e.preventDefault();
+    });
+    window.requestGameFullscreen = () => document.documentElement.requestFullscreen?.().catch(()=>{});
+}
+ativarFullscreenProtecao();
+function reiniciarCompleto() { location.reload(); }
 
-// ========= ÁUDIO CORRIGIDO =========
-const musica = document.getElementById("musica-fundo");
+function getStoryText(name) {
+    return `
+        <p><span class="highlight">🌟 Olá, ${name}!</span></p>
+        
+        <!-- TEXTO EXTRA SOBRE VAN GOGH - FONTE MAIOR -->
+        <div class="van-gogh-quote">
+            🎨 <strong>Vincent van Gogh sobre "Campo de Trigo":</strong><br>
+            "Eu pintei a obra Campo de Trigo em 1890, no final da vida.<br>
+            Utilizei pinceladas fortes e cores intensas para representar a energia da natureza.<br>
+            O céu dramático e o trigo ondulante transmitem emoções profundas, como inquietação e esperança.<br>
+            Essa pintura mostra como eu transformava paisagens simples em expressões de sentimento."
+        </div>
+        
+        <p><strong>🎮 CONTROLES:</strong><br>
+        • <span class="tecla">A</span> (botão ESQUERDO) → ABAIXAR ⬇️<br>
+        • <span class="tecla">L</span> (botão DIREITO) → SALTAR ⬆️ <strong>(segure para ficar mais tempo no ar!)</strong></p>
+        <p><strong>🐦‍⬛ REGRAS:</strong><br>
+        • Corvo Preto → perde 1 vida<br>
+        • 🤍 CORVO BRANCO → ganha +2 vidas<br>
+        • Corvos BAIXOS (rente ao chão): PULE e SEGURE o botão!<br>
+        • Corvos ALTOS (no alto): ABAIXE-SE!<br>
+        • ⏱️ Sobreviva 3 minutos para vencer!</p>
+        <p><strong>💡 DICA IMPORTANTE:</strong> Segure o botão de SALTAR para prolongar o tempo no ar e desviar dos corvos baixos!</p>
+        <div class="signature-story">💛 Van Gogh</div>
+    `;
+}
 
-function tocar(id, vol = 0.4) {
-    const audio = document.getElementById(id);
-    if (audio) {
-        audio.currentTime = 0;
-        audio.volume = vol;
-        audio.play().catch(()=>{});
+// ELEMENTOS
+const introScreen = document.getElementById('introScreen');
+const storyScreen = document.getElementById('storyScreen');
+const childNameInput = document.getElementById('childName');
+const goToStoryBtn = document.getElementById('goToStoryBtn');
+const backToIntroBtn = document.getElementById('backToIntroBtn');
+const startGameBtn = document.getElementById('startGameBtn');
+const storyContent = document.getElementById('storyContent');
+const winScreenDiv = document.getElementById('winScreen');
+const loseOverlay = document.getElementById('loseOverlay');
+const assinaturaNome = document.getElementById('assinaturaNome');
+const dataAssinatura = document.getElementById('dataAssinatura');
+const loseMsg = document.getElementById('loseMsg');
+const btnMostrarMensagem = document.getElementById('btnMostrarMensagem');
+const mensagemVanGogh = document.getElementById('mensagemVanGogh');
+const msgNomeSpan = document.getElementById('msgNome');
+
+let globalPlayerName = "";
+let gameEnded = false;
+let ativo = false;
+
+// JOGO
+let vidas = 7;
+let spawnTimeoutId = null;
+let animationId = null;
+let timerInterval = null;
+let tempoRestante = 180;
+let corvosDesviados = 0;
+let ultimoMultiploBranco = 0;
+let estaSaltando = false;
+let alturaOriginal = 15;
+let temporizadorSalto = null;
+let segurandoSalto = false;
+
+const heroi = document.getElementById('heroi');
+const cenario = document.getElementById('cenario');
+
+// NOVAS IMAGENS DOS CORVOS
+const corvoPretoImg = "https://i.imgur.com/ZCGFEjz.png";
+const corvoBrancoImg = "https://i.imgur.com/EZaSAB1.png";
+
+// ========== SONS (ARQUIVOS LOCAIS) ==========
+const musica = new Audio("sons/musicadocorvo.mp3");
+musica.loop = true;
+
+const somStart = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/vangogh%20come%C3%A7o.mp3";
+
+const somWin = "sons/vitoria-vangogh.mp3";
+const somLose = "sons/mortevangoh.mp3";
+
+const somVida = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelaazul.mp3";
+const somDano = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/estrelavermelha.mp3";
+const somPulo = "https://raw.githubusercontent.com/lenilsonxavier-dev/pequenosartistaspwa/main/jogos%20assets/pulo.mp3";
+
+const sons = {};
+
+function tocar(url, vol = 0.4) {
+    try {
+        if (!sons[url]) {
+            sons[url] = new Audio(url);
+        }
+
+        let a = sons[url];
+        a.currentTime = 0;
+        a.volume = vol;
+        a.play().catch(e => console.warn("Erro ao tocar som:", e));
+    } catch(e) {}
+}
+
+function atualizarVidas() { document.getElementById('vidas').innerText = vidas; }
+function atualizarCorvosDesviados() { document.getElementById('corvosDesviados').innerText = corvosDesviados; }
+function atualizarTimer() {
+    let m = Math.floor(tempoRestante / 60);
+    let s = tempoRestante % 60;
+    document.getElementById('timer').innerText = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function adicionarVidas(q) {
+    if (!ativo) return;
+    vidas = Math.min(vidas + q, 20);
+    atualizarVidas();
+    document.getElementById('vidas').style.transform = 'scale(1.2)';
+    setTimeout(() => document.getElementById('vidas').style.transform = 'scale(1)', 200);
+}
+
+function aplicarDano() {
+    if (!ativo) return;
+    vidas--;
+    atualizarVidas();
+    heroi.classList.add('dano');
+    setTimeout(() => heroi.classList.remove('dano'), 250);
+    tocar(somDano, 0.5);
+    if (vidas <= 0) gameOver(false);
+}
+
+// SALTO PROLONGADO
+function iniciarSalto() {
+    if (!ativo || estaSaltando) return;
+    estaSaltando = true;
+    segurandoSalto = true;
+    tocar(somPulo, 0.4);
+    
+    heroi.style.transition = "bottom 0.1s cubic-bezier(0.2, 0.95, 0.3, 1.1)";
+    heroi.style.bottom = "210px";
+    
+    function manterNoAr() {
+        if (segurandoSalto && ativo && estaSaltando) {
+            heroi.style.bottom = "210px";
+            temporizadorSalto = setTimeout(manterNoAr, 50);
+        }
+    }
+    temporizadorSalto = setTimeout(manterNoAr, 50);
+}
+
+function finalizarSalto() {
+    segurandoSalto = false;
+    if (temporizadorSalto) {
+        clearTimeout(temporizadorSalto);
+        temporizadorSalto = null;
+    }
+    if (estaSaltando && ativo) {
+        heroi.style.transition = "bottom 0.2s cubic-bezier(0.4, 0.1, 0.3, 1)";
+        heroi.style.bottom = alturaOriginal + "px";
+        setTimeout(() => { 
+            estaSaltando = false;
+            heroi.style.transition = "bottom 0.12s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+        }, 220);
     }
 }
 
-// ========= RESTANTE DO SEU JOGO =========
-// (tudo igual, só trocamos chamadas de som)
+function acaoAbaixar() { 
+    if (!ativo || estaSaltando) return; 
+    heroi.style.transition = "bottom 0.04s linear";
+    heroi.style.aspectRatio = "110 / 90";
+    heroi.style.bottom = "5px";
+}
+function levantar() { 
+    heroi.style.aspectRatio = "110 / 200";
+    heroi.style.bottom = alturaOriginal + "px";
+}
+
+function getAlturaCorvo() {
+    if (Math.random() < 0.5) {
+        return 5 + Math.random() * 38;   // baixo
+    } else {
+        return 120 + Math.random() * 55; // alto
+    }
+}
+
+function spawn() {
+    if (!ativo) return;
+    
+    let tipo = "preto";
+    let imgUrl = corvoPretoImg;
+    let podeBranco = (corvosDesviados > 0 && corvosDesviados % 20 === 0 && ultimoMultiploBranco !== corvosDesviados);
+    
+    if (podeBranco && Math.random() < 0.5) {
+        tipo = "branco";
+        imgUrl = corvoBrancoImg;
+        ultimoMultiploBranco = corvosDesviados;
+    }
+    
+    let corvoDiv = document.createElement('div');
+    corvoDiv.className = "corvo";
+    if (tipo === "branco") corvoDiv.classList.add("corvo-branco");
+    corvoDiv.style.backgroundImage = `url('${imgUrl}')`;
+    corvoDiv.style.right = "-80px";
+    corvoDiv.style.bottom = getAlturaCorvo() + "px";
+    
+    document.getElementById('jogo').appendChild(corvoDiv);
+    
+    let x = -80;
+    let colidiu = false;
+    let velocidade = 5.2;
+    
+    let movimento = setInterval(() => {
+        if (!ativo || colidiu) {
+            if (!colidiu && corvoDiv.parentNode) corvoDiv.remove();
+            clearInterval(movimento);
+            return;
+        }
+        x += velocidade;
+        corvoDiv.style.right = x + "px";
+        
+        let h = heroi.getBoundingClientRect();
+        let cr = corvoDiv.getBoundingClientRect();
+        
+        let colidiuX = (h.right > cr.left + 4 && h.left < cr.right - 4);
+        let colidiuY = (h.bottom > cr.top + 5 && h.top < cr.bottom - 5);
+        
+        if (colidiuX && colidiuY) {
+            colidiu = true;
+            if (tipo === "branco") {
+                adicionarVidas(2);
+                tocar(somVida, 0.5);
+                const msg = document.createElement('div');
+                msg.textContent = "+2 ❤️";
+                msg.style.position = "fixed";
+                msg.style.left = cr.left + "px";
+                msg.style.top = cr.top - 20 + "px";
+                msg.style.color = "#FFD700";
+                msg.style.fontSize = "22px";
+                msg.style.fontWeight = "bold";
+                msg.style.textShadow = "2px 2px 4px black";
+                msg.style.zIndex = "2000";
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 600);
+            } else {
+                aplicarDano();
+            }
+            corvoDiv.remove();
+            clearInterval(movimento);
+        }
+        
+        if (x > window.innerWidth + 100 && !colidiu) {
+            corvosDesviados++;
+            atualizarCorvosDesviados();
+            corvoDiv.remove();
+            clearInterval(movimento);
+        }
+    }, 20);
+    
+    spawnTimeoutId = setTimeout(spawn, 1250);
+}
+
+function startSpawning() { if (spawnTimeoutId) clearTimeout(spawnTimeoutId); spawn(); }
+
+// NÃO HÁ MAIS MOVIMENTO DE CENÁRIO - CENÁRIO ESTÁTICO E CONTÍNUO
+// A função loop foi removida. Nada para animar além dos corvos.
+
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (!ativo) return;
+        if (tempoRestante <= 0) gameOver(true);
+        else { tempoRestante--; atualizarTimer(); }
+    }, 1000);
+}
 
 function startGame() {
+    window.requestGameFullscreen?.();
+    storyScreen.classList.add('hidden');
+    introScreen.classList.add('hidden');
+    winScreenDiv.classList.add('hidden');
+    loseOverlay.classList.add('hidden');
+    
+    gameEnded = false;
+    ativo = true;
+    vidas = 7;
+    corvosDesviados = 0;
+    tempoRestante = 180;
+    ultimoMultiploBranco = 0;
+    estaSaltando = false;
+    segurandoSalto = false;
+    if (temporizadorSalto) clearTimeout(temporizadorSalto);
+    
+    heroi.style.bottom = "15px";
+    heroi.style.left = "50%";
+    heroi.style.transform = "translateX(-50%)";
+    heroi.style.aspectRatio = "110 / 200";
+    heroi.style.transition = "bottom 0.12s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+    
+    atualizarVidas();
+    atualizarCorvosDesviados();
+    atualizarTimer();
+    
+    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
+    if (animationId) cancelAnimationFrame(animationId);
+    if (timerInterval) clearInterval(timerInterval);
+    document.querySelectorAll('.corvo').forEach(c => c.remove());
+    
+    tocar(somStart);
     musica.currentTime = 0;
-    musica.play().catch(()=>{});
+    musica.play().catch(e => console.warn("Música não pôde ser reproduzida:", e));
+    
+    // Não há mais animação de cenário
+    startSpawning();
+    startTimer();
 }
 
 function gameOver(win) {
+    if (gameEnded) return;
+    gameEnded = true;
+    ativo = false;
+    if (spawnTimeoutId) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
+    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    if (temporizadorSalto) { clearTimeout(temporizadorSalto); temporizadorSalto = null; }
     musica.pause();
-
+    document.querySelectorAll('.corvo').forEach(c => c.remove());
+    
     if (win) {
-        tocar("som-win");
+        assinaturaNome.textContent = globalPlayerName;
+        msgNomeSpan.textContent = globalPlayerName;
+        const now = new Date();
+        dataAssinatura.innerHTML = `✨ ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} ✨`;
+        mensagemVanGogh.style.display = 'none';
+        winScreenDiv.classList.remove('hidden');
+        tocar(somWin);
     } else {
-        tocar("som-lose");
+        loseMsg.innerHTML = `💀 ${globalPlayerName}, os corvos venceram... 💀`;
+        loseOverlay.classList.remove('hidden');
+        tocar(somLose);
     }
 }
 
-</script>
+// EVENTOS
+document.getElementById("abaixa").addEventListener("pointerdown", (e) => { e.preventDefault(); acaoAbaixar(); });
+document.getElementById("abaixa").addEventListener("pointerup", (e) => { e.preventDefault(); levantar(); });
+document.getElementById("abaixa").addEventListener("pointerleave", () => levantar());
+document.getElementById("pula").addEventListener("pointerdown", (e) => { e.preventDefault(); iniciarSalto(); });
+document.getElementById("pula").addEventListener("pointerup", (e) => { e.preventDefault(); finalizarSalto(); });
+document.getElementById("pula").addEventListener("pointerleave", () => finalizarSalto());
 
+window.onkeydown = (e) => {
+    const active = document.activeElement?.tagName?.toLowerCase();
+    if (active === 'input') return;
+    const key = e.key.toLowerCase();
+    if (key === "a") { e.preventDefault(); acaoAbaixar(); }
+    if (key === "l") { e.preventDefault(); iniciarSalto(); }
+};
+window.onkeyup = (e) => {
+    const active = document.activeElement?.tagName?.toLowerCase();
+    if (active === 'input') return;
+    const key = e.key.toLowerCase();
+    if (key === "a") { e.preventDefault(); levantar(); }
+    if (key === "l") { e.preventDefault(); finalizarSalto(); }
+};
+
+// FLUXO
+function showStory() {
+    let name = childNameInput.value.trim();
+    if (name === "") name = "Artista";
+    globalPlayerName = name;
+    storyContent.innerHTML = getStoryText(name);
+    introScreen.classList.add('hidden');
+    storyScreen.classList.remove('hidden');
+}
+function backToIntro() { storyScreen.classList.add('hidden'); introScreen.classList.remove('hidden'); }
+
+btnMostrarMensagem.addEventListener('click', () => {
+    if (mensagemVanGogh.style.display === 'none' || !mensagemVanGogh.style.display) {
+        mensagemVanGogh.style.display = 'block';
+        btnMostrarMensagem.textContent = '🔒 FECHAR';
+    } else {
+        mensagemVanGogh.style.display = 'none';
+        btnMostrarMensagem.textContent = '📖 LER MENSAGEM';
+    }
+});
+document.getElementById('btnVoltarJogo').addEventListener('click', () => { winScreenDiv.classList.add('hidden'); startGame(); });
+document.getElementById('btnSair').addEventListener('click', () => location.reload());
+goToStoryBtn.addEventListener('click', showStory);
+backToIntroBtn.addEventListener('click', backToIntro);
+startGameBtn.addEventListener('click', startGame);
+childNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); showStory(); } });
+</script>
 </body>
 </html>
