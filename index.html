@@ -93,12 +93,12 @@
     button:hover { background: #ff9cbb; }
     .menu button { width: 80%; max-width: 320px; font-size: 18px; }
     .menu-color { color: #001858; font-weight: bold; border: 2px solid #ffffff; }
+    /* Cores dos botões */
+    .menu-bordo { background: #800000; color: white; }
     .menu-amarelo { background: #ffde59; }
     .menu-azul { background: #72ddf7; }
-    .menu-roxo { background: #b28dff; }
     .menu-laranja { background: #ffb347; }
     .menu-verde { background: #7ee081; }
-    .menu-lilas { background: #e0aaff; }
     .menu-color:hover { filter: brightness(0.96); }
     #btnSomMuseu {
       background: #72ddf7;
@@ -108,7 +108,7 @@
     }
     #btnSomMuseu:hover { background: #55cde9; }
 
-    /* ========== CARDS E GALERIA ========== */
+    /* ========== CARDS E GALERIA (removida) ========== */
     .card {
       background: #fff; border-radius: 20px; padding: 22px; margin: 12px; 
       text-align: left; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -163,46 +163,6 @@
     }
     .delete-btn:hover { background: white; transform: scale(1.1); }
 
-    /* ========== FERRAMENTA DE DESENHO ========== */
-    .colorir-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;
-      margin: 20px 0; max-width: 600px; margin-left: auto; margin-right: auto;
-    }
-    .colorir-thumb {
-      border: 3px solid #001858; border-radius: 12px; overflow: hidden; cursor: pointer;
-      transition: 0.2s;
-    }
-    .colorir-thumb:hover { transform: scale(1.05); border-color: #f582ae; }
-    .colorir-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .canvas-wrapper { display: flex; justify-content: center; margin: 20px 0; overflow: auto; max-width: 100%; }
-    .canvas {
-      border: 4px solid #001858; border-radius: 20px; background: white;
-      touch-action: none; max-width: 100%; height: auto;
-    }
-    .colorir-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 15px 0; }
-    .colorir-tools button { background: #8bd3dd; padding: 10px 20px; }
-    .selected-tool { background: #f582ae !important; color: white; }
-    .palette {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 10px 0;
-    }
-    .palette button {
-      width: 40px; height: 40px; border-radius: 50%; border: 2px solid #001858;
-      cursor: pointer;
-    }
-    .size-control {
-      display: flex; align-items: center; gap: 12px; background: #e8f0fe; border-radius: 50px;
-      padding: 8px 20px; border: 3px solid white; box-shadow: 0 4px 0 #8fbbaf; margin: 10px;
-    }
-    .current-color-indicator {
-      display: flex; align-items: center; gap: 10px; background: white; border-radius: 50px;
-      padding: 5px 20px 5px 10px; border: 3px solid #f0b27a;
-    }
-    .color-circle { width: 45px; height: 45px; border-radius: 50%; border: 3px solid white; }
-    #seletorCor {
-      width: 60px; height: 60px; border-radius: 50%; border: 4px solid white; cursor: pointer;
-      background: transparent;
-    }
-    .extra-tools { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0 0; }
     /* ========== DESAFIOS ========== */
     .desafios-container { 
       max-width: 800px; 
@@ -254,114 +214,41 @@
     .desafios-grid::-webkit-scrollbar { width: 6px; }
     .desafios-grid::-webkit-scrollbar-thumb { background: #8bd3dd; border-radius: 10px; }
      
- .botao-app {
-  display: block;
-  width: 90%;
-  margin: 10px auto;
-  padding: 15px;
-
-  font-size: 18px;
-  font-weight: bold;
-
-  color: #0b2c5a;
-
-  border: none;
-  border-radius: 25px;
-
-  background: #f4d35e;
-  box-shadow: 0 6px 0 #c9a73c;
-
-  transition: 0.2s;
-}
-
-.botao-app:active {
-  transform: translateY(3px);
-  box-shadow: 0 3px 0 rgba(0,0,0,0.3);
-}
-
-.botao-jogos {
-  background: #0b3d91 !important;
-  color: white !important;
-  box-shadow: 0 6px 0 #072a66 !important;
-}
-.botao-voltar-jogo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 10px 18px;
-  font-size: 16px;
-  font-weight: bold;
-
-  color: white;
-  background: #3b82c4;
-
-  border: none;
-  border-radius: 20px;
-
-  box-shadow: 0 5px 0 #2a5d8f;
-}
-
-    /* ========== PINCEL MÁGICO ========== */
-    .pincel-container {
-      max-width: 800px; margin: 0 auto; padding: 20px; background: #fff0e0;
-      border-radius: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    .botao-app {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #0b2c5a;
+      border: none;
+      border-radius: 25px;
+      background: #f4d35e;
+      box-shadow: 0 6px 0 #c9a73c;
+      transition: 0.2s;
     }
-    .pincel-header {
-      display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
-      background: #f8d5c4; padding: 15px 25px; border-radius: 60px;
+    .botao-app:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.3);
     }
-    .pincel-avatar { font-size: 70px; animation: tremer 2s infinite ease-in-out; }
-    @keyframes tremer {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      50% { transform: rotate(-5deg); }
-      100% { transform: rotate(0deg); }
+    .botao-jogos {
+      background: #0b3d91 !important;
+      color: white !important;
+      box-shadow: 0 6px 0 #072a66 !important;
     }
-    .pincel-fala {
-      background: white; border-radius: 30px 30px 30px 5px; padding: 15px 20px;
-      font-size: 1.2rem; color: #172c66; text-align: left; flex: 1;
-      border: 2px solid #f582ae; position: relative;
-    }
-    .pincel-fala:before {
-      content: ''; position: absolute; left: -15px; top: 20px;
-      border-top: 15px solid transparent; border-bottom: 15px solid transparent;
-      border-right: 15px solid #f582ae;
-    }
-    .perguntas-sugeridas {
-      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;
-    }
-    .perguntas-sugeridas button {
-      background: #8bd3dd; font-size: 14px; padding: 8px 16px; border-radius: 40px;
-    }
-    .chat-area {
-      background: #ffe9d6; border-radius: 30px; padding: 15px; max-height: 300px;
-      overflow-y: auto; margin: 20px 0; border: 2px solid #f582ae; text-align: left;
-    }
-    .mensagem { margin: 10px 0; display: flex; align-items: flex-start; gap: 10px; }
-    .mensagem.pergunta { justify-content: flex-end; }
-    .mensagem.pergunta span {
-      background: #f582ae; color: white; padding: 10px 15px;
-      border-radius: 20px 20px 5px 20px; max-width: 70%;
-    }
-    .mensagem.resposta { justify-content: flex-start; align-items: center; }
-    .mensagem.resposta span {
-      background: white; padding: 10px 15px; border-radius: 20px 20px 20px 5px;
-      border: 2px solid #8bd3dd; max-width: 70%;
-    }
-    .botao-audio {
-      background: none; border: none; font-size: 20px; cursor: pointer; margin-left: 5px;
-      color: #172c66; transition: 0.2s;
-    }
-    .input-area { display: flex; gap: 10px; margin-top: 15px; }
-    .input-area input {
-      flex: 1; padding: 15px; border: 3px solid #8bd3dd; border-radius: 50px;
-      font-size: 16px; outline: none;
-    }
-    .input-area button { background: #f582ae; border-radius: 50px; padding: 15px 25px; font-size: 18px; }
-    .modo-pais {
-      background: #f8d5c4; border-radius: 30px; padding: 15px; margin-top: 20px;
-      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    .botao-voltar-jogo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: #3b82c4;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 5px 0 #2a5d8f;
     }
 
     /* ========== MUSEU ========== */
@@ -373,8 +260,6 @@
     .iframe-container { position: relative; width: 100%; height: 70vh; border-radius: 40px; overflow: hidden; }
     .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .tour-guide { background: #fee5b1; margin-top: 15px; padding: 15px 20px; border-radius: 40px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; border: 3px solid white; color: #154256; font-weight: bold; font-size: 1.3rem; justify-content: center; }
-
-
 
     /* ========== BOTÕES VOLTAR AO MENU ========== */
     .btn-voltar-menu {
@@ -399,7 +284,7 @@
     .btn-voltar-verde { background: #56b870; box-shadow: 0 6px 0 #3e8652; }
     .btn-voltar-lilas { background: #b887e8; box-shadow: 0 6px 0 #7d57a8; }
 
-    /* ========== JOGO NOITE ESTRELADA ========== */
+    /* ========== JOGOS (iframe) ========== */
     .pa-vg-game-container {
       max-width: 1320px;
       margin: 0 auto;
@@ -409,75 +294,27 @@
       padding: 14px;
       box-shadow: 0 10px 28px rgba(0,0,0,.28);
     }
-    .pa-vg-canvas {
-      width: 100%;
-      height: auto;
-      display: block;
-      border: 3px solid #fff;
-      border-radius: 16px;
-      background: #0b1a32;
-      touch-action: none;
-    }
-    .pa-vg-ui-panel { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; }
-    .pa-vg-phase-badge, .pa-vg-score-badge {
-      background: #ffde59;
-      color: #001858;
-      border: 2px solid #fff;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-weight: bold;
-    }
-
-
-    .pa-vg-controls { display: flex; justify-content: flex-end; margin-top: 10px; }
-    .pa-vg-btn.pa-vg-restart {
-      background: #72ddf7;
-      color: #001858;
-      border: 2px solid #fff;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .pa-vg-mobile-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-    .pa-vg-dir-btn { min-width: 110px; padding: 12px 18px; border-radius: 999px; border: 2px solid #fff; background: #72ddf7; color: #001858; font-weight: bold; font-size: 1.1rem; }
-    
-
-    /* ========== LABORATÓRIO DAS CORES ========== */
+    /* ========== LABORATÓRIO DAS CORES (não utilizado no momento) ========== */
     #laboratorioCores .game-container { max-width: 1180px; margin: 0 auto; background: #e8e1cf; border-radius: 26px; padding: 22px; color: #1b3551; }
-    #laboratorioCores h1 { text-align: center; margin: 0; color: #3d8f78; letter-spacing: .5px; }
-    #laboratorioCores .sub { display: inline-block; background: #dfd4bc; border-radius: 999px; padding: 7px 18px; margin-top: 8px; font-weight: bold; color: #1e1e1e; }
-    #laboratorioCores .mix-area { margin: 18px 0 14px; background: #e2dccb; border-radius: 999px; padding: 24px; display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; }
-    #laboratorioCores .color-swatch { width: 110px; height: 110px; border-radius: 50%; border: 5px solid #2f2f2f; box-shadow: 0 6px 12px rgba(0,0,0,.14); }
-    #laboratorioCores .brush { font-size: 2.2rem; font-weight: 700; transition: transform .2s ease; }
-    #laboratorioCores .result-area { background: linear-gradient(90deg,#292929,#333,#292929); border-radius: 999px; padding: 14px 18px; display: flex; align-items: center; justify-content: center; gap: 18px; margin: 8px 0 16px; }
-    #laboratorioCores .result-swatch { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ffd700; }
-    #laboratorioCores .result-text { color: #fff; font-size: 2rem; font-weight: 700; background: #161616; border-radius: 999px; padding: 8px 20px; }
-    #laboratorioCores .palette-title { text-align: center; font-size: 2rem; font-weight: 700; color: #214163; margin: 10px 0; }
-    #laboratorioCores .palette { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; }
-    #laboratorioCores .color-btn { width: 78px; height: 78px; border-radius: 50%; border: 3px solid #fff; cursor: pointer; box-shadow: 0 8px 12px rgba(0,0,0,.2); }
-    #laboratorioCores .color-btn.selected { border-color: #111; transform: scale(1.08); }
-    #laboratorioCores .info-panel { background: #e1d7be; border-radius: 26px; padding: 14px; display: grid; grid-template-columns: repeat(2,minmax(220px,1fr)); gap: 12px; }
-    #laboratorioCores .complement-box, #laboratorioCores .contrast-box { background: #e9e9e9; border-radius: 22px; padding: 12px; text-align: center; font-size: 1.35rem; font-weight: 700; color: #000; }
-    #laboratorioCores .complement-color { display: inline-block; width: 42px; height: 42px; border-radius: 50%; border: 1px solid #555; vertical-align: middle; margin-left: 8px; }
-    #laboratorioCores .reset-btn { margin-top: 16px; background: #f4b24b; border: none; border-radius: 999px; padding: 14px 26px; font-size: 1.6rem; font-weight: 700; cursor: pointer; box-shadow: 0 6px 10px rgba(0,0,0,.2); }
-    #laboratorioCores footer { text-align: center; margin-top: 14px; font-size: 1.05rem; color: #2d4a69; }
-    @media (max-width: 900px) {
-      #laboratorioCores .info-panel { grid-template-columns: 1fr; }
-      #laboratorioCores .result-text { font-size: 1.45rem; }
-      #laboratorioCores .palette-title { font-size: 1.5rem; }
+
+    /* ========== NOVA TELA DE WEBVIEW ========== */
+    #webviewScreen {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+      background: #001858;
+      padding: 0;
+      margin: 0;
     }
-
-
-    #pincelIA .perguntas-sugeridas button,
-    #pincelIA .input-area button,
-    #pincelIA .modo-pais button {
-      background: #b887e8;
-      color: #fff;
-      border: 2px solid #efd9ff;
-      box-shadow: 0 5px 0 #7d57a8;
-      border-radius: 999px;
-      font-weight: 700;
+    #webviewScreen .btn-voltar-menu {
+      margin: 15px;
+      align-self: flex-start;
+    }
+    #webviewFrame {
+      width: 100%;
+      flex-grow: 1;
+      border: none;
+      background: white;
     }
 
     /* ========== MEDIA QUERY ========== */
@@ -533,7 +370,6 @@ font-family:'Comic Sans MS';
 <script>
 function entrar() {
   var s = document.getElementById("senha").value;
-
   if (s === "246") {
     document.getElementById("login").style.display = "none";
   } else {
@@ -557,59 +393,15 @@ function entrar() {
 <!-- ========== MENU PRINCIPAL ========== -->
 <div id="home" class="screen menu">
   <h1>🎨 Pequenos Artistas do Quirino</h1>
-  <button class="menu-color menu-amarelo" onclick="show('desenho')">🖍 Desenho Livre / Colorir</button>
+  <button class="menu-color menu-bordo" onclick="abrirWebView('candinhoDesenhista')">🖍 Candinho Desenhista</button>
+  <button class="menu-color menu-amarelo" onclick="abrirWebView('candinho2')">🎨 Candinho 2.0</button>
   <button class="menu-color menu-azul" onclick="show('museu')">🏛 Museu Virtual</button>
-  <button class="menu-color menu-roxo" onclick="show('galeria')">🏆 Galeria</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
   <button class="botao-app" onclick="abrirCentralJogos()">🎮 Central de Jogos</button>
-  <button class="menu-color menu-lilas" onclick="show('pincelIA'); iniciarPincel()">🖌 Pincel Mágico</button>
   <button class="btn-sair" onclick="fecharApp()">
     <i class="fas fa-times-circle"></i> Sair do Ateliê
   </button>
-</div>
-
-<!-- ========== DESENHO ========== -->
-<div id="desenho" class="screen">
-  <h2>🖍 Desenho Livre & Colorir</h2>
-  <p style="font-size:1.8rem; margin:0 0 20px;">✨ Escolha um modelo ou tela livre ✨</p>
-  <div class="colorir-grid" id="listaDesenhos"></div>
-  <div class="canvas-wrapper">
-    <canvas id="canvasDesenho" width="520" height="520" class="canvas" style="display:none;"></canvas>
-  </div>
-  <div id="ferramentasDesenho" style="display:none;">
-    <div style="background:rgba(255,255,240,0.7); border-radius:90px; padding:20px; margin:15px 0; border:3px solid white;">
-      <div class="colorir-tools">
-        <button id="btnPincel" class="selected-tool">🖌️ Pincel</button>
-        <button id="btnLapis">✏️ Lápis</button>
-        <button id="btnSpray">💨 Spray</button>
-        <button id="btnBalde">🪣 Balde</button>
-        <button id="btnBorrachaP">🧽 Peq</button>
-        <button id="btnBorrachaG">🧼 Grande</button>
-      </div>
-      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px; margin: 15px 0;">
-        <div class="size-control">
-          <label>🔘 Tam.:</label>
-          <input type="range" id="tamanhoFerramenta" min="1" max="50" value="8" step="1">
-          <span id="tamanhoValor" class="size-value">8</span>
-        </div>
-        <div class="current-color-indicator">
-          <span style="font-size:1.4rem;">Cor:</span>
-          <div id="corAtualCircle" class="color-circle" style="background:#ff4d4d;"></div>
-          <input type="color" id="seletorCor" value="#ff4d4d">
-        </div>
-      </div>
-      <div class="palette" id="paletaCores"></div>
-      <div class="extra-tools">
-        <button id="zoomIn">🔍 +</button>
-        <button id="zoomOut">🔍 -</button>
-        <button id="limparBtn">🧽 Limpar tudo</button>
-        <button id="salvarBtn">💾 Salvar na Galeria</button>
-        <button id="voltarBtn">⬅ Outro desenho</button>
-      </div>
-    </div>
-  </div>
-  <button class="btn-voltar-menu btn-voltar-amarelo" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
 </div>
 
 <!-- ========== MUSEU ========== -->
@@ -634,17 +426,6 @@ function entrar() {
       </div>
     </div>
   </div>
-</div>
-
-<!-- ========== GALERIA ========== -->
-<div id="galeria" class="screen">
-  <h2>🏆 Galeria dos Artistas</h2>
-  <div class="gallery-controls">
-    <button onclick="loadGallery()">🔄 Atualizar</button>
-    <button class="clear-gallery-btn" onclick="limparGaleria()">🗑️ Limpar Galeria</button>
-  </div>
-  <div id="gallery" class="gallery"></div>
-  <button class="btn-voltar-menu btn-voltar-roxo" onclick="show('home')"><span class="ico">⬅️</span> Voltar</button>
 </div>
 
 <!-- ========== MURAL ========== -->
@@ -683,53 +464,23 @@ function entrar() {
   <div id="desafiosGrid" class="desafios-grid"></div>
 </div>
 
-
-
+<!-- ========== CENTRAL DE JOGOS ========== -->
 <div id="jogosOnline" class="screen">
   <h2>🎮 Central de Jogos</h2>
-
   <div id="listaJogosOnline"></div>
-
-  <button class="botao-app botao-jogos" onclick="show('home')">
-  ⬅ Voltar
-</button>
+  <button class="botao-app botao-jogos" onclick="show('home')">⬅ Voltar</button>
 </div>
 <div id="telaJogo" class="screen">
-  <button class="botao-voltar-jogo" onclick="fecharJogo()">
-  ⬅ Voltar
-</button>
+  <button class="botao-voltar-jogo" onclick="fecharJogo()">⬅ Voltar</button>
   <iframe id="frameJogo" style="width:100%; height:90vh; border:none;"></iframe>
 </div>
 
-<!-- ========== PINCEL MÁGICO ========== -->
-<div id="pincelIA" class="screen">
-  <h2>🖌 Pincel Mágico</h2>
-  <div class="pincel-container">
-    <div class="pincel-header">
-      <div class="pincel-avatar">🖌️</div>
-      <div class="pincel-fala" id="pincelFala">
-        Olá! Eu sou o Pincel Mágico.
-      </div>
-    </div>
-    <div class="perguntas-sugeridas">
-      <button onclick="fazerPergunta('Quem foi Leonardo da Vinci?')">Leonardo</button>
-      <button onclick="fazerPergunta('Quem foi Van Gogh?')">Van Gogh</button>
-      <button onclick="fazerPergunta('Quem foi Tarsila?')">Tarsila</button>
-      <button onclick="fazerPergunta('Me conte uma curiosidade')">🤔 Curiosidade</button>
-      <button onclick="fazerPergunta('Estou feliz')">😊 Feliz</button>
-      <button onclick="fazerPergunta('Estou triste')">😢 Triste</button>
-    </div>
-    <div class="chat-area" id="chatArea"></div>
-    <div class="input-area">
-      <input type="text" id="perguntaInput" placeholder="Digite sua pergunta...">
-      <button onclick="enviarPergunta()">Enviar</button>
-    </div>
-    <div class="modo-pais">
-      <button onclick="limparHistorico()">🧹 Limpar histórico</button>
-      <button onclick="bloquearPalavra()">🚫 Bloquear palavra</button>
-    </div>
+<!-- ========== TELA WEBVIEW (PARA OS CANDINHOS) ========== -->
+<div id="webviewScreen" class="screen">
+  <div style="display: flex; justify-content: flex-start; padding: 10px;">
+    <button class="btn-voltar-menu btn-voltar-amarelo" onclick="fecharWebView()"><span class="ico">⬅️</span> Voltar ao Menu</button>
   </div>
-  <button class="btn-voltar-menu btn-voltar-lilas" onclick="show('home')" style="margin-top:20px;"><span class="ico">⬅️</span> Voltar</button>
+  <iframe id="webviewFrame" style="width: 100%; height: calc(100vh - 80px); border: none;"></iframe>
 </div>
 
 <script>
@@ -739,17 +490,11 @@ let audioMuseu = null;
 
 function tocarAudio(nomeArquivo) {
   if (!nomeArquivo) return;
-
-  // 🔇 Para o áudio anterior
   if (audioAtual) {
     audioAtual.pause();
     audioAtual.currentTime = 0;
   }
-
-  // 🎵 Caminho do áudio
   audioAtual = new Audio('sons/' + nomeArquivo + '.mp3');
-
-  // ▶️ Toca o áudio
   audioAtual.play().catch(e => console.log("Erro ao tocar áudio:", e));
 }
 
@@ -768,7 +513,6 @@ function alternarSomMuseu() {
     audioMuseu.addEventListener('pause', atualizarBotaoSomMuseu);
     audioMuseu.addEventListener('play', atualizarBotaoSomMuseu);
   }
-
   if (audioMuseu.paused) {
     audioMuseu.play().catch(e => console.log("Erro ao tocar som do museu:", e));
   } else {
@@ -784,7 +528,6 @@ function pararSomMuseu() {
   atualizarBotaoSomMuseu();
 }
 
-// ========== FUNÇÃO ÚNICA DE NAVEGAÇÃO ==========
 function show(id) {
   if (id !== 'museu') pararSomMuseu();
   const screens = document.querySelectorAll('.screen');
@@ -794,12 +537,29 @@ function show(id) {
   });
   const target = document.getElementById(id);
   if (target) {
-    target.style.display = (id === 'mural') ? 'flex' : 'block';
+    target.style.display = (id === 'mural' || id === 'webviewScreen') ? 'flex' : 'block';
     target.classList.add('active');
   } else {
     console.error("Tela não encontrada:", id);
   }
   atualizarBotaoSomMuseu();
+}
+
+// ========== FUNÇÕES DE WEBVIEW (CANDINHOS) ==========
+function abrirWebView(tipo) {
+  const frame = document.getElementById('webviewFrame');
+  if (tipo === 'candinhoDesenhista') {
+    frame.src = 'https://candinhodesenhista.vercel.app/';
+  } else if (tipo === 'candinho2') {
+    frame.src = 'https://candinho2-0.vercel.app/';
+  }
+  show('webviewScreen');
+}
+
+function fecharWebView() {
+  const frame = document.getElementById('webviewFrame');
+  frame.src = '';
+  show('home');
 }
 
 // ========== LÓGICA DE ABERTURA ==========
@@ -808,7 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const splash = document.getElementById('splash');
   const video = document.getElementById('splash-video');
   const fallback = document.getElementById('splash-fallback');
-
   if (startBtn) {
     startBtn.onclick = function() {
       if (fallback) fallback.style.display = 'none';
@@ -821,7 +580,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     };
   }
-
   function abrirApp() {
     if (splash) {
       splash.style.opacity = '0';
@@ -832,291 +590,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
-
-// ========== FERRAMENTA DE DESENHO ==========
-const canvas = document.getElementById('canvasDesenho');
-const ctx = canvas.getContext('2d');
-const listaDesenhos = document.getElementById('listaDesenhos');
-const ferramentasDiv = document.getElementById('ferramentasDesenho');
-const tamanhoSlider = document.getElementById('tamanhoFerramenta');
-const tamanhoValor = document.getElementById('tamanhoValor');
-const corCircle = document.getElementById('corAtualCircle');
-const seletorCor = document.getElementById('seletorCor');
-const btnPincel = document.getElementById('btnPincel');
-const btnLapis = document.getElementById('btnLapis');
-const btnSpray = document.getElementById('btnSpray');
-const btnBalde = document.getElementById('btnBalde');
-const btnBorrachaP = document.getElementById('btnBorrachaP');
-const btnBorrachaG = document.getElementById('btnBorrachaG');
-const zoomIn = document.getElementById('zoomIn');
-const zoomOut = document.getElementById('zoomOut');
-const limparBtn = document.getElementById('limparBtn');
-const salvarBtn = document.getElementById('salvarBtn');
-const voltarBtn = document.getElementById('voltarBtn');
-
-let ferramentaAtual = 'pincel';
-let corAtual = '#ff4d4d';
-let zoom = 1;
-let desenhando = false;
-
-const imagensModelo = [
-  { nome: 'Desenho 1 🎈', src: 'https://i.imgur.com/6JfY8vS.jpeg' },
-  { nome: 'Desenho 2 🐶', src: 'https://i.imgur.com/Tb4CYtP.jpg' },
-  { nome: 'Desenho 3 🌟', src: 'https://i.imgur.com/UpY3Zy0.jpg' },
-  { nome: 'Desenho 4 🦋', src: 'https://i.imgur.com/McV5Sma.jpg' },
-  { nome: 'Desenho 5 🚀', src: 'https://i.imgur.com/rCSfucZ.jpg' }
-];
-
-function criarPaletaCores() {
-  const paleta = document.getElementById('paletaCores');
-  const cores = ['#ff4d4d','#ff9f4b','#f7dc6f','#6fcf97','#5dade2','#d7bde2','#f5b041','#a569bd','#5d6d7e','#ff80b5','#48c9b0','#f1948a'];
-  paleta.innerHTML = '';
-  cores.forEach(cor => {
-    const btn = document.createElement('button');
-    btn.style.backgroundColor = cor;
-    btn.onclick = () => setCor(cor);
-    paleta.appendChild(btn);
-  });
-}
-
-function setCor(cor) {
-  corAtual = cor;
-  seletorCor.value = cor;
-  corCircle.style.backgroundColor = cor;
-}
-
-function setFerramenta(ferramenta) {
-  ferramentaAtual = ferramenta;
-  [btnPincel, btnLapis, btnSpray, btnBalde, btnBorrachaP, btnBorrachaG].forEach(b => b.classList.remove('selected-tool'));
-  const mapa = { pincel: btnPincel, lapis: btnLapis, spray: btnSpray, balde: btnBalde, borrachaP: btnBorrachaP, borrachaG: btnBorrachaG };
-  if (mapa[ferramenta]) mapa[ferramenta].classList.add('selected-tool');
-}
-
-tamanhoSlider.addEventListener('input', () => { tamanhoValor.textContent = tamanhoSlider.value; });
-function getTamanho() { return parseInt(tamanhoSlider.value); }
-
-function mostrarListaDesenhos() {
-  listaDesenhos.innerHTML = '';
-  const livreDiv = document.createElement('div');
-  livreDiv.className = 'colorir-thumb';
-  livreDiv.style.display = 'flex'; livreDiv.style.flexDirection = 'column'; livreDiv.style.alignItems = 'center';
-  livreDiv.innerHTML = '<div style="font-size: 4rem;">🆕</div><div>✨ Tela Livre</div>';
-  livreDiv.onclick = iniciarTelaLivre;
-  listaDesenhos.appendChild(livreDiv);
-  imagensModelo.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'colorir-thumb';
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.alt = item.nome;
-    div.appendChild(img);
-    div.appendChild(document.createTextNode(item.nome));
-    div.onclick = () => carregarDesenhoModelo(idx);
-    listaDesenhos.appendChild(div);
-  });
-  listaDesenhos.style.display = 'grid';
-  ferramentasDiv.style.display = 'none';
-  canvas.style.display = 'none';
-}
-
-function iniciarTelaLivre() {
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  listaDesenhos.style.display = 'none';
-  ferramentasDiv.style.display = 'block';
-  canvas.style.display = 'block';
-  zoom = 1;
-  canvas.style.transform = 'scale(1)';
-}
-
-function carregarDesenhoModelo(idx) {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.src = imagensModelo[idx].src;
-  img.onload = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    listaDesenhos.style.display = 'none';
-    ferramentasDiv.style.display = 'block';
-    canvas.style.display = 'block';
-    zoom = 1;
-    canvas.style.transform = 'scale(1)';
-  };
-  img.onerror = () => alert('Erro ao carregar imagem.');
-}
-
-function voltarEscolha() { mostrarListaDesenhos(); }
-
-function getMousePos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  let clientX, clientY;
-  if (e.touches) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  } else {
-    clientX = e.clientX;
-    clientY = e.clientY;
-  }
-  const x = (clientX - rect.left) / zoom * scaleX;
-  const y = (clientY - rect.top) / zoom * scaleY;
-  return { x: Math.min(canvas.width-1, Math.max(0, x)), y: Math.min(canvas.height-1, Math.max(0, y)) };
-}
-
-function iniciarDesenho(e) {
-  e.preventDefault();
-  desenhando = true;
-  const pos = getMousePos(e);
-  if (ferramentaAtual === 'balde') {
-    floodFill(Math.floor(pos.x), Math.floor(pos.y));
-    desenhando = false;
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  }
-}
-
-function desenhar(e) {
-  if (!desenhando) return;
-  e.preventDefault();
-  const pos = getMousePos(e);
-  const tam = getTamanho();
-  ctx.save();
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  if (ferramentaAtual === 'spray') {
-    ctx.fillStyle = corAtual;
-    for (let i=0; i<15; i++) {
-      let dx = (Math.random()-0.5)*tam*3.5;
-      let dy = (Math.random()-0.5)*tam*3.5;
-      ctx.fillRect(pos.x+dx, pos.y+dy, tam*0.5, tam*0.5);
-    }
-  } else {
-    ctx.strokeStyle = ferramentaAtual.includes('borracha') ? '#ffffff' : corAtual;
-    ctx.lineWidth = tam;
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  }
-  ctx.restore();
-}
-
-function pararDesenho() { desenhando = false; ctx.beginPath(); }
-
-function floodFill(x, y) {
-  const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
-  const data = imgData.data;
-  const target = getPixelColor(data, x, y);
-  const fill = hexToRgb(corAtual);
-  if (colorMatch(target, fill, 5)) return;
-  const stack = [[x,y]];
-  const w = canvas.width, h = canvas.height;
-  while(stack.length) {
-    const [px, py] = stack.pop();
-    if (px<0 || px>=w || py<0 || py>=h) continue;
-    const idx = (py*w+px)*4;
-    if (!colorMatch({r:data[idx],g:data[idx+1],b:data[idx+2]}, target, 10)) continue;
-    data[idx]=fill.r; data[idx+1]=fill.g; data[idx+2]=fill.b; data[idx+3]=255;
-    stack.push([px+1,py],[px-1,py],[px,py+1],[px,py-1]);
-  }
-  ctx.putImageData(imgData,0,0);
-}
-function getPixelColor(data, x, y) {
-  const idx = (y*canvas.width+x)*4;
-  return {r:data[idx],g:data[idx+1],b:data[idx+2]};
-}
-function colorMatch(c1, c2, tol) {
-  return Math.abs(c1.r-c2.r)<=tol && Math.abs(c1.g-c2.g)<=tol && Math.abs(c1.b-c2.b)<=tol;
-}
-function hexToRgb(hex) {
-  const v = parseInt(hex.slice(1),16);
-  return {r:v>>16&255, g:v>>8&255, b:v&255};
-}
-
-function aumentarZoom() { zoom = Math.min(zoom+0.2,3); canvas.style.transform = `scale(${zoom})`; }
-function diminuirZoom() { zoom = Math.max(zoom-0.2,0.5); canvas.style.transform = `scale(${zoom})`; }
-function limparCanvas() { ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height); }
-function salvarDesenho() {
-  const arts = JSON.parse(localStorage.getItem('arts')||'[]');
-  arts.push(canvas.toDataURL('image/png'));
-  localStorage.setItem('arts', JSON.stringify(arts));
-  Swal.fire({
-    title: 'Obra de Arte Salva! 🎨',
-    text: 'Sua pintura já está guardada na Galeria dos Artistas!',
-    icon: 'success',
-    confirmButtonColor: '#ffcc00',
-    confirmButtonText: 'Oba, entendi!',
-    background: '#fff9e6',
-    borderRadius: '20px'
-  });
-}
-
-function configurarBotoesDesenho() {
-  btnPincel.onclick = ()=>setFerramenta('pincel');
-  btnLapis.onclick = ()=>setFerramenta('lapis');
-  btnSpray.onclick = ()=>setFerramenta('spray');
-  btnBalde.onclick = ()=>setFerramenta('balde');
-  btnBorrachaP.onclick = ()=>setFerramenta('borrachaP');
-  btnBorrachaG.onclick = ()=>setFerramenta('borrachaG');
-  zoomIn.onclick = aumentarZoom;
-  zoomOut.onclick = diminuirZoom;
-  limparBtn.onclick = limparCanvas;
-  salvarBtn.onclick = () => {
-    const dataURL = canvas.toDataURL("image/png");
-    const galeria = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
-    galeria.push(dataURL);
-    localStorage.setItem('galeria_artistas', JSON.stringify(galeria));
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        title: 'Obra Salva! 🎨',
-        text: 'Seu desenho já está na galeria!',
-        icon: 'success',
-        confirmButtonColor: '#ffcc00'
-      });
-    }
-    if (typeof loadGallery === "function") loadGallery();
-  };
-  voltarBtn.onclick = voltarEscolha;
-  if (seletorCor) {
-    seletorCor.addEventListener('input', (e) => setCor(e.target.value));
-  }
-}
-
-function limparGaleria() {
-  localStorage.removeItem('galeria_artistas');
-  const galleryDiv = document.getElementById('gallery');
-  if (galleryDiv) galleryDiv.innerHTML = '';
-  alert("Galeria limpa!");
-}
-
-function configurarCanvasEvents() {
-  canvas.addEventListener('mousedown', iniciarDesenho);
-  canvas.addEventListener('mousemove', desenhar);
-  canvas.addEventListener('mouseup', pararDesenho);
-  canvas.addEventListener('mouseleave', pararDesenho);
-  canvas.addEventListener('touchstart', iniciarDesenho, {passive:false});
-  canvas.addEventListener('touchmove', (e)=>{e.preventDefault(); desenhar(e);}, {passive:false});
-  canvas.addEventListener('touchend', pararDesenho);
-}
-
-// ========== GALERIA ==========
-function loadGallery() {
-  const container = document.getElementById('gallery'); 
-  if (!container) return;
-  container.innerHTML = '';
-  const desenhos = JSON.parse(localStorage.getItem('galeria_artistas')) || [];
-  if (desenhos.length === 0) {
-    container.innerHTML = '<p>A galeria está vazia! 🎨</p>';
-    return;
-  }
-  desenhos.forEach(imgData => {
-    const img = document.createElement('img');
-    img.src = imgData;
-    container.appendChild(img);
-  });
-}
 
 // ========== MURAL ==========
 let savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
@@ -1169,30 +642,24 @@ function sairDoMural() {
   show('home');
 }
 
-// 🎮 CENTRAL DE JOGOS
+// ========== CENTRAL DE JOGOS ==========
 const jogosOnlineLista = [
   { nome: "🐦 Corvos", link: "https://arteeducar.vercel.app/jogos/corvos" },
-{ nome: "🌌 Noite Estrelada", link: "https://arteeducar.vercel.app/jogos/noite-estrelada" },
-{ nome: "🎨 Dalí", link: "https://arteeducar.vercel.app/jogos/dali" },
-{ nome: "🧒 Candinho", link: "https://candinhochallenge.vercel.app" }
+  { nome: "🌌 Noite Estrelada", link: "https://arteeducar.vercel.app/jogos/noite-estrelada" },
+  { nome: "🎨 Dalí", link: "https://arteeducar.vercel.app/jogos/dali" },
+  { nome: "🧒 Candinho", link: "https://candinhochallenge.vercel.app" }
 ];
 
 function carregarJogos() {
   const lista = document.getElementById("listaJogosOnline");
   if (!lista) return;
-
   lista.innerHTML = "";
-
   jogosOnlineLista.forEach(jogo => {
     const btn = document.createElement("button");
     btn.innerText = "🎮 " + jogo.nome;
-    btn.className = "botao-app"; // 🔵 estilo
-
-    btn.onclick = () => {
-      abrirJogo(jogo.link); // 🔥 ESSENCIAL
-    };
-
-    lista.appendChild(btn); // 🔥 ESSENCIAL
+    btn.className = "botao-app";
+    btn.onclick = () => abrirJogo(jogo.link);
+    lista.appendChild(btn);
   });
 }
 
@@ -1201,23 +668,19 @@ function abrirCentralJogos() {
   carregarJogos();
 }
 
-// 🔥 NOVO: ABRIR JOGO NO IFRAME
 function abrirJogo(url) {
   show("telaJogo");
-
   const frame = document.getElementById("frameJogo");
   frame.src = url;
 }
 
-// 🔥 NOVO: FECHAR JOGO
 function fecharJogo() {
   const frame = document.getElementById("frameJogo");
   frame.src = "";
-
   show("jogosOnline");
 }
 
-// ========== DESAFIOS (30 itens, com objetivo) ==========
+// ========== DESAFIOS (30 itens – mantido do original) ==========
 const desafios = [
   { numero: 1, titulo: "Desenho às Cegas", descricao: "Fechem os olhos e tentem desenhar um objeto simples (copo, casa, flor). Depois comparem os resultados com quem fez o desafio com você.", objetivo: "Estimular criatividade e percepção sem pressão estética." },
   { numero: 2, titulo: "Cores Musicais", descricao: "Ouça músicas diferentes (alegre, triste, calma, agitada). Desenhe e pinte o que sentir em cada música.", objetivo: "Expressar emoções através das cores." },
@@ -1317,829 +780,15 @@ function aceitarDesafio(titulo) {
   });
 }
 
-// ========== ARRAIS DE ATIVIDADES EMOCIONAIS (HUMANIZADAS) ==========
-const atividadesTriste = [
-  "Sinto muito que você esteja se sentindo triste. 💙 Vamos transformar essa tristeza em arte? Desenhe um coração e imagine o que ele gostaria de dizer. Depois, você pode fazer um teatrinho com esse coração! 💖",
-  "Que pena que você está triste. ☔ Que tal fazer a Dança da Chuva Leve? Faça movimentos bem lentos, como se seus braços fossem gotinhas caindo do céu. Coloque uma música suave e deixe a chuva levar a tristeza embora.",
-  "Entendo que às vezes a gente fica triste. 🦋 Vamos tentar a Respiração da Borboleta? Sente-se, coloque as mãos no peito, inspire abrindo os braços como asas e expire fechando. Isso ajuda o coração a ficar mais calminho.",
-  "Sinto muito, amiguinho. 🤗 Que tal cuidar de um boneco ou bichinho de pelúcia que está triste? Converse com ele, dê um abraço bem forte e invente uma história para ele ficar feliz de novo.",
-  "Tristeza é um sentimento que todo mundo tem às vezes. 🎵 Vamos ouvir uma música calminha e desenhar no chão o que a música faz a gente sentir? Pode ser com giz de cera ou lápis de cor.",
-  "Às vezes ficamos tristes e nosso corpo fica paradinho. 🗿 Que tal brincar de Estátua da Tristeza? Você congela numa pose triste e, aos pouquinhos, vai se transformando numa estátua alegre, cheia de sorrisos!",
-  "Sinto muito. 🎨 Pegue lápis de cor bem clarinhos, como azul bebê, rosa clarinho e lilás, e desenhe o seu sentimento. As cores macias ajudam a gente a se acalmar.",
-  "Que tal criar uma história bem baixinho, quase cochichando? 🎶 Você pode falar e cantarolar o final da história. É como um segredo que a gente conta pra música.",
-  "Vamos fazer a postura da criança? 🧘 Sente-se no chão, abrace os joelhos e incline a cabeça para frente. Respire bem devagar, sentindo a barriga encher e esvaziar. Isso ajuda a gente a se sentir protegido.",
-  "Que tal escrever ou desenhar uma cartinha para você mesmo? 💌 Escreva coisas boas que você gostaria de ouvir. Depois, leia em voz alta com carinho."
-];
-
-const atividadesTedio = [
-  "Ah, tédio! 🦄 Vamos inventar um animal que não existe e dançar como ele? Pode ser um 'elefante voador' ou um 'cachorro com asas'! Crie o seu e dance pela sala.",
-  "Tédio, tédio... 🙈 Que tal desenhar sem olhar para o papel? Coloque uma música e desenhe o que vier na cabeça, de olhos fechados. Depois você abre os olhos e vê a surpresa!",
-  "Sem nada pra fazer? 👏 Vamos criar uma orquestra com o corpo! Bata palmas, estale os dedos, bata os pés no chão, faça sons com a boca. Invente uma música só com o seu corpo!",
-  "Que tal dar vida aos objetos? 🎭 Pegue um lápis, uma borracha ou qualquer objeto da sala e invente um personagem para ele. Crie uma história e faça um teatrinho!",
-  "Vamos fazer yoga dos nomes estranhos? 🧘‍♂️ Invente nomes para as poses, como 'postura do flamingo dorminhoco' ou 'pose do macaco distraído'. Depois tente fazer essas poses!",
-  "Bora dançar? 🚶 Coloque uma música e ande pela sala. Quando a música for rápida, ande rápido; quando for devagar, ande bem devagarinho. Varia conforme o ritmo!",
-  "Que tal desenhar no chão? 📜 Pegue um papel bem grande (pode ser jornal ou papel de presente) e desenhe com um amigo uma cidade gigante, com casas, árvores e bichos.",
-  "Brincadeira do espelho: 🪞 Em dupla, um faz movimentos e o outro imita como se fosse um espelho. Depois trocam. Quanto mais exagerado, mais divertido!",
-  "Vamos criar uma história usando só três sons? 🔊 Escolha três sons (palma, estalo, assobio) e conte uma história usando só esses sons. O outro tem que adivinhar!",
-  "Dança do congelamento! ⏸️ Dance livremente e, quando alguém gritar 'congela!', você para na posição que estiver. Quem se mexer primeiro perde!"
-];
-
-const atividadesFeliz = [
-  "Que bom que você está feliz! 💃 Vamos espalhar essa alegria? Dance pela sala fazendo movimentos bem grandes, abrindo os braços e ocupando todo o espaço. A felicidade gosta de espaço!",
-  "Alegria combina com música animada! 🎨 Escute sua música preferida e desenhe o que ela te faz sentir. Use cores vibrantes como amarelo, laranja e vermelho!",
-  "Feliz, feliz, feliz! 🎬 Que tal encenar o dia mais feliz que você já teve ou um dia perfeito que você imagina? Pode ser sozinho ou com a família.",
-  "Yoga do guerreiro feliz! 🧘‍♀️ Faça a postura do guerreiro, com os braços abertos e o rosto bem sorridente. Guerreiro feliz é mais forte!",
-  "Vamos criar personagens felizes? 🎉 Desenhe um personagem bem alegre e depois desfile com ele pela sala, contando quem ele é e por que está tão feliz.",
-  "Roda de ritmos! 🥁 Cada pessoa cria um ritmo com palmas ou batidas, e o grupo repete. Depois todo mundo toca junto formando uma grande orquestra feliz!",
-  "Estátuas felizes! 🏆 Congele numa pose de vitória, como se tivesse ganhado um prêmio, ou numa pose de risada. Depois outra pessoa tenta adivinhar o que você está sentindo.",
-  "Dança com lenços coloridos! 🌈 Pegue um lenço ou pedaço de pano colorido e dance com ele, fazendo movimentos que imitam o vento, o fogo ou a água.",
-  "História coletiva cantada! 🎤 Cada pessoa fala uma parte da história, mas tem que ser cantando. Pode ser uma história de aventura, de amizade ou de bichos falantes.",
-  "Respiração do riso! 😂 Inspire fundo e, quando soltar o ar, solte também uma gargalhada bem gostosa. Repita várias vezes até todo mundo rir junto!"
-];
-
-const atividadesAnsioso = [
-  "A ansiedade pode ser difícil, mas você consegue superar! 🎈 Vamos fazer a Respiração do Balão? Inspire enchendo a barriga como se fosse um balão e expire esvaziando bem devagar.",
-  "Ansiedade pede calma. ⭕ Vamos desenhar uma mandala? Faça círculos e traços repetitivos, sem pressa. O movimento circular acalma a mente.",
-  "Que tal dançar em câmera lenta? 🐢 Coloque uma música calma e dance como se você estivesse dentro de um sonho, com movimentos bem lentos e suaves.",
-  "Brincadeira do semáforo: 🚦 Verde (pode se mexer livremente), amarelo (movimento bem lento) e vermelho (parado, respirando fundo). Alguém vai comandando as cores.",
-  "Vamos fazer a postura da árvore? 🌳 Fique em pé, apoie um pé na outra perna e equilibre-se. Olhe para um ponto fixo. Isso ajuda a concentrar e acalmar.",
-  "Sons que acalmam: 🕯️ Explore sons longos com a voz (como 'ômmmm') ou com objetos (como um sino ou um copo de vidro). Sons longos ajudam a relaxar.",
-  "Desenho da respiração: 〰️ Pegue um lápis e, enquanto inspira, faça um traço para cima. Enquanto expira, faça um traço para baixo. Repita fazendo montanhas e vales.",
-  "Caminhada silenciosa: 👣 Ande bem devagar pela sala, sentindo cada parte do pé tocar o chão. Preste atenção só nisso. É como uma meditação andando.",
-  "Crie seu lugar seguro: 🏡 Desenhe ou imagine um lugar onde você se sente protegido e calmo. Pode ser uma casa na árvore, uma praia ou o quarto dos sonhos.",
-  "Relaxamento do corpo que derrete: ☁️ Deite-se no chão e imagine que seu corpo está ficando pesado e derretendo, como sorvete no sol. Relaxe cada parte aos poucos."
-];
-
-const atividadesRaiva = [
-  "A raiva é forte, mas você é mais forte ainda! 😤 Vamos transformar essa raiva em arte. Primeiro, desenhe sua raiva: que cor ela tem? Que forma? Depois, rasgue o papel bem forte (pode fazer tirinhas!). Por fim, crie um novo desenho com os pedaços – você transformou a raiva em algo novo!",
-  "Teatro do Monstro da Raiva: 👹 Crie um monstro que só quer um abraço. Como ele é? O que ele fala? Depois, abrace esse monstro bem forte e veja ele se transformar num bichinho manso.",
-  "Dança dos Pés Firmes: 👣 Bata os pés no chão com força e ritmo. Sinta o chão vibrando. Isso ajuda a soltar a energia da raiva sem machucar ninguém.",
-  "Pintura com os dedos: 🖐️ Use tinta (pode ser guache ou até tinta caseira) e espalhe com energia sobre uma folha grande. A tinta escorre, mistura e a raiva vai embora.",
-  "Escultura de massinha: 🤲 Pegue massinha bem macia e amasse com força. Depois modele algo que te acalme, como um coração ou uma estrela.",
-  "Grito no Papel: 📢 Faça um desenho bem gritado, com rabiscos fortes e rápidos. É como se o papel ouvisse seu grito e ficasse mais leve.",
-  "Respiração do Dragão: 🐲 Inspire fundo e, ao soltar o ar, imagine que está soltando fogo como um dragão. Repita várias vezes até o fogo virar uma brisa suave.",
-  "Crie uma máscara da calma: 🎭 Desenhe ou monte uma máscara que represente a calma. Depois experimente usá-la e veja como você se sente."
-];
-
-const audiosEmocionais = {
-  triste: ['triste-01', 'triste-02', 'triste-03', 'triste-04', 'triste-05', 'triste-06', 'triste-07', 'triste-08', 'triste-09', 'triste-10'],
-  tedio: ['tedio-01', 'tedio-02', 'tedio-03', 'tedio-04', 'tedio-05', 'tedio-06', 'tedio-07', 'tedio-08', 'tedio-09', 'tedio-10'],
-  raiva: ['raiva-01', 'raiva-02', 'raiva-03', 'raiva-04', 'raiva-05', 'raiva-06', 'raiva-07', 'raiva-08'],
-  feliz: ['feliz-01', 'feliz-02', 'feliz-03', 'feliz-04', 'feliz-05', 'feliz-06', 'feliz-07', 'feliz-08', 'feliz-09', 'feliz-10'],
-  ansioso: ['ansioso-01', 'ansioso-02', 'ansioso-03', 'ansioso-04', 'ansioso-05', 'ansioso-06', 'ansioso-07', 'ansioso-08', 'ansioso-09', 'ansioso-10']
-};
-
-const audiosCuriosidades = {
-  desenho: Array.from({ length: 29 }, (_, i) => `curiosidadedesenho-${String(i + 1).padStart(2, '0')}`),
-  escultura: ['curiosidadeescultura-01', 'curiosidadeescultura-02', 'curiosidadeescultura-03', 'curiosidadeescultura-04', 'curiosidadeescultura-05'],
-  danca: ['curiosidadebaledanca-01', 'curiosidadeanabotadanca-02', 'curiosidademodernadanca-03', 'curiosidadebrasileiradanca-04', 'curiosidadeespetaculodanca-05'],
-  teatro: ['curiosidadecomecouteatro-01', 'curiosidadegregosteatro-02', 'curiosidadeepidauroteatro-03', 'curiosidadepalcoteatro-04', 'curiosidadesombrasteatro-05'],
-  arteGeral: ['curiosidadegrafite-01', 'curiosidadebanksy-02', ...Array.from({ length: 18 }, (_, i) => `curiosidadearte-${String(i + 3).padStart(2, '0')}`)]
-};
-
-const mapaAudioPorPalavra = [
-  { palavras: ['arte africana'], audio: 'africanaarte-01' },
-  { palavras: ['almeida júnior', 'almeida junior', 'almeida jr'], audio: 'almeidajunior-01' },
-  { palavras: ['altura do som', 'som agudo', 'som grave'], audio: 'alturasom-01' },
-  { palavras: ['música é expressão'], audio: 'amusicapodeexpressar-01' },
-  { palavras: ['bia bedran'], audio: 'biabedran-01' },
-  { palavras: ['bispo do rosário', 'bispo'], audio: 'bisporosario-01' },
-  { palavras: ['romero britto', 'britto'], audio: 'britto-01' },
-  { palavras: ['caravaggio'], audio: 'caravaggio-01' },
-  { palavras: ['carybé', 'carybe'], audio: 'carybe-01' },
-  { palavras: ['círculo cromático', 'circulo cromatico', 'roda de cores'], audio: 'circulocromatico-01' },
-  { palavras: ['cor', 'o que é cor'], audio: 'corconceito-01' },
-  { palavras: ['cores complementares'], audio: 'corescomplemestares-04' },
-  { palavras: ['cores frias'], audio: 'coresfriasconceito' },
-  { palavras: ['cores neutras'], audio: 'coresneutras-01' },
-  { palavras: ['cores quentes'], audio: 'coresquentesconceito' },
-  { palavras: ['cores secundárias', 'cores secundarias'], audio: 'coressecundárias-02' },
-  { palavras: ['cores terciárias', 'cores terciarias'], audio: 'coresterciarias-03' },
-  { palavras: ['cores primárias', 'cores primarias'], audio: 'corprimaria-01' },
-  { palavras: ['pintura', 'técnicas de pintura', 'tecnicas de pintura'], audio: 'pinturaconceito-01' },
-  { palavras: ['ponto', 'o que é ponto'], audio: 'pontoconceito-01' },
-  { palavras: ['linha', 'o que é linha'], audio: 'linhaconceito' },
-  { palavras: ['harmonia de cores', 'harmonia cromática', 'harmonia cromatica'], audio: 'harmoniacores' },
-  { palavras: ['escala de cores', 'gradiente', 'degradê', 'degrade'], audio: 'escalacores' },
-  { palavras: ['som', 'o que é som'], audio: 'somconceito-01' },
-  { palavras: ['intensidade', 'som forte', 'som fraco'], audio: 'intensidadeconceito' },
-  { palavras: ['duração do som', 'duracao do som'], audio: 'duracaomusica' },
-  { palavras: ['ritmo', 'o que é ritmo'], audio: 'ritmoconceito-01' },
-  { palavras: ['melodia', 'o que é melodia'], audio: 'melodiaconceito' },
-  { palavras: ['instrumentos musicais', 'tipos de instrumentos'], audio: 'instrumentos' },
-  { palavras: ['o que é música', 'definição de música', 'definicao de musica'], audio: 'musicaesomorganizado' },
-  { palavras: ['idade média', 'musica medieval', 'hildegard'], audio: 'historiaidademedia-01' },
-  { palavras: ['renascimento', 'palestrina'], audio: 'historiarenascimento-01' },
-  { palavras: ['barroco', 'bach', 'vivaldi'], audio: 'historiabarroco-01' },
-  { palavras: ['clássico', 'classico', 'mozart', 'haydn'], audio: 'historiaclassico-01' },
-  { palavras: ['romantismo', 'beethoven', 'chopin'], audio: 'historiaromantico-01' },
-  { palavras: ['música moderna', 'musica moderna', 'debussy'], audio: 'historiamoderno-01' },
-  { palavras: ['resumo períodos musicais', 'resumo periodos musicais'], audio: 'historiaresumoperiodos-01' },
-  { palavras: ['palavra cantada'], audio: 'palavracantada-01' },
-  { palavras: ['toquinho'], audio: 'toquinho-01' }, { palavras: ['hélio ziskind', 'helio ziskind'], audio: 'helioziskind-01' },
-  { palavras: ['xuxa'], audio: 'xuxa-01' }, { palavras: ['tiquequê', 'tiqueque'], audio: 'tiqueque-01' }, { palavras: ['the wiggles', 'wiggles'], audio: 'wiggles-01' }, { palavras: ['raffi'], audio: 'raffi-01' }, { palavras: ['disney'], audio: 'disney-01' },
-  { palavras: ['mpb'], audio: 'generompb-01' }, { palavras: ['funk'], audio: 'generofunk-01' }, { palavras: ['pop'], audio: 'generopop-01' }, { palavras: ['rock'], audio: 'generorock-01' }, { palavras: ['samba'], audio: 'generosamba-01' }, { palavras: ['bossa nova'], audio: 'generobossanova-01' }, { palavras: ['axé', 'axe'], audio: 'generoaxe-01' }, { palavras: ['forró', 'forro'], audio: 'generoforro-01' }, { palavras: ['blues'], audio: 'generoblues-01' }, { palavras: ['jazz'], audio: 'generojazz-01' }, { palavras: ['reggae'], audio: 'generoreggae-01' }, { palavras: ['heavy metal'], audio: 'generoheavymetal-01' }, { palavras: ['house'], audio: 'generohouse-01' }, { palavras: ['techno'], audio: 'generotechno-01' }, { palavras: ['hip hop'], audio: 'generohiphop-01' }, { palavras: ['gospel'], audio: 'generogospel-01' }, { palavras: ['country'], audio: 'generocountry-01' }, { palavras: ['rap'], audio: 'generorap-01' },
-  { palavras: ['o que é dança', 'definição de dança', 'definicao de danca', 'dança é uma prática', 'danca e uma pratica'], audio: 'objetivosdança' }, { palavras: ['objetivos da dança', 'objetivos da danca'], audio: 'objetivosdança' }, { palavras: ['tipos de dança', 'tipos de danca'], audio: 'tiposdedança-01' }, { palavras: ['elementos da dança', 'elementos da danca'], audio: 'elementosdadança-01' },
-  { palavras: ['balé', 'ballet', 'dança clássica', 'danca classica'], audio: 'dancabale-01' }, { palavras: ['dança contemporânea', 'danca contemporanea'], audio: 'dancacontemporanea-01' }, { palavras: ['danças urbanas', 'dancas urbanas', 'street dance'], audio: 'dancaurbana-01' }, { palavras: ['jazz dança', 'jazz dance'], audio: 'dancajazz-01' }, { palavras: ['samba dança', 'dança samba', 'danca samba'], audio: 'dancasamba-01' }, { palavras: ['forró dança', 'forro dança', 'dança forró', 'danca forro'], audio: 'dancaforro-01' }, { palavras: ['sapateado'], audio: 'dancasapateado-01' }, { palavras: ['frevo'], audio: 'dancafrevo-01' }, { palavras: ['bumba meu boi', 'boi bumbá', 'boi bumba'], audio: 'dancabumbameuboi-01' }, { palavras: ['caboclinho'], audio: 'dancacaboclinho-01' }, { palavras: ['cavalo marinho'], audio: 'dancacavalomarinho-01' }, { palavras: ['coco', 'dança coco', 'danca coco'], audio: 'dancacoco-01' }, { palavras: ['samba de roda'], audio: 'dancasambaroda-01' }, { palavras: ['jongo'], audio: 'dancajongo-01' },
-  { palavras: ['teatro', 'o que é teatro'], audio: 'conceitoteatro-01' }, { palavras: ['origem do teatro', 'história do teatro', 'historia do teatro'], audio: 'historiateatro-01' }, { palavras: ['tipos de teatro', 'gêneros teatrais', 'generos teatrais'], audio: 'tiposdeteatro-01' }, { palavras: ['teatro dramático', 'teatro dramatico'], audio: 'teatrodramatico-01' }, { palavras: ['teatro de comédia', 'teatro de comedia'], audio: 'teatrocomedia-01' }, { palavras: ['teatro de fantoches', 'teatro de bonecos'], audio: 'teatrofantoches-01' }, { palavras: ['teatro infantil'], audio: 'teatroinfantil-01' }, { palavras: ['teatro musical'], audio: 'teatromusical-01' }, { palavras: ['teatro de sombras'], audio: 'teatrosombras-01' }, { palavras: ['teatro de rua'], audio: 'teatrorua-01' },
-  { palavras: ['arte indígena', 'arte indigena'], audio: 'indigenarte-01' }, { palavras: ['cultura indígena', 'cultura indigena'], audio: 'indigenacultura-01' }, { palavras: ['arte africana', 'arte africana é muito rica', 'arte africana e muito rica'], audio: 'africanaarte-01' }, { palavras: ['máscaras africanas', 'mascaras africanas'], audio: 'mascarasafricanas-01' }, { palavras: ['aquarela'], audio: 'tecnicaaquarela-01' }, { palavras: ['pintura a óleo', 'pintura a oleo'], audio: 'tecnicapinturaoleo-01' }, { palavras: ['colagem'], audio: 'tecnicacolagem-01' },
-  { palavras: ['van gogh'], audio: 'vangogh-01' }, { palavras: ['michelangelo'], audio: 'michelangelo-01' }, { palavras: ['rafael', 'raffaello'], audio: 'rafael-01' }, { palavras: ['leonardo da vinci', 'leonardo'], audio: 'leonardo-01' }, { palavras: ['djanira'], audio: 'djanira-01' }, { palavras: ['frida'], audio: 'fridakahlo-01' }, { palavras: ['dali', 'salvador dalí', 'salvador dali'], audio: 'dali-01' }, { palavras: ['tarsila'], audio: 'tarsila-01' }, { palavras: ['ivan cruz'], audio: 'ivancruz-01' }, { palavras: ['portinari'], audio: 'portinari-01' }, { palavras: ['matisse'], audio: 'matisse-01' }, { palavras: ['magritte'], audio: 'magritte-01' }, { palavras: ['monet'], audio: 'monet-01' }, { palavras: ['seurat'], audio: 'seurat-01' }, { palavras: ['degas'], audio: 'degas-01' }, { palavras: ['munch'], audio: 'munch-01' }, { palavras: ['rembrandt'], audio: 'rembrandt-01' }, { palavras: ['hélio oiticica', 'helio oiticica'], audio: 'oiticica-01' }, { palavras: ['di cavalcanti'], audio: 'dicavalcanti-01' }, { palavras: ['almeida júnior', 'almeida junior'], audio: 'almeidajunior-01' }, { palavras: ['georgina'], audio: 'georgina-01' }, { palavras: ['pedro américo', 'pedro americo'], audio: 'pedroamerico-01' }, { palavras: ['segall'], audio: 'segall-01' }, { palavras: ['volpi'], audio: 'volpi-01' }, { palavras: ['milhazes'], audio: 'milhazes-01' }, { palavras: ['picasso'], audio: 'picasso-01' }, { palavras: ['miró', 'miro'], audio: 'miro-01' }, { palavras: ['kandinsky'], audio: 'kandinsky-01' }, { palavras: ['klee'], audio: 'klee-01' }, { palavras: ['malfatti'], audio: 'malfatti-01' }, { palavras: ['vik muniz'], audio: 'vikmuniz-01' }, { palavras: ['heitor dos prazeres'], audio: 'heitorprazeres-01' }, { palavras: ['adriana varejão', 'adriana varejao'], audio: 'varejao-01' }, { palavras: ['resposta padrão', 'resposta padrao'], audio: 'padraoresposta-01' }
-];
-
-function sortearTextoEAudio(textos, audios) {
-  const indice = Math.floor(Math.random() * textos.length);
-  return { texto: textos[indice], audio: audios[indice] || audios[indice % audios.length] || 'padraoresposta-01' };
+// ========== FUNÇÕES DE ÁUDIO PARA DESAFIOS (stub) ==========
+function tocarAudio(nome) {
+  console.log("Tocar áudio:", nome);
 }
-
-// ========== ARRAIS DE CURIOSIDADES DE ARTE (para sorteio geral) ==========
-const curiosidadesDesenho = [
-  "Antes de existirem cadernos, as pessoas já pintavam nas cavernas, como nas pinturas de Caverna de Altamira, usando terra e carvão. 🎨",
-  "Leonardo da Vinci desenhava máquinas voadoras séculos antes de o avião existir. ✈️",
-  "Vincent van Gogh gostava de pintar com cores fortes para mostrar sentimentos. Pintou céus cheios de estrelas e girassóis brilhantes. 🌌",
-  "Michelangelo esculpiu e pintou obras gigantes. Acreditava que as figuras já estavam escondidas dentro da pedra. 🗿",
-  "Raffaello Sanzio pintava pessoas calmas e harmoniosas. Suas obras parecem organizadas e tranquilas. 👼",
-  "Leonardo da Vinci amava desenhar, pintar e inventar. Observava tudo com muita curiosidade. 🔍",
-  "Romero Britto usa muitas cores alegres e formas simples. Suas obras parecem festas desenhadas. 🎈",
-  "Djanira da Motta e Silva pintava o dia a dia das pessoas, o trabalho e as tradições do Brasil. 🇧🇷",
-  "Frida Kahlo pintava a si mesma para contar sua história. Mostrava sentimentos com coragem. 🌺",
-  "Salvador Dalí criava imagens que parecem sonhos estranhos e divertidos. ⏰",
-  "Caravaggio gostava de contrastes fortes entre luz e sombra para contar histórias. 🔦",
-  "Tarsila do Amaral pintou o Brasil com cores vivas e formas diferentes, inspiradas na imaginação. 🎨",
-  "Ivan Cruz retratava crianças brincando de amarelinha, pipa e roda. 🪁",
-  "Candido Portinari mostrou em suas pinturas a vida das pessoas simples e trabalhadoras. 👨‍🌾",
-  "Henri Matisse amava cores alegres e recortes de papel que viravam arte. ✂️",
-  "René Magritte gostava de fazer a gente pensar: será que tudo é o que parece? 🧐",
-  "Claude Monet pintava a natureza observando a luz do sol em diferentes momentos. ☀️",
-  "Georges Seurat criava imagens usando muitos pontinhos coloridos. 🔵",
-  "Edgar Degas adorava desenhar bailarinas em movimento. 🩰",
-  "Edvard Munch usava a pintura para mostrar emoções fortes. 😱",
-  "Rembrandt pintava rostos cheios de expressão e emoção. 🎭",
-  "Hélio Oiticica criava obras para as pessoas entrarem, tocarem e participarem. 🕺",
-  "Di Cavalcanti mostrava festas, músicas e pessoas do Brasil. 🎉",
-  "José Ferraz de Almeida Júnior pintava a vida no interior, com cenas simples do cotidiano. 🌾",
-  "Georgina de Albuquerque retratava cenas históricas e momentos importantes do Brasil. 📜",
-  "Pedro Américo criou grandes pinturas que contam a história do país. ⚔️",
-  "Lasar Segall falava sobre sentimentos, viagens e desafios das pessoas. 🌍",
-  "Alfredo Volpi ficou famoso por pintar bandeirinhas coloridas. 🏠",
-  "Beatriz Milhazes mistura cores, flores e formas inspiradas na cultura brasileira. 🌼"
-];
-
-const curiosidadesEscultura = [
-  "Michelangelo dizia que a escultura já estava escondida na pedra, e ele só ajudava a revelar. 🗿",
-  "'O Pensador', de Auguste Rodin, mostra como uma postura pode expressar pensamento profundo. 🤔",
-  "No Brasil, Aleijadinho esculpiu profetas em pedra que parecem conversar com quem olha. 🙏",
-  "Algumas esculturas são feitas de sucata e materiais reciclados, mostrando que arte pode nascer do inesperado. ♻️",
-  "Existem esculturas gigantes feitas de gelo que derretem com o tempo, ensinando que arte também pode ser passageira. ❄️"
-];
-
-const curiosidadesDanca = [
-  "O balé clássico nasceu nas cortes da Europa e ficou famoso com companhias como o Bolshoi Ballet. 🩰",
-  "A bailarina brasileira Ana Botafogo levou o balé brasileiro aos palcos internacionais. 🌟",
-  "A dança moderna surgiu quando artistas quiseram movimentos mais livres, como propôs Martha Graham. 💃",
-  "Muitas danças brasileiras nasceram das culturas africanas, indígenas e europeias misturadas. 🇧🇷",
-  "Em espetáculos como 'O Lago dos Cisnes', o corpo conta a história sem precisar falar. 🦢"
-];
-
-const curiosidadesTeatro = [
-  "O teatro começou na Grécia Antiga, há mais de 2.500 anos, em festas dedicadas ao deus Dionísio. 🎭",
-  "Os gregos criaram dois grandes estilos: Tragédia (histórias sérias) e Comédia (histórias engraçadas).",
-  "O Teatro de Epidauro, na Grécia, existe até hoje e tem uma acústica incrível! Você consegue ouvir um sussurro no palco lá do último degrau.",
-  "No teatro, o palco pode virar floresta, castelo, escola ou qualquer lugar que a imaginação quiser. 🌳",
-  "Teatro de sombras é uma forma antiga de contar histórias usando silhuetas projetadas em uma tela iluminada."
-];
-
-const curiosidadesArteGeral = [
-  "O grafite transforma muros em galerias ao ar livre. 🧱",
-  "Banksy cria arte urbana misteriosa e cheia de mensagens. 🕵️",
-  "Alguns artistas pintam com os pés ou com a boca, mostrando que há muitas formas de criar. 🦶",
-  "Museus guardam obras antigas, como o Museu do Louvre. 🏛️",
-  "No Brasil, o MASP exibe obras suspensas em suportes transparentes. 🖼️",
-  "A arte pode misturar tecnologia e luz. 💡",
-  "Quadrinhos também são arte, combinando desenho e narrativa. 📚",
-  "Filmes misturam teatro, música, figurino e artes visuais. 🎬",
-  "A arte ajuda a contar a história de um povo. 📖",
-  "Crianças também podem expor seus trabalhos em mostras escolares. 🏫",
-  "Muitos artistas erravam muito antes de acertar. ❌",
-  "A prática é mais importante que o talento. 💪",
-  "Cada cultura tem sua própria forma de arte. 🌍",
-  "A arte pode denunciar injustiças. ✊",
-  "A arte pode celebrar festas e tradições. 🎉",
-  "Existem orquestras formadas só por crianças. 🧒",
-  "O corpo é instrumento, pincel e palco ao mesmo tempo. 🧘",
-  "Imaginação é um músculo que cresce quando usamos. 🧠",
-  "Toda obra começa com uma ideia pequena. 💡",
-  "Quando uma criança cria arte, ela não copia o mundo, ela recria. ✨"
-];
-
-// ========== PINCEL MÁGICO - BANCO DE CONHECIMENTO PRINCIPAL ==========
-const conhecimento = [
-
-  // ===== RESPOSTAS EMOCIONAIS HUMANIZADAS =====
-  { 
-    palavras: ['estou triste', 'triste', 'me sinto triste', 'sentindo triste'], 
-    resposta: () => sortearTextoEAudio(atividadesTriste, audiosEmocionais.triste)
-  },
-  { 
-    palavras: ['estou entediado', 'entediado', 'tédio', 'sem nada para fazer'], 
-    resposta: () => sortearTextoEAudio(atividadesTedio, audiosEmocionais.tedio)
-  },
-  { 
-    palavras: ['estou com raiva', 'raiva', 'com raiva', 'zangado'], 
-    resposta: () => sortearTextoEAudio(atividadesRaiva, audiosEmocionais.raiva)
-  },
-  { 
-    palavras: ['estou feliz', 'feliz', 'alegre', 'contente'], 
-    resposta: () => sortearTextoEAudio(atividadesFeliz, audiosEmocionais.feliz)
-  },
-  { 
-    palavras: ['estou ansioso', 'ansioso', 'ansiedade', 'nervoso'], 
-    resposta: () => sortearTextoEAudio(atividadesAnsioso, audiosEmocionais.ansioso)
-  },
-
-  // ===== CONCEITOS GERAIS DE ARTE =====
-  { palavras: ['arte', 'o que é arte'], resposta: 'Arte é uma forma de expressão! Pode ser um desenho, pintura, dança, música, teatro… É o jeito das pessoas mostrarem sentimentos e ideias. 🎨' },
-  { palavras: ['desenho', 'o que é desenho'], resposta: 'Desenho é quando usamos lápis, caneta ou giz para criar linhas e formas. Dá para desenhar tudo o que a gente imagina! 🖍️' },
-  { palavras: ['pintura', 'técnicas de pintura'], resposta: 'Na pintura, existem várias técnicas: aquarela (tinta com água, suave), guache (tinta grossa), tinta a óleo (demora a secar) e até pintura com os dedos! 🎨' },
-
-  // ===== ELEMENTOS DAS ARTES VISUAIS =====
-  { palavras: ['ponto', 'o que é ponto'], resposta: 'O ponto é a menor marca no desenho! Sozinho chama atenção, mas muitos pontos juntos podem formar linhas, formas e até texturas. No pontilhismo, os pontos criam imagens incríveis! Seurat usou isso em "Tarde de domingo na Ilha de Grande Jatte". 🔴' },
-  { palavras: ['linha', 'o que é linha'], resposta: 'A linha é como um ponto que saiu passeando! Pode ser reta, curva, fina ou grossa. Linhas retas parecem firmes; curvas são mais suaves. Dürer e Kandinsky adoravam brincar com linhas! 📏' },
-  { palavras: ['cores primárias', 'primarias', 'o que são cores primárias'], resposta: 'Cores primárias ou puras são aquelas que não podem ser obtidas por meio de outras misturas. Elas são: amarelo, azul e vermelho. Com elas, podemos criar todas as outras cores! 🔴🔵🟡' },
-  { palavras: ['cores secundárias', 'secundarias', 'o que são cores secundárias'], resposta: 'Cores secundárias são geradas por meio da mistura de duas cores primárias. 🌈 Amarelo + vermelho = laranja 🟠, vermelho + azul = roxo ou violeta 🟣, azul + amarelo = verde 🟢. Que combinação legal!' },
-  { palavras: ['cores terciárias', 'terciarias', 'o que são cores terciárias'], resposta: 'Cores terciárias são geradas pela mistura de uma cor primária com uma cor secundária. São elas: vermelho-arroxeado (vinho), vermelho-alaranjado, amarelo-esverdeado, amarelo-alaranjado (bege), azul-arroxeado e azul-esverdeado (verde-água). Um montão de cores! 🌈' },
-  { palavras: ['cores complementares', 'complementares', 'contrastantes', 'o que são cores complementares'], resposta: 'Cores complementares são opostas no círculo cromático e criam o máximo de contraste! Os três pares principais são: 🔴 vermelho e 🟢 verde, 🟡 amarelo e 🟣 violeta (roxo), 🔵 azul e 🟠 laranja. Uma realça a outra! ⚡' },
-  { palavras: ['cores quentes', 'quentes', 'o que são cores quentes'], resposta: 'Cores quentes transmitem sensação de calor e energia! São elas: vermelho, laranja e amarelo. Elas lembram sol e fogo, dão alegria e movimento! ☀️' },
-  { palavras: ['cores frias', 'frias', 'o que são cores frias'], resposta: 'Cores frias transmitem sensação de calma e serenidade! São elas: azul, verde e violeta (roxo). Elas lembram água, céu e floresta. ❄️' },
-  { palavras: ['cores neutras', 'neutras', 'o que são cores neutras'], resposta: 'Cores neutras são aquelas que têm pouca reflexão da luz, como os tons de cinza e marrom. Elas são ótimas para equilibrar outras cores! ⚪⚫' },
-  { palavras: ['cor', 'o que é cor'], resposta: 'As cores são sensações visuais que nossos olhos captam quando há luz presente. A palavra "cor" vem do latim (color) e significa "cobrir" ou "ocultar". A luz branca é a união das sete cores do arco-íris: vermelho, laranja, amarelo, verde, azul, anil e violeta. Já a cor preta representa a ausência de luz. 🌈' },
-  // NOVAS ENTRADAS SOBRE TEORIA DAS CORES (complementando)
-  { palavras: ['círculo cromático', 'circulo das cores', 'roda de cores'], resposta: 'O círculo cromático é como um arco-íris organizado em volta. Nele, as cores estão dispostas em ordem: vermelho, laranja, amarelo, verde, azul, violeta. Ajuda a ver quais cores combinam! 🔄' },
-  { palavras: ['harmonia de cores', 'harmonia cromática', 'combinação de cores'], resposta: 'Harmonia de cores é quando escolhemos cores que ficam bonitas juntas. Por exemplo, cores vizinhas no círculo (como azul e verde) criam harmonia suave; cores opostas (como azul e laranja) criam contraste vibrante! 🌈✨' },
-  { palavras: ['escala de cores', 'gradiente', 'degradê'], resposta: 'Uma escala de cores é quando uma cor vai ficando mais clara ou mais escura aos poucos. Você pode fazer isso adicionando branco (tom pastel) ou preto (sombra). Fica lindo em pinturas! 🎨' },
-
-  // ===== TEORIA MUSICAL PARA CRIANÇAS =====
-  { palavras: ['som', 'o que é som'], resposta: '🎵 Som é tudo o que podemos ouvir. O silêncio também faz parte da música, ele ajuda o som a “respirar”.' },
-  { palavras: ['altura do som', 'som agudo', 'som grave'], resposta: '🎵 Som agudo é fininho e alto, como o canto de um passarinho 🐦. Som grave é grosso e forte, como um tambor 🥁.' },
-  { palavras: ['intensidade', 'volume', 'som forte', 'som fraco'], resposta: '🎵 Intensidade é o volume do som: forte é o som alto; fraco é o som baixinho. A música pode crescer e diminuir como uma onda 🌊.' },
-  { palavras: ['duração do som', 'sons curtos', 'sons longos'], resposta: '🎵 Duração é quanto tempo um som dura. Sons curtos e longos juntos criam o ritmo da música.' },
-  { palavras: ['ritmo', 'o que é ritmo'], resposta: '🎵 Ritmo é o coração da música 💓. Acontece quando batemos palmas, pés ou acompanhamos uma canção.' },
-  { palavras: ['melodia', 'o que é melodia'], resposta: '🎵 Melodia é a linha musical que cantamos 🎶. É aquela parte da música que fica na cabeça o dia todo.' },
-  { palavras: ['instrumentos musicais', 'tipos de instrumentos'], resposta: '🎵 Instrumentos musicais: sopro (flauta, trompete), cordas (violão, violino), percussão (tambor, pandeiro). Cada instrumento tem sua voz especial.' },
-  { palavras: ['música é expressão'], resposta: '🎵 A música pode mostrar alegria, tristeza, calma ou energia 😊😢. Não precisa falar para comunicar!' },
-  { palavras: ['o que é música', 'definição de música'], resposta: '✨ Música é som organizado com ritmo, melodia e emoção. Toda criança pode brincar, criar e aprender música com o corpo, a voz e a imaginação 🎨🎶' },
-
-  // ===== PERÍODOS DA MÚSICA E COMPOSITORES =====
-  { 
-    palavras: ['idade média', 'música medieval', 'hildegard von bingen'], 
-    resposta: '🎶 Na Idade Média (séc. V–XV), a música era ligada à igreja, cantada em grupo, sem instrumentos. Hildegard von Bingen foi uma monja compositora e pensadora. Ela é uma das primeiras mulheres compositoras da história! Obra famosa: Ordo Virtutum.' 
-  },
-  { 
-    palavras: ['renascimento', 'música renascentista', 'palestrina'], 
-    resposta: '🎶 No Renascimento (séc. XV–XVI), a música ficou mais suave, com várias vozes juntas, equilíbrio e beleza. Giovanni Pierluigi da Palestrina foi um compositor italiano de música sacra. Obra famosa: Missa Papae Marcelli.' 
-  },
-  { 
-    palavras: ['barroco', 'música barroca', 'bach', 'vivaldi'], 
-    resposta: '🎶 O período Barroco (1600–1750) tem música cheia de emoção, ornamentos e contrastes. Johann Sebastian Bach foi um mestre alemão da harmonia. Obra famosa: Toccata e Fuga em Ré Menor. Antonio Vivaldi era italiano e criou músicas alegres e descritivas, como As Quatro Estações.' 
-  },
-  { 
-    palavras: ['clássico', 'período clássico', 'mozart', 'haydn'], 
-    resposta: '🎶 No período Clássico (1750–1820), a música é equilibrada, clara e organizada. Wolfgang Amadeus Mozart foi um gênio musical desde criança, famoso por óperas e sinfonias como Eine kleine Nachtmusik. Joseph Haydn, austríaco, foi professor de Mozart e ficou conhecido por suas sinfonias, como a Sinfonia Surpresa.' 
-  },
-  { 
-    palavras: ['romântico', 'período romântico', 'beethoven', 'chopin'], 
-    resposta: '🎶 O Romantismo (séc. XIX) trouxe música intensa, cheia de sentimentos e histórias. Ludwig van Beethoven revolucionou a música mesmo ficando surdo. Sua obra mais famosa é a Sinfonia nº 9. Frédéric Chopin era um pianista polonês que criou músicas delicadas e poéticas chamadas Noturnos.' 
-  },
-  { 
-    palavras: ['moderno', 'música moderna', 'debussy'], 
-    resposta: '🎶 Na música moderna (séc. XX), os compositores experimentaram novos sons e liberdade musical. Claude Debussy, francês, criou músicas como pinturas sonoras, cheias de climas e sensações. Obra famosa: Clair de Lune.' 
-  },
-  { palavras: ['resumo períodos musicais'], resposta: '✨ Resumo rápido: Idade Média: música religiosa; Renascimento: harmonia vocal; Barroco: emoção e movimento; Clássico: equilíbrio e clareza; Romântico: sentimento e drama; Moderno: experimentação.' },
-
-  // ===== MÚSICA INFANTIL (ARTISTAS) =====
-  { 
-    palavras: ['palavra cantada'], 
-    resposta: '🧸 A Palavra Cantada é a dupla Sandra Peres e Paulo Tatit, que faz músicas educativas, poéticas e divertidas para crianças.' 
-  },
-  { 
-    palavras: ['toquinho'], 
-    resposta: '🧸 Toquinho é um cantor e compositor brasileiro com canções suaves e afetivas que encantam crianças e adultos.' 
-  },
-  { 
-    palavras: ['bia bedran'], 
-    resposta: '🧸 Bia Bedran traz brincadeiras cantadas, folclore e histórias, com forte ligação com a educação infantil.' 
-  },
-  { 
-    palavras: ['hélio ziskind'], 
-    resposta: '🧸 Hélio Ziskind é conhecido por canções educativas e trilhas infantis para TV.' 
-  },
-  { 
-    palavras: ['xuxa'], 
-    resposta: '🧸 Xuxa é um ícone do pop infantil, com coreografias, cores e refrões fáceis que marcaram época.' 
-  },
-  { 
-    palavras: ['tiquequê'], 
-    resposta: '🧸 Tiquequê é um grupo com humor, jogos de palavras e criatividade, com linguagem próxima do universo infantil atual.' 
-  },
-  { 
-    palavras: ['the wiggles'], 
-    resposta: '🧸 The Wiggles é um grupo australiano que une música e dança para aprender brincando.' 
-  },
-  { 
-    palavras: ['raffi'], 
-    resposta: '🧸 Raffi é um cantor de folk infantil com mensagens de respeito, natureza e amizade.' 
-  },
-  { 
-    palavras: ['disney'], 
-    resposta: '🧸 As músicas da Disney são trilhas sonoras de filmes que encantam com histórias, emoção e canções inesquecíveis.' 
-  },
-
-  // ===== GÊNEROS MUSICAIS =====
-  { 
-    palavras: ['mpb', 'música popular brasileira'], 
-    resposta: '🎤 MPB mistura tradição e modernidade, com letras poéticas, sociais e afetivas. Usa violão, piano e ritmos brasileiros.' 
-  },
-  { 
-    palavras: ['funk'], 
-    resposta: '🎤 Funk tem batida forte e repetitiva. Surgiu nas periferias como expressão social e dança.' 
-  },
-  { 
-    palavras: ['pop'], 
-    resposta: '🎤 Pop é música popular e acessível, com refrões fáceis e ritmo dançante. Feito para atingir muitos públicos.' 
-  },
-  { 
-    palavras: ['rock'], 
-    resposta: '🎤 Rock tem energia, atitude e guitarras elétricas. Pode ser calmo ou barulhento, e fala de liberdade e juventude.' 
-  },
-  { 
-    palavras: ['samba'], 
-    resposta: '🎤 Samba é ritmo brasileiro ligado à dança e à comunidade. Usa percussão e alegria, muito presente no carnaval.' 
-  },
-  { 
-    palavras: ['bossa nova'], 
-    resposta: '🎤 Bossa nova é um samba mais suave e sofisticado, com clima calmo e violão delicado.' 
-  },
-  { 
-    palavras: ['axé'], 
-    resposta: '🎤 Axé é ritmo festivo da Bahia, para dançar, pular e cantar em grupo. Muito usado em carnavais.' 
-  },
-  { 
-    palavras: ['forró'], 
-    resposta: '🎤 Forró é ritmo nordestino animado ou romântico, com sanfona, zabumba e triângulo. Dança em par.' 
-  },
-  { 
-    palavras: ['blues'], 
-    resposta: '🎤 Blues é música de sentimento profundo, que fala de tristeza, esperança e vida. Base de muitos outros estilos.' 
-  },
-  { 
-    palavras: ['jazz'], 
-    resposta: '🎤 Jazz é improvisação e liberdade musical. Cada músico cria no momento. Pode ser suave ou animado.' 
-  },
-  { 
-    palavras: ['reggae'], 
-    resposta: '🎤 Reggae tem ritmo tranquilo e marcado, com mensagens de paz, amor e igualdade. Nasceu na Jamaica.' 
-  },
-  { 
-    palavras: ['heavy metal'], 
-    resposta: '🎤 Heavy metal é a versão mais pesada do rock, com guitarras distorcidas e temas intensos.' 
-  },
-  { 
-    palavras: ['house'], 
-    resposta: '🎤 House é música eletrônica dançante, com batida constante, usada em festas.' 
-  },
-  { 
-    palavras: ['techno', 'tecno'], 
-    resposta: '🎤 Techno é eletrônica mais minimalista e futurista, com sons repetidos.' 
-  },
-  { 
-    palavras: ['hip hop'], 
-    resposta: '🎤 Hip hop é uma cultura que envolve música, dança e arte visual. Ritmo marcado e letras faladas sobre a realidade.' 
-  },
-  { 
-    palavras: ['gospel'], 
-    resposta: '🎤 Gospel é música religiosa cristã, com letras de fé, esperança e louvor.' 
-  },
-  { 
-    palavras: ['country'], 
-    resposta: '🎤 Country é música ligada à vida no campo, com instrumentos acústicos e histórias do dia a dia.' 
-  },
-  { 
-    palavras: ['rap'], 
-    resposta: '🎤 Rap é forma musical falada e ritmada, com letras fortes e críticas da vida urbana.' 
-  },
-
-  // ===== DANÇA =====
-  { 
-    palavras: ['dança', 'o que é dança', 'definição de dança'], 
-    resposta: '💃 A dança é uma prática de expressão corporal por meio do movimento, que traz benefícios como autoconhecimento, lazer, criatividade, relaxamento e melhora da saúde, por ser também um exercício físico. Além de prática recreativa ou profissional, a dança é uma área de conhecimento, construída ao longo do tempo por estudos sobre o corpo, o movimento e seus significados. Ao dançar, o corpo se relaciona com tempo, espaço e som, e a dança surge da integração desses elementos com o movimento corporal, estimulando a criação e a criatividade.' 
-  },
-  { 
-    palavras: ['objetivos da dança', 'para que serve a dança'], 
-    resposta: '🎯 A dança tem vários objetivos: lazer (diversão e socialização), trabalho (atuação profissional de dançarinos), exercício físico (melhora da saúde e condicionamento) e manifestação cultural (preservação de tradições e costumes).' 
-  },
-  { 
-    palavras: ['tipos de dança', 'estilos de dança'], 
-    resposta: 'Existem muitos tipos de dança! Alguns exemplos: 🩰 Balé (dança clássica, técnica e disciplinada), 💃 Dança contemporânea (liberdade de movimentos, experimentação), 🕺 Danças urbanas (estilos criados em contextos urbanos e periféricos), 🎷 Jazz (improviso e raízes populares), 🇧🇷 Samba (expressão da cultura popular brasileira), 🌵 Forró (dança em par do Nordeste), 👞 Sapateado (dança rítmica com sons dos pés).' 
-  },
-  { 
-    palavras: ['elementos da dança'], 
-    resposta: 'Os principais elementos da dança são: movimento (gestos e ações do corpo, organizados por fluência, espaço, peso e tempo, estudados por Rudolf Laban), espaço (o local onde a dança acontece), som (música, respiração, batidas do corpo) e corpo (o instrumento da dança, valorizando a diversidade corporal, social e cultural).' 
-  },
-  { 
-    palavras: ['balé', 'ballet', 'dança clássica'], 
-    resposta: '🩰 O balé é uma dança clássica, técnica e disciplinada, que exige anos de treino. Surgiu nas cortes italianas e se desenvolveu na França e Rússia. As bailarinas usam sapatilhas de ponta e os movimentos são precisos e graciosos.' 
-  },
-  { 
-    palavras: ['dança contemporânea'], 
-    resposta: '💃 A dança contemporânea busca liberdade de movimentos, experimentação e diversidade de corpos. Ela mistura técnicas e expressões, sem regras fixas, e muitas vezes aborda temas sociais e políticos.' 
-  },
-  { 
-    palavras: ['danças urbanas', 'hip hop dança', 'street dance'], 
-    resposta: '🕺 As danças urbanas são estilos criados em contextos urbanos e periféricos, como o hip hop, breaking, locking e popping. Têm forte significado social e cultural, expressando a realidade e a criatividade das comunidades.' 
-  },
-  { 
-    palavras: ['jazz dança', 'jazz dance'], 
-    resposta: '🎷 O jazz é um estilo de dança marcado pelo improviso e pelas raízes populares. Surgiu nos Estados Unidos com a música jazz e incorpora elementos do balé e da dança moderna, com movimentos energéticos e expressivos.' 
-  },
-  { 
-    palavras: ['samba dança', 'dança samba'], 
-    resposta: '🇧🇷 O samba é uma expressão da cultura popular brasileira, com influência africana. Como dança, pode ser dançado solo ou em par, com movimentos de quadris, passos rápidos e muita alegria. É a alma do carnaval!' 
-  },
-  { 
-    palavras: ['forró dança', 'dança forró'], 
-    resposta: '🌵 O forró é uma dança em par, originária do Nordeste brasileiro. Tem ritmos como xote, baião e arrasta-pé. A dança é coladinha, com passos básicos e muita cumplicidade entre os parceiros.' 
-  },
-  { 
-    palavras: ['sapateado', 'tap dance'], 
-    resposta: '👞 O sapateado é uma dança rítmica em que os pés produzem sons ao bater no chão com sapatos especiais que têm placas de metal. Pode ser dançado solo ou em grupo, e exige coordenação e musicalidade.' 
-  },
-  // NOVAS ENTRADAS: DANÇAS TÍPICAS BRASILEIRAS
-  { 
-    palavras: ['frevo', 'dança frevo'], 
-    resposta: '🎉 Frevo é uma dança típica de Pernambuco, cheia de energia e passos malabarísticos. Os dançarinos usam sombrinhas coloridas e se movem rapidamente ao som de uma orquestra de metais. É patrimônio cultural imaterial da humanidade!' 
-  },
-  { 
-    palavras: ['samba', 'dança samba'], 
-    resposta: '🇧🇷 O samba é um dos símbolos do Brasil! Tem gingado, balanço e muita alegria. Pode ser dançado sozinho ou em par, e é a alma do carnaval carioca. Escolas de samba desfilam com enredos incríveis.' 
-  },
-  { 
-    palavras: ['bumba meu boi', 'bumba boi', 'boi bumbá'], 
-    resposta: '🐂 O Bumba Meu Boi é uma festa do folclore brasileiro, muito forte no Maranhão. Conta a história de um boi que morre e revive, com personagens como o Pai Francisco e a Mãe Catirina. Tem dança, música e teatro ao mesmo tempo!' 
-  },
-  { 
-    palavras: ['caboclinho'], 
-    resposta: '🌿 Caboclinho é uma dança indígena do Nordeste, com cocares de penas, arco e flecha. Os dançarinos imitam a caça e a guerra, com passos rápidos e muita força. É uma forma de preservar a cultura dos povos originários.' 
-  },
-  { 
-    palavras: ['cavalo marinho'], 
-    resposta: '🐴 Cavalo Marinho é uma dança dramática do folclore pernambucano. Mistura música, dança e teatro, com personagens como o Cavalo Marinho (um cavalo encantado), Mateus e Catirina. É uma grande brincadeira!' 
-  },
-  { 
-    palavras: ['coco', 'dança coco'], 
-    resposta: '🥥 Coco é uma dança de roda do Nordeste, com sapateado e palmas. Surgiu nos engenhos de cana, quando os trabalhadores batiam os pés no chão enquanto quebravam coco. O ritmo é contagiante!' 
-  },
-  { 
-    palavras: ['samba de roda'], 
-    resposta: '🔄 Samba de roda é uma forma tradicional de samba, dançado em roda, com participação de todos. Nasceu no Recôncavo Baiano e é patrimônio cultural brasileiro. As pessoas entram na roda, sambam e dão lugar a outras.' 
-  },
-  { 
-    palavras: ['jongo'], 
-    resposta: '🥁 Jongo é uma dança de origem africana, praticada no sudeste do Brasil. Os tambores chamados "caxambu" e "angona" puxam o ritmo, e os dançarinos respondem com versos improvisados. Tem umbigada e muita ancestralidade.' 
-  },
-
-  // ===== TEATRO =====
-  { 
-    palavras: ['teatro', 'o que é teatro', 'definição de teatro'], 
-    resposta: '🎭 Teatro é a arte de contar histórias usando o corpo, a voz, o espaço e a imaginação. É quando pessoas se transformam em personagens e convidam o público para entrar em outro mundo sem sair do lugar. O palco vira floresta, castelo, escola, planeta distante… tudo pode nascer ali.' 
-  },
-  { 
-    palavras: ['origem do teatro', 'história do teatro', 'teatro grego'], 
-    resposta: '🌍 O teatro começou na Grécia Antiga, há mais de 2.500 anos. As primeiras apresentações aconteciam em festas dedicadas ao deus Dionísio, ligadas à música, dança e celebrações. Os gregos criaram dois grandes estilos: Tragédia (histórias sérias e emocionantes) e Comédia (histórias engraçadas e críticas). Os espetáculos eram feitos em grandes teatros ao ar livre, como o famoso Teatro de Epidauro, que existe até hoje.' 
-  },
-  { 
-    palavras: ['tipos de teatro', 'gêneros teatrais', 'estilos de teatro'], 
-    resposta: '🎭 Tipos de Teatro:\n\n🎭 Teatro Dramático: Histórias sérias, emocionantes ou reflexivas.\n😂 Teatro de Comédia: Histórias engraçadas que fazem o público rir e pensar.\n🎎 Teatro de Fantoches / Bonecos: Personagens são bonecos manipulados por artistas.\n🎨 Teatro Infantil: Peças criadas especialmente para crianças, com linguagem acessível e temas lúdicos.\n🎪 Teatro Musical: História contada com música, canto e dança.\n🎭 Teatro de Sombras: Personagens aparecem como sombras projetadas em uma tela iluminada.\n🎭 Teatro de Rua: Acontece em praças e espaços públicos.' 
-  },
-  { 
-    palavras: ['teatro dramático'], 
-    resposta: '🎭 Teatro Dramático: São peças com histórias sérias, emocionantes ou que fazem a gente pensar sobre a vida. Podem ser tragédias ou dramas familiares.' 
-  },
-  { 
-    palavras: ['teatro de comédia', 'comédia'], 
-    resposta: '😂 Teatro de Comédia: Peças engraçadas que fazem o público rir, mas também podem criticar costumes e comportamentos de forma leve e divertida.' 
-  },
-  { 
-    palavras: ['teatro de fantoches', 'fantoches', 'teatro de bonecos'], 
-    resposta: '🎎 Teatro de Fantoches ou Bonecos: Os personagens são bonecos manipulados por artistas (chamados de bonequeiros ou fantoches). É uma forma de teatro muito antiga e amada pelas crianças!' 
-  },
-  { 
-    palavras: ['teatro infantil'], 
-    resposta: '🎨 Teatro Infantil: Peças criadas especialmente para crianças, com histórias mágicas, cores, música e temas que falam sobre amizade, imaginação e sentimentos.' 
-  },
-  { 
-    palavras: ['teatro musical', 'musical'], 
-    resposta: '🎪 Teatro Musical: A história é contada com música, canto e dança. Os personagens cantam para mostrar o que estão sentindo. Exemplos famosos: O Rei Leão, Mary Poppins.' 
-  },
-  { 
-    palavras: ['teatro de sombras'], 
-    resposta: '🎭 Teatro de Sombras: Os personagens aparecem como silhuetas (sombras) projetadas em uma tela iluminada por trás. É uma arte linda e cheia de mistério.' 
-  },
-  { 
-    palavras: ['teatro de rua'], 
-    resposta: '🎭 Teatro de Rua: Apresentações que acontecem em praças, parques e espaços públicos, gratuitas e abertas para todos. A rua vira palco!' 
-  },
-
-  // ===== BIOGRAFIAS DE ARTISTAS PLÁSTICOS (resumidas e humanizadas) =====
-  { palavras: ['vincent van gogh', 'van gogh', 'gogh', 'quem foi van gogh'], resposta: 'Vincent van Gogh (1853–1890) foi um pintor holandês do pós-impressionismo. Ele criou obras vibrantes e emotivas, com pinceladas intensas e cores expressivas. Produziu mais de 2 mil trabalhos, incluindo “Noite Estrelada”. Ele só foi reconhecido após sua morte. 🌟' },
-  { palavras: ['michelangelo', 'quem foi michelangelo'], resposta: 'Michelangelo (1475–1564) foi um artista renascentista italiano, mestre da escultura, pintura e arquitetura. Criou o teto da Capela Sistina e a escultura “Davi”. Sua arte celebra a força e a dramaticidade do corpo humano. 🗿' },
-  { palavras: ['raffaello sanzio', 'rafael', 'quem foi rafael'], resposta: 'Raffaello Sanzio (1483–1520), conhecido como Rafael, foi um dos grandes nomes do Renascimento. Famoso por suas Madonas e pela obra “A Escola de Atenas”. Destacou-se pela harmonia e equilíbrio nas composições. 👼' },
-  { palavras: ['leonardo da vinci', 'leonardo', 'da vinci', 'quem foi leonardo'], resposta: 'Leonardo da Vinci (1452–1519) foi um gênio multifacetado do Renascimento. Pintor da “Mona Lisa” e de “A Última Ceia”, também foi cientista, inventor e anatomista. Uniu arte e ciência como poucos na história. 🔍' },
-  { palavras: ['romero britto', 'britto', 'quem é romero britto'], resposta: 'Romero Britto (1963– ) é um artista brasileiro contemporâneo conhecido por seu estilo colorido, alegre e inspirado na pop art. Suas obras têm traços marcantes e padrões vibrantes. 🎈' },
-  { palavras: ['djanira', 'djanira da motta e silva', 'quem foi djanira'], resposta: 'Djanira da Motta e Silva (1914–1979) foi uma pintora brasileira modernista. Retratou cenas do cotidiano, trabalhadores e manifestações culturais do Brasil com cores fortes e composição simples. 🇧🇷' },
-  { palavras: ['frida kahlo', 'kahlo', 'frida', 'quem foi frida kahlo'], resposta: 'Frida Kahlo (1907–1954) foi uma artista mexicana famosa por autorretratos intensos. Suas pinturas abordam identidade, cultura mexicana e experiências pessoais marcantes. 🌺' },
-  { palavras: ['salvador dalí', 'dalí', 'quem foi salvador dalí'], resposta: 'Salvador Dalí (1904–1989) foi o principal nome do Surrealismo espanhol. Criou imagens oníricas e provocativas, como os relógios derretendo em “A Persistência da Memória”. ⏰' },
-  { palavras: ['caravaggio', 'quem foi caravaggio'], resposta: 'Caravaggio (1571–1610) foi um pintor italiano do Barroco. Revolucionou a arte com o uso dramático de luz e sombra, técnica conhecida como claro-escuro. 🔦' },
-  { palavras: ['tarsila do amaral', 'tarsila', 'quem foi tarsila'], resposta: 'Tarsila do Amaral (1886–1973) foi uma das principais artistas do Modernismo brasileiro. Criadora de “Abaporu”, contribuiu para o movimento antropofágico. 🎨' },
-  { palavras: ['ivan cruz', 'quem foi ivan cruz'], resposta: 'Ivan Cruz (1947–2023) foi um artista brasileiro conhecido por retratar brincadeiras infantis tradicionais, valorizando a cultura popular. 🪁' },
-  { palavras: ['candido portinari', 'portinari', 'quem foi portinari'], resposta: 'Candido Portinari (1903–1962) foi um pintor brasileiro que retratou temas sociais e o povo trabalhador. Destacam-se os painéis “Guerra e Paz”. 👨‍🌾' },
-  { palavras: ['henri matisse', 'matisse', 'quem foi matisse'], resposta: 'Henri Matisse (1869–1954) foi um artista francês do Fauvismo. Explorou cores vibrantes e formas simplificadas, criando composições alegres e decorativas. ✂️' },
-  { palavras: ['rené magritte', 'magritte', 'quem foi magritte'], resposta: 'René Magritte (1898–1967) foi um pintor surrealista belga. Suas obras brincam com a percepção e a realidade, como em “Isto não é um cachimbo”. 🧐' },
-  { palavras: ['claude monet', 'monet', 'quem foi monet'], resposta: 'Claude Monet (1840–1926) foi um dos fundadores do Impressionismo. Pintou séries sobre a luz e a natureza, como as “Ninféias”. ☀️' },
-  { palavras: ['georges seurat', 'seurat', 'quem foi seurat'], resposta: 'Georges Seurat (1859–1891) foi o criador do pontilhismo. Utilizava pequenos pontos de cor para formar imagens, como em “Tarde de Domingo na Ilha de Grande Jatte”. 🔵' },
-  { palavras: ['edgar degas', 'degas', 'quem foi degas'], resposta: 'Edgar Degas (1834–1917) foi um impressionista francês conhecido por retratar bailarinas e cenas do cotidiano urbano. 🩰' },
-  { palavras: ['edvard munch', 'munch', 'quem foi munch'], resposta: 'Edvard Munch (1863–1944) foi um pintor norueguês expressionista. Criador de “O Grito”, explorou emoções humanas intensas. 😱' },
-  { palavras: ['rembrandt', 'quem foi rembrandt'], resposta: 'Rembrandt (1606–1669) foi um mestre holandês do Barroco. Famoso por autorretratos e pelo domínio da luz e sombra. 🎭' },
-  { palavras: ['hélio oiticica', 'oiticica', 'quem foi hélio oiticica'], resposta: 'Hélio Oiticica (1937–1980) foi um artista brasileiro inovador. Criou obras interativas e experiências sensoriais no movimento neoconcreto. 🕺' },
-  { palavras: ['di cavalcanti', 'cavalcanti', 'quem foi di cavalcanti'], resposta: 'Di Cavalcanti (1897–1976) foi um modernista brasileiro que retratou o samba, a vida urbana e a cultura popular. 🎉' },
-  { palavras: ['almeida júnior', 'almeida jr', 'quem foi almeida júnior'], resposta: 'José Ferraz de Almeida Júnior (1850–1899), conhecido como Almeida Jr., destacou-se por retratar o interior paulista com realismo. 🌾' },
-  { palavras: ['georgina de albuquerque', 'georgina', 'quem foi georgina de albuquerque'], resposta: 'Georgina de Albuquerque (1885–1962) foi uma pintora brasileira pioneira, abordou temas históricos e cenas do cotidiano. 📜' },
-  { palavras: ['pedro américo', 'quem foi pedro américo'], resposta: 'Pedro Américo (1843–1905) foi um pintor acadêmico brasileiro, autor de grandes cenas históricas como “Independência ou Morte”. ⚔️' },
-  { palavras: ['lasar segall', 'segall', 'quem foi lasar segall'], resposta: 'Lasar Segall (1891–1957) foi um artista lituano naturalizado brasileiro. Retratou temas sociais, imigração e sofrimento humano. 🌍' },
-  { palavras: ['alfredo volpi', 'volpi', 'quem foi alfredo volpi'], resposta: 'Alfredo Volpi (1896–1988) foi conhecido pelas “bandeirinhas” coloridas, explorou formas geométricas e cores suaves. 🏠' },
-  { palavras: ['beatriz milhazes', 'milhazes', 'quem é beatriz milhazes'], resposta: 'Beatriz Milhazes (1960– ) é uma artista contemporânea brasileira. Mistura cores intensas, padrões decorativos e referências à cultura popular. 🌼' },
-
-  // ===== NOVAS ENTRADAS: ARTES INDÍGENAS E AFRICANAS =====
-  { 
-    palavras: ['arte indígena', 'arte indigena', 'arte dos índios', 'cultura indígena'], 
-    resposta: '🪶 A arte indígena está presente na pintura corporal, na cerâmica, na cestaria, na arte plumária (enfeites de penas) e na música. Cada etnia tem seus próprios desenhos e significados, ligados à natureza e aos ancestrais. É uma arte cheia de símbolos e tradição!' 
-  },
-  { 
-    palavras: ['arte africana', 'arte da áfrica', 'cultura africana'], 
-    resposta: '🌍 A arte africana é muito rica e diversa! Máscaras, esculturas em madeira, tecidos coloridos (como o kente) e instrumentos musicais como o djembe. Muitas obras representam espíritos, ancestrais e forças da natureza. Essa arte influenciou artistas como Picasso e o modernismo brasileiro.' 
-  },
-  { 
-    palavras: ['máscaras africanas'], 
-    resposta: '🎭 As máscaras africanas são usadas em rituais, festas e cerimônias. Cada máscara tem um significado especial e representa um espírito ou ancestral. São feitas de madeira, tecido, palha e decoradas com cores e materiais naturais.' 
-  },
-  { 
-    palavras: ['pintura corporal indígena'], 
-    resposta: '🖌️ Muitos povos indígenas pintam o corpo com tintas naturais (como urucum, jenipapo) para rituais, guerras ou festas. Cada desenho conta uma história, mostra a que grupo a pessoa pertence ou afasta maus espíritos. É uma arte que vive na pele!' 
-  },
-
-  // ===== NOVAS ENTRADAS: TÉCNICAS ARTÍSTICAS =====
-  { 
-    palavras: ['aquarela', 'técnica aquarela'], 
-    resposta: '💧 Aquarela é uma técnica de pintura com tinta dissolvida em água. As cores ficam transparentes e suaves, criando efeitos delicados. Os artistas usam pincéis e papel especial. É ótima para pintar céus, flores e paisagens sonhadoras!' 
-  },
-  { 
-    palavras: ['pintura a óleo', 'óleo sobre tela'], 
-    resposta: '🖼️ Pintura a óleo usa tintas feitas com pigmentos e óleo (como linhaça). Elas demoram mais a secar, permitindo misturar e criar detalhes. Grandes mestres como Leonardo da Vinci e Van Gogh usaram essa técnica. As cores ficam bem vibrantes e duradouras.' 
-  },
-  { 
-    palavras: ['colagem', 'técnica de colagem'], 
-    resposta: '✂️ Colagem é uma técnica onde colamos pedaços de papel, tecido, fotos ou outros materiais sobre uma superfície. Artistas como Picasso e Henri Matisse fizeram colagens incríveis. Dá para criar composições surreais e cheias de textura!' 
-  },
-  // ===== NOVOS PINTORES (LISTA EXPANDIDA) =====
-  { 
-    palavras: ['rené magritte', 'magritte', 'quem foi rené magritte'], 
-    resposta: 'René Magritte foi um pintor belga do Surrealismo. 🎨 Ele gostava de pintar coisas comuns de um jeito estranho e misterioso. O que ele ensina: a imaginar além do óbvio.' 
-  },
-  { 
-    palavras: ['pablo picasso', 'picasso', 'quem foi picasso'], 
-    resposta: 'Pablo Picasso foi um pintor espanhol, criador do Cubismo. 🖼️ Ele desenhava pessoas e objetos com formas diferentes e divertidas. O que ele ensina: que não existe só um jeito de desenhar.' 
-  },
-  { 
-    palavras: ['vincent van gogh', 'van gogh', 'gogh'], 
-    resposta: 'Vincent van Gogh foi um pintor holandês do Pós‑Impressionismo. 🌻 Ele pintava com muitas cores e pinceladas cheias de emoção. O que ele ensina: a pintar sentimentos.' 
-  },
-  { 
-    palavras: ['frida kahlo', 'kahlo', 'frida'], 
-    resposta: 'Frida Kahlo foi uma pintora mexicana de arte moderna. 🌺 Ela pintava sua própria história, seus sonhos e dores. O que ela ensina: a ser verdadeiro na arte.' 
-  },
-  { 
-    palavras: ['leonardo da vinci', 'leonardo', 'da vinci'], 
-    resposta: 'Leonardo da Vinci foi um gênio italiano do Renascimento. 🔍 Ele desenhava, pintava e inventava coisas. O que ele ensina: curiosidade e observação.' 
-  },
-  { 
-    palavras: ['michelangelo', 'quem foi michelangelo'], 
-    resposta: 'Michelangelo foi um artista italiano do Renascimento. 🗿 Ele pintava corpos fortes e cheios de movimento. O que ele ensina: força e dedicação.' 
-  },
-  { 
-    palavras: ['rafael', 'raffaello sanzio', 'quem foi rafael'], 
-    resposta: 'Rafael foi um pintor italiano do Renascimento. 👼 Ele criava pinturas calmas e equilibradas. O que ele ensina: harmonia e beleza.' 
-  },
-  { 
-    palavras: ['salvador dalí', 'dalí', 'quem foi salvador dalí'], 
-    resposta: 'Salvador Dalí foi um pintor espanhol do Surrealismo. ⏰ Ele misturava sonhos e imaginação em suas pinturas. O que ele ensina: a sonhar acordado.' 
-  },
-  { 
-    palavras: ['joan miró', 'miró', 'quem foi joan miró'], 
-    resposta: 'Joan Miró foi um pintor espanhol de arte moderna. ✨ Ele usava formas simples como estrelas e linhas. O que ele ensina: a brincar com formas.' 
-  },
-  { 
-    palavras: ['claude monet', 'monet', 'quem foi monet'], 
-    resposta: 'Claude Monet foi um pintor francês do Impressionismo. ☀️ Ele pintava a luz e a natureza. O que ele ensina: observar o mundo com atenção.' 
-  },
-  { 
-    palavras: ['alfredo volpi', 'volpi', 'quem foi alfredo volpi'], 
-    resposta: 'Alfredo Volpi foi um pintor brasileiro do Modernismo. 🏠 Ele gostava de pintar bandeirinhas e casas coloridas. O que ele ensina: valorizar formas simples.' 
-  },
-  { 
-    palavras: ['pierre auguste renoir', 'renoir', 'quem foi renoir'], 
-    resposta: 'Pierre-Auguste Renoir foi um pintor francês do Impressionismo. 🎉 Ele pintava pessoas felizes e momentos leves. O que ele ensina: alegria e convivência.' 
-  },
-  { 
-    palavras: ['edgar degas', 'degas', 'quem foi degas'], 
-    resposta: 'Edgar Degas foi um pintor francês do Impressionismo. 🩰 Ele adorava desenhar bailarinas em movimento. O que ele ensina: movimento e observação.' 
-  },
-  { 
-    palavras: ['wassily kandinsky', 'kandinsky', 'quem foi kandinsky'], 
-    resposta: 'Wassily Kandinsky foi um pintor russo do Abstracionismo. 🎵 Ele pintava músicas usando cores e formas. O que ele ensina: que cores também falam.' 
-  },
-  { 
-    palavras: ['paul klee', 'klee', 'quem foi paul klee'], 
-    resposta: 'Paul Klee foi um pintor suíço de arte moderna. 🖍️ Ele desenhava como se fosse uma criança curiosa. O que ele ensina: liberdade para criar.' 
-  },
-  { 
-    palavras: ['anita malfatti', 'malfatti', 'quem foi anita malfatti'], 
-    resposta: 'Anita Malfatti foi uma pintora brasileira do Modernismo. 🇧🇷 Ela pintava pessoas com cores fortes. O que ela ensina: coragem para inovar.' 
-  },
-  { 
-    palavras: ['vik muniz', 'muniz', 'quem é vik muniz'], 
-    resposta: 'Vik Muniz é um artista brasileiro contemporâneo. ♻️ Ele cria arte com objetos diferentes, como lixo e doces. O que ele ensina: criar com qualquer material.' 
-  },
-  { 
-    palavras: ['carybé', 'quem foi carybé'], 
-    resposta: 'Carybé foi um artista argentino-brasileiro de arte moderna. 🥁 Ele desenhava festas, danças e cultura popular. O que ele ensina: valorizar a cultura.' 
-  },
-  { 
-    palavras: ['heitor dos prazeres', 'heitor', 'quem foi heitor dos prazeres'], 
-    resposta: 'Heitor dos Prazeres foi um pintor, compositor e sambista brasileiro. 🎶 Ele pintava festas, samba e alegria. O que ele ensina: arte nasce da vida.' 
-  },
-  { 
-    palavras: ['adriana varejão', 'varejão', 'quem é adriana varejão'], 
-    resposta: 'Adriana Varejão é uma artista brasileira contemporânea. 🏛️ Ela mistura história e imaginação em suas obras. O que ela ensina: arte também faz pensar.' 
-  },
-  { 
-    palavras: ['arthur bispo do rosário', 'bispo', 'quem foi arthur bispo do rosário'], 
-    resposta: 'Arthur Bispo do Rosário foi um artista brasileiro de arte singular. 🧵 Ele criava arte com objetos do dia a dia, como tecidos e linhas. O que ele ensina: tudo pode virar arte.' 
-  },
-  // ===== RESPOSTA PADRÃO =====
-  { 
-    palavras: [], 
-    resposta: 'Que pergunta legal! Ainda não sei responder essa, mas você pode perguntar sobre pintores (Tarsila, Portinari, Van Gogh), obras (Abaporu, Monalisa), dança (samba, balé), música ou teatro. Ou me conte como você está se sentindo! Vamos tentar de novo? 😊' 
-  }
-];
-
-let palavrasBloqueadas = ['violência', 'guerra', 'tiro', 'sangue', 'briga', 'morte'];
-let historicoPerguntas = [];
-
-function removerAcentos(str) {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
-function responderCuriosidade(perguntaNormalizada) {
-  const todas = [
-    ...curiosidadesDesenho.map((c, i) => ({ texto: "🎨 " + c, audio: audiosCuriosidades.desenho[i] })),
-    ...curiosidadesEscultura.map((c, i) => ({ texto: "🗿 " + c, audio: audiosCuriosidades.escultura[i] })),
-    ...curiosidadesDanca.map((c, i) => ({ texto: "💃 " + c, audio: audiosCuriosidades.danca[i] })),
-    ...curiosidadesTeatro.map((c, i) => ({ texto: "🎭 " + c, audio: audiosCuriosidades.teatro[i] })),
-    ...curiosidadesArteGeral.map((c, i) => ({ texto: "✨ " + c, audio: audiosCuriosidades.arteGeral[i] }))
-  ];
-  return todas[Math.floor(Math.random() * todas.length)];
-}
-
-function obterAudioPorPergunta(perguntaNormalizada) {
-  for (const item of mapaAudioPorPalavra) {
-    if (item.palavras.some(p => perguntaNormalizada.includes(removerAcentos(p)))) return item.audio;
-  }
-  return 'padraoresposta-01';
-}
-
-function adicionarMensagem(tipo, texto, audio = null){
-  const chat = document.getElementById('chatArea');
-  const div = document.createElement('div');
-  div.className = `mensagem ${tipo}`;
-  if (tipo === 'resposta') {
-    const textoEscapado = texto.replace(/'/g, "\\'");
-    div.innerHTML = `<span>${texto} ${audio ? `<button class="botao-audio" onclick="tocarAudio('${audio}')"><i class="fas fa-volume-up"></i></button>` : ''}</span>`;
-  } else {
-    div.innerHTML = `<span>${texto}</span>`;
-  }
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function fazerPergunta(pergunta) {
-  document.getElementById('perguntaInput').value = pergunta;
-  enviarPergunta();
-}
-
-function enviarPergunta() {
-  const input = document.getElementById('perguntaInput');
-  const pergunta = input.value.trim();
-  if (pergunta === '') return;
-  const perguntaLower = pergunta.toLowerCase();
-  for (let palavra of palavrasBloqueadas) {
-    if (perguntaLower.includes(palavra)) {
-      adicionarMensagem('pergunta', pergunta);
-      adicionarMensagem('resposta', 'Ops! Essa pergunta não posso responder. Que tal perguntar sobre arte, desenho ou música? 🖌️');
-      input.value = '';
-      historicoPerguntas.push({ pergunta, resposta: 'bloqueada', data: new Date() });
-      return;
-    }
-  }
-  adicionarMensagem('pergunta', pergunta);
-  historicoPerguntas.push({ pergunta, data: new Date() });
-  const pincelFala = document.getElementById('pincelFala');
-  pincelFala.innerText = 'Deixa eu pensar... 🤔';
-  setTimeout(() => {
-    const perguntaNormalizada = removerAcentos(perguntaLower);
-    let respostaEncontrada = null;
-    let audioResposta = 'padraoresposta-01';
-    const palavrasCuriosidade = ['curiosidade', 'curiosidades', 'me conte alguma coisa', 'me conta alguma novidade', 'fale sobre', 'conta algo', 'me diga algo', 'me fala uma'];
-    if (palavrasCuriosidade.some(p => perguntaNormalizada.includes(p))) {
-      respostaEncontrada = responderCuriosidade(perguntaNormalizada);
-    } else {
-      for (let item of conhecimento) {
-        for (let palavra of item.palavras) {
-          const palavraNormalizada = removerAcentos(palavra.toLowerCase());
-          if (perguntaNormalizada.includes(palavraNormalizada)) {
-            respostaEncontrada = typeof item.resposta === 'function' ? item.resposta() : item.resposta;
-            break;
-          }
-        }
-        if (respostaEncontrada) break;
-      }
-    }
-    if (!respostaEncontrada) {
-      respostaEncontrada = conhecimento.find(item => item.palavras.length === 0).resposta;
-    }
-    if (typeof respostaEncontrada === 'object' && respostaEncontrada !== null) {
-      audioResposta = respostaEncontrada.audio || audioResposta;
-      respostaEncontrada = respostaEncontrada.texto || '';
-    } else {
-      audioResposta = obterAudioPorPergunta(perguntaNormalizada);
-    }
-    pincelFala.innerText = respostaEncontrada;
-    adicionarMensagem('resposta', respostaEncontrada, audioResposta);
-    historicoPerguntas[historicoPerguntas.length-1].resposta = respostaEncontrada;
-  }, 800);
-  input.value = '';
-}
-
-function limparHistorico() {
-  document.getElementById('chatArea').innerHTML = '';
-  adicionarMensagem('resposta', 'Histórico limpo! Pode fazer novas perguntas.');
-  historicoPerguntas = [];
-}
-
-function bloquearPalavra() {
-  const palavra = prompt('Digite a palavra que deseja bloquear (ex: violência, guerra):');
-  if (palavra && palavra.trim() !== '') {
-    palavrasBloqueadas.push(palavra.trim().toLowerCase());
-    alert(`Palavra "${palavra}" bloqueada!`);
-  }
-}
-
-function iniciarPincel() {
-  const chat = document.getElementById('chatArea');
-  if (chat.children.length === 0) {
-    const msg = 'Olá! Eu sou o Pincel Mágico. Pode me perguntar sobre artistas, obras, me contar como se sente, ou pedir uma curiosidade!';
-    adicionarMensagem('resposta', msg);
-    tocarAudio('pincel-novo');
-  }
-}
-
-document.getElementById('perguntaInput')?.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') enviarPergunta();
-});
 
 // ========== INICIALIZAÇÃO ==========
 window.onload = function() {
-  criarPaletaCores();
-  configurarBotoesDesenho();
-  configurarCanvasEvents();
-  mostrarListaDesenhos();
-  setCor('#ff4d4d');
   renderDesafios();
 };
-
-function entrarEmModoImersivo() {
-  const doc = document.documentElement;
-  if (doc.requestFullscreen) doc.requestFullscreen();
-  else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-}
-document.addEventListener('click', function() { entrarEmModoImersivo(); }, { once: true });
 
 function fecharApp() {
   Swal.fire({
@@ -2165,7 +814,5 @@ function fecharApp() {
   });
 }
 </script>
-
 </body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_4mPzYL2HXpaFUsiTbCo53eUGhZYX" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
