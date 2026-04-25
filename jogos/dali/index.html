@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>DALÍ - MISTURA SURREAL | Toque nas Gotas</title>
+<title>DALÍ - MISTURA SURREAL | Colisão + Toque</title>
 
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -45,24 +45,22 @@ canvas { display: block; width: 100%; height: 100%; position: absolute; top: 0; 
 button { padding: 16px 40px; font-size: 20px; background: #f1c40f; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; color: #000; transition: 0.05s linear; }
 button:active { transform: scale(0.96); }
 
-/* Instrução mobile */
 .instrucao {
     position: absolute;
-    bottom: 25px;
+    bottom: 20px;
     left: 0;
     right: 0;
     text-align: center;
-    color: rgba(255,255,200,0.8);
-    background: rgba(0,0,0,0.5);
-    padding: 8px;
-    font-size: 14px;
+    color: rgba(255,255,200,0.9);
+    background: rgba(0,0,0,0.6);
+    padding: 6px;
+    font-size: 12px;
     z-index: 100;
     pointer-events: none;
 }
 
 @media (max-width: 700px) {
     #dali-player { width: 75px; height: 105px; bottom: 10%; }
-    .instrucao { font-size: 11px; }
 }
 </style>
 </head>
@@ -77,13 +75,14 @@ button:active { transform: scale(0.96); }
 
 <div id="dali-player"></div>
 <canvas id="gameCanvas"></canvas>
-<div class="instrucao">💧 TOQUE NAS GOTAS para coletar | 🖱️ Setas do teclado movem Dalí</div>
+<div class="instrucao">💧 As gotas são coletadas automaticamente ao encostar em Dalí | 🖱️ Setas do teclado movem Dalí | 💡 Toque também funciona!</div>
 
 <div id="tela-start" class="overlay">
     <h1>SALVADOR DALÍ</h1>
-    <p style="margin: 10px 0; font-size: 18px;">💡 Misture duas gotas para formar a cor pedida!<br>
-    ⚠️ Se errar a mistura, você PERDE 5 PONTOS.<br>
-    👆 Toque diretamente nas gotas para pegá-las.</p>
+    <p style="margin: 10px 0; font-size: 18px;">🎨 Colete duas gotas e misture as cores!<br>
+    ⚠️ Se errar a mistura, PERDE 5 PONTOS.<br>
+    👆 As gotas são coletadas automaticamente ao tocar no Dalí.<br>
+    ➡️ Use as setas do teclado ou deslize o dedo no chão (mobile).</p>
     <button id="btn-iniciar">🌠 INICIAR 🌠</button>
 </div>
 
@@ -96,7 +95,7 @@ button:active { transform: scale(0.96); }
 </div>
 
 <script>
-// ==================== SONS COM WEB AUDIO API ====================
+// ==================== SONS WEB AUDIO API ====================
 let audioCtx = null;
 let musicaAtual = null;
 
@@ -107,10 +106,7 @@ function initAudio() {
 }
 
 function tocarBeep(freq, duracao, volume = 0.3, tipo = 'sine') {
-    if (!audioCtx) {
-        initAudio();
-        if (!audioCtx) return;
-    }
+    if (!audioCtx) { initAudio(); if (!audioCtx) return; }
     const now = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -124,11 +120,11 @@ function tocarBeep(freq, duracao, volume = 0.3, tipo = 'sine') {
     osc.stop(now + duracao);
 }
 
-function somColeta() { tocarBeep(880, 0.12, 0.25); setTimeout(() => tocarBeep(1046.5, 0.15, 0.25), 80); }
-function somErro() { tocarBeep(220, 0.12, 0.3, 'sawtooth'); } // perda de pontos
-function somGotaPega() { tocarBeep(659.25, 0.07, 0.18, 'sine'); }
-function somVitoria() { [523.25, 659.25, 783.99, 1046.5].forEach((f,i)=>setTimeout(()=>tocarBeep(f,0.3,0.3), i*180)); }
-function somDerrota() { [440, 349.23, 293.66, 220].forEach((f,i)=>setTimeout(()=>tocarBeep(f,0.4,0.3,'sawtooth'), i*250)); }
+function somColeta() { tocarBeep(880,0.12,0.25); setTimeout(()=>tocarBeep(1046.5,0.15,0.25),80); }
+function somErro() { tocarBeep(220,0.12,0.3,'sawtooth'); }
+function somGotaPega() { tocarBeep(659.25,0.07,0.18,'sine'); }
+function somVitoria() { [523.25,659.25,783.99,1046.5].forEach((f,i)=>setTimeout(()=>tocarBeep(f,0.3,0.3),i*180)); }
+function somDerrota() { [440,349.23,293.66,220].forEach((f,i)=>setTimeout(()=>tocarBeep(f,0.4,0.3,'sawtooth'),i*250)); }
 function somStart() { tocarBeep(523.25,0.15); setTimeout(()=>tocarBeep(659.25,0.15),100); setTimeout(()=>tocarBeep(783.99,0.2),200); }
 
 function tocarMusicaFundo() {
@@ -136,7 +132,7 @@ function tocarMusicaFundo() {
     musicaAtual = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3");
     musicaAtual.loop = true;
     musicaAtual.volume = 0.2;
-    musicaAtual.play().catch(()=>console.warn("Música opcional não carregou"));
+    musicaAtual.play().catch(()=>console.warn("Música opcional"));
 }
 function pararMusicaFundo() { if (musicaAtual) { musicaAtual.pause(); musicaAtual.currentTime = 0; } }
 
@@ -197,23 +193,15 @@ function spawnGota() {
     const nome = nomes[Math.floor(Math.random() * nomes.length)];
     const x = 40 + Math.random() * (canvas.width - 80);
     gotas.push({
-        x: x, y: 70, nome: nome, cor: cores[nome], vel: 4.8,
-        id: Math.random()  // identificador para toque
+        x: x, y: 70, nome: nome, cor: cores[nome], vel: 4.8
     });
 }
 
-// Função para tentar coletar uma gota específica (por toque ou clique)
-function tentarColetarGota(gota) {
+// Função de coleta (chamada quando colide ou toca na gota)
+function coletarGota(gota) {
     if (!ativo) return false;
     
-    // Distância do Dalí até a gota
-    const daliX = posX;
-    const daliY = canvas.height - 120;
-    const dx = Math.abs(gota.x - daliX);
-    const dy = Math.abs(gota.y - daliY);
-    if (dx > 65 || dy > 70) return false;  // muito longe
-    
-    // Efeito sonoro ao pegar qualquer gota
+    // Efeito sonoro de pegar gota
     somGotaPega();
     
     if (!corMistura) {
@@ -222,7 +210,7 @@ function tentarColetarGota(gota) {
         dali.style.filter = `drop-shadow(0 0 15px ${gota.cor})`;
         return true;
     } else {
-        // Segunda gota: tentar misturar
+        // Segunda gota: tenta misturar
         const par = [corMistura, gota.nome].sort().join('+');
         const receitas = {
             'amarelo+azul': 'VERDE',
@@ -242,7 +230,7 @@ function tentarColetarGota(gota) {
             setTimeout(() => { if (ativo) dali.style.filter = `drop-shadow(0 0 10px white)`; }, 200);
             return true;
         } else {
-            // ERROU: perde 5 pontos (não fica negativo)
+            // ERROU: perde 5 pontos
             pontuacao = Math.max(0, pontuacao - 5);
             atualizarUI();
             somErro();
@@ -253,16 +241,36 @@ function tentarColetarGota(gota) {
     }
 }
 
-// Detecção de toque/clique nas gotas
+// Detecção de colisão física entre Dalí e gota (círculo vs retângulo aproximado)
+function verificarColisoes() {
+    // Posição do centro do Dalí (considerando a imagem)
+    const daliCenterX = posX;
+    const daliCenterY = canvas.height - 95; // ajuste fino conforme a imagem
+    const raioColisao = 55; // raio de colisão
+    
+    for (let i = 0; i < gotas.length; i++) {
+        const g = gotas[i];
+        const dx = g.x - daliCenterX;
+        const dy = g.y - daliCenterY;
+        const dist = Math.hypot(dx, dy);
+        if (dist < raioColisao) {
+            // Colidiu!
+            const sucesso = coletarGota(g);
+            if (sucesso) {
+                gotas.splice(i,1);
+                i--; // ajusta índice
+            }
+        }
+    }
+}
+
+// Toque/clique direto na gota (opcional, mas mantido)
 function handleCanvasTap(e) {
     if (!ativo) return;
     e.preventDefault();
-    
-    // Obtém coordenadas do toque/clique relativo ao canvas
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
     let clientX, clientY;
     if (e.touches) {
         clientX = e.touches[0].clientX;
@@ -271,19 +279,16 @@ function handleCanvasTap(e) {
         clientX = e.clientX;
         clientY = e.clientY;
     }
-    
     const canvasX = (clientX - rect.left) * scaleX;
     const canvasY = (clientY - rect.top) * scaleY;
     
-    // Percorre as gotas de trás para frente (a mais recente primeiro)
     for (let i = gotas.length-1; i >= 0; i--) {
         const g = gotas[i];
-        // Raio aproximado da gota (30px)
         const dist = Math.hypot(canvasX - g.x, canvasY - g.y);
         if (dist < 35) {
-            const sucesso = tentarColetarGota(g);
+            const sucesso = coletarGota(g);
             if (sucesso) {
-                gotas.splice(i, 1);
+                gotas.splice(i,1);
                 break;
             }
         }
@@ -293,7 +298,7 @@ function handleCanvasTap(e) {
 canvas.addEventListener('touchstart', handleCanvasTap);
 canvas.addEventListener('mousedown', handleCanvasTap);
 
-// Movimento do Dalí (setas do teclado)
+// Movimento do Dalí (setas + arrasto horizontal opcional)
 window.addEventListener('keydown', (e) => {
     if (!ativo) return;
     if (e.key === 'ArrowLeft') { e.preventDefault(); movEsq = true; }
@@ -304,7 +309,27 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight') movDir = false;
 });
 
-// Loop de animação e movimento automático do Dalí
+// Controle por arrasto horizontal (mobile)
+let touchStartX = 0;
+let isDragging = false;
+canvas.addEventListener('touchstart', (e) => {
+    if (!ativo) return;
+    touchStartX = e.touches[0].clientX;
+    isDragging = true;
+});
+canvas.addEventListener('touchmove', (e) => {
+    if (!ativo || !isDragging) return;
+    e.preventDefault();
+    const deltaX = e.touches[0].clientX - touchStartX;
+    if (Math.abs(deltaX) > 5) {
+        posX += deltaX * 0.8;
+        posX = Math.min(Math.max(posX, 70), canvas.width - 70);
+        dali.style.left = (posX - 50) + 'px';
+        touchStartX = e.touches[0].clientX;
+    }
+});
+canvas.addEventListener('touchend', () => { isDragging = false; });
+
 function loop() {
     if (!ativo) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -312,15 +337,13 @@ function loop() {
     // Movimento do Dalí (teclado)
     if (movEsq) posX -= 10;
     if (movDir) posX += 10;
-    posX = Math.max(70, Math.min(canvas.width - 70, posX));
+    posX = Math.min(Math.max(posX, 70), canvas.width - 70);
     dali.style.left = (posX - 50) + 'px';
     
     // Atualiza e desenha gotas
     for (let i = 0; i < gotas.length; i++) {
         const g = gotas[i];
         g.y += g.vel;
-        
-        // Desenha gota com brilho
         ctx.shadowBlur = 12;
         ctx.shadowColor = g.cor;
         ctx.beginPath();
@@ -331,13 +354,14 @@ function loop() {
         ctx.lineWidth = 2;
         ctx.stroke();
         ctx.shadowBlur = 0;
-        
-        // Remove gotas que saíram da tela
         if (g.y > canvas.height + 80) {
             gotas.splice(i,1);
             i--;
         }
     }
+    
+    // VERIFICA COLISÕES FÍSICAS (AQUI É O CORAÇÃO DA CORREÇÃO)
+    verificarColisoes();
     
     // Verifica fim de jogo
     if (pontuacao >= 120) fimJogo(true);
@@ -398,20 +422,18 @@ function fimJogo(vitoria) {
     telaFim.style.display = 'flex';
     
     if (vitoria) {
-        tituloFim.innerText = "✨ A VITÓRIA É SURREAL! ✨";
+        tituloFim.innerText = "✨A VITÓRIA É SURREAL! ✨";
         imgFim.src = IMG_VITORIA;
         somVitoria();
     } else {
-        tituloFim.innerText = "⏰ O TEMPO ESCORREU...";
+        tituloFim.innerText = "⏰ O TEMPO ESCORREU COMO TINTA...";
         imgFim.src = IMG_DERROTA;
         somDerrota();
     }
 }
 
-// Botão iniciar
 document.getElementById('btn-iniciar').addEventListener('click', () => iniciarJogo());
 
-// Desbloqueia áudio no primeiro toque
 function unlockAudio() {
     initAudio();
     if (audioCtx) audioCtx.resume();
@@ -421,7 +443,6 @@ function unlockAudio() {
 document.body.addEventListener('touchstart', unlockAudio);
 document.body.addEventListener('click', unlockAudio);
 
-// Previne arrastar
 document.querySelectorAll('img, canvas').forEach(el => el.addEventListener('dragstart', e => e.preventDefault()));
 </script>
 </body>
