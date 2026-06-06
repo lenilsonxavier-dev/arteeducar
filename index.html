@@ -394,7 +394,7 @@ function entrar() {
 <div id="home" class="screen menu">
   <h1>🎨 Pequenos Artistas do Quirino</h1>
   <button class="menu-color menu-bordo" onclick="abrirWebView('candinhoDesenhista')">🖍 Candinho Desenhista</button>
-  <button class="menu-color menu-amarelo" onclick="abrirWebView('candinho2')">🎨 Candinho 2.0</button>
+  <button class="menu-color menu-amarelo" onclick="abrirWebView('candinhoportinari')">🎨 Candinhoportinari</button>
   <button class="menu-color menu-azul" onclick="show('museu')">🏛 Museu Virtual</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
   <button class="menu-color menu-verde" onclick="show('desafiosArte')">🎲 Desafios de Arte</button>
@@ -551,7 +551,7 @@ function abrirWebView(tipo) {
   if (tipo === 'candinhoDesenhista') {
     frame.src = 'https://candinhodesenhista.vercel.app/';
   } else if (tipo === 'candinho2') {
-    frame.src = 'https://candinho2-0.vercel.app/';
+    frame.src = 'https://candinhoportinari.vercel.app/';
   }
   show('webviewScreen');
 }
