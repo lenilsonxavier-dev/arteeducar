@@ -393,7 +393,7 @@ function entrar() {
 <!-- ========== MENU PRINCIPAL ========== -->
 <div id="home" class="screen menu">
   <h1>🎨 Pequenos Artistas do Quirino</h1>
-  <button class="menu-color menu-bordo" onclick="abrirWebView('candinhoDesenhista')">🖍 Candinho Desenhista</button>
+  <!-- Botão Candinho Desenhista removido conforme solicitado -->
   <button class="menu-color menu-amarelo" onclick="abrirWebView('candinhoportinari')">🎨 Candinhoportinari</button>
   <button class="menu-color menu-azul" onclick="show('museu')">🏛 Museu Virtual</button>
   <button class="menu-color menu-laranja" onclick="show('mural'); carregarMural()">🖼️ Mural Virtual</button>
@@ -475,7 +475,7 @@ function entrar() {
   <iframe id="frameJogo" style="width:100%; height:90vh; border:none;"></iframe>
 </div>
 
-<!-- ========== TELA WEBVIEW (PARA OS CANDINHOS) ========== -->
+<!-- ========== TELA WEBVIEW (PARA O CANDINHOPORTINARI) ========== -->
 <div id="webviewScreen" class="screen">
   <div style="display: flex; justify-content: flex-start; padding: 10px;">
     <button class="btn-voltar-menu btn-voltar-amarelo" onclick="fecharWebView()"><span class="ico">⬅️</span> Voltar ao Menu</button>
@@ -545,12 +545,10 @@ function show(id) {
   atualizarBotaoSomMuseu();
 }
 
-// ========== FUNÇÕES DE WEBVIEW (CANDINHOS) ==========
+// ========== FUNÇÃO WEBVIEW (APENAS CANDINHOPORTINARI) ==========
 function abrirWebView(tipo) {
   const frame = document.getElementById('webviewFrame');
-  if (tipo === 'candinhoDesenhista') {
-    frame.src = 'https://candinhodesenhista.vercel.app/';
-  } else if (tipo === 'candinho2') {
+  if (tipo === 'candinhoportinari') {
     frame.src = 'https://candinhoportinari.vercel.app/';
   }
   show('webviewScreen');
@@ -591,51 +589,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ========== MURAL ==========
-let savedUploads = JSON.parse(localStorage.getItem('muralUploads') || '[]');
-let muralItems = [...savedUploads];
-let currentFilter = 'todos';
-
-function renderMural() {
-  const muralGrid = document.getElementById('mural-grid');
-  if (!muralGrid) return;
-  muralGrid.innerHTML = '';
-  const filtered = muralItems.filter(item => currentFilter === 'todos' || item.category === currentFilter);
-  filtered.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'mural-card';
-    card.innerHTML = `
-      <div class="card-image">
-        <img src="${item.imageUrl}" alt="${item.label}">
-      </div>
-      <div class="card-label">${item.label}</div>
-      <button class="delete-btn" data-id="${item.id}">🗑️</button>
-    `;
-    muralGrid.appendChild(card);
-  });
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.onclick = () => deletarImagem(btn.dataset.id);
-  });
-}
-
-function deletarImagem(id) {
-  muralItems = muralItems.filter(item => item.id !== id);
-  savedUploads = savedUploads.filter(item => item.id !== id);
-  localStorage.setItem('muralUploads', JSON.stringify(savedUploads));
-  renderMural();
-}
-
-function resetMural() {
-  muralItems = [];
-  savedUploads = [];
-  localStorage.removeItem('muralUploads');
-  renderMural();
-}
-
+// ========== MURAL (simplificado, sem uploads locais, apenas Padlet) ==========
 function carregarMural() {
-  if (document.getElementById('mural-grid')) {
-    renderMural();
-  }
+  // O mural já está no iframe do Padlet, não precisa de mais ações.
 }
 
 function sairDoMural() {
@@ -643,11 +599,12 @@ function sairDoMural() {
 }
 
 // ========== CENTRAL DE JOGOS ==========
+// Link do jogo Candinho atualizado para https://candinhojogo.vercel.app/
 const jogosOnlineLista = [
   { nome: "🐦 Corvos", link: "https://arteeducar.vercel.app/jogos/corvos" },
   { nome: "🌌 Noite Estrelada", link: "https://arteeducar.vercel.app/jogos/noite-estrelada" },
   { nome: "🎨 Dalí", link: "https://arteeducar.vercel.app/jogos/dali" },
-  { nome: "🧒 Candinho", link: "https://candinhochallenge.vercel.app" }
+  { nome: "🧒 Candinho", link: "https://candinhojogo.vercel.app/" }
 ];
 
 function carregarJogos() {
@@ -680,7 +637,7 @@ function fecharJogo() {
   show("jogosOnline");
 }
 
-// ========== DESAFIOS (30 itens – mantido do original) ==========
+// ========== DESAFIOS (30 itens) ==========
 const desafios = [
   { numero: 1, titulo: "Desenho às Cegas", descricao: "Fechem os olhos e tentem desenhar um objeto simples (copo, casa, flor). Depois comparem os resultados com quem fez o desafio com você.", objetivo: "Estimular criatividade e percepção sem pressão estética." },
   { numero: 2, titulo: "Cores Musicais", descricao: "Ouça músicas diferentes (alegre, triste, calma, agitada). Desenhe e pinte o que sentir em cada música.", objetivo: "Expressar emoções através das cores." },
@@ -780,7 +737,7 @@ function aceitarDesafio(titulo) {
   });
 }
 
-// ========== FUNÇÕES DE ÁUDIO PARA DESAFIOS (stub) ==========
+// ========== STUB PARA ÁUDIO DOS DESAFIOS ==========
 function tocarAudio(nome) {
   console.log("Tocar áudio:", nome);
 }
